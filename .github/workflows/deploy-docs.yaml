@@ -20,11 +20,16 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DOCS_LOCAL_KROKI: "true"
+  DOCS_KROKI_URL: http://kroki:8000
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      kroki:
+        image: yuzutech/kroki
+        env:
+          KROKI_LISTEN: 0.0.0.0:8000
     steps:
       - uses: actions/checkout@v6
 

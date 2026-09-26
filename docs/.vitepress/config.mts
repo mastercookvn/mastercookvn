@@ -1,4 +1,4 @@
-import { execFileSync, spawn, type ChildProcess } from "node:child_process";
+import { spawn, type ChildProcess } from "node:child_process";
 import { statSync } from "node:fs";
 import path from "node:path";
 
@@ -15,45 +15,8 @@ import { withSidebar } from "vitepress-sidebar";
 import { VitePressSidebarOptions } from "vitepress-sidebar/types";
 import waitOn from "wait-on";
 
-const REMOTE_KROKI_URL = "https://kroki.io";
+const COMPOSE_KROKI_URL = "http://localhost:8002";
 const WIN32_EXECUTABLE_EXTENSIONS = [".exe", ".cmd", ".bat", ".com"];
-
-const remoteKrokiUrl =
-  process.env.DOCS_KROKI_URL?.trim() ||
-  process.env.KROKI_SERVER_URL?.trim() ||
-  undefined;
-
-const forceLocalKroki = ["1", "true", "yes"].includes(
-  (process.env.DOCS_LOCAL_KROKI ?? "").toLowerCase(),
-);
-
-const useLocalKroki = !remoteKrokiUrl && (forceLocalKroki || !process.env.CI);
-
-const krokiPort = useLocalKroki ? await getPort({ port: 8000 }) : undefined;
-
-const krokiServerUrl =
-  remoteKrokiUrl ??
-  (krokiPort ? `http://localhost:${krokiPort}` : REMOTE_KROKI_URL);
-
-const diagramPluginOptions = {
-  diagramsDir: "src/public/diagrams",
-  publicPath: "/mastercookvn/diagrams",
-  diagramsDistDir: "diagrams",
-  excludedDiagramTypes: ["mermaid"],
-  krokiServerUrl,
-} satisfies DiagramPluginOptions & BuildTimeDiagramPluginOptions;
-
-const diagrams = createBuildTimeDiagramsPlugin(diagramPluginOptions);
-
-type KrokiWrapperOptions = {
-  port: number;
-  docker?: boolean;
-};
-
-type KrokiCommand = {
-  command: string;
-  args: string[];
-};
 
 function isFile(candidate: string): boolean {
   try {
@@ -79,55 +42,62 @@ function resolveOnPath(bin: string): string | null {
   return null;
 }
 
-function resolveWithMise(bin: string): string | null {
-  try {
-    const resolved = execFileSync("mise", ["which", bin], {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-    return resolved && isFile(resolved) ? resolved : null;
-  } catch {
-    return null;
-  }
+const configuredKrokiUrl =
+  process.env.DOCS_KROKI_URL?.trim() ||
+  process.env.KROKI_SERVER_URL?.trim() ||
+  undefined;
+
+const krokiBin = configuredKrokiUrl ? null : resolveOnPath("kroki");
+
+const krokiPort = krokiBin ? await getPort({ port: 8000 }) : undefined;
+
+const krokiServerUrl =
+  configuredKrokiUrl ??
+  (krokiPort ? `http://localhost:${krokiPort}` : COMPOSE_KROKI_URL);
+
+const diagramPluginOptions = {
+  diagramsDir: "src/public/diagrams",
+  publicPath: "/mastercookvn/diagrams",
+  diagramsDistDir: "diagrams",
+  excludedDiagramTypes: ["mermaid"],
+  krokiServerUrl,
+} satisfies DiagramPluginOptions & BuildTimeDiagramPluginOptions;
+
+const diagrams = createBuildTimeDiagramsPlugin(diagramPluginOptions);
+
+type KrokiWrapperOptions = {
+  bin: string;
+  port: number;
+};
+
+function waitForKroki(url: string): Plugin {
+  const health = `${url.replace(/^http/, "http-get")}/health`;
+  const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/.test(url);
+
+  return {
+    name: "vitepress-diagrams-kroki-wait",
+    apply: "build",
+
+    async buildStart() {
+      if (!isLocal) return;
+      try {
+        await waitOn({ resources: [health], timeout: 30_000 });
+      } catch {
+        throw new Error(
+          `Kroki is not reachable at ${url}. Start it with ` +
+            "`docker compose up -d` in docs/, or point DOCS_KROKI_URL at a " +
+            "running Kroki server.",
+        );
+      }
+    },
+  };
 }
 
-function resolveKrokiCommand({
+export function createDiagramsWithKroki({
+  bin,
   port,
-  docker,
-}: KrokiWrapperOptions): KrokiCommand {
-  if (docker) {
-    return {
-      command: "docker",
-      args: [
-        "run",
-        "--rm",
-        "-e",
-        "DEBUG=true", // for d2
-        "-p",
-        `${port}:8000`,
-        "yuzutech/kroki",
-      ],
-    };
-  }
-
-  const jarOverride = process.env.DOCS_KROKI_JAR?.trim();
-  if (jarOverride) return { command: "java", args: ["-jar", jarOverride] };
-
-  const krokiBin = resolveOnPath("kroki");
-  if (krokiBin) return { command: krokiBin, args: [] };
-
-  const jar = resolveWithMise("kroki-server.jar");
-  if (jar) return { command: "java", args: ["-jar", jar] };
-
-  throw new Error(
-    "Kroki not found. Run `mise install` in docs/, put a `kroki` launcher on " +
-      "PATH, set DOCS_KROKI_JAR to the standalone jar, or set DOCS_KROKI_URL " +
-      "to a remote Kroki server.",
-  );
-}
-
-export function createDiagramsWithKroki(options: KrokiWrapperOptions): Plugin {
-  const krokiUrl = `http://localhost:${options.port}`;
+}: KrokiWrapperOptions): Plugin {
+  const krokiUrl = `http://localhost:${port}`;
   let krokiProcess: ChildProcess | null = null;
   let started = false;
 
@@ -135,12 +105,11 @@ export function createDiagramsWithKroki(options: KrokiWrapperOptions): Plugin {
     if (started) return;
     started = true;
 
-    const { command, args } = resolveKrokiCommand(options);
-    const child = spawn(command, args, {
+    const child = spawn(bin, {
       stdio: ["ignore", "ignore", "inherit"],
       env: {
         ...process.env,
-        KROKI_PORT: String(options.port),
+        KROKI_PORT: String(port),
         DEBUG: "true", // for d2
       },
     });
@@ -151,7 +120,7 @@ export function createDiagramsWithKroki(options: KrokiWrapperOptions): Plugin {
       child.once("exit", (code, signal) =>
         reject(
           new Error(
-            `Kroki (${command}) exited with ${code ?? signal} ` +
+            `Kroki (${bin}) exited with ${code ?? signal} ` +
               "before becoming healthy",
           ),
         ),
@@ -160,7 +129,7 @@ export function createDiagramsWithKroki(options: KrokiWrapperOptions): Plugin {
 
     await Promise.race([
       waitOn({
-        resources: [`http-get://localhost:${options.port}/health`],
+        resources: [`http-get://localhost:${port}/health`],
         timeout: 30_000,
       }),
       exitedEarly,
@@ -222,7 +191,9 @@ const vitePressOptions = {
   },
   vite: {
     plugins: [
-      ...(krokiPort ? [createDiagramsWithKroki({ port: krokiPort })] : []),
+      ...(krokiBin && krokiPort
+        ? [createDiagramsWithKroki({ bin: krokiBin, port: krokiPort })]
+        : [waitForKroki(krokiServerUrl)]),
       pagefindPlugin(),
       diagrams.vitePlugin(),
     ],
