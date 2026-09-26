@@ -8,16 +8,22 @@ on:
       - "docs/**/*"
       - pnpm-lock.yaml
       - pnpm-workspace.yaml
+      - mise.toml
       - ".github/workflows/deploy-docs.yaml"
       - ".tool-versions"
       - "!**/README.md"
       - "!**/AGENTS.md"
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 env:
-  MISE_ENV: ci
+  DOCS_LOCAL_KROKI: "true"
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -39,13 +45,13 @@ jobs:
           install_args: --monorepo
 
       - name: Restore Docs diagrams Cache
+        id: diagrams-cache
         uses: actions/cache/restore@v6
         with:
           path: docs/src/public/diagrams/
           key: docs-diagrams-
-
-      - name: Add additional bin path
-        run: echo "${{ github.workspace }}/docs/bin" >> "$GITHUB_PATH"
+          restore-keys: |
+            docs-diagrams-
 
       - name: Install dependencies
         run: pnpm install
@@ -53,19 +59,35 @@ jobs:
       - name: Build docs
         run: pnpm --filter @mastercookvn/docs build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/.vitepress/dist
+          path: docs/.vitepress/dist
 
       - name: Calculate Docs diagrams Cache Key
         id: cache-key
         run: |
-          echo "cache_key=docs-diagrams-$(find docs/src/public/diagrams/ -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+          mkdir -p docs/src/public/diagrams
+          hash="$(find docs/src/public/diagrams -type f -print0 | sort -z | xargs -0 -r sha256sum | sha256sum | cut -d ' ' -f 1)"
+          echo "cache_key=docs-diagrams-$hash" >> "$GITHUB_OUTPUT"
 
       - name: Cache Docs diagrams
+        if: steps.cache-key.outputs.cache_key != steps.diagrams-cache.outputs.cache-matched-key
         uses: actions/cache/save@v6
         with:
           path: docs/src/public/diagrams/
-          key: ${{ steps.cache-key.outputs.cach_key }}
+          key: ${{ steps.cache-key.outputs.cache_key }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
