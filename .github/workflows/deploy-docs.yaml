@@ -1,0 +1,71 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**/*"
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - ".github/workflows/deploy-docs.yaml"
+      - ".tool-versions"
+      - "!**/README.md"
+      - "!**/AGENTS.md"
+
+env:
+  MISE_ENV: ci
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .tool-versions
+
+      - name: Setup Mise
+        uses: jdx/mise-action@v4
+        with:
+          experimental: true
+          install_args: --monorepo
+
+      - name: Restore Docs diagrams Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: docs/src/public/diagrams/
+          key: docs-diagrams-
+
+      - name: Add additional bin path
+        run: echo "${{ github.workspace }}/docs/bin" >> "$GITHUB_PATH"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build docs
+        run: pnpm --filter @mastercookvn/docs build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/.vitepress/dist
+
+      - name: Calculate Docs diagrams Cache Key
+        id: cache-key
+        run: |
+          echo "cache_key=docs-diagrams-$(find docs/src/public/diagrams/ -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Docs diagrams
+        uses: actions/cache/save@v6
+        with:
+          path: docs/src/public/diagrams/
+          key: ${{ steps.cache-key.outputs.cach_key }}

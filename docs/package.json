@@ -1,0 +1,22 @@
+{
+  "name": "@mastercookvn/docs",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "diagram:clean": "vitepress-plugin-diagrams clean --delete"
+  },
+  "devDependencies": {
+    "@catppuccin/vitepress": "catalog:",
+    "pagefind": "catalog:",
+    "vitepress-mermaid-renderer": "catalog:",
+    "vitepress-openapi": "catalog:",
+    "vitepress-plugin-pagefind": "catalog:",
+    "get-port": "catalog:",
+    "vitepress": "catalog:",
+    "vitepress-plugin-diagrams": "catalog:",
+    "vitepress-sidebar": "catalog:",
+    "wait-on": "catalog:"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@mastercookvn/mastercookvn",
+  "private": true,
+  "type": "module",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12.6.0",
+      "onFail": "warn"
+    }
+  }
+}

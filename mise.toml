@@ -1,0 +1,11 @@
+#:schema https://raw.githubusercontent.com/jdx/mise/refs/heads/main/schema/mise.json
+
+[tools]
+node = "26.10.0"
+pnpm = "12.6.0"
+java = "latest"
+
+[tools."http:kroki"]
+url = "https://github.com/yuzutech/kroki/releases/download/v{{ version }}/kroki-standalone-server-v{{ version }}.jar"
+version = "0.32.1"
+bin = "kroki-server.jar"
