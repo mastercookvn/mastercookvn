@@ -38,6 +38,7 @@ const krokiServerUrl =
 const diagramPluginOptions = {
   diagramsDir: "src/public/diagrams",
   publicPath: "/mastercookvn/public/diagrams",
+  diagramsDistDir: "public/diagrams",
   excludedDiagramTypes: ["mermaid"],
   krokiServerUrl,
 } satisfies DiagramPluginOptions & BuildTimeDiagramPluginOptions;
