@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DOCS_KROKI_URL: http://kroki:8000
+  DOCS_KROKI_URL: http://localhost:8000
 
 jobs:
   build:
@@ -30,6 +30,8 @@ jobs:
         image: yuzutech/kroki
         env:
           KROKI_LISTEN: 0.0.0.0:8000
+        ports:
+          - 8000:8000
     steps:
       - uses: actions/checkout@v6
 

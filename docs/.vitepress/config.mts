@@ -72,14 +72,12 @@ type KrokiWrapperOptions = {
 
 function waitForKroki(url: string): Plugin {
   const health = `${url.replace(/^http/, "http-get")}/health`;
-  const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/.test(url);
 
   return {
     name: "vitepress-diagrams-kroki-wait",
     apply: "build",
 
     async buildStart() {
-      if (!isLocal) return;
       try {
         await waitOn({ resources: [health], timeout: 30_000 });
       } catch {
