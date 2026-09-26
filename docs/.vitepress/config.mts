@@ -8,7 +8,6 @@ import { type Plugin } from "vitepress";
 import {
   BuildTimeDiagramPluginOptions,
   DiagramPluginOptions,
-  configureDiagramsPlugin,
   createBuildTimeDiagramsPlugin,
 } from "vitepress-plugin-diagrams";
 import { pagefindPlugin } from "vitepress-plugin-pagefind";
@@ -38,10 +37,12 @@ const krokiServerUrl =
 
 const diagramPluginOptions = {
   diagramsDir: "src/public/diagrams",
-  publicPath: "/mastercookvn/diagrams",
+  publicPath: "/mastercookvn/public/diagrams",
   excludedDiagramTypes: ["mermaid"],
   krokiServerUrl,
 } satisfies DiagramPluginOptions & BuildTimeDiagramPluginOptions;
+
+const diagrams = createBuildTimeDiagramsPlugin(diagramPluginOptions);
 
 type KrokiWrapperOptions = {
   port: number;
@@ -206,7 +207,7 @@ const vitePressOptions = {
       dark: "catppuccin-mocha",
     },
     config: (md) => {
-      configureDiagramsPlugin(md, diagramPluginOptions);
+      diagrams.configureMarkdown(md);
     },
   },
   themeConfig: {
@@ -222,7 +223,7 @@ const vitePressOptions = {
     plugins: [
       ...(krokiPort ? [createDiagramsWithKroki({ port: krokiPort })] : []),
       pagefindPlugin(),
-      createBuildTimeDiagramsPlugin(diagramPluginOptions),
+      diagrams.vitePlugin(),
     ],
   },
 } satisfies UserConfig<NoInfer<DefaultTheme.Config>>;
