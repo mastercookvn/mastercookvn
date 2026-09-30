@@ -7,3 +7,4 @@ In `./docs/`, contains use cases, class, sequence, activity,... diagrams
 ## Rules
 
 - Use convetional commits, scope allowed (docs, web, backend, repo), others are not
+- Use pnpm packages catalog, in `pnpm-workspace.yaml`
