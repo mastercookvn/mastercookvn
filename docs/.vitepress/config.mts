@@ -16,6 +16,8 @@ import { VitePressSidebarOptions } from "vitepress-sidebar/types";
 import waitOn from "wait-on";
 
 const COMPOSE_KROKI_URL = "http://localhost:8002";
+const PUBLIC_KROKI_URL = "https://kroki.io";
+const KROKI_PROBE_TIMEOUT = 3_000;
 const WIN32_EXECUTABLE_EXTENSIONS = [".exe", ".cmd", ".bat", ".com"];
 
 function isFile(candidate: string): boolean {
@@ -51,16 +53,46 @@ const krokiBin = configuredKrokiUrl ? null : resolveOnPath("kroki");
 
 const krokiPort = krokiBin ? await getPort({ port: 8000 }) : undefined;
 
-const krokiServerUrl =
-  configuredKrokiUrl ??
-  (krokiPort ? `http://localhost:${krokiPort}` : COMPOSE_KROKI_URL);
+function krokiHealthResource(url: string): string {
+  return `${url.replace(/^https?/, (scheme) => `${scheme}-get`)}/health`;
+}
+
+async function isKrokiHealthy(
+  url: string,
+  timeout = KROKI_PROBE_TIMEOUT,
+): Promise<boolean> {
+  try {
+    await waitOn({ resources: [krokiHealthResource(url)], timeout });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function resolveKrokiServerUrl(): Promise<string | undefined> {
+  if (configuredKrokiUrl) return configuredKrokiUrl;
+
+  if (krokiPort) return `http://localhost:${krokiPort}`;
+
+  if (await isKrokiHealthy(COMPOSE_KROKI_URL)) return COMPOSE_KROKI_URL;
+
+  console.warn(
+    `⚠️  No local Kroki at ${COMPOSE_KROKI_URL}, falling back to ` +
+      `${PUBLIC_KROKI_URL}. Diagram sources leave your machine and rendering ` +
+      "is rate limited; run `docker compose up -d` in docs/ or set " +
+      "DOCS_KROKI_URL to use a Kroki you control.",
+  );
+  return undefined;
+}
+
+const krokiServerUrl = await resolveKrokiServerUrl();
 
 const diagramPluginOptions = {
   diagramsDir: "src/public/diagrams",
   publicPath: "/mastercookvn/diagrams",
   diagramsDistDir: "diagrams",
   excludedDiagramTypes: ["mermaid"],
-  krokiServerUrl,
+  ...(krokiServerUrl ? { krokiServerUrl } : {}),
 } satisfies DiagramPluginOptions & BuildTimeDiagramPluginOptions;
 
 const diagrams = createBuildTimeDiagramsPlugin(diagramPluginOptions);
@@ -71,7 +103,7 @@ type KrokiWrapperOptions = {
 };
 
 function waitForKroki(url: string): Plugin {
-  const health = `${url.replace(/^http/, "http-get")}/health`;
+  const health = krokiHealthResource(url);
 
   return {
     name: "vitepress-diagrams-kroki-wait",
@@ -82,9 +114,10 @@ function waitForKroki(url: string): Plugin {
         await waitOn({ resources: [health], timeout: 30_000 });
       } catch {
         throw new Error(
-          `Kroki is not reachable at ${url}. Start it with ` +
-            "`docker compose up -d` in docs/, or point DOCS_KROKI_URL at a " +
-            "running Kroki server.",
+          `Kroki is not reachable at ${url}, configured via DOCS_KROKI_URL / ` +
+            "KROKI_SERVER_URL. Start that server, point the variable at a " +
+            "running one, or unset it to fall back to " +
+            `${PUBLIC_KROKI_URL}.`,
         );
       }
     },
@@ -191,7 +224,9 @@ const vitePressOptions = {
     plugins: [
       ...(krokiBin && krokiPort
         ? [createDiagramsWithKroki({ bin: krokiBin, port: krokiPort })]
-        : [waitForKroki(krokiServerUrl)]),
+        : configuredKrokiUrl
+          ? [waitForKroki(configuredKrokiUrl)]
+          : []),
       pagefindPlugin(),
       diagrams.vitePlugin(),
     ],
