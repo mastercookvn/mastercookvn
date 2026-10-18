@@ -11,12 +11,12 @@
     "@catppuccin/vitepress": "catalog:",
     "pagefind": "catalog:",
     "vitepress-mermaid-renderer": "catalog:",
-    "vitepress-openapi": "catalog:",
     "vitepress-plugin-pagefind": "catalog:",
     "get-port": "catalog:",
     "vitepress": "catalog:",
     "vitepress-plugin-diagrams": "catalog:",
     "vitepress-sidebar": "catalog:",
-    "wait-on": "catalog:"
+    "wait-on": "catalog:",
+    "markdown-it-mathjax3": "catalog:"
   }
 }

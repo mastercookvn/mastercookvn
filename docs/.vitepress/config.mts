@@ -203,6 +203,7 @@ const vitePressOptions = {
   base: "/mastercookvn/",
   srcDir: "src",
   markdown: {
+    math: true,
     theme: {
       light: "catppuccin-latte",
       dark: "catppuccin-mocha",
