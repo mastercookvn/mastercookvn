@@ -2,7 +2,7 @@
 
 ## Phạm vi
 
-UC-DT-03, UC-HD-03, UC-HD-04, UC-KHO-04 đến UC-KHO-07. Theo [BR07, BR13](../../specification.md) và [mô hình lớp](../class.md).
+UC-DT-04, UC-DT-05, UC-HD-05, UC-HD-06, UC-KHO-05 đến UC-KHO-08. Theo [BR07, BR13](../../specification.md) và [mô hình lớp](../class.md).
 
 ## Giữ dụng cụ
 

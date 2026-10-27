@@ -2,7 +2,7 @@
 
 ## Phạm vi
 
-UC liên quan: UC-DT-01, UC-DT-02, UC-DT-03, UC-HD-01. Tra tại [danh mục chung](../index.md). Quy tắc tại [đặc tả](../../specification.md); lớp tại [mô hình](../class.md).
+UC liên quan: UC-DT-01, UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD-02. Tra tại [danh mục chung](../index.md). Quy tắc tại [đặc tả](../../specification.md); lớp tại [mô hình](../class.md).
 
 ## Thành phần
 

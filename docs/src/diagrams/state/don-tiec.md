@@ -2,7 +2,7 @@
 
 ## Phạm vi
 
-UC-DT-02, UC-DT-03, UC-HD-01 đến UC-HD-06. Quy tắc theo [spec](../../specification.md), dữ liệu theo [class](../class.md).
+UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD-02 đến UC-HD-08, UC-VH-01, UC-KHO-07. Quy tắc theo [spec](../../specification.md), dữ liệu theo [class](../class.md).
 
 Không gom tiến độ một bữa vào trạng thái hợp đồng chung. Bữa thứ nhất có thể hoàn tất khi bữa thứ hai chưa phục vụ.
 

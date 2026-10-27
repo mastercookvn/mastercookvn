@@ -2,22 +2,44 @@
 
 ## Mục đích
 
-Thể hiện ranh giới MasterCookVN và các nhóm chức năng; danh mục mã/tên/tác nhân làm gốc tại [chỉ mục](./index.md). Không vẽ mỗi bước nội bộ thành một UC độc lập.
+Thể hiện ranh giới MasterCookVN, tác nhân và quan hệ giữa UC. Mã/tên/tác nhân làm gốc tại [chỉ mục](./index.md). Vẽ một sơ đồ tổng quát theo gói, cộng một sơ đồ con cho mỗi gói.
 
-## Tác nhân và nhóm
+## Tác nhân
 
-- Khách hàng: xem/tạm tính, đặt, xác nhận hợp đồng, thanh toán, sửa/hủy, đánh giá.
-- Tư vấn: đặt hộ, khảo sát/nhận tiệc, hợp đồng/phụ lục, ghi đánh giá hộ.
-- Quản lý cơ sở: tài khoản/quyền, danh mục/giá/tham số, quản lý và báo cáo.
-- Kế toán: thu/hoàn, quyết toán, chốt kỳ nguyên liệu, báo cáo.
-- Thủ kho: nhập nguyên liệu/dụng cụ, kiểm kê, xuất/thu hồi/phục hồi dụng cụ.
-- Quản lý nhân sự: hồ sơ và phân công.
-- Dịch vụ thanh toán: xác nhận giao dịch online.
+| Tác nhân | Loại | Ghi chú |
+| --- | --- | --- |
+| Khách hàng | Người | Không đăng nhập vẫn xem/tạm tính được (UC-DT-01). |
+| Nhân viên nội bộ | Trừu tượng | Cha của các vai trò nội bộ; dùng cho UC-TK-02, UC-BC-01. |
+| Nhân viên tư vấn | Người, kế thừa Nhân viên nội bộ | |
+| Kế toán | Người, kế thừa Nhân viên nội bộ | |
+| Thủ kho | Người, kế thừa Nhân viên nội bộ | |
+| Quản lý nhân sự | Người, kế thừa Nhân viên nội bộ | |
+| Quản lý cơ sở | Người, kế thừa Tư vấn, Kế toán, Thủ kho, Quản lý nhân sự | Dùng được mọi UC nội bộ; chỉ nối trực tiếp UC riêng của quản lý. |
+| Dịch vụ thanh toán | Hệ thống ngoài | Chỉ tham gia UC-HD-03; chưa chốt nhà cung cấp. |
 
-## Quan hệ cần thể hiện
+Không vẽ nhà cung cấp, nhân viên không tài khoản, Zalo, bản đồ, thời tiết, lịch chạy tự động thành tác nhân.
 
-Tạo đơn có hai cách khách tự đặt/tư vấn đặt hộ. Ký có hai cách online/ký giấy. Thanh toán có hai cách online/ghi nhận thủ công. Các cách thay thế có thể ghi chú trên cùng UC, không bắt buộc phân rã thêm.
+## Gói và UC
 
-Sửa/hủy tác động từng bữa trong hợp đồng; hoàn tiền là chức năng được gọi khi có khoản phải hoàn, không bắt buộc mọi lần hủy. Kiểm tra tài nguyên, tính tiền, kiểm tra hết hạn là xử lý bên trong UC nhận tiệc/sửa/thu cọc, không dùng hệ thống làm actor của chính nó. Cron tháng mô tả ở activity cập nhật giá, không thêm actor nhắc lịch.
+| Gói | UC |
+| --- | --- |
+| Tài khoản | UC-TK-01 → UC-TK-03 |
+| Danh mục | UC-DM-01 → UC-DM-07 |
+| Đặt tiệc | UC-DT-01 → UC-DT-06 |
+| Hợp đồng và thanh toán | UC-HD-01 → UC-HD-08 |
+| Nhân sự và vận hành | UC-NS-01, UC-NS-02, UC-VH-01 |
+| Nguyên liệu và dụng cụ | UC-KHO-01 → UC-KHO-08 |
+| Đánh giá và báo cáo | UC-CS-01, UC-BC-01 → UC-BC-03 |
 
-Không đưa nhà cung cấp, nhân viên không có tài khoản, Zalo, bản đồ hoặc thời tiết thành actor tích hợp. Không kế thừa vai trò quản lý từ khách hàng; quyền kiêm nhiệm là hợp các vai trò tài khoản.
+## Quan hệ include/extend
+
+| Quan hệ | Từ | Đến | Ghi chú |
+| --- | --- | --- | --- |
+| include | UC-DT-05 Xác nhận nhận đơn | UC-DT-04 Kiểm tra khả năng phục vụ | Luôn kiểm tra trước khi giữ |
+| include | UC-HD-05 Điều chỉnh bằng phụ lục | UC-DT-04 Kiểm tra khả năng phục vụ | Khi tăng bàn |
+| extend | Đặt hộ | UC-DT-02 Tạo đơn | Điểm mở rộng: tư vấn tạo đơn cho khách |
+| extend | UC-HD-04 Thanh toán thủ công | UC-HD-03 Thanh toán online | Thay thế khi trả tiền mặt/chuyển khoản trực tiếp; có thể vẽ là UC song song nếu GV không chấp nhận extend |
+| extend | UC-HD-07 Ghi nhận hoàn tiền | UC-HD-06 Hủy | Chỉ khi có khoản phải hoàn |
+| extend | UC-HD-07 Ghi nhận hoàn tiền | UC-HD-08 Quyết toán | Khi số dư âm |
+
+Kiểm tra hết hạn giữ chỗ, tính tiền, tạo đợt đề xuất giá là xử lý bên trong UC, không vẽ hệ thống làm actor của chính nó.

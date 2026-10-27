@@ -2,7 +2,7 @@
 
 ## Phạm vi
 
-UC liên quan: UC-KHO-01, UC-KHO-02, UC-KHO-03, UC-DM-01, UC-BC-02. Tra tại [danh mục chung](../index.md). Quy tắc tại [đặc tả](../../specification.md); lớp tại [mô hình](../class.md).
+UC liên quan: UC-KHO-01, UC-KHO-02, UC-KHO-03, UC-KHO-04, UC-DM-01, UC-DM-03, UC-BC-02. Tra tại [danh mục chung](../index.md). Quy tắc tại [đặc tả](../../specification.md); lớp tại [mô hình](../class.md).
 
 ## Thành phần
 

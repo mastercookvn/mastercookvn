@@ -1,57 +1,120 @@
 # Đánh giá và báo cáo
 
-Các quy tắc dẫn mã BR được duy trì tại [đặc tả](../../specification.md). [Danh mục UC](../index.md) là chỉ mục duy nhất.
+Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../index.md) là chỉ mục duy nhất. Quy ước bước: `Na` luồng thay thế, `Ne` ngoại lệ tại bước N.
 
 ## UC-CS-01
 
 | Trường | Nội dung |
 | --- | --- |
-| ID | UC-CS-01 |
 | Tên | Ghi nhận đánh giá sau bữa |
-| Mô tả | Lưu phản hồi của người đặt cho một bữa đã hoàn tất. |
 | Tác nhân | Khách hàng, Nhân viên tư vấn |
-| Ưu tiên | Cốt lõi |
-| Kích hoạt | Người đặt muốn đánh giá bữa đã hoàn tất. |
-| Điều kiện trước | Bữa thuộc hồ sơ khách, đã hoàn tất và chưa có đánh giá. |
-| Luồng chính | Chọn bữa; nhập điểm 1–5 và nhận xét; lưu khách đánh giá cùng tài khoản nhập. |
-| Luồng thay thế | Tư vấn nhập hộ theo ý kiến người đặt. |
-| Ngoại lệ | Bữa chưa hoàn tất, đã có đánh giá hoặc sai chủ hồ sơ: không tạo. |
-| Điều kiện sau | Một đánh giá được gắn đúng bữa. |
+| Mục tiêu | Lưu phản hồi của người đặt cho bữa đã hoàn tất. |
+| Kích hoạt | Người đặt muốn đánh giá. |
+| Tiền điều kiện | Bữa HoanTat, thuộc hồ sơ khách, chưa có đánh giá. |
+| Hậu điều kiện | Một đánh giá gắn đúng bữa, lưu người nhập thực tế. |
+| Quan hệ | Điểm vào từ UC-DT-06. |
 | Quy tắc | BR14 |
-| Phi chức năng | Theo mục 7 của đặc tả; kiểm tra quyền phía server. |
+
+**Luồng chính**
+
+1. Khách chọn bữa HoanTat trong lịch sử đặt.
+2. Khách nhập điểm 1–5, nhận xét.
+3. Hệ thống kiểm tra, lưu đánh giá, người nhập.
+
+**Luồng thay thế**
+
+- 1a. Tư vấn nhập hộ: chọn bữa theo hồ sơ khách, nhập ý kiến người đặt; lưu tư vấn là người nhập.
+
+**Ngoại lệ**
+
+- 3e. Bữa chưa hoàn tất, đã có đánh giá hoặc không thuộc hồ sơ: không tạo.
 
 ## UC-BC-01
 
 | Trường | Nội dung |
 | --- | --- |
-| ID | UC-BC-01 |
 | Tên | Xem dashboard và cảnh báo |
-| Mô tả | Tổng hợp các hồ sơ cần xử lý và cảnh báo trong phạm vi quyền. |
-| Tác nhân | Quản lý cơ sở, Nhân viên tư vấn, Kế toán, Thủ kho, Quản lý nhân sự |
-| Ưu tiên | Cốt lõi |
-| Kích hoạt | Nhân viên cần xem công việc hiện tại. |
-| Điều kiện trước | Đã đăng nhập; dữ liệu theo quyền từng vai trò. |
-| Luồng chính | Tổng hợp tiệc sắp tới, chờ ký/cọc/quyết toán, thiếu nhân sự, dụng cụ dưới ngưỡng; loại giữ chỗ quá hạn; hiển thị và dẫn đến hồ sơ. |
-| Luồng thay thế | Kiểm tra bù đợt giá tháng trên server khi vào chức năng nội bộ. |
-| Ngoại lệ | Không gửi email/Zalo hoặc tạo lịch nhắc tự động. |
-| Điều kiện sau | Người dùng thấy công việc/cảnh báo trong quyền. |
-| Quy tắc | BR05, BR07, BR11, BR12, BR13 |
-| Phi chức năng | Theo mục 7 của đặc tả; kiểm tra quyền phía server. |
+| Tác nhân | Nhân viên nội bộ |
+| Mục tiêu | Thấy việc cần xử lý và cảnh báo trong phạm vi vai trò. |
+| Kích hoạt | Đăng nhập nội bộ hoặc mở dashboard. |
+| Tiền điều kiện | Đã đăng nhập tài khoản nội bộ. |
+| Hậu điều kiện | Hiển thị danh sách việc, dẫn tới hồ sơ tương ứng; không thay đổi dữ liệu. |
+| Quan hệ | Điểm vào các UC xử lý. |
+| Quy tắc | BR07, BR11, BR12, BR13 |
+
+**Luồng chính**
+
+1. Hệ thống xác định vai trò người dùng.
+2. Hệ thống tổng hợp khối theo vai trò:
+   - Tư vấn: đơn chờ khảo sát/nhận, hợp đồng chờ ký/cọc sắp hết hạn, phụ lục chờ.
+   - Kế toán: chờ cọc, chờ quyết toán, khoản phải hoàn, kỳ nguyên liệu chờ chốt.
+   - Thủ kho: bữa sắp tới cần xuất, bữa chờ kiểm đếm, dụng cụ dưới tồn tối thiểu.
+   - Quản lý nhân sự: bữa sắp tới thiếu phân công so với gợi ý.
+   - Quản lý cơ sở: tất cả khối, đợt đề xuất giá chưa xử lý.
+3. Hệ thống hiển thị lịch tiệc sắp tới (ngày/tuần) và các khối.
+4. Người dùng chọn mục, chuyển tới UC tương ứng.
+
+**Luồng thay thế**
+
+- 2a. Không có mục nào: hiển thị trống.
+
+**Ngoại lệ**
+
+- 1e. Tài khoản khách: không truy cập dashboard nội bộ.
 
 ## UC-BC-02
 
 | Trường | Nội dung |
 | --- | --- |
-| ID | UC-BC-02 |
-| Tên | Xem báo cáo kinh doanh |
-| Mô tả | Đánh giá doanh thu và lãi theo nguyên liệu từ các kỳ có dữ liệu xác định. |
+| Tên | Xem báo cáo doanh thu và food cost |
 | Tác nhân | Quản lý cơ sở, Kế toán |
-| Ưu tiên | Cốt lõi |
-| Kích hoạt | Cần xem doanh thu, nguyên liệu và kết quả theo kỳ. |
-| Điều kiện trước | Có dữ liệu đơn, bữa, giao dịch và kỳ nguyên liệu. |
-| Luồng chính | Chọn kỳ; tổng hợp doanh thu bữa theo ngày phục vụ, thu/hoàn và tiền giữ do hủy riêng; dùng kỳ đã chốt để tính food cost/lãi nguyên liệu; hiển thị hao hụt và đánh giá. |
-| Luồng thay thế | Kỳ chưa chốt chỉ hiển thị số liệu tạm/chưa xác định food cost; không tính chi phí thực tế từng bữa từ phiếu mua chung. |
-| Ngoại lệ | Khoảng ngày sai: yêu cầu chọn lại; không chia 0 và không tính cọc chưa phục vụ thành doanh thu món. |
-| Điều kiện sau | Có báo cáo trong phạm vi ghi nhận, không gọi lãi nguyên liệu là lợi nhuận ròng. |
+| Mục tiêu | Xem doanh thu, thu/hoàn, food cost, lãi theo nguyên liệu, tình hình đơn, đánh giá theo kỳ. |
+| Kích hoạt | Cần xem kết quả kinh doanh. |
+| Tiền điều kiện | Đã đăng nhập đúng quyền. |
+| Hậu điều kiện | Hiển thị báo cáo; không thay đổi dữ liệu. |
+| Quan hệ | Dùng kết quả UC-KHO-03. |
 | Quy tắc | BR06, BR11, BR14 |
-| Phi chức năng | Theo mục 7 của đặc tả; kiểm tra quyền phía server. |
+
+**Luồng chính**
+
+1. Người dùng chọn khoảng thời gian (tháng/quý/năm hoặc từ–đến), lọc loại tiệc (tùy chọn).
+2. Hệ thống tổng hợp doanh thu bữa đã thực hiện theo ngày phục vụ, tách món/dịch vụ/bồi thường.
+3. Hệ thống tổng hợp tiền thu, tiền hoàn, tiền giữ lại do hủy.
+4. Hệ thống lấy kỳ nguyên liệu đã chốt: chi phí tiêu thụ, food cost, lãi theo nguyên liệu = doanh thu món − chi phí.
+5. Hệ thống tổng hợp số đơn theo trạng thái, tỷ lệ hủy, điểm đánh giá trung bình.
+6. Hệ thống hiển thị bảng, biểu đồ.
+
+**Luồng thay thế**
+
+- 4a. Tháng chưa chốt: food cost, lãi hiển thị "chưa xác định".
+
+**Ngoại lệ**
+
+- 1e. Từ ngày sau đến ngày: yêu cầu chọn lại.
+
+## UC-BC-03
+
+| Trường | Nội dung |
+| --- | --- |
+| Tên | Xem báo cáo dụng cụ |
+| Tác nhân | Quản lý cơ sở, Thủ kho |
+| Mục tiêu | Xem tồn dụng cụ, loại dưới ngưỡng, hao hụt và bồi thường theo kỳ. |
+| Kích hoạt | Cần xem tình trạng kho dụng cụ. |
+| Tiền điều kiện | Đã đăng nhập đúng quyền. |
+| Hậu điều kiện | Hiển thị báo cáo; không thay đổi dữ liệu. |
+| Quan hệ | Dữ liệu từ UC-KHO-05 đến UC-KHO-08. |
+| Quy tắc | BR13 |
+
+**Luồng chính**
+
+1. Người dùng chọn khoảng thời gian.
+2. Hệ thống hiển thị từng loại: sở hữu, sẵn sàng, đang sử dụng, hư, tồn tối thiểu, cờ dưới ngưỡng.
+3. Hệ thống tổng hợp trong kỳ: lượng nhập mua, hư, mất, phục hồi, loại bỏ; tiền bồi thường khách chịu.
+
+**Luồng thay thế**
+
+- 2a. Lọc chỉ loại dưới ngưỡng.
+
+**Ngoại lệ**
+
+- 1e. Khoảng ngày sai: yêu cầu chọn lại.
