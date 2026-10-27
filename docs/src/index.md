@@ -7,9 +7,9 @@ hero:
   text: Nấu cả Việt Nam, ngon vô đây
   actions:
     - theme: brand
-      text: Diagrams
-      link: /diagrams
+      text: Đặc tả phần mềm
+      link: /specification
     - theme: alt
-      text: References
-      link: /references
+      text: Use case và sơ đồ
+      link: /diagrams
 ---
