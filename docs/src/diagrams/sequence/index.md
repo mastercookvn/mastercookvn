@@ -1,6 +1,6 @@
 # Sequence diagrams
 
-Chỉ mục sơ đồ; mã và tên UC làm gốc ở [danh mục chung](../index.md). Các trang dưới đây là mô tả đầu vào, chưa vẽ.
+Chỉ mục sơ đồ; mã và tên UC làm gốc ở [danh mục chung](../index.md).
 
 - [Đặt tiệc và đặt hộ](./dat-tiec-dat-ho.md) — UC-DT-01, UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD-02.
 - [Xác nhận, cọc và thanh toán](./xac-nhan-thanh-toan.md) — UC-HD-02, UC-HD-03, UC-HD-04.

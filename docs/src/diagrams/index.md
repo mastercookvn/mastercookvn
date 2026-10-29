@@ -58,4 +58,4 @@
 
 Khi thêm, bỏ hoặc đổi UC, sửa bảng này và trang đặc tả liên quan trong cùng thay đổi. Khi thêm sơ đồ, sửa chỉ mục của loại sơ đồ tương ứng. Không chép bảng UC vào spec hoặc chỉ mục con.
 
-Các file sơ đồ hiện chỉ chứa mô tả để agent sau vẽ. Không có mã vẽ hoặc SVG sinh tự động. Khi thêm mã vẽ, tuân thủ comment định danh trong `docs/AGENTS.md`. Không thêm cấu hình Vim.
+Các file sơ đồ được thể hiện bằng biểu đồ Mermaid (không sinh file SVG). Khi chỉnh sửa sơ đồ, giữ nguyên ngôn ngữ tiếng Việt và tuân thủ các quy định trong `AGENTS.md`.
