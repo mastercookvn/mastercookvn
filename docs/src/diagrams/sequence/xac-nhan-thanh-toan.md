@@ -23,7 +23,7 @@ sequenceDiagram
     end
     HD-->>UI: Xác nhận đã ký
 
-    K->>UI: Chọn số tiền cọc (50%–100%)
+    K->>UI: Chọn số tiền cọc (50% - 100%)
     UI->>TT: Tạo yêu cầu thanh toán online
     activate TT
     TT->>TT: Sinh mã tham chiếu và phân bổ dự kiến theo bữa
@@ -49,7 +49,7 @@ sequenceDiagram
         TR-->>TT: Xác nhận giữ chính thức
         HD-->>UI: Hợp đồng có hiệu lực
     else Chưa đủ
-        note over TT,HD: Chờ đủ điều kiện; hết hạn thì nhả chỗ
+        note over TT,HD: Chờ đủ điều kiện, hết hạn thì nhả chỗ
     end
 
     opt Thanh toán phần còn lại

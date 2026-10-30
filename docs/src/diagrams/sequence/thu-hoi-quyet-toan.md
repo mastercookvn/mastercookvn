@@ -3,7 +3,7 @@
 ```mermaid
 sequenceDiagram
     participant TK as Thủ kho
-    participant DC as Dụng cụ/Kiểm đếm
+    participant DC as Dụng cụ / Kiểm đếm
     participant QT as Quyết toán
     participant KT as Kế toán
     participant TT as Thanh toán
@@ -28,7 +28,7 @@ sequenceDiagram
 
     TK->>DC: Cập nhật trạng thái dụng cụ
     activate DC
-    DC->>DC: Tốt vào sẵn sàng; hư vào không khả dụng; mất giảm sở hữu
+    DC->>DC: Tốt vào sẵn sàng, hư vào không khả dụng, mất giảm sở hữu
     DC->>DC: Nhả giữ bữa (không cập nhật hai lần)
     DC-->>TK: Xác nhận cập nhật tồn kho
     deactivate DC

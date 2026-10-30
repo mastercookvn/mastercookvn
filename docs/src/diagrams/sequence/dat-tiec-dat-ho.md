@@ -44,9 +44,9 @@ sequenceDiagram
     DH->>TR: Kiểm tra tất cả bữa và giữ hiệu lực bên ngoài
     activate TR
     TR->>TR: Tính nhu cầu nhân sự từ bàn bố trí
+    deactivate TR
     alt Đủ tài nguyên và trong phạm vi 20km
         TR-->>DH: Tài nguyên hợp lệ
-        deactivate TR
         DH->>HD: Phát hành hợp đồng chung
         activate HD
         HD->>HD: Chốt nội dung và hạn 24 giờ
@@ -56,7 +56,6 @@ sequenceDiagram
         DH-->>UI: Hợp đồng đã phát hành
     else Thiếu tài nguyên hoặc ngoài 20km
         TR-->>DH: Trả lý do từ chối
-        deactivate TR
         DH-->>UI: Thông báo lý do, không giữ một phần
     end
     deactivate DH
