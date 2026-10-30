@@ -60,20 +60,9 @@ sequenceDiagram
 
 UC liên quan: UC-HD-06, UC-HD-07. Tra tại [danh mục chung](../index.md). Quy tắc tại [đặc tả](../../specification.md); lớp tại [mô hình](../class.md).
 
-## Thành phần
+## Lưu ý và giới hạn
 
-Khách/Tư vấn → xử lý hủy → hợp đồng → phân bổ thanh toán → giữ/phân công → Kế toán.
-
-## Nội dung cần thể hiện
-
-1. Nhận lựa chọn hủy một số bữa hoặc tất cả bữa chưa thực hiện; ghi thời điểm yêu cầu.
-2. Từng bữa lấy căn cứ hoàn cọc theo BR08, tiền trả trước vượt và khoảng giờ còn lại.
-3. Tính hoàn bậc thang theo BR10, cộng tiền vượt được hoàn đủ; tổng hợp kết quả cả yêu cầu.
-4. Khách hoặc tư vấn xác nhận; lưu kết quả hủy, nhả tài nguyên và hủy phân công đúng bữa, tạo nghĩa vụ hoàn.
-5. Các bữa khác và quyết toán bữa đã thực hiện không đổi.
-6. Kế toán trả tiền ngoài hệ thống; ghi giao dịch hoàn cùng phân bổ và bằng chứng.
-7. Tính lại số dư, hoàn tất bữa hủy khi không còn thu/hoàn; hợp đồng đóng chỉ khi tất cả bữa đã xử lý.
-
-## Nhánh và giới hạn
-
-Bậc hoàn: >=30 ngày 100%; >=15 và <30 ngày 50%; <15 ngày 0%. Chưa cọc hủy miễn phí. Không có mặt là ghi nhận riêng, không đồng nghĩa khách hủy giữa lúc phục vụ. Không phê duyệt hoàn nhiều cấp.
+- Bậc hoàn tiền cọc căn cứ số ngày còn lại đến tiệc: $\ge 30$ ngày hoàn 100%; từ $15$ đến dưới $30$ ngày hoàn 50%; dưới $15$ ngày hoàn 0%. Phần tiền trả trước vượt cọc được hoàn đủ 100%.
+- Hủy trước khi cọc không phát sinh chi phí.
+- Khách không có mặt tại tiệc là trường hợp ghi nhận riêng, không tính là khách chủ động yêu cầu hủy.
+- Quy trình hoàn tiền do Kế toán chi trả và ghi nhận trực tiếp, không qua phê duyệt nhiều cấp phức tạp.

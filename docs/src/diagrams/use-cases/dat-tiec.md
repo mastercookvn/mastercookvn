@@ -1,19 +1,17 @@
 # Đặt tiệc
 
-Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../index.md) là chỉ mục duy nhất. Quy ước bước: `Na` luồng thay thế, `Ne` ngoại lệ tại bước N.
-
 ## UC-DT-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Xem danh mục và tạm tính |
-| Tác nhân | Khách hàng |
-| Mục tiêu | Khách chọn món, biết chi phí dự kiến trước khi đặt. |
-| Kích hoạt | Khách tham khảo dịch vụ. |
-| Tiền điều kiện | Không cần đăng nhập. |
-| Hậu điều kiện | Hiển thị giá dự kiến; không lưu đơn, không giữ chỗ. |
-| Quan hệ | Có thể chuyển sang UC-DT-02 với lựa chọn hiện tại. |
-| Quy tắc | BR03, BR04 |
+| Trường         | Nội dung                                            |
+| -------------- | --------------------------------------------------- |
+| Tên            | Xem danh mục và tạm tính                            |
+| Tác nhân       | Khách hàng                                          |
+| Mục tiêu       | Khách chọn món, biết chi phí dự kiến trước khi đặt. |
+| Kích hoạt      | Khách tham khảo dịch vụ.                            |
+| Tiền điều kiện | Không cần đăng nhập.                                |
+| Hậu điều kiện  | Hiển thị giá dự kiến; không lưu đơn, không giữ chỗ. |
+| Quan hệ        | Có thể chuyển sang UC-DT-02 với lựa chọn hiện tại.  |
+| Quy tắc        | BR03, BR04                                          |
 
 **Luồng chính**
 
@@ -33,16 +31,16 @@ Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../ind
 
 ## UC-DT-02
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Tạo đơn đặt tiệc |
-| Tác nhân | Khách hàng, Nhân viên tư vấn |
-| Mục tiêu | Lưu yêu cầu đặt một hoặc nhiều bữa vào đúng hồ sơ khách. |
-| Kích hoạt | Khách tự đặt online hoặc liên hệ tư vấn đặt hộ. |
-| Tiền điều kiện | Khách tự đặt: đã đăng nhập. Đặt hộ: tư vấn đã đăng nhập. |
-| Hậu điều kiện | Đơn ChoXacNhan và các bữa DuKien lưu ở server; chưa giữ tài nguyên. |
-| Quan hệ | Extend: đặt hộ (tư vấn). Dùng cách tính của UC-DT-01. |
-| Quy tắc | BR01, BR02, BR03, BR04 |
+| Trường         | Nội dung                                                            |
+| -------------- | ------------------------------------------------------------------- |
+| Tên            | Tạo đơn đặt tiệc                                                    |
+| Tác nhân       | Khách hàng, Nhân viên tư vấn                                        |
+| Mục tiêu       | Lưu yêu cầu đặt một hoặc nhiều bữa vào đúng hồ sơ khách.            |
+| Kích hoạt      | Khách tự đặt online hoặc liên hệ tư vấn đặt hộ.                     |
+| Tiền điều kiện | Khách tự đặt: đã đăng nhập. Đặt hộ: tư vấn đã đăng nhập.            |
+| Hậu điều kiện  | Đơn ChoXacNhan và các bữa DuKien lưu ở server; chưa giữ tài nguyên. |
+| Quan hệ        | Extend: đặt hộ (tư vấn). Dùng cách tính của UC-DT-01.               |
+| Quy tắc        | BR01, BR02, BR03, BR04                                              |
 
 **Luồng chính**
 
@@ -66,16 +64,16 @@ Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../ind
 
 ## UC-DT-03
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Khảo sát địa điểm |
-| Tác nhân | Nhân viên tư vấn |
-| Mục tiêu | Ghi điều kiện hiện trường, khoảng cách từng bữa làm căn cứ nhận tiệc. |
-| Kích hoạt | Có đơn ChoXacNhan; tư vấn trao đổi với khách (gọi điện/Zalo/đến xem). |
-| Tiền điều kiện | Đơn chưa hủy/từ chối. |
-| Hậu điều kiện | Mỗi bữa có khảo sát riêng: khoảng cách, Q&A, ghi chú hiện trạng. |
-| Quan hệ | Đầu vào của UC-DT-05. |
-| Quy tắc | BR01, BR07 |
+| Trường         | Nội dung                                                              |
+| -------------- | --------------------------------------------------------------------- |
+| Tên            | Khảo sát địa điểm                                                     |
+| Tác nhân       | Nhân viên tư vấn                                                      |
+| Mục tiêu       | Ghi điều kiện hiện trường, khoảng cách từng bữa làm căn cứ nhận tiệc. |
+| Kích hoạt      | Có đơn ChoXacNhan; tư vấn trao đổi với khách (gọi điện/Zalo/đến xem). |
+| Tiền điều kiện | Đơn chưa hủy/từ chối.                                                 |
+| Hậu điều kiện  | Mỗi bữa có khảo sát riêng: khoảng cách, Q&A, ghi chú hiện trạng.      |
+| Quan hệ        | Đầu vào của UC-DT-05.                                                 |
+| Quy tắc        | BR01, BR07                                                            |
 
 **Luồng chính**
 
@@ -96,16 +94,16 @@ Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../ind
 
 ## UC-DT-04
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Kiểm tra khả năng phục vụ |
-| Tác nhân | Nhân viên tư vấn |
-| Mục tiêu | Biết dụng cụ, nhân sự có đủ cho các bữa trong khung giờ không. |
-| Kích hoạt | Tư vấn kiểm tra trước khi nhận; được gọi từ UC-DT-05, UC-HD-05. |
-| Tiền điều kiện | Bữa có khung sử dụng tài nguyên, bàn bố trí, số người. |
-| Hậu điều kiện | Kết quả đủ hoặc danh sách thiếu; không ghi giữ chỗ. |
-| Quan hệ | Được include bởi UC-DT-05, UC-HD-05. |
-| Quy tắc | BR07, BR12, BR13 |
+| Trường         | Nội dung                                                        |
+| -------------- | --------------------------------------------------------------- |
+| Tên            | Kiểm tra khả năng phục vụ                                       |
+| Tác nhân       | Nhân viên tư vấn                                                |
+| Mục tiêu       | Biết dụng cụ, nhân sự có đủ cho các bữa trong khung giờ không.  |
+| Kích hoạt      | Tư vấn kiểm tra trước khi nhận; được gọi từ UC-DT-05, UC-HD-05. |
+| Tiền điều kiện | Bữa có khung sử dụng tài nguyên, bàn bố trí, số người.          |
+| Hậu điều kiện  | Kết quả đủ hoặc danh sách thiếu; không ghi giữ chỗ.             |
+| Quan hệ        | Được include bởi UC-DT-05, UC-HD-05.                            |
+| Quy tắc        | BR07, BR12, BR13                                                |
 
 **Luồng chính**
 
@@ -128,16 +126,16 @@ Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../ind
 
 ## UC-DT-05
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Xác nhận nhận hoặc từ chối đơn |
-| Tác nhân | Nhân viên tư vấn |
-| Mục tiêu | Cơ sở quyết định nhận toàn đơn và giữ tài nguyên tạm. |
-| Kích hoạt | Đơn đã khảo sát đủ các bữa. |
-| Tiền điều kiện | Đơn ChoXacNhan; mọi bữa có khảo sát. |
-| Hậu điều kiện | Nhận: đơn DaNhan, giữ tạm 24 giờ, chuyển lập hợp đồng. Từ chối: đơn BiTuChoi kèm lý do. |
-| Quan hệ | Include UC-DT-04. Sau khi nhận chuyển UC-HD-01. |
-| Quy tắc | BR01, BR07 |
+| Trường         | Nội dung                                                                                |
+| -------------- | --------------------------------------------------------------------------------------- |
+| Tên            | Xác nhận nhận hoặc từ chối đơn                                                          |
+| Tác nhân       | Nhân viên tư vấn                                                                        |
+| Mục tiêu       | Cơ sở quyết định nhận toàn đơn và giữ tài nguyên tạm.                                   |
+| Kích hoạt      | Đơn đã khảo sát đủ các bữa.                                                             |
+| Tiền điều kiện | Đơn ChoXacNhan; mọi bữa có khảo sát.                                                    |
+| Hậu điều kiện  | Nhận: đơn DaNhan, giữ tạm 24 giờ, chuyển lập hợp đồng. Từ chối: đơn BiTuChoi kèm lý do. |
+| Quan hệ        | Include UC-DT-04. Sau khi nhận chuyển UC-HD-01.                                         |
+| Quy tắc        | BR01, BR07                                                                              |
 
 **Luồng chính**
 
@@ -159,16 +157,16 @@ Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../ind
 
 ## UC-DT-06
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Tra cứu đơn, hợp đồng và lịch sử thanh toán |
-| Tác nhân | Khách hàng, Nhân viên tư vấn, Kế toán |
-| Mục tiêu | Xem tình trạng đơn/bữa, nội dung hợp đồng, phụ lục, giao dịch thu/hoàn. |
-| Kích hoạt | Người dùng cần tra cứu. |
-| Tiền điều kiện | Đã đăng nhập. |
-| Hậu điều kiện | Hiển thị dữ liệu trong phạm vi quyền; không thay đổi dữ liệu. |
-| Quan hệ | Là điểm vào của UC-HD-02, UC-HD-03, UC-HD-05, UC-HD-06, UC-CS-01. |
-| Quy tắc | BR02, BR11 |
+| Trường         | Nội dung                                                                |
+| -------------- | ----------------------------------------------------------------------- |
+| Tên            | Tra cứu đơn, hợp đồng và lịch sử thanh toán                             |
+| Tác nhân       | Khách hàng, Nhân viên tư vấn, Kế toán                                   |
+| Mục tiêu       | Xem tình trạng đơn/bữa, nội dung hợp đồng, phụ lục, giao dịch thu/hoàn. |
+| Kích hoạt      | Người dùng cần tra cứu.                                                 |
+| Tiền điều kiện | Đã đăng nhập.                                                           |
+| Hậu điều kiện  | Hiển thị dữ liệu trong phạm vi quyền; không thay đổi dữ liệu.           |
+| Quan hệ        | Là điểm vào của UC-HD-02, UC-HD-03, UC-HD-05, UC-HD-06, UC-CS-01.       |
+| Quy tắc        | BR02, BR11                                                              |
 
 **Luồng chính**
 

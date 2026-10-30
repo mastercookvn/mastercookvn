@@ -10,6 +10,166 @@
 - Các model sau là mô hình miền, không yêu cầu mỗi lớp tương ứng một bảng hoặc tự tạo CRUD cho mọi lớp.
 - Các giá và nội dung chốt là dữ liệu lịch sử, không liên kết động để thay đổi theo danh mục mới.
 
+## Sơ đồ lớp tổng quan
+
+Sơ đồ tổng quan thể hiện kiến trúc miền (domain model) và mối liên kết cốt lõi giữa các phân hệ:
+
+```mermaid
+classDiagram
+    direction TB
+
+    class KhachHang {
+        +UUID id
+        +string hoTen
+        +string soDienThoai
+    }
+
+    class TaiKhoan {
+        +UUID id
+        +string soDienThoai
+        +string trangThai
+    }
+
+    class VaiTro {
+        +UUID id
+        +string ma
+    }
+
+    class NhanVien {
+        +UUID id
+        +string hoTen
+        +string loai
+        +string viTri
+    }
+
+    class DonDatTiec {
+        +UUID id
+        +string ma
+        +string kenh
+        +string trangThai
+    }
+
+    class BuaTiec {
+        +UUID id
+        +datetime batDau
+        +datetime ketThuc
+        +int soBanAn
+        +int soBanBoTri
+        +string trangThai
+    }
+
+    class HopDong {
+        +UUID id
+        +string so
+        +money tongGiaTri
+        +string trangThai
+    }
+
+    class PhuLucHopDong {
+        +UUID id
+        +string so
+        +string loai
+        +money chenhLech
+        +string trangThai
+    }
+
+    class GiaoDichThanhToan {
+        +UUID id
+        +string loai
+        +string phuongThuc
+        +money soTien
+        +string trangThai
+    }
+
+    class PhanBoThanhToan {
+        +UUID id
+        +money soTien
+    }
+
+    class QuyetToanBua {
+        +UUID id
+        +money tongPhaiTra
+        +string trangThai
+    }
+
+    class HuyBuaTiec {
+        +UUID id
+        +money tienHoan
+        +money tienGiuLai
+    }
+
+    class MonAn {
+        +UUID id
+        +string ten
+        +money giaBanChuan
+    }
+
+    class NguyenLieu {
+        +UUID id
+        +string ten
+        +decimal_money giaHienHanh
+    }
+
+    class DungCu {
+        +UUID id
+        +string ten
+        +int soLuongSoHuu
+        +int soLuongSanSang
+    }
+
+    class GiuDungCu {
+        +UUID id
+        +int soLuong
+        +string trangThai
+    }
+
+    class PhieuXuatDungCu {
+        +UUID id
+        +string ma
+        +string trangThai
+    }
+
+    class BienBanKiemDem {
+        +UUID id
+        +string trangThai
+    }
+
+    class PhanCongNhanSu {
+        +UUID id
+        +string viTri
+        +string trangThai
+    }
+
+    class DanhGia {
+        +UUID id
+        +int diem
+    }
+
+    %% Quan he lien ket giua cac phan he
+    KhachHang "1" --> "0..1" TaiKhoan : lienKet
+    NhanVien "1" --> "0..1" TaiKhoan : lienKet
+    TaiKhoan "1" --> "0..*" VaiTro : coVaiTro
+    KhachHang "1" --> "0..*" DonDatTiec : datTiec
+    DonDatTiec "1" *-- "1..*" BuaTiec : gom
+    DonDatTiec "1" --> "0..1" HopDong : phatHanh
+    HopDong "1" --> "0..*" PhuLucHopDong : dieuChinh
+    PhuLucHopDong "0..*" --> "1" BuaTiec : apDung
+    HopDong "1" --> "0..*" GiaoDichThanhToan : phatSinh
+    GiaoDichThanhToan "1" *-- "1..*" PhanBoThanhToan : phanBo
+    PhanBoThanhToan "0..*" --> "1" BuaTiec : choBua
+    BuaTiec "1" --> "0..1" QuyetToanBua : quyetToan
+    BuaTiec "1" --> "0..1" HuyBuaTiec : huy
+    BuaTiec "0..*" --> "1..*" MonAn : chonMon
+    MonAn "0..*" --> "1..*" NguyenLieu : dinhLuong
+    BuaTiec "1" --> "0..*" GiuDungCu : giu
+    GiuDungCu "0..*" --> "1" DungCu : loai
+    BuaTiec "1" --> "0..1" PhieuXuatDungCu : xuat
+    PhieuXuatDungCu "1" --> "0..1" BienBanKiemDem : kiemDem
+    BuaTiec "1" --> "0..*" PhanCongNhanSu : phanCong
+    PhanCongNhanSu "0..*" --> "1" NhanVien : giaoCho
+    BuaTiec "1" --> "0..1" DanhGia : nhanDanhGia
+```
+
 ## Tài khoản và khách hàng
 
 ```mermaid
@@ -21,8 +181,8 @@ classDiagram
         +string matKhauBam
         +string tenHienThi
         +string trangThai
-        +UUID khachHangId
-        +UUID nhanVienId
+        +UUID? khachHangId
+        +UUID? nhanVienId
         +dangKy()
         +dangNhap()
         +khoa()
@@ -47,8 +207,8 @@ classDiagram
         +UUID id
         +string hoTen
         +string soDienThoai
-        +string diaChiLienHe
-        +text ghiChu
+        +string? diaChiLienHe
+        +text? ghiChu
         +capNhat()
         +timTheoSoDienThoai()
     }
@@ -70,45 +230,13 @@ classDiagram
     NhanVien "1" --> "0..1" TaiKhoan : lienKetTaiKhoan
 ```
 
-### TaiKhoan
+### Ràng buộc nghiệp vụ
 
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; soDienThoai: string duy nhất; matKhauBam: string; tenHienThi: string; trangThai: HoatDong/Khoa; khachHangId?: UUID; nhanVienId?: UUID |
-| Hành vi chính | dangKy(); dangNhap(); khoa(); lienKetKhachHang() |
-| Ràng buộc | Không cần tài khoản để có hồ sơ khách/nhân sự. |
-
-### VaiTro
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ma: enum KhachHang/QuanLyCoSo/TuVan/KeToan/ThuKho/QuanLyNhanSu; ten: string |
-| Hành vi chính | quyenTheoChucNang() |
-| Ràng buộc | Vai trò cố định theo bảng quyền spec, không thêm quy trình duyệt quyền. |
-
-### GanVaiTro
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | taiKhoanId: UUID; vaiTroId: UUID |
-| Hành vi chính | gan(); go() |
-| Ràng buộc | Cặp tài khoản–vai trò duy nhất; quyền là hợp các vai trò. |
-
-### KhachHang
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; hoTen: string; soDienThoai: string duy nhất; diaChiLienHe?: string; ghiChu?: text |
-| Hành vi chính | capNhat(); timTheoSoDienThoai() |
-| Ràng buộc | Một người/tên cho mỗi SĐT chuẩn hóa. Khách đăng ký cùng SĐT liên kết hồ sơ đặt hộ, không OTP. |
-
-### NhanVien
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; hoTen: string; soDienThoai: string; loai: CoDinh/ThoiVu; viTri: tập Bep/PhucVu/VanChuyen/KiemDem; trangThai: DangLam/NgungLam |
-| Hành vi chính | capNhat(); coThePhanCong(khoangGio, viTri) |
-| Ràng buộc | Vị trí nghiệp vụ không phải vai trò tài khoản. Không lương/chấm công. |
+- **TaiKhoan**: Không bắt buộc phải có tài khoản để lưu hồ sơ khách hàng hoặc hồ sơ nhân sự.
+- **VaiTro**: Vai trò hệ thống cố định theo bảng quyền đặc tả, không có quy trình phê duyệt cấp quyền động.
+- **GanVaiTro**: Cặp tài khoản–vai trò là duy nhất; quyền của người dùng là hợp các vai trò được gán.
+- **KhachHang**: Khóa định danh hồ sơ là số điện thoại chuẩn hóa. Khách hàng đăng ký tài khoản mới cùng số điện thoại sẽ tự động liên kết với hồ sơ khách đã tạo qua đặt hộ trước đó.
+- **NhanVien**: Vị trí chuyên môn (Bếp, Phục vụ, Vận chuyển, Kiểm đếm) là thông tin nghiệp vụ phân công ca, không phải vai trò tài khoản hệ thống. Không quản lý chấm công/lương.
 
 ## Đơn, bữa và khảo sát
 
@@ -123,7 +251,7 @@ classDiagram
         +string kenh
         +string trangThai
         +datetime ngayTao
-        +text lyDoTuChoi
+        +text? lyDoTuChoi
         +themBua()
         +gui()
         +xacNhanNhan()
@@ -145,10 +273,10 @@ classDiagram
         +int soBanBoTri
         +int soGheBoTri
         +map nhanSuDuKienTheoViTri
-        +string nguoiLienHe
-        +string soDienThoaiLienHe
+        +string? nguoiLienHe
+        +string? soDienThoaiLienHe
         +string trangThai
-        +text ghiChu
+        +text? ghiChu
         +tinhTienMon()
         +nhuCauDungCu()
         +goiYNhanSu()
@@ -160,7 +288,7 @@ classDiagram
     class LoaiTiec {
         +UUID id
         +string ten
-        +text moTa
+        +text? moTa
         +bool dangSuDung
         +capNhat()
         +ngung()
@@ -171,7 +299,7 @@ classDiagram
         +UUID buaId
         +text diaChi
         +decimal khoangCachKm
-        +text ghiChu
+        +text? ghiChu
         +UUID nguoiGhiId
         +datetime ngayGhi
         +capNhat()
@@ -194,7 +322,7 @@ classDiagram
         +string tenMonChot
         +money donGiaChuanChot
         +decimal heSoQuyMo
-        +text ghiChu
+        +text? ghiChu
         +thanhTien(soBanAn)
     }
 
@@ -215,7 +343,7 @@ classDiagram
         +money tienMon
         +money tienDichVu
         +money phuThu
-        +text lyDoPhuThu
+        +text? lyDoPhuThu
         +decimal thueSuat
         +money tienThue
         +money chenhLechLamTron
@@ -232,69 +360,14 @@ classDiagram
     BuaTiec "1" *-- "1" KhoanGiaBua : tinhGia
 ```
 
-### DonDatTiec
+### Ràng buộc nghiệp vụ
 
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ma: string duy nhất; khachHangId: UUID; nguoiTaoId: UUID; kenh: Web/DienThoai/Zalo/TrucTiep; trangThai: ChoXacNhan/DaNhan/BiTuChoi/HetHan/DaHuy; ngayTao: datetime; lyDoTuChoi?: text |
-| Hành vi chính | themBua(); gui(); xacNhanNhan(); tuChoi(); huy() |
-| Ràng buộc | Đơn nhiều bữa; nháp chưa gửi ở trình duyệt, không trạng thái nháp lưu server. |
-
-### BuaTiec
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; donId: UUID; loaiTiecId: UUID; batDau: datetime; ketThuc: datetime; dungCuTu: datetime; dungCuDen: datetime; soBanAnBanDau: int; soBanAn: int; soNguoiMoiBan: int; soBanBoTri: int; soGheBoTri: int; nhanSuDuKienTheoViTri: map vị trí–số người; nguoiLienHe?: string; soDienThoaiLienHe?: string; trangThai: enum; ghiChu?: text |
-| Hành vi chính | tinhTienMon(); nhuCauDungCu(); goiYNhanSu(); kiemTraSua(); huy(); hoanTat() |
-| Ràng buộc | Tách bàn ăn khỏi bàn ghế; thực đơn, khảo sát và phân công riêng. Khung tài nguyên nhập thủ công. |
-
-### LoaiTiec
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ten: string; moTa?: text; dangSuDung: bool |
-| Hành vi chính | capNhat(); ngung() |
-| Ràng buộc | Chỉ phân loại, không tự gợi ý văn hóa/món cúng, không đám tang. |
-
-### KhaoSatDiaDiem
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID duy nhất; diaChi: text; khoangCachKm: decimal; ghiChu?: text; nguoiGhiId: UUID; ngayGhi: datetime |
-| Hành vi chính | capNhat(); kiemTraPhamVi() |
-| Ràng buộc | Không tái sử dụng địa điểm giữa các bữa; không tọa độ/API bản đồ. Mỗi bữa có địa chỉ từ lúc tạo, câu trả lời có thể bổ sung khi tư vấn. |
-
-### TraLoiKhaoSat
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; khaoSatId: UUID; thuTu: int; cauHoi: string; traLoi: text |
-| Hành vi chính | capNhat() |
-| Ràng buộc | Câu hỏi/đáp án lưu tại khảo sát, không cần hệ quản lý bộ câu hỏi riêng. Gợi ý điện, nước, chỗ nấu, tầng/thang máy, xe tiếp cận, diện tích. |
-
-### MonTrongBua
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID; monId: UUID; tenMonChot: string; donGiaChuanChot: money; heSoQuyMo: decimal; ghiChu?: text |
-| Hành vi chính | thanhTien(soBanAn) |
-| Ràng buộc | Một dòng cho mỗi món; đổi món là thay dòng qua phụ lục, không thêm món sau ký. |
-
-### DichVuTrongBua
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID; dichVuId: UUID; tenChot: string; donViChot: string; soLuong: decimal; donGiaChot: money |
-| Hành vi chính | thanhTien() |
-| Ràng buộc | Dịch vụ do cơ sở cung cấp; không đối tác thuê ngoài hoặc phát sinh trong tiệc. |
-
-### KhoanGiaBua
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID; tienMon: money; tienDichVu: money; phuThu: money; lyDoPhuThu?: text; thueSuat: decimal; tienThue: money; chenhLechLamTron: money; tong: money |
-| Hành vi chính | tinhTong() |
-| Ràng buộc | Đúng một bảng giá hiện hành/bữa; bản hợp đồng/phụ lục giữ bản nội dung bất biến. Giá gợi ý chưa phải giá chốt. |
+- **DonDatTiec**: Đơn tiệc hỗ trợ một hoặc nhiều bữa tiệc; bản nháp chưa gửi chỉ lưu ở trình duyệt, hệ thống chỉ lưu khi người dùng gửi đơn (`ChoXacNhan`).
+- **BuaTiec**: Phân biệt rõ số bàn ăn và số bàn ghế bố trí thực tế. Khung thời gian sử dụng tài nguyên được nhập thủ công. Thực đơn, khảo sát và phân công độc lập theo từng bữa.
+- **LoaiTiec**: Phân loại phục vụ quản lý và thống kê, không tự động gợi ý món tâm linh/văn hóa.
+- **KhaoSatDiaDiem & TraLoiKhaoSat**: Mỗi bữa tiệc có một bản khảo sát địa điểm riêng; câu hỏi và câu trả lời lưu trực tiếp tại khảo sát, không dùng chung câu trả lời giữa các bữa.
+- **MonTrongBua & DichVuTrongBua**: Lưu danh sách món và dịch vụ chốt cố định của bữa tiệc, không liên kết động theo danh mục hiện hành sau khi hợp đồng phát hành.
+- **KhoanGiaBua**: Đúng một bảng tính giá hiện hành cho mỗi bữa tiệc. Giá trong hợp đồng chốt là dữ liệu lịch sử bất biến.
 
 ## Hợp đồng, điều chỉnh và tiền
 
@@ -318,14 +391,14 @@ classDiagram
 
     class XacNhanVanBan {
         +UUID id
-        +UUID hopDongId
-        +UUID phuLucId
+        +UUID? hopDongId
+        +UUID? phuLucId
         +string phuongThuc
-        +UUID nguoiXacNhanId
+        +UUID? nguoiXacNhanId
         +string tenNguoiKy
         +datetime thoiDiemKy
         +UUID nguoiGhiId
-        +UUID tepKyId
+        +UUID? tepKyId
         +ghiOnline()
         +ghiKyGiay()
     }
@@ -363,7 +436,7 @@ classDiagram
         +money tienHoan
         +money tienGiuLai
         +money thuThemThoaThuan
-        +text ghiChuThoaThuan
+        +text? ghiChuThoaThuan
         +tinhHoan()
         +xacNhanHuy()
     }
@@ -375,10 +448,10 @@ classDiagram
         +string phuongThuc
         +money soTien
         +string trangThai
-        +string maThamChieu
+        +string? maThamChieu
         +datetime thoiDiem
-        +UUID nguoiGhiId
-        +UUID tepBangChungId
+        +UUID? nguoiGhiId
+        +UUID? tepBangChungId
         +xacNhanOnline()
         +ghiThuCong()
         +phanBo()
@@ -399,11 +472,11 @@ classDiagram
         +UUID buaId
         +money giaTriHienHanh
         +money denBu
-        +money nghiaVuSauHuy
+        +money? nghiaVuSauHuy
         +money tongPhaiTra
         +string trangThai
-        +datetime ngayChot
-        +UUID nguoiChotId
+        +datetime? ngayChot
+        +UUID? nguoiChotId
         +tongThu()
         +tongHoan()
         +soDu()
@@ -430,69 +503,14 @@ classDiagram
     GiaoDichThanhToan "0..*" --> "0..1" TepDinhKem : chungTu
 ```
 
-### HopDong
+### Ràng buộc nghiệp vụ
 
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; so: string duy nhất; donId: UUID duy nhất; noiDungChot: text/document; tongGiaTri: money; phatHanhLuc: datetime; hanCoc: datetime; trangThai: ChoXacNhanCoc/CoHieuLuc/HetHan/DaHuy/HoanTat |
-| Hành vi chính | phatHanh(); kiemTraHieuLuc(); soDu(); kiemTraDong() |
-| Ràng buộc | Một hợp đồng bao phủ các bữa của đơn. Nội dung lưu đủ danh sách bữa/giá/điều khoản chốt, không phụ thuộc danh mục hiện hành. |
-
-### XacNhanVanBan
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; hopDongId?: UUID; phuLucId?: UUID; phuongThuc: Online/KyGiay; nguoiXacNhanId?: UUID; tenNguoiKy: string; thoiDiemKy: datetime; nguoiGhiId: UUID; tepKyId?: UUID |
-| Hành vi chính | ghiOnline(); ghiKyGiay() |
-| Ràng buộc | Thuộc đúng một hợp đồng hoặc phụ lục; ký giấy bắt buộc file. Online lưu tài khoản khách; không OTP/chữ ký số. |
-
-### PhuLucHopDong
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; hopDongId: UUID; buaId: UUID; so: string; loai: DoiMon/SoBanAn; noiDungTruoc: document; noiDungSau: document; chenhLech: money; cocBoSung: money; trangThai: ChoXacNhan/ChoCocBoSung/DaApDung/DaHuy; nguoiLapId: UUID; ngayLap: datetime |
-| Hành vi chính | tinhChenhLech(); xacNhan(); apDung(); huy() |
-| Ràng buộc | Một phụ lục cho một bữa; không dời ngày. Chỉ một phụ lục chưa xử lý cho cùng bữa để tránh áp thay đổi xung đột. |
-
-### HuyBuaTiec
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID duy nhất; nguoiGhiId: UUID; yeuCauLuc: datetime; lyDo: text; soGioConLai: decimal; cocLamCanCuHoan: money; traTruocVuot: money; tyLeHoan: decimal; phiXuLy: money; tienHoan: money; tienGiuLai: money; thuThemThoaThuan: money; ghiChuThoaThuan?: text |
-| Hành vi chính | tinhHoan(); xacNhanHuy() |
-| Ràng buộc | Một lần hủy/bữa; lưu kết quả và căn cứ để sửa chính sách sau không đổi lịch sử. Hủy toàn hợp đồng tạo kết quả từng bữa, không cần thêm đối tượng hủy bao ngoài. |
-
-### GiaoDichThanhToan
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; hopDongId: UUID; loai: Coc/CocBoSung/ThanhToanCuoi/Hoan; phuongThuc: TienMat/Online/ChuyenKhoanThuCong; soTien: money; trangThai: Cho/ThanhCong/ThatBai; maThamChieu?: string duy nhất theo nhà cung cấp; thoiDiem: datetime; nguoiGhiId?: UUID; tepBangChungId?: UUID |
-| Hành vi chính | xacNhanOnline(); ghiThuCong(); phanBo() |
-| Ràng buộc | Mọi số tiền giao dịch dương; loại Hoan quyết định chiều chi. Không sửa cọc thành hoàn, không thêm bảng công nợ. |
-
-### PhanBoThanhToan
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; giaoDichId: UUID; buaId: UUID; soTien: money; phanCocBatBuoc: money; phanTraTruoc: money |
-| Hành vi chính | kiemTraTongPhanBo() |
-| Ràng buộc | Tổng dòng bằng giao dịch. Phần bắt buộc + trả trước bằng số phân bổ đối với thu cọc; hoàn liên kết đúng bữa có nghĩa vụ hoàn. |
-
-### QuyetToanBua
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID duy nhất; giaTriHienHanh: money; denBu: money; nghiaVuSauHuy?: money; tongPhaiTra: money; trangThai: ChoXuLy/HoanTat; ngayChot?: datetime; nguoiChotId?: UUID |
-| Hành vi chính | tongThu(); tongHoan(); soDu(); chot() |
-| Ràng buộc | Số đã thu/hoàn và số dư tính từ giao dịch thành công, không nhập thêm cột khách nợ độc lập. Bữa hủy thay tiền phục vụ bằng nghĩa vụ sau hủy. |
-
-### TepDinhKem
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; khoaLuuTru: string; tenGoc: string; loaiNoiDung: string; kichThuoc: int; nguoiTaiId: UUID; taiLuc: datetime |
-| Hành vi chính | layTheoQuyen() |
-| Ràng buộc | Lưu bản ký, bằng chứng hoàn; kho file có thể dùng S3, chưa chốt API. Không dùng URL công khai thay quyền hồ sơ. |
+- **HopDong**: Một hợp đồng bao phủ tất cả các bữa tiệc của đơn. Nội dung lưu đủ danh sách bữa, đơn giá và điều khoản chốt; không phụ thuộc thay đổi danh mục sau này.
+- **XacNhanVanBan**: Gắn với đúng một Hợp đồng hoặc Phụ lục; phương thức ký giấy bắt buộc đính kèm tệp văn bản ký scan. Ký online lưu tài khoản khách hàng, không dùng OTP.
+- **PhuLucHopDong**: Một phụ lục cho đúng một bữa tiệc; không cho phép dời ngày tiệc. Mỗi bữa chỉ có tối đa một phụ lục chưa xử lý để tránh xung đột dữ liệu.
+- **HuyBuaTiec**: Lưu kết quả và căn cứ hoàn tiền độc lập cho từng bữa tiệc; hủy toàn hợp đồng tạo kết quả cho từng bữa tương ứng.
+- **GiaoDichThanhToan & PhanBoThanhToan**: Mọi số tiền giao dịch là số dương (loại `Hoan` quyết định chiều chi). Tổng tiền phân bổ cho các bữa phải bằng chính xác số tiền giao dịch.
+- **QuyetToanBua**: Số tiền đã thu/hoàn và số dư tính từ các giao dịch thành công. Bữa tiệc bị hủy thay thế tiền phục vụ bằng nghĩa vụ thanh toán sau hủy.
 
 ## Danh mục món và nguyên liệu
 
@@ -512,8 +530,8 @@ classDiagram
         +UUID id
         +UUID loaiMonId
         +string ten
-        +text moTa
-        +string anh
+        +text? moTa
+        +string? anh
         +money giaBanChuan
         +bool dangPhucVu
         +chiPhiUocTinh()
@@ -525,7 +543,7 @@ classDiagram
     class SetThucDon {
         +UUID id
         +string ten
-        +text moTa
+        +text? moTa
         +bool dangPhucVu
         +tinhGia()
         +capNhatMon()
@@ -559,7 +577,7 @@ classDiagram
     class DichVu {
         +UUID id
         +string ten
-        +text moTa
+        +text? moTa
         +string donVi
         +money donGia
         +bool dangSuDung
@@ -583,69 +601,14 @@ classDiagram
     NguyenLieu "1" <-- "0..*" DinhLuongMon : thanhPhan
 ```
 
-### LoaiMon
+### Ràng buộc nghiệp vụ
 
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ten: string; thuTu: int; dangSuDung: bool |
-| Hành vi chính | capNhat(); ngung() |
-| Ràng buộc | Phân nhóm để lọc danh mục, không thêm cơ cấu món bắt buộc ngoài tối thiểu 6 món tự chọn. |
-
-### MonAn
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; loaiMonId: UUID; ten: string; moTa?: text; anh?: string; giaBanChuan: money; dangPhucVu: bool |
-| Hành vi chính | chiPhiUocTinh(); giaGoiY(foodCostMucTieu); capNhatGia(); ngung() |
-| Ràng buộc | Giá cho bàn ăn chuẩn 10 người, không giá theo đĩa hoặc món lẻ tại tiệc. |
-
-### SetThucDon
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ten: string; moTa?: text; dangPhucVu: bool |
-| Hành vi chính | tinhGia(); capNhatMon(); ngung() |
-| Ràng buộc | Giá tính tổng món, không cộng lợi nhuận lần thứ hai; bữa giữ danh sách món đã chốt, không trỏ động vào set. |
-
-### MonTrongSet
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | setId: UUID; monId: UUID; thuTu: int |
-| Hành vi chính | sapXep() |
-| Ràng buộc | Cặp set–món duy nhất. |
-
-### NguyenLieu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ten: string; donViChuan: string; giaHienHanh: decimal-money; dangSuDung: bool |
-| Hành vi chính | capNhatGia(); monBiAnhHuong() |
-| Ràng buộc | Giá hiện hành để định lượng, khác giá trị tồn kiểm kê; không có soLuongTon trừ theo từng tiệc. |
-
-### DinhLuongMon
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | monId: UUID; nguyenLieuId: UUID; soLuongChuan: decimal |
-| Hành vi chính | tinhChiPhi() |
-| Ràng buộc | Lượng cho 1 bàn ăn chuẩn; cặp món–nguyên liệu duy nhất, không hao hụt sơ chế. |
-
-### DichVu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ten: string; moTa?: text; donVi: string; donGia: money; dangSuDung: bool |
-| Hành vi chính | capNhat(); ngung() |
-| Ràng buộc | Trang trí, dọn dẹp, âm thanh… do cơ sở tự cung cấp. |
-
-### CauHinhNghiepVu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; foodCostMucTieu: decimal; thueSuat: decimal; mocHieuLuc: datetime; nguoiCapNhatId: UUID |
-| Hành vi chính | apDungChoDuLieuMoi() |
-| Ràng buộc | Tham số khác theo spec. Các ngưỡng chốt trong code/config cần ghi rõ tại spec; không thêm hàng chục tham số từ bản AI cũ. |
+- **LoaiMon & MonAn**: Phân nhóm để lọc danh mục; món ăn tự chọn tối thiểu 6 món cho một tiệc. Đơn giá chuẩn áp dụng cho bàn ăn chuẩn 10 người.
+- **SetThucDon**: Đơn giá set tính bằng tổng đơn giá các món thành phần, không cộng thêm biên lợi nhuận kép. Bữa tiệc lưu danh sách món chốt, không trỏ động vào set.
+- **MonTrongSet**: Cặp set–món là duy nhất.
+- **NguyenLieu & DinhLuongMon**: Định lượng xác định lượng nguyên liệu cho 1 bàn ăn chuẩn 10 người (cặp món–nguyên liệu là duy nhất). Đơn giá hiện hành dùng để tính chi phí ước tính và đề xuất giá bán món.
+- **DichVu**: Do cơ sở tự cung cấp (trang trí, âm thanh,...); không quản lý đối tác thuê ngoài.
+- **CauHinhNghiepVu**: Tham số nghiệp vụ toàn hệ thống (food cost mục tiêu, thuế suất,...), áp dụng cho các tính toán và đơn tiệc tạo mới.
 
 ## Nhập, kiểm kê và food cost
 
@@ -657,9 +620,9 @@ classDiagram
         +string ma
         +datetime ngayNhap
         +string tenNhaCungCap
-        +string soDienThoaiNhaCungCap
+        +string? soDienThoaiNhaCungCap
         +UUID nguoiNhapId
-        +text ghiChu
+        +text? ghiChu
         +tongTien()
         +ghiNhan()
     }
@@ -680,10 +643,10 @@ classDiagram
         +string trangThai
         +money doanhThuMon
         +money chiPhiTieuThu
-        +decimal foodCostThucTe
+        +decimal? foodCostThucTe
         +money laiTheoNguyenLieu
-        +UUID nguoiChotId
-        +datetime chotLuc
+        +UUID? nguoiChotId
+        +datetime? chotLuc
         +tongHop()
         +tinhFoodCost()
         +chot()
@@ -702,7 +665,7 @@ classDiagram
         +decimal_money donGiaBinhQuan
         +money giaTriCuoi
         +money chiPhiTieuThu
-        +text ghiChu
+        +text? ghiChu
         +tinhGiaTon()
         +tinhTieuThu()
     }
@@ -726,10 +689,10 @@ classDiagram
         +UUID nguyenLieuId
         +decimal_money giaCu
         +decimal_money giaDeXuat
-        +decimal_money giaDuocChon
+        +decimal_money? giaDuocChon
         +string trangThai
-        +UUID nguoiXuLyId
-        +datetime xuLyLuc
+        +UUID? nguoiXuLyId
+        +datetime? xuLyLuc
         +tinhGiaTrongSo()
         +chapNhan()
         +dieuChinh()
@@ -741,53 +704,11 @@ classDiagram
     DotDeXuatGia "1" *-- "0..*" DongDeXuatGia : gom
 ```
 
-### PhieuNhapNguyenLieu
+### Ràng buộc nghiệp vụ
 
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ma: string duy nhất; ngayNhap: datetime; tenNhaCungCap: string; soDienThoaiNhaCungCap?: string; nguoiNhapId: UUID; ghiChu?: text |
-| Hành vi chính | tongTien(); ghiNhan() |
-| Ràng buộc | Không bắt buộc gắn bữa, không quản lý PO/công nợ NCC. |
-
-### DongNhapNguyenLieu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; phieuId: UUID; nguyenLieuId: UUID; donViChot: string; soLuong: decimal; donGia: decimal-money |
-| Hành vi chính | thanhTien() |
-| Ràng buộc | Lượng và giá theo đơn vị chuẩn; lượng > 0, giá >= 0. |
-
-### KyNguyenLieu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; thang: YearMonth duy nhất; trangThai: DangNhap/DaChot; doanhThuMon: money; chiPhiTieuThu: money; foodCostThucTe?: decimal; laiTheoNguyenLieu: money; nguoiChotId?: UUID; chotLuc?: datetime |
-| Hành vi chính | tongHop(); tinhFoodCost(); chot(); moLai() |
-| Ràng buộc | Chốt tuần tự tháng; nếu sửa tháng cũ đánh dấu các tháng sau cần chốt lại. Không xuất kho sau mỗi tiệc. |
-
-### DongKiemKeNguyenLieu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; kyId: UUID; nguyenLieuId: UUID; luongDau: decimal; giaTriDau: money; luongNhap: decimal; giaTriNhap: money; luongCuoiThucTe: decimal; donGiaBinhQuan: decimal-money; giaTriCuoi: money; chiPhiTieuThu: money; ghiChu?: text |
-| Hành vi chính | tinhGiaTon(); tinhTieuThu() |
-| Ràng buộc | Cặp kỳ–nguyên liệu duy nhất. Đầu kỳ kế thừa kỳ trước; tháng đầu khai lượng/giá ban đầu. Nhập do tổng hợp phiếu, cuối do kiểm kê. |
-
-### DotDeXuatGia
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; thang: YearMonth duy nhất; mocTinh: datetime; tuNgay: datetime; denNgay: datetime; taoLuc: datetime; nguonKhoiTao: Cron/KiemTraBu; trangThai: ChoXuLy/DaXuLy |
-| Hành vi chính | taoNeuChuaCo(); tongHopTrangThai() |
-| Ràng buộc | Mốc tính luôn đầu tháng kể cả chạy bù; một giao dịch tạo đủ đợt/dòng, không cần model lịch nhắc. |
-
-### DongDeXuatGia
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; dotId: UUID; nguyenLieuId: UUID; giaCu: decimal-money; giaDeXuat: decimal-money; giaDuocChon?: decimal-money; trangThai: ChoXuLy/ChapNhan/DieuChinh/BoQua; nguoiXuLyId?: UUID; xuLyLuc?: datetime |
-| Hành vi chính | tinhGiaTrongSo(); chapNhan(); dieuChinh(); boQua() |
-| Ràng buộc | Cặp đợt–nguyên liệu duy nhất; lưu tổng lượng/giá trị có trọng số hoặc căn cứ phiếu nguồn để giải thích đề xuất. |
+- **PhieuNhapNguyenLieu & DongNhapNguyenLieu**: Ghi nhận lượng và đơn giá thực mua; không bắt buộc gắn trực tiếp với bữa tiệc. Lượng $>0$, đơn giá $\ge 0$.
+- **KyNguyenLieu & DongKiemKeNguyenLieu**: Kiểm kê và chốt kỳ theo tháng. Tiêu thụ = Giá trị đầu + Nhập − Cuối kỳ. Không xuất kho trừ nguyên liệu sau từng bữa tiệc.
+- **DotDeXuatGia & DongDeXuatGia**: Khởi tạo mốc tính ngày đầu tháng; tính bình quân trọng số 30 ngày gần nhất (khoảng cách 10 ngày tương ứng 1.5; 1.5; 2). Giá đề xuất độc lập với giá trị tồn kho.
 
 ## Dụng cụ và tài nguyên
 
@@ -800,7 +721,7 @@ classDiagram
         +string donVi
         +string coSoDinhMuc
         +decimal dinhMuc
-        +decimal duTru
+        +decimal? duTru
         +int soLuongToiThieu
         +money giaBoiThuong
         +int soLuongSoHuu
@@ -821,7 +742,7 @@ classDiagram
         +datetime tuLuc
         +datetime denLuc
         +string trangThai
-        +datetime hetHanTam
+        +datetime? hetHanTam
         +bool daXuat
         +kiemTraKhaDung()
         +chuyenChinhThuc()
@@ -841,7 +762,7 @@ classDiagram
         +string ma
         +datetime ngayNhap
         +string tenNhaCungCap
-        +string soDienThoaiNhaCungCap
+        +string? soDienThoaiNhaCungCap
         +UUID nguoiNhapId
         +tongTien()
         +ghiNhan()
@@ -861,7 +782,7 @@ classDiagram
         +string ma
         +UUID buaId
         +UUID nguoiXuatId
-        +datetime xuatLuc
+        +datetime? xuatLuc
         +string trangThai
         +kiemTraTon()
         +xuat()
@@ -882,7 +803,7 @@ classDiagram
         +UUID nguoiKiemId
         +datetime kiemLuc
         +string trangThai
-        +text ghiChu
+        +text? ghiChu
         +kiemTraCanBang()
         +tinhDenBu()
         +xacNhan()
@@ -897,7 +818,7 @@ classDiagram
         +int mat
         +int soKhachChiu
         +money donGiaBoiThuongChot
-        +text lyDo
+        +text? lyDo
         +tinhDenBu()
     }
 
@@ -919,85 +840,14 @@ classDiagram
     DongXuatDungCu "1" <-- "1" DongKiemDem : kiemTheoDongXuat
 ```
 
-### DungCu
+### Ràng buộc nghiệp vụ
 
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ten: string; donVi: string; coSoDinhMuc: Nguoi/BanBoTri/Bua; dinhMuc: decimal; duTru?: decimal-percent; soLuongToiThieu: int; giaBoiThuong: money; soLuongSoHuu: int; soLuongSanSang: int; soLuongDangSuDung: int; soLuongHu: int |
-| Hành vi chính | tinhNhuCau(); canhBaoThieu(); phucHoi(); loaiBo() |
-| Ràng buộc | Sở hữu = sẵn sàng + đang sử dụng + hư; mất/loại bỏ đã trừ sở hữu. Không serial, không ngăn chờ vệ sinh riêng. |
-
-### GiuDungCu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID; dungCuId: UUID; soLuong: int; tuLuc: datetime; denLuc: datetime; trangThai: Tam/ChinhThuc/DaNha; hetHanTam?: datetime; daXuat: bool |
-| Hành vi chính | kiemTraKhaDung(); chuyenChinhThuc(); nha() |
-| Ràng buộc | Giữ và xuất là hai khái niệm; không trừ kho hai lần. Không chồng tổng giữ vượt sở hữu dùng được. |
-
-### GiaBoiThuongBua
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | buaId: UUID; dungCuId: UUID; tenChot: string; donGiaChot: money |
-| Hành vi chính | layGiaChot() |
-| Ràng buộc | Giá được chốt khi phát hành hợp đồng, trước khi kiểm đếm; không dùng giá hiện hành thay thế. |
-
-### PhieuNhapDungCu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ma: string duy nhất; ngayNhap: datetime; tenNhaCungCap: string; soDienThoaiNhaCungCap?: string; nguoiNhapId: UUID |
-| Hành vi chính | tongTien(); ghiNhan() |
-| Ràng buộc | Mua bổ sung kho, không luồng phê duyệt mua hàng. |
-
-### DongNhapDungCu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; phieuId: UUID; dungCuId: UUID; soLuong: int; donGia: money |
-| Hành vi chính | thanhTien() |
-| Ràng buộc | Ghi nhận một lần làm tăng sẵn sàng và sở hữu. |
-
-### PhieuXuatDungCu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; ma: string duy nhất; buaId: UUID duy nhất; nguoiXuatId: UUID; xuatLuc?: datetime; trangThai: Nhap/DaXuat/DaKiemDem/DaHuy |
-| Hành vi chính | kiemTraTon(); xuat(); hoanTatKiemDem() |
-| Ràng buộc | Phạm vi đơn giản: một phiếu xuất/bữa, một lần thu hồi đầy đủ; không thu hồi một phần. |
-
-### DongXuatDungCu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; phieuId: UUID; dungCuId: UUID; soLuong: int |
-| Hành vi chính | kiemTraSoLuong() |
-| Ràng buộc | Cặp phiếu–dụng cụ duy nhất; lượng thực xuất làm căn cứ kiểm đếm. |
-
-### BienBanKiemDem
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; phieuXuatId: UUID duy nhất; nguoiKiemId: UUID; kiemLuc: datetime; trangThai: Nhap/DaXacNhan; ghiChu?: text |
-| Hành vi chính | kiemTraCanBang(); tinhDenBu(); xacNhan() |
-| Ràng buộc | Không biểu mẫu trình bày, không bắt ảnh/chữ ký/GPS. Xác nhận cập nhật tồn và quyết toán nguyên tử. |
-
-### DongKiemDem
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; bienBanId: UUID; dongXuatId: UUID duy nhất; thuHoiTot: int; hu: int; mat: int; soKhachChiu: int; donGiaBoiThuongChot: money; lyDo?: text |
-| Hành vi chính | tinhDenBu() |
-| Ràng buộc | Tốt + hư + mất = xuất; 0 <= khách chịu <= hư + mất. |
-
-### XuLyDungCuHu
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; dungCuId: UUID; soLuong: int; loai: PhucHoi/LoaiBo; lyDo: text; nguoiGhiId: UUID; thoiDiem: datetime |
-| Hành vi chính | apDung() |
-| Ràng buộc | Không tạo hệ quản lý bảo trì phức tạp, chỉ ghi lượng phục hồi/loại bỏ. |
+- **DungCu**: Bất biến sở hữu: $\text{Sở hữu} = \text{Sẵn sàng} + \text{Đang sử dụng} + \text{Hư}$. Tồn tối thiểu là ngưỡng cảnh báo bổ sung, không chặn cứng quy trình nếu đủ lượng dùng được.
+- **GiuDungCu**: Giữ tạm (24 giờ) hoặc giữ chính thức; phân biệt rõ với xuất kho để tránh trừ kho hai lần vào năng lực khả dụng tương lai.
+- **GiaBoiThuongBua**: Đơn giá bồi thường được chốt trong hợp đồng trước khi diễn ra tiệc, không áp dụng đơn giá thị trường tại thời điểm kiểm đếm.
+- **PhieuNhapDungCu & DongNhapDungCu**: Nhập mua bổ sung trực tiếp làm tăng sẵn sàng và tăng sở hữu.
+- **PhieuXuatDungCu, BienBanKiemDem & DongKiemDem**: Một bữa tối đa một phiếu xuất và một biên bản kiểm đếm đầy đủ. Điều kiện cân bằng bắt buộc: $\text{Tốt} + \text{Hư} + \text{Mất} = \text{Xuất}$; $0 \le \text{Khách chịu} \le \text{Hư} + \text{Mất}$.
+- **XuLyDungCuHu**: Ghi nhận lượng phục hồi (chuyển sang sẵn sàng) hoặc loại bỏ (giảm lượng hư và giảm sở hữu).
 
 ## Phân công và đánh giá
 
@@ -1009,7 +859,7 @@ classDiagram
         +UUID buaId
         +UUID nhanVienId
         +string viTri
-        +text nhiemVu
+        +text? nhiemVu
         +datetime batDau
         +datetime ketThuc
         +string trangThai
@@ -1024,71 +874,19 @@ classDiagram
         +UUID buaId
         +UUID khachHangId
         +int diem
-        +text nhanXet
+        +text? nhanXet
         +UUID nguoiNhapId
         +datetime ngayNhap
         +ghiNhan()
     }
 ```
 
-### PhanCongNhanSu
+### Ràng buộc nghiệp vụ
 
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID; nhanVienId: UUID; viTri: enum; nhiemVu?: text; batDau: datetime; ketThuc: datetime; trangThai: HieuLuc/DaHuy; nguoiPhanCongId: UUID |
-| Hành vi chính | kiemTraTrungLich(); doiNguoi(); huy() |
-| Ràng buộc | Giờ làm nhập riêng; có thể khác giờ phục vụ. Năng lực chưa phân công vẫn tính theo nhu cầu dự kiến của bữa đang giữ, không đợi có tên nhân viên. Không trạng thái nhận/từ chối ca, không check-in. |
+- **PhanCongNhanSu**: Khung giờ làm việc có thể bao phủ hoặc lệch so với giờ phục vụ của bữa. Kiểm tra chặn trùng lịch khi phân công người cụ thể. Năng lực nhân sự chung được dự trù theo vị trí của các bữa đang giữ trước khi gán người đích danh.
+- **DanhGia**: Mỗi bữa tiệc tối đa một đánh giá (điểm 1–5), chỉ mở khi bữa tiệc đã chuyển trạng thái `HoanTat`. Người đánh giá phải là người đặt của đơn chứa bữa đó.
 
-### DanhGia
-
-| Thành phần | Nội dung |
-| --- | --- |
-| Thuộc tính | id: UUID; buaId: UUID duy nhất; khachHangId: UUID; diem: int; nhanXet?: text; nguoiNhapId: UUID; ngayNhap: datetime |
-| Hành vi chính | ghiNhan() |
-| Ràng buộc | Điểm 1–5, đúng người đặt, bữa hoàn tất; nhân viên có thể nhập hộ. Không feedback của khách mời. |
-
-## Quan hệ và số lượng liên kết
-
-| Từ | Đến | Số lượng | Ý nghĩa |
-| --- | --- | --- | --- |
-| TaiKhoan | VaiTro | N — N qua GanVaiTro | Một tài khoản có nhiều vai trò. |
-| KhachHang | TaiKhoan | 1 — 0..1 | Tài khoản khách liên kết một hồ sơ; hồ sơ đặt hộ có thể chưa có tài khoản. |
-| NhanVien | TaiKhoan | 1 — 0..1 | Nhân sự không cần tài khoản; tài khoản nội bộ có thể gắn một nhân viên. |
-| KhachHang | DonDatTiec | 1 — 0..N | Mỗi đơn thuộc đúng một người đặt. |
-| DonDatTiec | BuaTiec | 1 — 1..N, hợp thành | Không gom các bữa vào một thực đơn/địa điểm chung. |
-| DonDatTiec | HopDong | 1 — 0..1 | Một hợp đồng không trỏ nhiều đơn. |
-| LoaiTiec | BuaTiec | 1 — 0..N | Phân loại riêng từng bữa. |
-| BuaTiec | KhaoSatDiaDiem | 1 — 1, hợp thành | Địa chỉ lưu từ lúc tạo; Q&A bổ sung trước khi nhận. |
-| KhaoSatDiaDiem | TraLoiKhaoSat | 1 — 0..N, hợp thành | Không dùng chung câu trả lời giữa các bữa. |
-| BuaTiec | MonTrongBua | 1 — 1..N, hợp thành | Mỗi dòng tham chiếu một MonAn. |
-| BuaTiec | DichVuTrongBua | 1 — 0..N, hợp thành | Mỗi dòng tham chiếu một DichVu. |
-| BuaTiec | KhoanGiaBua | 1 — 1, hợp thành | Một tổng hiện hành; giá cũ giữ trong văn bản chốt. |
-| HopDong | PhuLucHopDong | 1 — 0..N | Mỗi phụ lục còn tham chiếu đúng một bữa thuộc đơn của hợp đồng. |
-| HopDong/PhuLucHopDong | XacNhanVanBan | 1 — 0..1 mỗi văn bản | Một xác nhận thuộc đúng một loại văn bản, không đồng thời cả hai. |
-| BuaTiec | HuyBuaTiec | 1 — 0..1 | Hủy nhiều bữa lưu một kết quả cho mỗi bữa. |
-| HopDong | GiaoDichThanhToan | 1 — 0..N | Thu và hoàn chung lịch sử giao dịch. |
-| GiaoDichThanhToan | PhanBoThanhToan | 1 — 1..N khi thành công | Mỗi phân bổ tham chiếu một bữa cùng hợp đồng. |
-| BuaTiec | QuyetToanBua | 1 — 0..1 | Bao gồm bữa phục vụ và bữa hủy có nghĩa vụ tiền. |
-| XacNhanVanBan/GiaoDichThanhToan | TepDinhKem | 0..N — 0..1 mỗi tham chiếu | File ký giấy/bằng chứng được kiểm tra quyền theo hồ sơ. |
-| LoaiMon | MonAn | 1 — 0..N | Mỗi món một loại. |
-| SetThucDon | MonAn | N — N qua MonTrongSet | Bữa không phụ thuộc thay đổi set sau khi ký. |
-| MonAn | NguyenLieu | N — N qua DinhLuongMon | Định lượng không phải giao dịch xuất kho. |
-| PhieuNhapNguyenLieu | DongNhapNguyenLieu | 1 — 1..N, hợp thành | Mỗi dòng một nguyên liệu; không bắt buộc liên kết bữa. |
-| KyNguyenLieu | DongKiemKeNguyenLieu | 1 — 1..N khi chốt | Mỗi dòng một nguyên liệu, có liên hệ kỳ trước theo tháng/nguyên liệu. |
-| DotDeXuatGia | DongDeXuatGia | 1 — 0..N, hợp thành | Không có nhập trong 30 ngày có thể tạo đợt rỗng đã xử lý. |
-| NguyenLieu | DongNhapNguyenLieu/DongKiemKeNguyenLieu/DongDeXuatGia | 1 — 0..N từng loại | Giá gợi ý và giá tồn là hai phép tính riêng. |
-| BuaTiec | GiuDungCu | 1 — 0..N | Mỗi giữ tham chiếu một DungCu và khung thời gian. |
-| BuaTiec | GiaBoiThuongBua | 1 — 0..N | Mỗi dòng chốt một dụng cụ; chốt đủ loại cần dùng trước ký. |
-| BuaTiec | PhieuXuatDungCu | 1 — 0..1 | Bữa không dùng dụng cụ có thể không có phiếu. |
-| PhieuXuatDungCu | DongXuatDungCu | 1 — 1..N, hợp thành | Mỗi dòng một DungCu. |
-| PhieuXuatDungCu | BienBanKiemDem | 1 — 0..1 | Mỗi biên bản gồm một dòng mỗi dòng xuất. |
-| BienBanKiemDem | DongKiemDem | 1 — 1..N, hợp thành | Liên kết dòng xuất gốc và giá chốt của bữa. |
-| PhieuNhapDungCu | DongNhapDungCu | 1 — 1..N, hợp thành | Mỗi dòng một DungCu. |
-| DungCu | XuLyDungCuHu | 1 — 0..N | Phục hồi/loại bỏ không áp dụng vượt lượng hư. |
-| BuaTiec | NhanVien | N — N qua PhanCongNhanSu | Không phân nhân sự theo hợp đồng chung. |
-| BuaTiec | DanhGia | 1 — 0..1 | KhachHang đánh giá phải là người đặt của đơn chứa bữa. |
-
-## Dịch vụ miền để thể hiện trên sơ đồ thiết kế
+## Dịch vụ miền (Domain Services)
 
 ```mermaid
 classDiagram
@@ -1146,27 +944,14 @@ classDiagram
     }
 ```
 
-| Dịch vụ | Trách nhiệm và phương thức |
-| --- | --- |
-| KiemTraTaiNguyen | kiemTra(bua, khoangGio); giuTam(don); chuyenChinhThuc(hopDong); nha(bua). Kiểm tra và giữ trong cùng giao dịch, tính cả các bữa cùng đơn. |
-| TinhGia | tinhBua(); tinhGiaMonGoiY(); tinhChenhLechPhuLuc(); lamTron500(). Dùng bản chốt khi đã ký. |
-| ThanhToan | taoYeuCau(); ghiThuCong(); nhanKetQua(); phanBo(); ghiHoan(). Chống ghi trùng mã bên cung cấp. |
-| ChotNguyenLieuThang | tongHopNhap(); layTonDau(); dinhGiaTonCuoi(); tinhFoodCost(); chotKy(). Không trừ nguyên liệu theo bữa. |
-| DeXuatGiaThang | taoNeuChuaCo(thang); tinhTrongSo(); xuLyDong(); layMonAnhHuong(). Cron và kiểm tra bù dùng chung thao tác. |
-| BaoCao | doanhThuTheoBua(); foodCostTheoKy(); laiTheoNguyenLieu(); thuHoan(); haoHut(); dashboard(). Không cần lớp/bảng BaoCao riêng. |
+## Các bất biến miền (Domain Invariants)
 
-## Các bất biến cần thể hiện
-
-1. Bữa, phụ lục, giao dịch phân bổ, quyết toán và giữ tài nguyên không được trỏ chéo hai hợp đồng.
-2. Khách online chỉ xem hồ sơ liên kết SĐT; vai trò nội bộ theo bảng quyền. Quyền không suy ra từ vị trí nhân sự.
-3. Tổng thu/hoàn từ giao dịch thành công; tổng phân bổ đúng số giao dịch; số dư chỉ tính một lần tiền cọc.
-4. Hủy bữa nhả giữ và hủy phân công của bữa đó, không làm mất dữ liệu các bữa khác.
-5. Tính khả dụng tương lai theo tổng sở hữu dùng được trừ giữ chồng lấn; lúc xuất kiểm tra thêm sẵn sàng thực tế. Giữ đã xuất không bị trừ thêm một lần chỉ vì hàng đang sử dụng.
-6. Kho nguyên liệu chỉ có các mốc kiểm kê theo tháng và phiếu nhập; không có PhieuXuatNguyenLieu hay tiêu thụ thực tế theo tiệc.
-7. Giá trị tồn dùng bình quân tháng; giá nguyên liệu hiện hành dùng đề xuất có trọng số 30 ngày; không dùng hai giá thay thế nhau.
-8. Đợt giá duy nhất/tháng; kỳ nguyên liệu duy nhất/tháng; đánh giá duy nhất/bữa; mã thanh toán bên cung cấp duy nhất.
-9. Danh mục đã có lịch sử chỉ được ngưng. Nội dung hợp đồng/phụ lục đã xác nhận và giao dịch đã thành công không sửa đè.
-
-## Phạm vi vẽ
-
-Vẽ một sơ đồ lớp tổng quan với các nhóm trên; có thể chia các hình chi tiết ngay trong file này nếu quá rộng. Giữ nguyên tên lớp/quan hệ giữa hình tổng quan và hình chi tiết. Không tự bổ sung lương, PO, nhà cung cấp độc lập, lô nguyên liệu, lịch xe, lead, OTP, thông báo hay công nợ.
+1. Bữa tiệc, phụ lục, giao dịch phân bổ, quyết toán và giữ tài nguyên không được trỏ chéo giữa hai hợp đồng.
+2. Khách hàng online chỉ xem hồ sơ liên kết số điện thoại của mình; quyền nội bộ xác định theo bảng phân quyền của vai trò.
+3. Tổng thu/hoàn tiền tính từ các giao dịch thành công; tổng phân bổ theo bữa phải bằng đúng số tiền giao dịch; số dư chỉ tính một lần tiền cọc.
+4. Hủy một bữa tiệc chỉ nhả giữ tài nguyên và hủy phân công của bữa đó, không làm ảnh hưởng đến dữ liệu các bữa khác trong cùng đơn.
+5. Tính khả dụng tương lai theo tổng sở hữu dùng được trừ đi các khoảng giữ chồng lấn; tại thời điểm xuất kho kiểm tra thêm lượng sẵn sàng thực tế. Giữ đã xuất kho không bị trừ hai lần.
+6. Kho nguyên liệu chỉ kiểm kê theo chu kỳ tháng và lưu phiếu nhập; không phát sinh phiếu xuất kho hay tính tiêu hao nguyên liệu chi tiết theo từng tiệc.
+7. Giá trị tồn kho sử dụng đơn giá bình quân tháng; giá nguyên liệu hiện hành dùng đơn giá đề xuất bình quân gia quyền 30 ngày; hai giá trị không dùng thay thế lẫn nhau.
+8. Đợt đề xuất giá là duy nhất theo tháng; kỳ nguyên liệu duy nhất theo tháng; đánh giá duy nhất theo bữa; mã giao dịch thanh toán phía đối tác cung cấp là duy nhất.
+9. Danh mục đã có lịch sử phát sinh dữ liệu chỉ được phép ngưng sử dụng, không xóa. Nội dung hợp đồng/phụ lục đã xác nhận và giao dịch đã thành công không sửa đè.

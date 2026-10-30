@@ -1,7 +1,5 @@
 # Đánh giá và báo cáo
 
-Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../index.md) là chỉ mục duy nhất. Quy ước bước: `Na` luồng thay thế, `Ne` ngoại lệ tại bước N.
-
 ## UC-CS-01
 
 | Trường | Nội dung |

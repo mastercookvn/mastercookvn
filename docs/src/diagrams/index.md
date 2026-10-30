@@ -49,6 +49,7 @@
 ## Sơ đồ cần thực hiện
 
 - [Use case tổng quát](./use-cases.md).
+- [Đặc tả chi tiết Use Cases](./use-cases/index.md).
 - [Mô hình lớp chi tiết](./class.md).
 - [Sequence](./sequence/index.md).
 - [Activity](./activity/index.md).

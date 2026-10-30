@@ -1,7 +1,5 @@
 # Nhân sự và vận hành
 
-Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../index.md) là chỉ mục duy nhất. Quy ước bước: `Na` luồng thay thế, `Ne` ngoại lệ tại bước N.
-
 ## UC-NS-01
 
 | Trường | Nội dung |

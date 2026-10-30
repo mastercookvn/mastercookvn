@@ -1,7 +1,5 @@
 # Hợp đồng và thanh toán
 
-Quy tắc BR tại [đặc tả](../../specification.md). [Danh mục UC](../index.md) là chỉ mục duy nhất. Quy ước bước: `Na` luồng thay thế, `Ne` ngoại lệ tại bước N.
-
 ## UC-HD-01
 
 | Trường | Nội dung |
