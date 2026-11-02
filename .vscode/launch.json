@@ -5,7 +5,7 @@
       "type": "java",
       "name": "Launch Backend",
       "request": "launch",
-      "mainClass": "com.mastercookvn.mastercook.MainApplication",
+      "mainClass": "mastercookvn.mastercookvn.MastercookvnApplication",
       "projectName": "backend"
     },
     {
