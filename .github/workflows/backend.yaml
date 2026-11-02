@@ -1,0 +1,78 @@
+name: Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths: &paths
+      - "backend/**"
+      - "pom.xml"
+      - "mvnw"
+      - "mvnw.cmd"
+      - ".mvn/**"
+      - "backend.Dockerfile"
+      - ".github/workflows/backend.yaml"
+      - "!**/*.md"
+  pull_request:
+    paths: *paths
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Push the image to GHCR
+        type: boolean
+        default: false
+      tag:
+        description: Image tag (defaults to the commit SHA)
+        type: string
+        required: false
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "27.0.1"
+          cache: maven
+
+      - name: Test
+        run: ./mvnw -B test
+
+      - name: Build
+        run: ./mvnw -B package -DskipTests
+
+      - name: Docker build
+        run: docker build -f backend.Dockerfile -t mastercookvn-backend:${{ github.sha }} .
+
+      - name: Login to GHCR
+        if: github.event_name == 'workflow_dispatch' && inputs.release
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release image to GHCR
+        if: github.event_name == 'workflow_dispatch' && inputs.release
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}/backend
+          TAG: ${{ inputs.tag }}
+        run: |
+          IMAGE="$(printf '%s' "$IMAGE" | tr '[:upper:]' '[:lower:]')"
+          TAG="${TAG:-${{ github.sha }}}"
+          docker tag "mastercookvn-backend:${{ github.sha }}" "$IMAGE:$TAG"
+          docker tag "mastercookvn-backend:${{ github.sha }}" "$IMAGE:latest"
+          docker push "$IMAGE:$TAG"
+          docker push "$IMAGE:latest"
