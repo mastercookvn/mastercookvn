@@ -1,0 +1,66 @@
+name: Web
+
+on:
+  push:
+    branches:
+      - main
+    paths: &paths
+      - "web/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "tsconfig*.json"
+      - "eslint.config.mjs"
+      - ".prettierrc.json"
+      - ".prettierignore"
+      - "mise.toml"
+      - "Dockerfile"
+      - ".github/workflows/web.yaml"
+      - "!**/*.md"
+  pull_request:
+    paths: *paths
+  workflow_dispatch:
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: mise.toml
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test:run
+
+      - name: Build
+        run: pnpm --filter @mastercookvn/web build
+
+      - name: Docker build
+        run: docker build -t mastercookvn-web:${{ github.sha }} .

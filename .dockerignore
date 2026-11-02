@@ -1,0 +1,7 @@
+.git
+.github
+docs
+node_modules
+web/node_modules
+**/.next/cache
+coverage

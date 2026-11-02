@@ -2,16 +2,16 @@
 
 ## UC-TK-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Đăng ký tài khoản khách |
-| Tác nhân | Khách hàng |
-| Mục tiêu | Khách có tài khoản để tự đặt, xác nhận hợp đồng, xem lịch sử. |
-| Kích hoạt | Khách chọn đăng ký. |
-| Tiền điều kiện | Chưa đăng nhập. |
-| Hậu điều kiện | Có tài khoản khách gắn đúng một hồ sơ khách theo SĐT. |
-| Quan hệ | — |
-| Quy tắc | BR02 |
+| Trường         | Nội dung                                                      |
+| -------------- | ------------------------------------------------------------- |
+| Tên            | Đăng ký tài khoản khách                                       |
+| Tác nhân       | Khách hàng                                                    |
+| Mục tiêu       | Khách có tài khoản để tự đặt, xác nhận hợp đồng, xem lịch sử. |
+| Kích hoạt      | Khách chọn đăng ký.                                           |
+| Tiền điều kiện | Chưa đăng nhập.                                               |
+| Hậu điều kiện  | Có tài khoản khách gắn đúng một hồ sơ khách theo SĐT.         |
+| Quan hệ        | —                                                             |
+| Quy tắc        | BR02                                                          |
 
 **Luồng chính**
 
@@ -31,16 +31,16 @@
 
 ## UC-TK-02
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Đăng nhập, đăng xuất, đổi mật khẩu |
-| Tác nhân | Khách hàng, Nhân viên nội bộ |
-| Mục tiêu | Truy cập chức năng theo vai trò của tài khoản. |
-| Kích hoạt | Người dùng chọn đăng nhập/đăng xuất/đổi mật khẩu. |
-| Tiền điều kiện | Có tài khoản đang hoạt động. |
-| Hậu điều kiện | Phiên đăng nhập mang tập vai trò của tài khoản; hoặc phiên kết thúc. |
-| Quan hệ | — |
-| Quy tắc | BR02 |
+| Trường         | Nội dung                                                             |
+| -------------- | -------------------------------------------------------------------- |
+| Tên            | Đăng nhập, đăng xuất, đổi mật khẩu                                   |
+| Tác nhân       | Khách hàng, Nhân viên nội bộ                                         |
+| Mục tiêu       | Truy cập chức năng theo vai trò của tài khoản.                       |
+| Kích hoạt      | Người dùng chọn đăng nhập/đăng xuất/đổi mật khẩu.                    |
+| Tiền điều kiện | Có tài khoản đang hoạt động.                                         |
+| Hậu điều kiện  | Phiên đăng nhập mang tập vai trò của tài khoản; hoặc phiên kết thúc. |
+| Quan hệ        | —                                                                    |
+| Quy tắc        | BR02                                                                 |
 
 **Luồng chính**
 
@@ -61,16 +61,16 @@
 
 ## UC-TK-03
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý tài khoản nội bộ và phân quyền |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Cấp, thu hồi quyền dùng chức năng nội bộ. |
-| Kích hoạt | Có nhân viên cần tài khoản, đổi quyền, khóa hoặc đặt lại mật khẩu. |
-| Tiền điều kiện | Quản lý đã đăng nhập. |
-| Hậu điều kiện | Tài khoản và vai trò được cập nhật; thao tác sau kiểm tra theo vai trò mới. |
-| Quan hệ | — |
-| Quy tắc | BR02 |
+| Trường         | Nội dung                                                                    |
+| -------------- | --------------------------------------------------------------------------- |
+| Tên            | Quản lý tài khoản nội bộ và phân quyền                                      |
+| Tác nhân       | Quản lý cơ sở                                                               |
+| Mục tiêu       | Cấp, thu hồi quyền dùng chức năng nội bộ.                                   |
+| Kích hoạt      | Có nhân viên cần tài khoản, đổi quyền, khóa hoặc đặt lại mật khẩu.          |
+| Tiền điều kiện | Quản lý đã đăng nhập.                                                       |
+| Hậu điều kiện  | Tài khoản và vai trò được cập nhật; thao tác sau kiểm tra theo vai trò mới. |
+| Quan hệ        | —                                                                           |
+| Quy tắc        | BR02                                                                        |
 
 **Luồng chính**
 
@@ -92,16 +92,16 @@
 
 ## UC-DM-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý loại món và món ăn |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Duy trì món đang phục vụ để khách chọn, tạm tính. |
-| Kích hoạt | Thêm/sửa/ngưng món hoặc loại món. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Món/loại món cập nhật, chỉ áp dụng cho tạm tính và đơn mới. |
-| Quan hệ | Giá gợi ý lấy từ UC-DM-03. |
-| Quy tắc | BR04 |
+| Trường         | Nội dung                                                    |
+| -------------- | ----------------------------------------------------------- |
+| Tên            | Quản lý loại món và món ăn                                  |
+| Tác nhân       | Quản lý cơ sở                                               |
+| Mục tiêu       | Duy trì món đang phục vụ để khách chọn, tạm tính.           |
+| Kích hoạt      | Thêm/sửa/ngưng món hoặc loại món.                           |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                    |
+| Hậu điều kiện  | Món/loại món cập nhật, chỉ áp dụng cho tạm tính và đơn mới. |
+| Quan hệ        | Giá gợi ý lấy từ UC-DM-03.                                  |
+| Quy tắc        | BR04                                                        |
 
 **Luồng chính**
 
@@ -124,16 +124,16 @@
 
 ## UC-DM-02
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý set thực đơn |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Có set món gợi ý sẵn để khách chọn nhanh. |
-| Kích hoạt | Tạo/sửa/ngưng set. |
-| Tiền điều kiện | Có món đang phục vụ. |
-| Hậu điều kiện | Set cập nhật, giá set bằng tổng giá món. |
-| Quan hệ | — |
-| Quy tắc | BR04 |
+| Trường         | Nội dung                                  |
+| -------------- | ----------------------------------------- |
+| Tên            | Quản lý set thực đơn                      |
+| Tác nhân       | Quản lý cơ sở                             |
+| Mục tiêu       | Có set món gợi ý sẵn để khách chọn nhanh. |
+| Kích hoạt      | Tạo/sửa/ngưng set.                        |
+| Tiền điều kiện | Có món đang phục vụ.                      |
+| Hậu điều kiện  | Set cập nhật, giá set bằng tổng giá món.  |
+| Quan hệ        | —                                         |
+| Quy tắc        | BR04                                      |
 
 **Luồng chính**
 
@@ -154,16 +154,16 @@
 
 ## UC-DM-03
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý nguyên liệu và định lượng món |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Có giá nguyên liệu hiện hành và công thức để tính giá gợi ý món. |
-| Kích hoạt | Thêm nguyên liệu, sửa giá, khai báo định lượng món. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Nguyên liệu, định lượng, giá gợi ý món được cập nhật. |
-| Quan hệ | Giá nguyên liệu còn được cập nhật qua UC-KHO-04. |
-| Quy tắc | BR03, BR04, BR05 |
+| Trường         | Nội dung                                                         |
+| -------------- | ---------------------------------------------------------------- |
+| Tên            | Quản lý nguyên liệu và định lượng món                            |
+| Tác nhân       | Quản lý cơ sở                                                    |
+| Mục tiêu       | Có giá nguyên liệu hiện hành và công thức để tính giá gợi ý món. |
+| Kích hoạt      | Thêm nguyên liệu, sửa giá, khai báo định lượng món.              |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                         |
+| Hậu điều kiện  | Nguyên liệu, định lượng, giá gợi ý món được cập nhật.            |
+| Quan hệ        | Giá nguyên liệu còn được cập nhật qua UC-KHO-04.                 |
+| Quy tắc        | BR03, BR04, BR05                                                 |
 
 **Luồng chính**
 
@@ -184,16 +184,16 @@
 
 ## UC-DM-04
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý dịch vụ |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Duy trì dịch vụ kèm theo (dọn dẹp, karaoke, trang trí cổng...) để khách chọn. |
-| Kích hoạt | Thêm/sửa/ngưng dịch vụ. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Dịch vụ dùng cho tạm tính/đơn mới. |
-| Quan hệ | — |
-| Quy tắc | BR04 |
+| Trường         | Nội dung                                                                      |
+| -------------- | ----------------------------------------------------------------------------- |
+| Tên            | Quản lý dịch vụ                                                               |
+| Tác nhân       | Quản lý cơ sở                                                                 |
+| Mục tiêu       | Duy trì dịch vụ kèm theo (dọn dẹp, karaoke, trang trí cổng...) để khách chọn. |
+| Kích hoạt      | Thêm/sửa/ngưng dịch vụ.                                                       |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                                      |
+| Hậu điều kiện  | Dịch vụ dùng cho tạm tính/đơn mới.                                            |
+| Quan hệ        | —                                                                             |
+| Quy tắc        | BR04                                                                          |
 
 **Luồng chính**
 
@@ -211,16 +211,16 @@
 
 ## UC-DM-05
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý danh mục dụng cụ |
-| Tác nhân | Quản lý cơ sở, Thủ kho |
-| Mục tiêu | Có định mức, tồn tối thiểu, dự trù, giá bồi thường để tính nhu cầu và bồi thường. |
-| Kích hoạt | Thêm/sửa/ngưng loại dụng cụ. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Loại dụng cụ dùng cho tính nhu cầu, xuất, thu hồi. |
-| Quan hệ | Lượng tồn tăng qua UC-KHO-05, không nhập ở đây. |
-| Quy tắc | BR13 |
+| Trường         | Nội dung                                                                          |
+| -------------- | --------------------------------------------------------------------------------- |
+| Tên            | Quản lý danh mục dụng cụ                                                          |
+| Tác nhân       | Quản lý cơ sở, Thủ kho                                                            |
+| Mục tiêu       | Có định mức, tồn tối thiểu, dự trù, giá bồi thường để tính nhu cầu và bồi thường. |
+| Kích hoạt      | Thêm/sửa/ngưng loại dụng cụ.                                                      |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                                          |
+| Hậu điều kiện  | Loại dụng cụ dùng cho tính nhu cầu, xuất, thu hồi.                                |
+| Quan hệ        | Lượng tồn tăng qua UC-KHO-05, không nhập ở đây.                                   |
+| Quy tắc        | BR13                                                                              |
 
 **Luồng chính**
 
@@ -241,16 +241,16 @@
 
 ## UC-DM-06
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý loại tiệc |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Phân loại đơn (cưới, sinh nhật, giỗ, tất niên...) để lọc, báo cáo. |
-| Kích hoạt | Thêm/sửa/ngưng loại tiệc. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Loại tiệc dùng khi tạo đơn và báo cáo. |
-| Quan hệ | — |
-| Quy tắc | Ngoài phạm vi: đám tang, gợi ý món theo loại tiệc. |
+| Trường         | Nội dung                                                           |
+| -------------- | ------------------------------------------------------------------ |
+| Tên            | Quản lý loại tiệc                                                  |
+| Tác nhân       | Quản lý cơ sở                                                      |
+| Mục tiêu       | Phân loại đơn (cưới, sinh nhật, giỗ, tất niên...) để lọc, báo cáo. |
+| Kích hoạt      | Thêm/sửa/ngưng loại tiệc.                                          |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                           |
+| Hậu điều kiện  | Loại tiệc dùng khi tạo đơn và báo cáo.                             |
+| Quan hệ        | —                                                                  |
+| Quy tắc        | Ngoài phạm vi: đám tang, gợi ý món theo loại tiệc.                 |
 
 **Luồng chính**
 
@@ -267,16 +267,16 @@
 
 ## UC-DM-07
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý tham số nghiệp vụ |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Điều chỉnh tham số cho dữ liệu mới, không đổi cam kết đã chốt. |
-| Kích hoạt | Cần đổi tỷ lệ/mốc. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Tham số mới áp dụng từ thời điểm lưu. |
-| Quan hệ | — |
-| Quy tắc | BR04, BR06, BR07, BR08, BR09, BR10, BR12. Ngày lễ/phụ thu lễ là danh sách cố định, không sửa ở đây. |
+| Trường         | Nội dung                                                                                            |
+| -------------- | --------------------------------------------------------------------------------------------------- |
+| Tên            | Quản lý tham số nghiệp vụ                                                                           |
+| Tác nhân       | Quản lý cơ sở                                                                                       |
+| Mục tiêu       | Điều chỉnh tham số cho dữ liệu mới, không đổi cam kết đã chốt.                                      |
+| Kích hoạt      | Cần đổi tỷ lệ/mốc.                                                                                  |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                                                            |
+| Hậu điều kiện  | Tham số mới áp dụng từ thời điểm lưu.                                                               |
+| Quan hệ        | —                                                                                                   |
+| Quy tắc        | BR04, BR06, BR07, BR08, BR09, BR10, BR12. Ngày lễ/phụ thu lễ là danh sách cố định, không sửa ở đây. |
 
 **Luồng chính**
 

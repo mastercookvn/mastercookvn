@@ -2,16 +2,16 @@
 
 ## UC-CS-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Ghi nhận đánh giá sau bữa |
-| Tác nhân | Khách hàng, Nhân viên tư vấn |
-| Mục tiêu | Lưu phản hồi của người đặt cho bữa đã hoàn tất. |
-| Kích hoạt | Người đặt muốn đánh giá. |
-| Tiền điều kiện | Bữa HoanTat, thuộc hồ sơ khách, chưa có đánh giá. |
-| Hậu điều kiện | Một đánh giá gắn đúng bữa, lưu người nhập thực tế. |
-| Quan hệ | Điểm vào từ UC-DT-06. |
-| Quy tắc | BR14 |
+| Trường         | Nội dung                                           |
+| -------------- | -------------------------------------------------- |
+| Tên            | Ghi nhận đánh giá sau bữa                          |
+| Tác nhân       | Khách hàng, Nhân viên tư vấn                       |
+| Mục tiêu       | Lưu phản hồi của người đặt cho bữa đã hoàn tất.    |
+| Kích hoạt      | Người đặt muốn đánh giá.                           |
+| Tiền điều kiện | Bữa HoanTat, thuộc hồ sơ khách, chưa có đánh giá.  |
+| Hậu điều kiện  | Một đánh giá gắn đúng bữa, lưu người nhập thực tế. |
+| Quan hệ        | Điểm vào từ UC-DT-06.                              |
+| Quy tắc        | BR14                                               |
 
 **Luồng chính**
 
@@ -29,16 +29,16 @@
 
 ## UC-BC-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Xem dashboard và cảnh báo |
-| Tác nhân | Nhân viên nội bộ |
-| Mục tiêu | Thấy việc cần xử lý và cảnh báo trong phạm vi vai trò. |
-| Kích hoạt | Đăng nhập nội bộ hoặc mở dashboard. |
-| Tiền điều kiện | Đã đăng nhập tài khoản nội bộ. |
-| Hậu điều kiện | Hiển thị danh sách việc, dẫn tới hồ sơ tương ứng; không thay đổi dữ liệu. |
-| Quan hệ | Điểm vào các UC xử lý. |
-| Quy tắc | BR07, BR11, BR12, BR13 |
+| Trường         | Nội dung                                                                  |
+| -------------- | ------------------------------------------------------------------------- |
+| Tên            | Xem dashboard và cảnh báo                                                 |
+| Tác nhân       | Nhân viên nội bộ                                                          |
+| Mục tiêu       | Thấy việc cần xử lý và cảnh báo trong phạm vi vai trò.                    |
+| Kích hoạt      | Đăng nhập nội bộ hoặc mở dashboard.                                       |
+| Tiền điều kiện | Đã đăng nhập tài khoản nội bộ.                                            |
+| Hậu điều kiện  | Hiển thị danh sách việc, dẫn tới hồ sơ tương ứng; không thay đổi dữ liệu. |
+| Quan hệ        | Điểm vào các UC xử lý.                                                    |
+| Quy tắc        | BR07, BR11, BR12, BR13                                                    |
 
 **Luồng chính**
 
@@ -62,16 +62,16 @@
 
 ## UC-BC-02
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Xem báo cáo doanh thu và food cost |
-| Tác nhân | Quản lý cơ sở, Kế toán |
-| Mục tiêu | Xem doanh thu, thu/hoàn, food cost, lãi theo nguyên liệu, tình hình đơn, đánh giá theo kỳ. |
-| Kích hoạt | Cần xem kết quả kinh doanh. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Hiển thị báo cáo; không thay đổi dữ liệu. |
-| Quan hệ | Dùng kết quả UC-KHO-03. |
-| Quy tắc | BR06, BR11, BR14 |
+| Trường         | Nội dung                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| Tên            | Xem báo cáo doanh thu và food cost                                                         |
+| Tác nhân       | Quản lý cơ sở, Kế toán                                                                     |
+| Mục tiêu       | Xem doanh thu, thu/hoàn, food cost, lãi theo nguyên liệu, tình hình đơn, đánh giá theo kỳ. |
+| Kích hoạt      | Cần xem kết quả kinh doanh.                                                                |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                                                   |
+| Hậu điều kiện  | Hiển thị báo cáo; không thay đổi dữ liệu.                                                  |
+| Quan hệ        | Dùng kết quả UC-KHO-03.                                                                    |
+| Quy tắc        | BR06, BR11, BR14                                                                           |
 
 **Luồng chính**
 
@@ -92,16 +92,16 @@
 
 ## UC-BC-03
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Xem báo cáo dụng cụ |
-| Tác nhân | Quản lý cơ sở, Thủ kho |
-| Mục tiêu | Xem tồn dụng cụ, loại dưới ngưỡng, hao hụt và bồi thường theo kỳ. |
-| Kích hoạt | Cần xem tình trạng kho dụng cụ. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Hiển thị báo cáo; không thay đổi dữ liệu. |
-| Quan hệ | Dữ liệu từ UC-KHO-05 đến UC-KHO-08. |
-| Quy tắc | BR13 |
+| Trường         | Nội dung                                                          |
+| -------------- | ----------------------------------------------------------------- |
+| Tên            | Xem báo cáo dụng cụ                                               |
+| Tác nhân       | Quản lý cơ sở, Thủ kho                                            |
+| Mục tiêu       | Xem tồn dụng cụ, loại dưới ngưỡng, hao hụt và bồi thường theo kỳ. |
+| Kích hoạt      | Cần xem tình trạng kho dụng cụ.                                   |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                          |
+| Hậu điều kiện  | Hiển thị báo cáo; không thay đổi dữ liệu.                         |
+| Quan hệ        | Dữ liệu từ UC-KHO-05 đến UC-KHO-08.                               |
+| Quy tắc        | BR13                                                              |
 
 **Luồng chính**
 

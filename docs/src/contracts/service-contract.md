@@ -62,13 +62,13 @@ Không dời ngày tiệc. Không xử lý yêu cầu thêm món, thêm bàn ăn
 
 Khách có thể hủy từng bữa hoặc toàn bộ hợp đồng. Thời hạn hủy của từng bữa tính từ thời điểm yêu cầu hủy được ghi nhận đến giờ bắt đầu bữa đó, theo BR10.
 
-| Thời điểm hủy | Hoàn phần cọc bắt buộc của bữa |
-| --- | --- |
-| Chưa cọc | Hủy miễn phí, ngay lập tức |
-| Còn ít nhất 30 ngày | 100%; phí xử lý mặc định bằng 0 |
-| Còn từ 15 đến dưới 30 ngày | 50% |
-| Còn dưới 15 ngày | 0% |
-| Sau giờ bắt đầu hoặc khách không có mặt | 0% |
+| Thời điểm hủy                           | Hoàn phần cọc bắt buộc của bữa  |
+| --------------------------------------- | ------------------------------- |
+| Chưa cọc                                | Hủy miễn phí, ngay lập tức      |
+| Còn ít nhất 30 ngày                     | 100%; phí xử lý mặc định bằng 0 |
+| Còn từ 15 đến dưới 30 ngày              | 50%                             |
+| Còn dưới 15 ngày                        | 0%                              |
+| Sau giờ bắt đầu hoặc khách không có mặt | 0%                              |
 
 Tiền khách trả trước vượt phần cọc bắt buộc của bữa bị hủy được hoàn đủ. Tổng tiền hoàn của hợp đồng bằng tổng tiền hoàn tính riêng cho từng bữa bị hủy.
 

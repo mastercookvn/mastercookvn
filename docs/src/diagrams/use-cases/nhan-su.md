@@ -2,16 +2,16 @@
 
 ## UC-NS-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Quản lý hồ sơ nhân sự |
-| Tác nhân | Quản lý nhân sự |
-| Mục tiêu | Có danh sách nhân sự cố định/thời vụ để phân công, kể cả người không có tài khoản. |
-| Kích hoạt | Có nhân viên mới hoặc thay đổi hồ sơ. |
-| Tiền điều kiện | Đã đăng nhập đúng quyền. |
-| Hậu điều kiện | Hồ sơ dùng được cho phân công. |
-| Quan hệ | Độc lập UC-TK-03 (hồ sơ ≠ tài khoản). |
-| Quy tắc | BR02, BR12 |
+| Trường         | Nội dung                                                                           |
+| -------------- | ---------------------------------------------------------------------------------- |
+| Tên            | Quản lý hồ sơ nhân sự                                                              |
+| Tác nhân       | Quản lý nhân sự                                                                    |
+| Mục tiêu       | Có danh sách nhân sự cố định/thời vụ để phân công, kể cả người không có tài khoản. |
+| Kích hoạt      | Có nhân viên mới hoặc thay đổi hồ sơ.                                              |
+| Tiền điều kiện | Đã đăng nhập đúng quyền.                                                           |
+| Hậu điều kiện  | Hồ sơ dùng được cho phân công.                                                     |
+| Quan hệ        | Độc lập UC-TK-03 (hồ sơ ≠ tài khoản).                                              |
+| Quy tắc        | BR02, BR12                                                                         |
 
 **Luồng chính**
 
@@ -30,16 +30,16 @@
 
 ## UC-NS-02
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Phân công nhân sự theo bữa |
-| Tác nhân | Quản lý nhân sự |
-| Mục tiêu | Giao người, vị trí, khung giờ cho từng bữa. |
-| Kích hoạt | Hợp đồng có hiệu lực, bữa cần chuẩn bị. |
-| Tiền điều kiện | Bữa DaXacNhan; có hồ sơ nhân sự đang làm. |
-| Hậu điều kiện | Bữa có danh sách phân công; nhân viên được báo ngoài hệ thống. |
-| Quan hệ | — |
-| Quy tắc | BR12 |
+| Trường         | Nội dung                                                       |
+| -------------- | -------------------------------------------------------------- |
+| Tên            | Phân công nhân sự theo bữa                                     |
+| Tác nhân       | Quản lý nhân sự                                                |
+| Mục tiêu       | Giao người, vị trí, khung giờ cho từng bữa.                    |
+| Kích hoạt      | Hợp đồng có hiệu lực, bữa cần chuẩn bị.                        |
+| Tiền điều kiện | Bữa DaXacNhan; có hồ sơ nhân sự đang làm.                      |
+| Hậu điều kiện  | Bữa có danh sách phân công; nhân viên được báo ngoài hệ thống. |
+| Quan hệ        | —                                                              |
+| Quy tắc        | BR12                                                           |
 
 **Luồng chính**
 
@@ -62,16 +62,16 @@
 
 ## UC-VH-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Cập nhật tiến độ bữa |
-| Tác nhân | Nhân viên tư vấn, Thủ kho |
-| Mục tiêu | Ghi bữa đang chuẩn bị, đang phục vụ, đã kết thúc để kích hoạt bước kho/quyết toán. |
-| Kích hoạt | Bữa bắt đầu chuẩn bị, bắt đầu hoặc kết thúc phục vụ. |
-| Tiền điều kiện | Bữa DaXacNhan hoặc đang ở bước tiến độ trước. |
-| Hậu điều kiện | Bữa chuyển DangChuanBi → DangPhucVu → ChoKiemDem/ChoQuyetToan. |
-| Quan hệ | Trước UC-KHO-06, sau là UC-KHO-07 hoặc UC-HD-08. |
-| Quy tắc | BR11, BR13 |
+| Trường         | Nội dung                                                                           |
+| -------------- | ---------------------------------------------------------------------------------- |
+| Tên            | Cập nhật tiến độ bữa                                                               |
+| Tác nhân       | Nhân viên tư vấn, Thủ kho                                                          |
+| Mục tiêu       | Ghi bữa đang chuẩn bị, đang phục vụ, đã kết thúc để kích hoạt bước kho/quyết toán. |
+| Kích hoạt      | Bữa bắt đầu chuẩn bị, bắt đầu hoặc kết thúc phục vụ.                               |
+| Tiền điều kiện | Bữa DaXacNhan hoặc đang ở bước tiến độ trước.                                      |
+| Hậu điều kiện  | Bữa chuyển DangChuanBi → DangPhucVu → ChoKiemDem/ChoQuyetToan.                     |
+| Quan hệ        | Trước UC-KHO-06, sau là UC-KHO-07 hoặc UC-HD-08.                                   |
+| Quy tắc        | BR11, BR13                                                                         |
 
 **Luồng chính**
 

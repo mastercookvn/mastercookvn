@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "vscjava.vscode-java-pack",
+    "ecmel.vscode-html-css",
+    "typescriptteam.native-preview",
+    "redhat.java",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "vscjava.vscode-maven",
+    "vscjava.vscode-java-dependency",
+    "vscjava.vscode-java-test",
+    "vscjava.vscode-java-debug"
+  ]
+}

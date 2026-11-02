@@ -153,23 +153,23 @@ flowchart LR
 
 ## Tác nhân
 
-| Tác nhân | Loại | Ghi chú |
-| --- | --- | --- |
-| Khách hàng | Người | Không cần đăng nhập vẫn xem danh mục và tạm tính (UC-DT-01). |
-| Nhân viên nội bộ | Trừu tượng | Vai trò cha chung cho nhân sự nội bộ (UC-TK-02, UC-BC-01). |
-| Nhân viên tư vấn | Người, kế thừa Nhân viên nội bộ | Tiếp nhận đơn, khảo sát địa điểm, lập hợp đồng và phụ lục. |
-| Kế toán | Người, kế thừa Nhân viên nội bộ | Xác nhận thu tiền, ghi nhận hoàn tiền, chốt kỳ kiểm kê, quyết toán. |
-| Thủ kho | Người, kế thừa Nhân viên nội bộ | Nhập/xuất/thu hồi dụng cụ, nhập nguyên liệu, kiểm kê cuối tháng. |
-| Quản lý nhân sự | Người, kế thừa Nhân viên nội bộ | Quản lý hồ sơ nhân viên, phân công ca làm việc theo từng bữa tiệc. |
-| Quản lý cơ sở | Người, kế thừa toàn bộ vai trò nội bộ | Quản trị hệ thống, xử lý đề xuất giá nguyên liệu tháng, điều chỉnh tham số. |
-| Dịch vụ thanh toán | Hệ thống ngoài | Cổng thanh toán trực tuyến xử lý webhook giao dịch (UC-HD-03). |
+| Tác nhân           | Loại                                  | Ghi chú                                                                     |
+| ------------------ | ------------------------------------- | --------------------------------------------------------------------------- |
+| Khách hàng         | Người                                 | Không cần đăng nhập vẫn xem danh mục và tạm tính (UC-DT-01).                |
+| Nhân viên nội bộ   | Trừu tượng                            | Vai trò cha chung cho nhân sự nội bộ (UC-TK-02, UC-BC-01).                  |
+| Nhân viên tư vấn   | Người, kế thừa Nhân viên nội bộ       | Tiếp nhận đơn, khảo sát địa điểm, lập hợp đồng và phụ lục.                  |
+| Kế toán            | Người, kế thừa Nhân viên nội bộ       | Xác nhận thu tiền, ghi nhận hoàn tiền, chốt kỳ kiểm kê, quyết toán.         |
+| Thủ kho            | Người, kế thừa Nhân viên nội bộ       | Nhập/xuất/thu hồi dụng cụ, nhập nguyên liệu, kiểm kê cuối tháng.            |
+| Quản lý nhân sự    | Người, kế thừa Nhân viên nội bộ       | Quản lý hồ sơ nhân viên, phân công ca làm việc theo từng bữa tiệc.          |
+| Quản lý cơ sở      | Người, kế thừa toàn bộ vai trò nội bộ | Quản trị hệ thống, xử lý đề xuất giá nguyên liệu tháng, điều chỉnh tham số. |
+| Dịch vụ thanh toán | Hệ thống ngoài                        | Cổng thanh toán trực tuyến xử lý webhook giao dịch (UC-HD-03).              |
 
 ## Quan hệ include và extend
 
-| Quan hệ | Từ | Đến | Ghi chú |
-| --- | --- | --- | --- |
-| `«include»` | UC-DT-05 Xác nhận nhận đơn | UC-DT-04 Kiểm tra khả năng phục vụ | Luôn kiểm tra tài nguyên trước khi nhận đơn và giữ chỗ |
-| `«include»` | UC-HD-05 Điều chỉnh bằng phụ lục | UC-DT-04 Kiểm tra khả năng phục vụ | Bắt buộc kiểm tra lại tài nguyên khi điều chỉnh tăng số bàn ăn |
-| `«extend»` | UC-HD-04 Thanh toán thủ công | UC-HD-03 Thanh toán online | Mở rộng khi khách thanh toán trực tiếp bằng tiền mặt / chuyển khoản ngoài luồng |
-| `«extend»` | UC-HD-07 Ghi nhận hoàn tiền | UC-HD-06 Hủy bữa hoặc hợp đồng | Mở rộng kích hoạt khi phát sinh nghĩa vụ hoàn tiền cọc |
-| `«extend»` | UC-HD-07 Ghi nhận hoàn tiền | UC-HD-08 Quyết toán | Mở rộng kích hoạt khi số dư quyết toán của bữa là âm |
+| Quan hệ     | Từ                               | Đến                                | Ghi chú                                                                         |
+| ----------- | -------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------- |
+| `«include»` | UC-DT-05 Xác nhận nhận đơn       | UC-DT-04 Kiểm tra khả năng phục vụ | Luôn kiểm tra tài nguyên trước khi nhận đơn và giữ chỗ                          |
+| `«include»` | UC-HD-05 Điều chỉnh bằng phụ lục | UC-DT-04 Kiểm tra khả năng phục vụ | Bắt buộc kiểm tra lại tài nguyên khi điều chỉnh tăng số bàn ăn                  |
+| `«extend»`  | UC-HD-04 Thanh toán thủ công     | UC-HD-03 Thanh toán online         | Mở rộng khi khách thanh toán trực tiếp bằng tiền mặt / chuyển khoản ngoài luồng |
+| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-06 Hủy bữa hoặc hợp đồng     | Mở rộng kích hoạt khi phát sinh nghĩa vụ hoàn tiền cọc                          |
+| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-08 Quyết toán                | Mở rộng kích hoạt khi số dư quyết toán của bữa là âm                            |

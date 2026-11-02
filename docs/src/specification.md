@@ -10,31 +10,31 @@ Ngoài phạm vi: phục vụ tại quán, cung cấp mặt bằng, đối tác 
 
 ## 2. Thuật ngữ
 
-| Thuật ngữ | Ý nghĩa |
-| --- | --- |
-| Bữa tiệc | Một lần phục vụ có thời gian, địa điểm, quy mô riêng |
-| Bàn ăn | Đơn vị thực phẩm và tính giá, khác số bàn thực tế bố trí |
-| Bàn ghế | Dụng cụ bố trí đồng thời, có thể phục vụ cuốn chiếu |
-| Set thực đơn | Danh sách món gợi ý sẵn, tính giá theo bàn ăn |
-| Định lượng món | Lượng nguyên liệu cho một bàn ăn chuẩn 10 người |
-| Giá nguyên liệu hiện hành | Giá được xác nhận để ước tính chi phí, đề xuất giá bán |
-| Food cost thực tế | Chi phí nguyên liệu tiêu thụ / doanh thu món ăn cùng kỳ |
-| Food cost mục tiêu | Tỷ lệ dùng đề xuất giá bán, khởi tạo 35% |
-| Lãi theo nguyên liệu | Doanh thu món ăn trừ nguyên liệu tiêu thụ; chưa trừ lương và chi phí khác |
+| Thuật ngữ                 | Ý nghĩa                                                                   |
+| ------------------------- | ------------------------------------------------------------------------- |
+| Bữa tiệc                  | Một lần phục vụ có thời gian, địa điểm, quy mô riêng                      |
+| Bàn ăn                    | Đơn vị thực phẩm và tính giá, khác số bàn thực tế bố trí                  |
+| Bàn ghế                   | Dụng cụ bố trí đồng thời, có thể phục vụ cuốn chiếu                       |
+| Set thực đơn              | Danh sách món gợi ý sẵn, tính giá theo bàn ăn                             |
+| Định lượng món            | Lượng nguyên liệu cho một bàn ăn chuẩn 10 người                           |
+| Giá nguyên liệu hiện hành | Giá được xác nhận để ước tính chi phí, đề xuất giá bán                    |
+| Food cost thực tế         | Chi phí nguyên liệu tiêu thụ / doanh thu món ăn cùng kỳ                   |
+| Food cost mục tiêu        | Tỷ lệ dùng đề xuất giá bán, khởi tạo 35%                                  |
+| Lãi theo nguyên liệu      | Doanh thu món ăn trừ nguyên liệu tiêu thụ; chưa trừ lương và chi phí khác |
 
 ## 3. Tác nhân và quyền
 
 Một tài khoản nội bộ có thể kiêm nhiều vai trò; hồ sơ nhân sự độc lập tài khoản.
 
-| Tác nhân | Quyền theo nhóm chức năng |
-| --- | --- |
-| Khách hàng | Xem danh mục; đặt, xem, xác nhận hợp đồng, thanh toán, yêu cầu sửa/hủy, đánh giá hồ sơ của mình |
-| Quản lý cơ sở | Tài khoản/quyền, danh mục, tham số, giá; toàn bộ nghiệp vụ và báo cáo |
-| Nhân viên tư vấn | Hồ sơ khách, đặt hộ, khảo sát, xác nhận nhận/từ chối tiệc, hợp đồng/phụ lục, lưu bản ký giấy |
-| Kế toán | Thu/hoàn, quyết toán, chốt tồn và food cost tháng, báo cáo |
-| Thủ kho | Nhập nguyên liệu/dụng cụ, kiểm kê nguyên liệu, xuất/thu hồi dụng cụ |
-| Quản lý nhân sự | Hồ sơ nhân viên, phân công và lịch làm việc |
-| Dịch vụ thanh toán | Thông báo kết quả thanh toán online; chưa chốt nhà cung cấp |
+| Tác nhân           | Quyền theo nhóm chức năng                                                                       |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| Khách hàng         | Xem danh mục; đặt, xem, xác nhận hợp đồng, thanh toán, yêu cầu sửa/hủy, đánh giá hồ sơ của mình |
+| Quản lý cơ sở      | Tài khoản/quyền, danh mục, tham số, giá; toàn bộ nghiệp vụ và báo cáo                           |
+| Nhân viên tư vấn   | Hồ sơ khách, đặt hộ, khảo sát, xác nhận nhận/từ chối tiệc, hợp đồng/phụ lục, lưu bản ký giấy    |
+| Kế toán            | Thu/hoàn, quyết toán, chốt tồn và food cost tháng, báo cáo                                      |
+| Thủ kho            | Nhập nguyên liệu/dụng cụ, kiểm kê nguyên liệu, xuất/thu hồi dụng cụ                             |
+| Quản lý nhân sự    | Hồ sơ nhân viên, phân công và lịch làm việc                                                     |
+| Dịch vụ thanh toán | Thông báo kết quả thanh toán online; chưa chốt nhà cung cấp                                     |
 
 Bếp, phục vụ, vận chuyển là vị trí để phân công, không bắt buộc tài khoản. Nhà cung cấp không truy cập hệ thống; tên và SĐT lưu trên phiếu nhập.
 
@@ -112,12 +112,12 @@ Tư vấn lập phụ lục trước/sau, chênh lệch; khách xác nhận onli
 
 Hủy từng bữa/cả hợp đồng; tính riêng theo thời điểm yêu cầu và giờ bắt đầu bữa, không theo lúc nhân viên xử lý.
 
-| Thời điểm | Hoàn phần cọc bắt buộc |
-| --- | --- |
-| Chưa cọc | Hủy miễn phí ngay |
-| Còn ít nhất 30 ngày | 100%, phí xử lý mặc định 0 |
-| Còn 15 đến dưới 30 ngày | 50% |
-| Còn dưới 15 ngày | 0% |
+| Thời điểm                           | Hoàn phần cọc bắt buộc                                                    |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| Chưa cọc                            | Hủy miễn phí ngay                                                         |
+| Còn ít nhất 30 ngày                 | 100%, phí xử lý mặc định 0                                                |
+| Còn 15 đến dưới 30 ngày             | 50%                                                                       |
+| Còn dưới 15 ngày                    | 0%                                                                        |
 | Đến giờ bắt đầu, khách không có mặt | 0%; nguyên liệu đã chế biến chỉ thu thêm theo thỏa thuận, không thu trùng |
 
 Phần trả vượt cọc bắt buộc hoàn đủ. Hủy hợp đồng cộng kết quả các bữa chưa thực hiện, giữ quyết toán bữa đã thực hiện. Nhả tài nguyên/hủy phân công ngay khi hủy; hoàn tiền ghi riêng, xử lý sau. Không xây luồng khách hủy giữa lúc phục vụ. Không UC cơ sở hủy riêng; trách nhiệm ghi trong hợp đồng, xử lý thỏa thuận ngoài luồng chuẩn.

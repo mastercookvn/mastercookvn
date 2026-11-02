@@ -10,7 +10,6 @@ on:
       - pnpm-workspace.yaml
       - mise.toml
       - ".github/workflows/deploy-docs.yaml"
-      - ".tool-versions"
       - "!**/README.md"
       - "!**/AGENTS.md"
   workflow_dispatch:
@@ -41,14 +40,9 @@ jobs:
           cache: true
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version-file: .tool-versions
-
-      - name: Setup Mise
-        uses: jdx/mise-action@v4
-        with:
-          experimental: true
+          node-version-file: mise.toml
 
       - name: Restore Docs diagrams Cache
         id: diagrams-cache

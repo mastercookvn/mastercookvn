@@ -1,0 +1,12 @@
+node_modules
+.pnpm-store
+dist
+out
+out-tsc
+coverage
+.next
+*.tsbuildinfo
+pnpm-lock.yaml
+docs/.vitepress/cache
+docs/.vitepress/dist
+docs/src/public/diagrams

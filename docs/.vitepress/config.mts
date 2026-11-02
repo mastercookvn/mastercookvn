@@ -59,7 +59,7 @@ function krokiHealthResource(url: string): string {
 
 async function isKrokiHealthy(
   url: string,
-  timeout = KROKI_PROBE_TIMEOUT,
+  timeout = KROKI_PROBE_TIMEOUT
 ): Promise<boolean> {
   try {
     await waitOn({ resources: [krokiHealthResource(url)], timeout });
@@ -80,7 +80,7 @@ async function resolveKrokiServerUrl(): Promise<string | undefined> {
     `⚠️  No local Kroki at ${COMPOSE_KROKI_URL}, falling back to ` +
       `${PUBLIC_KROKI_URL}. Diagram sources leave your machine and rendering ` +
       "is rate limited; run `docker compose up -d` in docs/ or set " +
-      "DOCS_KROKI_URL to use a Kroki you control.",
+      "DOCS_KROKI_URL to use a Kroki you control."
   );
   return undefined;
 }
@@ -117,7 +117,7 @@ function waitForKroki(url: string): Plugin {
           `Kroki is not reachable at ${url}, configured via DOCS_KROKI_URL / ` +
             "KROKI_SERVER_URL. Start that server, point the variable at a " +
             "running one, or unset it to fall back to " +
-            `${PUBLIC_KROKI_URL}.`,
+            `${PUBLIC_KROKI_URL}.`
         );
       }
     },
@@ -152,9 +152,9 @@ export function createDiagramsWithKroki({
         reject(
           new Error(
             `Kroki (${bin}) exited with ${code ?? signal} ` +
-              "before becoming healthy",
-          ),
-        ),
+              "before becoming healthy"
+          )
+        )
       );
     });
 
@@ -246,5 +246,5 @@ const vitePressSidebarOptions = {
 } satisfies VitePressSidebarOptions;
 
 export default defineConfig(
-  withSidebar(vitePressOptions, vitePressSidebarOptions),
+  withSidebar(vitePressOptions, vitePressSidebarOptions)
 );

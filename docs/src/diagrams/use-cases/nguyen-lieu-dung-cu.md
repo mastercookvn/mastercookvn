@@ -2,16 +2,16 @@
 
 ## UC-KHO-01
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Ghi nhận nhập nguyên liệu |
-| Tác nhân | Thủ kho |
-| Mục tiêu | Lưu lượng, giá mua làm đầu vào food cost tháng và đề xuất giá. |
-| Kích hoạt | Nguyên liệu mua về. |
-| Tiền điều kiện | Có danh mục nguyên liệu, đơn vị chuẩn; tháng chưa chốt. |
-| Hậu điều kiện | Phiếu nhập lưu, không gắn bữa tiệc. |
-| Quan hệ | Đầu vào UC-KHO-03, UC-KHO-04. |
-| Quy tắc | BR05, BR06 |
+| Trường         | Nội dung                                                       |
+| -------------- | -------------------------------------------------------------- |
+| Tên            | Ghi nhận nhập nguyên liệu                                      |
+| Tác nhân       | Thủ kho                                                        |
+| Mục tiêu       | Lưu lượng, giá mua làm đầu vào food cost tháng và đề xuất giá. |
+| Kích hoạt      | Nguyên liệu mua về.                                            |
+| Tiền điều kiện | Có danh mục nguyên liệu, đơn vị chuẩn; tháng chưa chốt.        |
+| Hậu điều kiện  | Phiếu nhập lưu, không gắn bữa tiệc.                            |
+| Quan hệ        | Đầu vào UC-KHO-03, UC-KHO-04.                                  |
+| Quy tắc        | BR05, BR06                                                     |
 
 **Luồng chính**
 
@@ -33,16 +33,16 @@
 
 ## UC-KHO-02
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Kiểm kê nguyên liệu cuối tháng |
-| Tác nhân | Thủ kho |
-| Mục tiêu | Ghi lượng tồn thực tế cuối tháng. |
-| Kích hoạt | Cuối tháng. |
+| Trường         | Nội dung                                                    |
+| -------------- | ----------------------------------------------------------- |
+| Tên            | Kiểm kê nguyên liệu cuối tháng                              |
+| Tác nhân       | Thủ kho                                                     |
+| Mục tiêu       | Ghi lượng tồn thực tế cuối tháng.                           |
+| Kích hoạt      | Cuối tháng.                                                 |
 | Tiền điều kiện | Kỳ tháng chưa chốt; có tồn đầu kỳ (tháng đầu: tồn ban đầu). |
-| Hậu điều kiện | Kỳ có dòng kiểm kê đủ nguyên liệu, trạng thái ChoChot. |
-| Quan hệ | Tiếp theo UC-KHO-03. |
-| Quy tắc | BR06 |
+| Hậu điều kiện  | Kỳ có dòng kiểm kê đủ nguyên liệu, trạng thái ChoChot.      |
+| Quan hệ        | Tiếp theo UC-KHO-03.                                        |
+| Quy tắc        | BR06                                                        |
 
 **Luồng chính**
 
@@ -62,16 +62,16 @@
 
 ## UC-KHO-03
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Chốt kỳ và tính food cost tháng |
-| Tác nhân | Kế toán |
-| Mục tiêu | Chốt giá trị tồn, chi phí tiêu thụ, food cost thực tế của tháng. |
-| Kích hoạt | Kỳ ChoChot. |
-| Tiền điều kiện | Kiểm kê đủ; các bữa trong tháng đã có giá trị món xác định. |
-| Hậu điều kiện | Kỳ DaChot; tồn cuối thành tồn đầu tháng sau; có food cost cho báo cáo. Sửa sau chốt phải mở lại kỳ, chốt lại kỳ đó và các kỳ sau. |
-| Quan hệ | Sau UC-KHO-02; kết quả dùng ở UC-BC-02, UC-DM-07. |
-| Quy tắc | BR06 |
+| Trường         | Nội dung                                                                                                                          |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Tên            | Chốt kỳ và tính food cost tháng                                                                                                   |
+| Tác nhân       | Kế toán                                                                                                                           |
+| Mục tiêu       | Chốt giá trị tồn, chi phí tiêu thụ, food cost thực tế của tháng.                                                                  |
+| Kích hoạt      | Kỳ ChoChot.                                                                                                                       |
+| Tiền điều kiện | Kiểm kê đủ; các bữa trong tháng đã có giá trị món xác định.                                                                       |
+| Hậu điều kiện  | Kỳ DaChot; tồn cuối thành tồn đầu tháng sau; có food cost cho báo cáo. Sửa sau chốt phải mở lại kỳ, chốt lại kỳ đó và các kỳ sau. |
+| Quan hệ        | Sau UC-KHO-02; kết quả dùng ở UC-BC-02, UC-DM-07.                                                                                 |
+| Quy tắc        | BR06                                                                                                                              |
 
 **Luồng chính**
 
@@ -94,16 +94,16 @@
 
 ## UC-KHO-04
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Xử lý đề xuất giá nguyên liệu tháng |
-| Tác nhân | Quản lý cơ sở |
-| Mục tiêu | Quyết định cập nhật giá nguyên liệu hiện hành theo giá mua gần đây. |
-| Kích hoạt | Đầu tháng có đợt đề xuất mới (hệ thống tạo theo lịch). |
-| Tiền điều kiện | Đợt đề xuất tháng đã tạo. |
-| Hậu điều kiện | Mỗi dòng có quyết định; giá nguyên liệu được chọn cập nhật; giá món chỉ đổi khi quản lý chọn. |
-| Quan hệ | Dữ liệu từ UC-KHO-01; có thể chuyển UC-DM-01 sửa giá món. |
-| Quy tắc | BR04, BR05 |
+| Trường         | Nội dung                                                                                      |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| Tên            | Xử lý đề xuất giá nguyên liệu tháng                                                           |
+| Tác nhân       | Quản lý cơ sở                                                                                 |
+| Mục tiêu       | Quyết định cập nhật giá nguyên liệu hiện hành theo giá mua gần đây.                           |
+| Kích hoạt      | Đầu tháng có đợt đề xuất mới (hệ thống tạo theo lịch).                                        |
+| Tiền điều kiện | Đợt đề xuất tháng đã tạo.                                                                     |
+| Hậu điều kiện  | Mỗi dòng có quyết định; giá nguyên liệu được chọn cập nhật; giá món chỉ đổi khi quản lý chọn. |
+| Quan hệ        | Dữ liệu từ UC-KHO-01; có thể chuyển UC-DM-01 sửa giá món.                                     |
+| Quy tắc        | BR04, BR05                                                                                    |
 
 **Luồng chính**
 
@@ -127,16 +127,16 @@
 
 ## UC-KHO-05
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Nhập mua dụng cụ |
-| Tác nhân | Thủ kho |
-| Mục tiêu | Tăng lượng dụng cụ sở hữu, sẵn sàng. |
-| Kích hoạt | Mua thêm dụng cụ (thường khi dưới tồn tối thiểu). |
-| Tiền điều kiện | Có danh mục dụng cụ. |
-| Hậu điều kiện | Lượng sở hữu và sẵn sàng tăng; có lịch sử nhập. |
-| Quan hệ | — |
-| Quy tắc | BR13 |
+| Trường         | Nội dung                                          |
+| -------------- | ------------------------------------------------- |
+| Tên            | Nhập mua dụng cụ                                  |
+| Tác nhân       | Thủ kho                                           |
+| Mục tiêu       | Tăng lượng dụng cụ sở hữu, sẵn sàng.              |
+| Kích hoạt      | Mua thêm dụng cụ (thường khi dưới tồn tối thiểu). |
+| Tiền điều kiện | Có danh mục dụng cụ.                              |
+| Hậu điều kiện  | Lượng sở hữu và sẵn sàng tăng; có lịch sử nhập.   |
+| Quan hệ        | —                                                 |
+| Quy tắc        | BR13                                              |
 
 **Luồng chính**
 
@@ -155,16 +155,16 @@
 
 ## UC-KHO-06
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Xuất dụng cụ cho bữa |
-| Tác nhân | Thủ kho |
-| Mục tiêu | Ghi lượng thực tế rời kho cho một bữa làm căn cứ thu hồi. |
-| Kích hoạt | Bữa DangChuanBi. |
-| Tiền điều kiện | Hợp đồng CoHieuLuc; bữa có giữ dụng cụ. |
-| Hậu điều kiện | Phiếu xuất DaXuat; sẵn sàng giảm, đang sử dụng tăng. |
-| Quan hệ | Sau UC-VH-01 (chuẩn bị); trước UC-KHO-07. |
-| Quy tắc | BR07, BR13 |
+| Trường         | Nội dung                                                  |
+| -------------- | --------------------------------------------------------- |
+| Tên            | Xuất dụng cụ cho bữa                                      |
+| Tác nhân       | Thủ kho                                                   |
+| Mục tiêu       | Ghi lượng thực tế rời kho cho một bữa làm căn cứ thu hồi. |
+| Kích hoạt      | Bữa DangChuanBi.                                          |
+| Tiền điều kiện | Hợp đồng CoHieuLuc; bữa có giữ dụng cụ.                   |
+| Hậu điều kiện  | Phiếu xuất DaXuat; sẵn sàng giảm, đang sử dụng tăng.      |
+| Quan hệ        | Sau UC-VH-01 (chuẩn bị); trước UC-KHO-07.                 |
+| Quy tắc        | BR07, BR13                                                |
 
 **Luồng chính**
 
@@ -186,16 +186,16 @@
 
 ## UC-KHO-07
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Thu hồi, kiểm đếm và bồi thường |
-| Tác nhân | Thủ kho |
-| Mục tiêu | Đối chiếu dụng cụ trở về, ghi hư/mất, tính tiền khách chịu. |
-| Kích hoạt | Bữa ChoKiemDem, hoặc bữa hủy sau khi đã xuất. |
-| Tiền điều kiện | Có phiếu DaXuat. |
-| Hậu điều kiện | Phiếu DaKiemDem; kho cập nhật; giữ nhả; bữa ChoQuyetToan với tiền bồi thường. |
-| Quan hệ | Tiếp theo UC-HD-08. |
-| Quy tắc | BR11, BR13 |
+| Trường         | Nội dung                                                                      |
+| -------------- | ----------------------------------------------------------------------------- |
+| Tên            | Thu hồi, kiểm đếm và bồi thường                                               |
+| Tác nhân       | Thủ kho                                                                       |
+| Mục tiêu       | Đối chiếu dụng cụ trở về, ghi hư/mất, tính tiền khách chịu.                   |
+| Kích hoạt      | Bữa ChoKiemDem, hoặc bữa hủy sau khi đã xuất.                                 |
+| Tiền điều kiện | Có phiếu DaXuat.                                                              |
+| Hậu điều kiện  | Phiếu DaKiemDem; kho cập nhật; giữ nhả; bữa ChoQuyetToan với tiền bồi thường. |
+| Quan hệ        | Tiếp theo UC-HD-08.                                                           |
+| Quy tắc        | BR11, BR13                                                                    |
 
 **Luồng chính**
 
@@ -217,16 +217,16 @@
 
 ## UC-KHO-08
 
-| Trường | Nội dung |
-| --- | --- |
-| Tên | Phục hồi hoặc loại bỏ dụng cụ hư |
-| Tác nhân | Thủ kho |
-| Mục tiêu | Đưa dụng cụ hư đã sửa về dùng được, hoặc loại khỏi sở hữu. |
-| Kích hoạt | Dụng cụ hư đã sửa xong hoặc bỏ. |
-| Tiền điều kiện | Loại dụng cụ có lượng hư > 0. |
-| Hậu điều kiện | Lượng hư giảm; sẵn sàng tăng (phục hồi) hoặc sở hữu giảm (loại bỏ). |
-| Quan hệ | — |
-| Quy tắc | BR13 |
+| Trường         | Nội dung                                                            |
+| -------------- | ------------------------------------------------------------------- |
+| Tên            | Phục hồi hoặc loại bỏ dụng cụ hư                                    |
+| Tác nhân       | Thủ kho                                                             |
+| Mục tiêu       | Đưa dụng cụ hư đã sửa về dùng được, hoặc loại khỏi sở hữu.          |
+| Kích hoạt      | Dụng cụ hư đã sửa xong hoặc bỏ.                                     |
+| Tiền điều kiện | Loại dụng cụ có lượng hư > 0.                                       |
+| Hậu điều kiện  | Lượng hư giảm; sẵn sàng tăng (phục hồi) hoặc sở hữu giảm (loại bỏ). |
+| Quan hệ        | —                                                                   |
+| Quy tắc        | BR13                                                                |
 
 **Luồng chính**
 

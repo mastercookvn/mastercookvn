@@ -1,0 +1,89 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch Backend",
+      "request": "launch",
+      "mainClass": "com.mastercookvn.mastercook.MainApplication",
+      "projectName": "backend"
+    },
+    {
+      "type": "java",
+      "name": "Attach to Backend",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005
+    },
+    {
+      "name": "Debug Web (Browser Launch)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/web",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "pathMapping": {
+        "/_next/*": "${workspaceFolder}/web/.next/*",
+        "/_next/static/*": "${workspaceFolder}/web/.next/static/*"
+      },
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/*": "${workspaceFolder}/*"
+      }
+    },
+    {
+      "name": "Debug Web (Browser Attach)",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9300,
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/web",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "pathMapping": {
+        "/_next/*": "${workspaceFolder}/web/.next/*",
+        "/_next/static/*": "${workspaceFolder}/web/.next/static/*"
+      },
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/*": "${workspaceFolder}/*"
+      }
+    },
+    {
+      "name": "Debug Web (Full)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["exec", "nx", "run", "web:debug"],
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/*": "${workspaceFolder}/*",
+        "../../../*": "${workspaceFolder}/*",
+        "../../*": "${workspaceFolder}/*",
+        "server/app/*": "${workspaceFolder}/web/app/*",
+        "server/chunks/ssr/[root-of-the-server]__*": "${workspaceFolder}/web/*",
+        "/turbopack/[project]/*": "${workspaceFolder}/*"
+      },
+      "outFiles": [
+        "${workspaceFolder}/web/.next/**/*.js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Attach Web (Full)",
+      "type": "pwa-node",
+      "request": "attach",
+      "port": 9300,
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/*": "${workspaceFolder}/*",
+        "../../../*": "${workspaceFolder}/*",
+        "../../*": "${workspaceFolder}/*",
+        "server/app/*": "${workspaceFolder}/web/app/*",
+        "server/chunks/ssr/[root-of-the-server]__*": "${workspaceFolder}/web/*",
+        "/turbopack/[project]/*": "${workspaceFolder}/*"
+      },
+      "outFiles": [
+        "${workspaceFolder}/web/.next/**/*.js",
+        "!**/node_modules/**"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-settings.json",
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true,
+    "jdtls-lsp@claude-plugins-official": true
+  },
+  "env": {
+    "ENABLE_LSP_TOOL": "1"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/post-edit.js\""
+          }
+        ]
+      }
+    ]
+  }
+}
