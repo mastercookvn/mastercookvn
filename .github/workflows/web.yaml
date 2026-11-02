@@ -14,12 +14,21 @@ on:
       - ".prettierrc.json"
       - ".prettierignore"
       - "mise.toml"
-      - "Dockerfile"
+      - "web.Dockerfile"
       - ".github/workflows/web.yaml"
       - "!**/*.md"
   pull_request:
     paths: *paths
   workflow_dispatch:
+    inputs:
+      release:
+        description: Push the image to GHCR
+        type: boolean
+        default: false
+      tag:
+        description: Image tag (defaults to the commit SHA)
+        type: string
+        required: false
 
 concurrency:
   group: web-${{ github.ref }}
@@ -27,6 +36,7 @@ concurrency:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   web:
@@ -63,4 +73,25 @@ jobs:
         run: pnpm --filter @mastercookvn/web build
 
       - name: Docker build
-        run: docker build -t mastercookvn-web:${{ github.sha }} .
+        run: docker build -f web.Dockerfile -t mastercookvn-web:${{ github.sha }} .
+
+      - name: Login to GHCR
+        if: github.event_name == 'workflow_dispatch' && inputs.release
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release image to GHCR
+        if: github.event_name == 'workflow_dispatch' && inputs.release
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}/web
+          TAG: ${{ inputs.tag }}
+        run: |
+          IMAGE="$(printf '%s' "$IMAGE" | tr '[:upper:]' '[:lower:]')"
+          TAG="${TAG:-${{ github.sha }}}"
+          docker tag "mastercookvn-web:${{ github.sha }}" "$IMAGE:$TAG"
+          docker tag "mastercookvn-web:${{ github.sha }}" "$IMAGE:latest"
+          docker push "$IMAGE:$TAG"
+          docker push "$IMAGE:latest"
