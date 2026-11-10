@@ -10,4 +10,3 @@ pnpm-lock.yaml
 docs/.vitepress/cache
 docs/.vitepress/dist
 docs/src/public/diagrams
-web/design
