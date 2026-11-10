@@ -1,4 +1,5 @@
 import { MealPriceBreakdown } from "@/components/ui/MealPriceBreakdown";
+import { ServingWavesList } from "@/components/ui/ServingWavesList";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { CONTRACT_WEDDING } from "@/mocks/contracts";
 
@@ -12,16 +13,19 @@ export function OrderMealsPanel() {
         <StatusBadge domain="meal" status={meal.status} />
       </div>
       <div className="l-grid l-grid-2">
-        <p className="text-small text-soft">
-          {meal.date}, {meal.time}
-          <br />
-          {meal.address}
-          <br />
-          {meal.servingTables} bàn ăn, {meal.guestsPerTable} người mỗi bàn,{" "}
-          {meal.setupTables} bàn bố trí
-          <br />
-          {meal.setName}
-        </p>
+        <div className="l-stack gap-2">
+          <p className="text-small text-soft">
+            {meal.date}, {meal.time}
+            <br />
+            {meal.address}
+            <br />
+            {meal.setName}
+          </p>
+          <ServingWavesList
+            waves={meal.waves}
+            guestsPerTable={meal.guestsPerTable}
+          />
+        </div>
         <div>
           <MealPriceBreakdown price={meal.price} />
         </div>

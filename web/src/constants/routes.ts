@@ -4,8 +4,11 @@ export const ROUTES = {
   services: "/services",
   booking: "/booking",
   login: "/login",
+  lookup: "/lookup",
   account: "/account",
   contract: (number: string) => `/account/contracts/${number}`,
+  /** Printable contract, opened by both the customer and staff. */
+  contractDocument: (number: string) => `/contracts/${number}/document`,
   workspace: "/admin",
   workspaceOrders: "/admin/orders",
   workspaceOrder: (code: string) => `/admin/orders/${code}`,

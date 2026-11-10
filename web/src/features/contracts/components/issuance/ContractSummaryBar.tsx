@@ -2,9 +2,12 @@
 
 import { Suspense } from "react";
 
+import { PageHeader } from "@/components/layout/workspace/PageHeader";
+import { DownloadIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/Badge";
-import { KpiBar } from "@/components/ui/KpiBar";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { ROUTES } from "@/constants/routes";
 import { CONTRACT_STATUS } from "@/constants/statuses";
 import { useQueryParam } from "@/hooks/useQueryParam";
 import { formatMoney } from "@/lib/format";
@@ -16,7 +19,10 @@ import {
 } from "@/mocks/contracts";
 import { useDemoState } from "@/mocks/demoStore";
 
-/** Sample data: each tab shows a contract at the matching stage. */
+/**
+ * One compact line instead of a grid of tiles: who, when, how much is paid.
+ * Sample data: each tab shows a contract at the matching stage.
+ */
 function SummaryForTab() {
   const [tab] = useQueryParam("tab");
   const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
@@ -31,6 +37,7 @@ function SummaryForTab() {
           value: CONTRACT_HOUSEWARMING.total,
           paid: CONTRACT_HOUSEWARMING.paid,
           firstDate: "22/11/2026",
+          editable: true,
           status: (
             <StatusBadge domain="contract" status={CONTRACT_STATUS.Active} />
           ),
@@ -42,6 +49,7 @@ function SummaryForTab() {
             value: SETTLEMENT_COMPANY.settlementTotal,
             paid: SETTLEMENT_COMPANY.paid + settlementPaid,
             firstDate: "25/10/2026",
+            editable: false,
             status: (
               <StatusBadge domain="contract" status={CONTRACT_STATUS.Active} />
             ),
@@ -52,6 +60,7 @@ function SummaryForTab() {
             value: CONTRACT_WEDDING.total,
             paid: depositPaidAmount,
             firstDate: "14/12/2026",
+            editable: false,
             status: issued ? (
               <StatusBadge
                 domain="contract"
@@ -61,20 +70,40 @@ function SummaryForTab() {
               <Badge tone="neutral">Chưa phát hành</Badge>
             ),
           };
+  const paidShare = row.value ? Math.min(1, row.paid / row.value) : 0;
 
   return (
-    <>
-      <KpiBar
-        items={[
-          { label: row.customer, value: row.number },
-          { label: "Giá trị", value: formatMoney(row.value) },
-          { label: "Đã thu", value: formatMoney(row.paid) },
-          { label: "Còn lại", value: formatMoney(row.value - row.paid) },
-          { label: "Bữa đầu", value: row.firstDate },
-          { label: "Trạng thái", value: row.status, compact: true },
-        ]}
-      />
-    </>
+    <PageHeader
+      screen="contractDetail"
+      title={`Hợp đồng ${row.number}`}
+      description={`${row.customer} · Bữa đầu ${row.firstDate}`}
+      meta={
+        <div className="contract-head-meta">
+          {row.status}
+          <span className="contract-head-paid">
+            Đã thu <b>{formatMoney(row.paid)}</b> / {formatMoney(row.value)}
+          </span>
+          <span className="contract-head-progress" aria-hidden="true">
+            <span style={{ width: `${paidShare * 100}%` }} />
+          </span>
+        </div>
+      }
+      aside={
+        <div className="l-row gap-2">
+          {row.editable && tab !== "addendum" ? (
+            <ButtonLink href="?tab=addendum">Sửa hợp đồng</ButtonLink>
+          ) : null}
+          <ButtonLink
+            href={ROUTES.contractDocument(row.number)}
+            target="_blank"
+            variant="primary"
+          >
+            <DownloadIcon size={18} />
+            Xuất hợp đồng
+          </ButtonLink>
+        </div>
+      }
+    />
   );
 }
 

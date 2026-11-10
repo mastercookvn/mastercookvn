@@ -32,10 +32,14 @@ export function DishPicker({
   dishes,
   selectedIds,
   onChange,
+  label = "Tìm món để thêm vào set",
+  emptyText = "Chưa chọn món nào.",
 }: {
   dishes: CatalogDish[];
   selectedIds: string[];
   onChange: (ids: string[]) => void;
+  label?: string;
+  emptyText?: string;
 }) {
   const listId = useId();
   const [query, setQuery] = useState("");
@@ -72,7 +76,7 @@ export function DishPicker({
           role="combobox"
           aria-expanded={open && results.length > 0}
           aria-controls={listId}
-          aria-label="Tìm món để thêm vào set"
+          aria-label={label}
           placeholder="Tìm món theo tên hoặc loại, ví dụ: lẩu"
           value={query}
           onFocus={() => setOpen(true)}
@@ -131,7 +135,7 @@ export function DishPicker({
       </div>
 
       {selected.length === 0 ? (
-        <p className="text-small text-soft">Chưa chọn món nào.</p>
+        <p className="text-small text-soft">{emptyText}</p>
       ) : (
         <ol className="dish-chosen">
           {selected.map((dish) => (

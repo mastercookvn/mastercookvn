@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { DishPicker } from "@/components/ui/DishPicker";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
@@ -12,8 +13,6 @@ import {
   updateDemoState,
   useDemoState,
 } from "@/mocks/demoStore";
-
-import { DishPicker } from "./DishPicker";
 
 const MINIMUM_DISHES = 3;
 

@@ -3,13 +3,16 @@ import { NextResponse, type NextRequest } from "next/server";
 import { ROUTES } from "@/constants/routes";
 import { parseSession, SESSION_COOKIE } from "@/lib/session";
 
+const CONTRACT_DOCUMENTS = "/contracts/";
+
 // Optimistic redirects only. Pages and the backend enforce permissions.
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const session = parseSession(request.cookies.get(SESSION_COOKIE)?.value);
   const needsStaff = pathname.startsWith(ROUTES.workspace);
+  const sharedDocument = pathname.startsWith(CONTRACT_DOCUMENTS);
 
-  if (session?.kind === "staff" && !needsStaff) {
+  if (session?.kind === "staff" && !needsStaff && !sharedDocument) {
     return NextResponse.redirect(new URL(ROUTES.workspace, request.url));
   }
 
@@ -23,5 +26,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/account/:path*"],
+  matcher: ["/admin/:path*", "/account/:path*", "/contracts/:path*"],
 };

@@ -13,6 +13,7 @@ import {
   type PaymentPurpose,
   type SettlementStatus,
 } from "@/constants/statuses";
+import type { ServingWave } from "@/lib/servingWaves";
 
 import {
   DISHES,
@@ -38,10 +39,12 @@ import {
 } from "./people";
 
 export type EstimateMeal = {
+  name: string;
+  /** Solar date, dd/MM/yyyy. A lunar pick is converted before it lands here. */
   date: string;
-  servingTables: number;
+  address: string;
   guestsPerTable: number;
-  setupTables: number;
+  waves: ServingWave[];
   mode: "set" | "custom";
   setId: string;
   dishIds: string[];
@@ -62,15 +65,29 @@ export type PaymentIntent = {
   createdAt: string;
 };
 
+/** An order the customer sent from the booking page, before any contract. */
+export type SubmittedOrder = {
+  code: string;
+  submittedAt: string;
+  eventType: string;
+  meals: EstimateMeal[];
+  total: number;
+};
+
 const DEFAULT_DISH_IDS = ["goi", "chagio", "ga", "bo", "lauthai", "traicay"];
 
 const INITIAL_STATE = {
   estimate: [
     {
+      name: "Tiệc cưới nhà gái",
       date: "14/12/2026",
-      servingTables: 30,
+      address: "24 Nguyễn Gia Trí, Bình Thạnh, TP.HCM",
       guestsPerTable: 10,
-      setupTables: 10,
+      waves: [
+        { from: "11:00", to: "12:00", tables: 10 },
+        { from: "12:00", to: "13:00", tables: 10 },
+        { from: "13:00", to: "14:00", tables: 10 },
+      ],
       mode: "set",
       setId: "hysu",
       dishIds: DEFAULT_DISH_IDS,
@@ -121,11 +138,13 @@ const INITIAL_STATE = {
   },
   /** Uploaded photos by service id, as data URLs. */
   serviceImages: {} as Record<string, string>,
+  bookingEventType: "Cưới hỏi",
+  submittedOrders: [] as SubmittedOrder[],
 };
 
 export type DemoState = typeof INITIAL_STATE;
 
-const DRAFT_KEY = "mastercook.estimate-draft";
+const DRAFT_KEY = "mastercook.estimate-draft.v2";
 const STATE_KEY = "mastercook.demo-state.v1";
 
 let state = INITIAL_STATE;
@@ -218,10 +237,11 @@ export const paymentIntentKey = (
 ) => `${contractNumber}:${purpose}`;
 
 export const NEW_ESTIMATE_MEAL: EstimateMeal = {
+  name: "",
   date: "20/12/2026",
-  servingTables: 15,
-  guestsPerTable: 12,
-  setupTables: 8,
+  address: "",
+  guestsPerTable: 10,
+  waves: [{ from: "17:30", to: "20:30", tables: 10 }],
   mode: "set",
   setId: "sumvay",
   dishIds: [],

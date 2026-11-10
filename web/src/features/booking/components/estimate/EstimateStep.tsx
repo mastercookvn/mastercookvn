@@ -16,7 +16,8 @@ import { MealCard } from "./MealCard";
 
 export function EstimateStep({ onContinue }: { onContinue: () => void }) {
   const meals = useDemoState((state) => state.estimate);
-  const estimates = meals.map(estimateMeal);
+  const dishes = useDemoState((state) => state.dishes);
+  const estimates = meals.map((meal) => estimateMeal(meal, dishes));
 
   const setMeals = (estimate: EstimateMeal[]) => updateDemoState({ estimate });
 
@@ -33,8 +34,8 @@ export function EstimateStep({ onContinue }: { onContinue: () => void }) {
             onChange={(patch) =>
               setMeals(
                 meals.map((item, i) =>
-                  i === index ? { ...item, ...patch } : item,
-                ),
+                  i === index ? { ...item, ...patch } : item
+                )
               )
             }
             onRemove={() => setMeals(meals.filter((_, i) => i !== index))}

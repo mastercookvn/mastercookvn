@@ -1,4 +1,5 @@
 import { MEAL_STATUS, type MealStatus } from "@/constants/statuses";
+import { waveSpan, waveTotals, type ServingWave } from "@/lib/servingWaves";
 
 export type OperationMeal = {
   id: string;
@@ -7,49 +8,67 @@ export type OperationMeal = {
   date: string;
   time: string;
   address: string;
+  guestsPerTable: number;
+  waves: ServingWave[];
   servingTables: number;
   guests: number;
   setupTables: number;
   initialStatus: MealStatus;
 };
 
+type OperationMealInput = Omit<
+  OperationMeal,
+  "time" | "servingTables" | "guests" | "setupTables"
+>;
+
+function createOperationMeal(input: OperationMealInput): OperationMeal {
+  const totals = waveTotals(input.waves);
+  return {
+    ...input,
+    ...totals,
+    time: waveSpan(input.waves),
+    guests: totals.servingTables * input.guestsPerTable,
+  };
+}
+
 export const OPERATION_MEALS: OperationMeal[] = [
-  {
+  createOperationMeal({
     id: "0120",
     name: "Tiệc họp mặt",
     orderCode: "DH-0120",
     date: "01/11",
-    time: "17:00–20:00",
     address: "33 Hoa Lan, Phú Nhuận",
-    servingTables: 9,
-    guests: 90,
-    setupTables: 9,
+    guestsPerTable: 10,
+    waves: [{ from: "17:00", to: "20:00", tables: 9 }],
     initialStatus: MEAL_STATUS.AwaitingCount,
-  },
-  {
+  }),
+  createOperationMeal({
     id: "0115",
     name: "Họp mặt công ty",
     orderCode: "DH-0115",
     date: "15/11",
-    time: "18:00–21:00",
     address: "18 Điện Biên Phủ, Bình Thạnh",
-    servingTables: 20,
-    guests: 200,
-    setupTables: 9,
+    guestsPerTable: 10,
+    waves: [
+      { from: "18:00", to: "19:00", tables: 7 },
+      { from: "19:00", to: "20:00", tables: 7 },
+      { from: "20:00", to: "21:00", tables: 6 },
+    ],
     initialStatus: MEAL_STATUS.Confirmed,
-  },
-  {
+  }),
+  createOperationMeal({
     id: "0128",
     name: "Tân gia",
     orderCode: "DH-0128",
     date: "22/11",
-    time: "10:30–13:30",
     address: "57 Phan Xích Long, Phú Nhuận",
-    servingTables: 12,
-    guests: 120,
-    setupTables: 6,
+    guestsPerTable: 10,
+    waves: [
+      { from: "10:30", to: "12:00", tables: 6 },
+      { from: "12:00", to: "13:30", tables: 6 },
+    ],
     initialStatus: MEAL_STATUS.Preparing,
-  },
+  }),
 ];
 
 export const operationMealById = (id: string) =>
@@ -62,7 +81,7 @@ export type Assignment = {
   hours: string;
 };
 
-export const STAFF_POSITIONS = ["Phục vụ", "Bếp", "Vận chuyển", "Kiểm đếm"];
+export { STAFF_POSITIONS } from "@/constants/staffing";
 
 const DEFAULT_ASSIGNMENTS: Assignment[] = [
   {

@@ -10,6 +10,7 @@ import {
   calculateMealPrice,
   type MealPrice,
 } from "@/lib/pricing";
+import { waveTotals, type ServingWave } from "@/lib/servingWaves";
 
 import {
   menuSetById,
@@ -32,6 +33,7 @@ export type Meal = {
   servingTables: number;
   guestsPerTable: number;
   setupTables: number;
+  waves: ServingWave[];
   setName: string;
   dishNames: string[];
   services: MealService[];
@@ -56,12 +58,16 @@ const withService = (id: string, quantity = 1): MealService => ({
   quantity,
 });
 
-type MealInput = Omit<Meal, "setName" | "dishNames" | "price"> & {
+type MealInput = Omit<
+  Meal,
+  "setName" | "dishNames" | "price" | "servingTables" | "setupTables"
+> & {
   setId: string;
 };
 
-function createMeal({ setId, ...meal }: MealInput): Meal {
+function createMeal({ setId, ...input }: MealInput): Meal {
   const set = menuSetById(setId);
+  const meal = { ...input, ...waveTotals(input.waves) };
   return {
     ...meal,
     setName: set.name,
@@ -83,9 +89,12 @@ export const MEAL_WEDDING = createMeal({
   time: "11:00–14:00",
   address: "24 Nguyễn Gia Trí, Bình Thạnh, TP.HCM",
   distanceKm: 9.5,
-  servingTables: 30,
   guestsPerTable: 10,
-  setupTables: 10,
+  waves: [
+    { from: "11:00", to: "12:00", tables: 10 },
+    { from: "12:00", to: "13:00", tables: 10 },
+    { from: "13:00", to: "14:00", tables: 10 },
+  ],
   setId: "hysu",
   services: [withService("don"), withService("cong")],
   status: MEAL_STATUS.Planned,
@@ -99,9 +108,11 @@ export const MEAL_ANNOUNCEMENT = createMeal({
   time: "17:30–20:30",
   address: "108 Lê Văn Việt, Thủ Đức, TP.HCM",
   distanceKm: 17,
-  servingTables: 15,
   guestsPerTable: 12,
-  setupTables: 8,
+  waves: [
+    { from: "17:30", to: "19:00", tables: 8 },
+    { from: "19:00", to: "20:30", tables: 7 },
+  ],
   setId: "sumvay",
   services: [withService("don")],
   status: MEAL_STATUS.Planned,
@@ -115,9 +126,11 @@ export const MEAL_HOUSEWARMING = createMeal({
   time: "10:30–13:30",
   address: "57 Phan Xích Long, Phú Nhuận, TP.HCM",
   distanceKm: 6,
-  servingTables: 12,
   guestsPerTable: 10,
-  setupTables: 6,
+  waves: [
+    { from: "10:30", to: "12:00", tables: 6 },
+    { from: "12:00", to: "13:30", tables: 6 },
+  ],
   setId: "tatnien",
   services: [withService("don")],
   status: MEAL_STATUS.Preparing,
@@ -131,9 +144,8 @@ export const MEAL_COMPANY = createMeal({
   time: "17:00–20:00",
   address: "12 Trường Sa, Phú Nhuận, TP.HCM",
   distanceKm: 5,
-  servingTables: 10,
   guestsPerTable: 10,
-  setupTables: 10,
+  waves: [{ from: "17:00", to: "20:00", tables: 10 }],
   setId: "tatnien",
   services: [withService("don")],
   status: MEAL_STATUS.AwaitingSettlement,

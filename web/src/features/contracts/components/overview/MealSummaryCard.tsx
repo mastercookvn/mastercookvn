@@ -2,6 +2,7 @@
 
 import { CalendarIcon, PinIcon } from "@/components/icons";
 import { MealPriceBreakdown } from "@/components/ui/MealPriceBreakdown";
+import { ServingWavesList } from "@/components/ui/ServingWavesList";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { MealStatus } from "@/constants/statuses";
 import type { Meal } from "@/mocks/contracts";
@@ -26,10 +27,11 @@ export function MealSummaryCard({
       <p className="text-small text-soft">
         <CalendarIcon size={16} /> {meal.date}, {meal.time} &nbsp;{" "}
         <PinIcon size={16} /> {meal.address}
-        <br />
-        {meal.servingTables} bàn ăn, {meal.guestsPerTable} người mỗi bàn,{" "}
-        {meal.setupTables} bàn bố trí
       </p>
+      <ServingWavesList
+        waves={meal.waves}
+        guestsPerTable={meal.guestsPerTable}
+      />
       <p className="text-small">
         <b>{meal.setName}:</b> {meal.dishNames.join(", ")}
       </p>

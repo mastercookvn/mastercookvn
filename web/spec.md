@@ -56,3 +56,23 @@ Trang Home của quản trị cần gom gọn lại, không nhất thể show h�
 Cài đặt đổi mật khẩu thì lại quá đơn điệu
 
 Lỗi ở mục báo cáo
+
+------  Script4:
+
+Trong UI của người dùng, việc tự chọn menu cũng phải được hiện thưc bằng dropdown và search món chứ khônh được tick như vậy
+
+Phân bổ lại các thông tin về đặt tiệc như ngày (hiển thị lịch ra, có cho chọn lịch âm nhưng sau đó phải hiển thị ngày dương tương ứng )
+
+Phân biệt rõ giữa bữa và set nhé, hay đọc lại doc đê hiểu. Ví dụ: Đãi từ 9h đến 11h, 11h dến 1h, 1h đến 3h,.. Việc dùng buổi có thể sai. Ý nghĩa của nó là mời 400 khách nhưng không có nghĩa là 400 kháh sẽ đêns 1 lượt mà sẽ chia ra, nó dẫn đến lohic nghiệp vụ
+
+Việc phân công nhân sự cũng dựa trên số người tham gia tiệc, số lần đãi và số lượng mỗi ng của mỗi lần đãi. UI nên deg theo luồng sau, hệ thống sẽ đè xuất phân công sẵn cho nhân viên, sau đó người dùng sẽ diều chỉnh nếu chưa hợp lý
+
+Hãy hoàn thiện luồng đăng nhập một cách chuẩn chỉnh 
+
+Khi đặt đơn thành công, không hiện mã đơn mà maskcot sẽ xuất hiện và cười (deg sau cho vừa khung hình)
+
+Phải cho khách hàng tra cứu lại đơn đặt và hợp đồng 
+
+Highligh logic sửa hợp đồng trong trang quản lý
+
+Chi tiết hợp đồng nên gọn lại, có thật sự cần các grid về mã hợp đòng, só tiền trạng thái ododf không? Phải có chức năng xuất hợp đồng chuẩn chỉnh theo luật việt nam để gửi khách hang

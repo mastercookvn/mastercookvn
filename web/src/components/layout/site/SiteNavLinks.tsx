@@ -9,6 +9,7 @@ import {
   CalculatorIcon,
   HomeIcon,
   MenuIcon,
+  SearchIcon,
 } from "@/components/icons";
 import { ROUTES } from "@/constants/routes";
 
@@ -19,6 +20,7 @@ const LINKS = [
   { href: ROUTES.menu, label: "Thực đơn", icon: MenuIcon },
   { href: ROUTES.services, label: "Dịch vụ, chính sách", icon: BookIcon },
   { href: ROUTES.booking, label: "Tính giá, đặt tiệc", icon: CalculatorIcon },
+  { href: ROUTES.lookup, label: "Tra cứu đơn", icon: SearchIcon },
 ];
 
 function NavList({ pathname }: { pathname?: string }) {

@@ -183,3 +183,11 @@
     gap: 8px;
   }
 }
+
+@layer components {
+  .auth-title {
+    font-family: var(--font-display);
+    font-size: var(--text-24);
+    font-weight: 600;
+  }
+}

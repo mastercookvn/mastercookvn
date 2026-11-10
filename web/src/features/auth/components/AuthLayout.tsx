@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 
-import { ClipboardIcon, PhoneIcon, ShieldIcon } from "@/components/icons";
+import {
+  ClipboardIcon,
+  LockIcon,
+  PhoneIcon,
+  ShieldIcon,
+} from "@/components/icons";
 import { MaskImage } from "@/components/motion/MaskImage";
 import { Reveal } from "@/components/motion/Reveal";
 
@@ -25,6 +30,10 @@ export function AuthLayout({ children }: { children: ReactNode }) {
             <li>
               <ShieldIcon size={18} />
               Tài khoản mới xác thực số qua mã SMS trước khi dùng.
+            </li>
+            <li>
+              <LockIcon size={18} />
+              Quên mật khẩu thì xác thực lại số bằng mã SMS để đặt mật khẩu mới.
             </li>
             <li>
               <ClipboardIcon size={18} />

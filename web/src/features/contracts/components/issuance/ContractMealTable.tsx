@@ -9,6 +9,7 @@ export function ContractMealTable() {
       columns={[
         "Bữa",
         "Thời gian",
+        num("Lượt đãi"),
         num("Bàn ăn"),
         num("Bàn bố trí"),
         "Thực đơn",
@@ -19,7 +20,8 @@ export function ContractMealTable() {
       ]}
       rows={contract.meals.map((meal, index) => [
         `Bữa ${index + 1}`,
-        `${meal.date} ${meal.time.slice(0, 5)}`,
+        `${meal.date} ${meal.time}`,
+        meal.waves.length,
         meal.servingTables,
         meal.setupTables,
         meal.setName,
@@ -30,7 +32,7 @@ export function ContractMealTable() {
       ])}
       foot={
         <>
-          <td colSpan={8}>Tổng hợp đồng</td>
+          <td colSpan={9}>Tổng hợp đồng</td>
           <td className="is-num">{formatMoney(contract.total)}</td>
         </>
       }

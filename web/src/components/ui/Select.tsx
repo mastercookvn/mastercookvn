@@ -45,7 +45,7 @@ export function Select({
     <BaseSelect.Root
       items={items}
       name={name}
-      value={value}
+      value={value === "" ? null : value}
       defaultValue={defaultValue}
       disabled={disabled}
       onValueChange={(next) => {

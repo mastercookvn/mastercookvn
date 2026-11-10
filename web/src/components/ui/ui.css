@@ -2176,3 +2176,47 @@
     }
   }
 }
+
+@layer components {
+  .wave-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .wave-list ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+  }
+
+  .wave-list li {
+    display: inline-flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: var(--color-ivory-deep);
+    font-size: var(--text-13);
+  }
+
+  .wave-list li b {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .wave-list li span {
+    color: var(--color-ink-muted);
+  }
+
+  .wave-list .wave-list-index {
+    font-size: var(--text-11-5);
+    color: var(--color-ink-subtle);
+  }
+
+  .wave-list small {
+    font-size: var(--text-12-5);
+    color: var(--color-ink-muted);
+  }
+}

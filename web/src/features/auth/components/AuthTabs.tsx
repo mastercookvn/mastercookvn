@@ -20,7 +20,9 @@ export function AuthTabs() {
       panels={{
         login: (
           <>
-            <LoginForm />
+            <Suspense fallback={null}>
+              <LoginForm />
+            </Suspense>
             {env.NEXT_PUBLIC_SHOW_SAMPLE_ACCOUNTS === "true" ? (
               <Suspense fallback={null}>
                 <SampleAccountList />

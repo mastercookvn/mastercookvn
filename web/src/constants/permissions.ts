@@ -61,7 +61,7 @@ export const WORKSPACE_SCREENS = {
     tabs: [
       { value: "overview", label: "Tổng quan, ký", roles: [TV, KT] },
       { value: "payment", label: "Thu tiền", roles: [KT] },
-      { value: "addendum", label: "Phụ lục", roles: [TV] },
+      { value: "addendum", label: "Sửa hợp đồng (phụ lục)", roles: [TV] },
       { value: "cancel", label: "Hủy bữa", roles: [TV] },
       { value: "settlement", label: "Quyết toán", roles: [KT] },
     ],

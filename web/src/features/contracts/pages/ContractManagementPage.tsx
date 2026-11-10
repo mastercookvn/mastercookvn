@@ -14,6 +14,7 @@ export async function ContractManagementPage() {
   return (
     <WorkspaceTabs
       screen="contractDetail"
+      showTitle={false}
       header={<ContractSummaryBar />}
       panels={{
         overview: <ContractIssuePanel roles={roles} />,

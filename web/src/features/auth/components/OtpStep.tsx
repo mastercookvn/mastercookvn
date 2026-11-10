@@ -1,19 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { TextField } from "@/components/ui/TextField";
 
-import type { RegisterState } from "@/features/auth/actions";
+import type { OtpFlowState } from "@/features/auth/actions";
 import { OTP_LENGTH } from "@/features/auth/otp-config";
 import { maskPhone } from "@/features/auth/schemas";
 
 import { SubmitButton } from "./SubmitButton";
 
-type OtpState = Extract<RegisterState, { step: "otp" }>;
+type OtpState = Extract<OtpFlowState, { step: "otp" }>;
 
 function useNow() {
   const [now, setNow] = useState(() => Date.now());
@@ -48,11 +48,18 @@ function ResendButton({ wait }: { wait: number }) {
 }
 
 export function OtpStep({
+  idPrefix,
   state,
+  submitLabel,
   onEditPhone,
+  children,
 }: {
+  idPrefix: string;
   state: OtpState;
+  submitLabel: string;
   onEditPhone: () => void;
+  /** Fields that are submitted together with the code. */
+  children?: ReactNode;
 }) {
   const now = useNow();
   const expiresIn = secondsLeft(state.expiresAt, now);
@@ -74,7 +81,7 @@ export function OtpStep({
       <TextField
         // Remount on every server response so a wrong code is cleared.
         key={`${state.expiresAt}-${state.error ?? ""}`}
-        id="register-otp"
+        id={`${idPrefix}-otp`}
         name="otp"
         label="Mã xác nhận"
         inputMode="numeric"
@@ -84,18 +91,20 @@ export function OtpStep({
         required
         autoFocus
         className="tracking-[0.4em]"
+        error={state.fieldErrors?.otp}
         hint={
           expiresIn > 0
             ? `Mã hết hạn sau ${clock(expiresIn)}.`
             : "Mã đã hết hạn. Hãy gửi lại mã mới."
         }
       />
+      {children}
       {state.error ? <Alert tone="error">{state.error}</Alert> : null}
       {!state.error && state.notice ? (
         <Alert tone="good">{state.notice}</Alert>
       ) : null}
       <SubmitButton name="intent" value="verify">
-        Xác nhận và tạo tài khoản
+        {submitLabel}
       </SubmitButton>
       <ResendButton wait={secondsLeft(state.resendAt, now)} />
     </>

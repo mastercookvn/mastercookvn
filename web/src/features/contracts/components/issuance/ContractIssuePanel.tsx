@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 
-import { Badge } from "@/components/ui/Badge";
+import { PrintIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { PanelHeader } from "@/components/ui/PanelHeader";
-import { StatusBadge } from "@/components/ui/StatusBadge";
-import { ToastButton } from "@/components/ui/ToastButton";
 import type { Role } from "@/constants/roles";
-import { CONTRACT_STATUS } from "@/constants/statuses";
+import { ROUTES } from "@/constants/routes";
 import { CONTRACT_WEDDING as contract } from "@/mocks/contracts";
 import { useDemoState } from "@/mocks/demoStore";
 
@@ -27,26 +26,21 @@ export function ContractIssuePanel({ roles }: { roles: Role[] }) {
   return (
     <>
       <PanelHeader
-        title={`Hợp đồng ${contract.number}`}
+        title="Phát hành và ký"
         subtitle={`Đơn ${contract.orderCode} · Giữ tạm đến ${contract.depositDeadline}`}
         actions={
           issued ? (
-            <>
-              <StatusBadge
-                domain="contract"
-                status={CONTRACT_STATUS.AwaitingConfirmationAndDeposit}
-              />
-              <ToastButton message="Bản mẫu: mở bản in hợp đồng">
-                In để ký tại quầy
-              </ToastButton>
-            </>
+            <ButtonLink
+              href={ROUTES.contractDocument(contract.number)}
+              target="_blank"
+            >
+              <PrintIcon size={18} />
+              In để ký tại quầy
+            </ButtonLink>
           ) : (
-            <>
-              <Badge tone="neutral">Chưa phát hành</Badge>
-              <Button variant="primary" onClick={() => setDialogOpen(true)}>
-                Phát hành hợp đồng
-              </Button>
-            </>
+            <Button variant="primary" onClick={() => setDialogOpen(true)}>
+              Phát hành hợp đồng
+            </Button>
           )
         }
       />

@@ -17,6 +17,10 @@ export const FLASH_MESSAGES = {
     message: "Đã xác nhận số điện thoại và tạo tài khoản. Chào {name}!",
   },
   logout: { tone: "info", message: "Bạn đã đăng xuất. Hẹn gặp lại!" },
+  passwordReset: {
+    tone: "success",
+    message: "Đã đặt mật khẩu mới. Đăng nhập lại bằng mật khẩu mới nhé.",
+  },
 } as const satisfies Record<string, { tone: FlashTone; message: string }>;
 
 export type FlashKey = keyof typeof FLASH_MESSAGES;

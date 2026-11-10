@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
 import type { EstimateMeal } from "@/mocks/demoStore";
 
 export function MenuModeSwitch({
@@ -11,21 +10,21 @@ export function MenuModeSwitch({
   onChange: (mode: EstimateMeal["mode"]) => void;
 }) {
   return (
-    <div className="l-row gap-1.5">
-      <Button
-        size="sm"
-        variant={mode === "set" ? "inverse" : "default"}
+    <div className="segmented" role="group" aria-label="Cách chọn thực đơn">
+      <button
+        type="button"
+        aria-pressed={mode === "set"}
         onClick={() => onChange("set")}
       >
-        Chọn set
-      </Button>
-      <Button
-        size="sm"
-        variant={mode === "custom" ? "inverse" : "default"}
+        Chọn set có sẵn
+      </button>
+      <button
+        type="button"
+        aria-pressed={mode === "custom"}
         onClick={() => onChange("custom")}
       >
         Tự chọn món
-      </Button>
+      </button>
     </div>
   );
 }

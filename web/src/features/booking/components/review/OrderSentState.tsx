@@ -1,20 +1,25 @@
-import { CheckIcon } from "@/components/icons";
+import { Mascot } from "@/components/brand/Mascot";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { ROUTES } from "@/constants/routes";
 
 export function OrderSentState() {
   return (
-    <EmptyState>
-      <CheckIcon size={52} />
-      <h2 className="h2-section">Đã gửi đơn DH-0142!</h2>
-      <p className="text-soft max-w-[52ch]">
-        Tư vấn sẽ liên hệ qua điện thoại hoặc Zalo để khảo sát địa điểm từng
-        bữa. Bạn theo dõi đơn trong Hồ sơ của tôi.
+    <section className="order-sent" aria-live="polite">
+      <div className="order-sent-stage" aria-hidden="true">
+        <span className="order-sent-glow" />
+        <Mascot mood="happy" size={180} className="order-sent-mascot" />
+      </div>
+      <h2 className="order-sent-title">Đặt tiệc thành công!</h2>
+      <p className="order-sent-text">
+        Cảm ơn bạn đã tin MasterCook. Tư vấn sẽ gọi điện hoặc nhắn Zalo trong
+        hôm nay để hẹn khảo sát địa điểm từng bữa.
       </p>
-      <ButtonLink href={ROUTES.account} variant="primary">
-        Xem đơn của tôi
-      </ButtonLink>
-    </EmptyState>
+      <div className="l-row justify-center gap-2">
+        <ButtonLink href={ROUTES.account} variant="primary">
+          Theo dõi đơn của tôi
+        </ButtonLink>
+        <ButtonLink href={ROUTES.home}>Về trang chủ</ButtonLink>
+      </div>
+    </section>
   );
 }
