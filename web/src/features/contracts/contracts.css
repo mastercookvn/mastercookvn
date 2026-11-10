@@ -1,0 +1,22 @@
+@layer components {
+  .countdown {
+    font-weight: 500;
+    color: var(--color-error);
+  }
+
+  .rating {
+    display: flex;
+    gap: 4px;
+    --icon-accent: currentColor;
+  }
+
+  .rating button {
+    padding: 0 2px;
+    color: var(--color-line-strong);
+    transition: color 0.2s;
+  }
+
+  .rating button.is-on {
+    color: var(--color-gold);
+  }
+}

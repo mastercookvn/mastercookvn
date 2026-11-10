@@ -1,0 +1,59 @@
+@layer components {
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(110px, 1fr));
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .calendar-cell {
+    min-height: 96px;
+    border-right: 1px solid var(--color-workspace-line-soft);
+    border-bottom: 1px solid var(--color-workspace-line-soft);
+    padding: 8px;
+    font-size: var(--text-14);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .calendar-cell.is-head {
+    background: var(--color-surface);
+    font-weight: 700;
+    color: var(--color-ink-muted);
+    text-align: center;
+    font-size: var(--text-13-5);
+  }
+
+  .calendar-cell.is-outside {
+    background: var(--color-workspace-hover);
+    color: var(--color-ink-subtle);
+  }
+
+  .calendar-cell.is-today > span {
+    background: var(--color-primary);
+    color: var(--color-surface);
+    border-radius: 4px;
+    padding: 0 7px;
+    align-self: flex-start;
+    font-weight: 500;
+  }
+
+  .calendar-event {
+    padding: 4px 7px;
+    border-radius: 3px;
+    font-size: var(--text-13);
+    line-height: 1.3;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  @media (max-width: 760px) {
+    .calendar {
+      overflow-x: auto;
+      grid-template-columns: repeat(7, minmax(110px, 1fr));
+    }
+  }
+}

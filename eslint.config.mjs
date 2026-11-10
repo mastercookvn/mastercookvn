@@ -31,6 +31,7 @@ export default defineConfig([
     "**/coverage/**",
     "**/*.tsbuildinfo",
     "docs/**",
+    "**/next-env.d.ts",
   ]),
 
   ...[...nextCoreWebVitals, ...nextTypescript].map(scopeToWeb),
@@ -41,6 +42,31 @@ export default defineConfig([
       next: {
         rootDir: path.join(repoRoot, "web"),
       },
+    },
+  },
+
+  {
+    files: ["web/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@phosphor-icons/*",
+                "simple-icons",
+                "simple-icons/*",
+                "lucide-react",
+                "react-icons",
+                "react-icons/*",
+                "@heroicons/*",
+              ],
+              message: 'Project icons are custom: "@/components/icons".',
+            },
+          ],
+        },
+      ],
     },
   },
 

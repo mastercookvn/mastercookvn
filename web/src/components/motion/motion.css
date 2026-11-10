@@ -1,0 +1,107 @@
+/* M01-M14 (section 3). Hidden states apply only under .motion-live, set by script. */
+.motion-live [data-reveal="up"] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.motion-live [data-reveal="up"][data-in] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s var(--ease-in-out-soft) var(--delay, 0ms),
+    transform 0.9s var(--ease-out-soft) var(--delay, 0ms);
+}
+
+.motion-live [data-reveal="fade"] {
+  opacity: 0;
+}
+
+.motion-live [data-reveal="fade"][data-in] {
+  opacity: 1;
+  transition: opacity 0.8s var(--ease-in-out-soft) var(--delay, 0ms);
+}
+
+.motion-live [data-reveal="mask"] {
+  clip-path: inset(0 0 100% 0);
+}
+
+.motion-live [data-reveal="mask"] img {
+  transform: scale(1.12);
+}
+
+.motion-live [data-reveal="mask"][data-in] {
+  clip-path: inset(0);
+  transition: clip-path 1s var(--ease-out-soft) var(--delay, 0ms);
+}
+
+.motion-live [data-reveal="mask"][data-in] img {
+  transform: scale(1);
+  transition: transform 1.4s var(--ease-out-soft) var(--delay, 0ms);
+}
+
+.motion-live [data-reveal="wipe"] {
+  clip-path: inset(0 0 0 100%);
+}
+
+.motion-live [data-reveal="wipe"] img {
+  transform: scale(1.12);
+}
+
+.motion-live [data-reveal="wipe"][data-in] {
+  clip-path: inset(0);
+  transition: clip-path 1.4s var(--ease-out-soft) var(--delay, 0ms);
+}
+
+.motion-live [data-reveal="wipe"][data-in] img {
+  transform: scale(1);
+  transition: transform 1.8s var(--ease-out-soft) var(--delay, 0ms);
+}
+
+.motion-live [data-reveal="line"] > span {
+  transform: translateY(112%);
+}
+
+.motion-live [data-reveal="line"][data-in] > span {
+  transform: none;
+  transition: transform 0.9s var(--ease-out-soft) var(--delay, 0ms);
+}
+
+/* M08: drop the reveal delay once settled. */
+.motion-live [data-reveal="mask"][data-settled] img {
+  transition: transform 0.9s var(--ease-out-soft);
+}
+
+.motion-live .set-card:hover [data-reveal="mask"][data-settled] img {
+  transform: scale(1.05);
+}
+
+.motion-live .dish-card:hover [data-reveal="mask"][data-settled] img {
+  transform: scale(1.06);
+}
+
+/* M12 */
+[data-surface="site"] .tab-panel {
+  animation: panel-in 0.28s var(--ease-in-out-soft);
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+}
+
+/* M10 */
+.number-flash {
+  animation: number-flash 0.6s var(--ease-in-out-soft);
+}
+
+@keyframes number-flash {
+  from {
+    background: var(--color-blue-100);
+  }
+
+  to {
+    background: transparent;
+  }
+}

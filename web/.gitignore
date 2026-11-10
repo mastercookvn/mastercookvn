@@ -2,3 +2,5 @@
 next-env.d.ts
 out/
 out-tsc/
+.env*
+!.env.example

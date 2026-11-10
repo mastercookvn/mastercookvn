@@ -1,0 +1,184 @@
+@import "tailwindcss";
+@import "../components/ui/ui.css";
+@import "../components/motion/motion-layout.css";
+@import "../components/layout/site/site.css";
+@import "../components/layout/workspace/workspace.css";
+@import "../features/home/home.css";
+@import "../features/menu/menu.css";
+@import "../features/services/services.css";
+@import "../features/booking/booking.css";
+@import "../features/auth/auth.css";
+@import "../features/account/account.css";
+@import "../features/contracts/contracts.css";
+@import "../features/orders/orders.css";
+@import "../features/dashboard/dashboard.css";
+@import "../features/meals/meals.css";
+@import "../features/reports/reports.css";
+@import "../features/settings/settings.css";
+@import "../components/motion/motion.css";
+
+/* Tokens from sections 2.3 and 2.8. Tailwind's default palette is removed. */
+@theme {
+  --color-*: initial;
+
+  --color-navy-950: #0b1a33;
+  --color-navy-900: #0f2444;
+  --color-navy-800: #16315c;
+  --color-navy-line: #27406a;
+  --color-primary: #1b3f78;
+  --color-blue-500: #3a67a8;
+  --color-blue-200: #c9d6e8;
+  --color-blue-100: #dde6f2;
+  --color-blue-50: #eef2f8;
+  --color-ivory: #f8f7f2;
+  --color-ivory-deep: #f1efe7;
+  --color-surface: #ffffff;
+  --color-ink: #12213a;
+  --color-ink-muted: #36435a;
+  --color-ink-subtle: #47556d;
+  --color-on-navy-muted: #b4c3da;
+  --color-line: #e3e4e0;
+  --color-line-strong: #cbd0d6;
+  --color-gold: #b8935a;
+  --color-gold-light: #d6b77e;
+  --color-gold-dark: #80622f;
+
+  --color-good: #2f6b57;
+  --color-good-soft: #e4efea;
+  --color-good-ink: #22503f;
+  --color-wait: #7e5e22;
+  --color-wait-soft: #f5eedc;
+  --color-wait-ink: #5e4716;
+  --color-error: #9a3b32;
+  --color-error-soft: #f6e7e4;
+  --color-error-ink: #6f2c22;
+  --color-error-line: #d9b6b0;
+  --color-info: #2c5a92;
+  --color-info-soft: #e4ecf6;
+  --color-info-ink: #1d4474;
+
+  --color-workspace-canvas: #f5f6f6;
+  --color-workspace-line: #e1e4e8;
+  --color-workspace-line-soft: #eef0f2;
+  --color-workspace-fill: #e9edf2;
+  --color-workspace-hover: #f8f9fa;
+  --color-workspace-active: #f3f0ea;
+  --color-workspace-nav: #dbe4f0;
+  --color-workspace-nav-active: #1f3f72;
+  --color-workspace-nav-muted: #aebdd3;
+  --color-workspace-nav-text: #f3f6fb;
+  --color-workspace-accent-hover: #6a4e1b;
+
+  --text-10-5: 10.5px;
+  --text-11: 11px;
+  --text-11-5: 11.5px;
+  --text-12: 12px;
+  --text-12-5: 12.5px;
+  --text-13: 13px;
+  --text-13-5: 13.5px;
+  --text-14: 14px;
+  --text-14-5: 14.5px;
+  --text-15: 15px;
+  --text-15-5: 15.5px;
+  --text-16: 16px;
+  --text-16-5: 16.5px;
+  --text-17: 17px;
+  --text-18: 18px;
+  --text-20: 20px;
+  --text-22: 22px;
+  --text-23: 23px;
+  --text-24: 24px;
+  --text-27: 27px;
+  --text-30: 30px;
+  --text-32: 32px;
+  --text-34: 34px;
+  --text-39: 39px;
+  --text-44: 44px;
+  --text-56: 56px;
+  --text-70: 70px;
+
+  --radius-control: 2px;
+  --radius-card: 3px;
+
+  --container-content: 1320px;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.33, 0, 0.2, 1);
+  --duration-fast: 240ms;
+  --duration-base: 700ms;
+}
+
+@theme inline {
+  --font-sans:
+    var(--font-be-vietnam-pro), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root {
+  --gutter-left: max(20px, env(safe-area-inset-left, 0px));
+  --gutter-right: max(20px, env(safe-area-inset-right, 0px));
+  --icon-accent: var(--color-gold);
+}
+
+[data-surface="workspace"] {
+  --color-line: var(--color-workspace-line);
+  --color-good-ink: #2c4e3e;
+  --color-info-ink: #2e475c;
+  --radius-control: 3px;
+  --icon-accent: currentColor;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-14-5);
+    line-height: 1.65;
+    font-variant-numeric: tabular-nums;
+  }
+
+  small {
+    font-size: smaller;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue-500);
+    outline-offset: 2px;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  label:has(input) {
+    cursor: pointer;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    appearance: textfield;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.12ms !important;
+      transition-delay: 0ms !important;
+    }
+  }
+}

@@ -1,0 +1,99 @@
+@layer components {
+  .meal-queue {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .meal-queue h3 {
+    font-size: var(--text-13-5);
+    color: var(--color-ink-muted);
+    font-weight: 700;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .meal-queue a {
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 2px 10px;
+    text-align: left;
+    width: 100%;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-workspace-line-soft);
+    padding: 12px 14px;
+  }
+
+  .meal-queue a:last-child {
+    border-bottom: 0;
+  }
+
+  .meal-queue a:hover {
+    background: var(--color-workspace-hover);
+  }
+
+  .meal-queue a[aria-current="page"] {
+    background: var(--color-workspace-active);
+  }
+
+  .meal-queue time {
+    grid-row: span 2;
+    font-size: var(--text-14);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .meal-queue time small {
+    display: block;
+    font-weight: 400;
+    color: var(--color-ink-muted);
+    font-size: var(--text-13);
+  }
+
+  .meal-queue b {
+    font-weight: 700;
+    font-size: var(--text-14-5);
+  }
+
+  .meal-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  .meal-head h2 {
+    font-size: var(--text-18);
+    font-weight: 700;
+  }
+
+  .progress-steps {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .progress-steps div {
+    flex: 1 1 100px;
+    text-align: center;
+    font-size: var(--text-13-5);
+    padding: 9px 6px;
+    background: var(--color-workspace-fill);
+    color: var(--color-ink-muted);
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .progress-steps div.is-done {
+    background: var(--color-good-soft);
+    color: var(--color-good);
+  }
+
+  .progress-steps div.is-active {
+    background: var(--color-primary);
+    color: var(--color-surface);
+    font-weight: 700;
+  }
+}
