@@ -2,11 +2,15 @@ import { Tabs, type TabItem } from "@/components/ui/Tabs";
 import { CONTRACT_STATUS } from "@/constants/statuses";
 import type { Contract } from "@/mocks/contracts";
 
-import { isAwaitingContract } from "../../lib/contractState";
+import {
+  isAwaitingContract,
+  isAwaitingSettlement,
+} from "../../lib/contractState";
 import { AddendumConfirmationPanel } from "../addendum/AddendumConfirmationPanel";
 import { CancelMealPanel } from "../cancellation/CancelMealPanel";
 import { PaymentPanel } from "../payment/PaymentPanel";
 import { ReviewForm } from "../review/ReviewForm";
+import { FinalInvoicePanel } from "../settlement/FinalInvoicePanel";
 
 import { ContractOverviewPanel } from "./ContractOverviewPanel";
 
@@ -15,6 +19,9 @@ function tabsFor(contract: Contract): TabItem[] {
   const overview = { value: "overview", label: "Tổng quan" };
   if (isAwaitingContract(contract)) {
     return [overview, { value: "payment", label: "Thanh toán" }];
+  }
+  if (isAwaitingSettlement(contract)) {
+    return [overview, { value: "invoice", label: "Hóa đơn quyết toán" }];
   }
   if (contract.status === CONTRACT_STATUS.Active) {
     return [
@@ -33,6 +40,7 @@ export function ContractTabs({ contract }: { contract: Contract }) {
     addendum: <AddendumConfirmationPanel />,
     cancel: <CancelMealPanel />,
     review: <ReviewForm />,
+    invoice: <FinalInvoicePanel />,
   };
 
   return (

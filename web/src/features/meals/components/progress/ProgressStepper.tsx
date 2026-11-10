@@ -1,76 +1,81 @@
 "use client";
 
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { MEAL_STATUS_META } from "@/constants/labels";
-import { MEAL_PROGRESS } from "@/constants/statuses";
-import { updateDemoState, useDemoState } from "@/mocks/demoStore";
+import { MEAL_PROGRESS, MEAL_STATUS } from "@/constants/statuses";
+import { servingStaffNeeded } from "@/lib/pricing";
+import { useDemoState } from "@/mocks/demoStore";
 import type { OperationMeal } from "@/mocks/operationMeals";
+
+import { advanceMeal } from "../../lib/mealActions";
+import { advanceLabel } from "../../lib/nextStep";
 
 import { ProgressHistory } from "./ProgressHistory";
 
-const NEXT_ACTION: Record<number, string> = {
-  0: "Bắt đầu chuẩn bị",
-  1: "Bắt đầu phục vụ",
-  2: "Kết thúc phục vụ",
-};
-
 export function ProgressStepper({ meal }: { meal: OperationMeal }) {
-  const statuses = useDemoState((state) => state.mealStatuses);
+  const status = useDemoState((state) => state.mealStatuses[meal.id]);
+  const issued = useDemoState(
+    (state) => state.equipmentIssued[meal.id] ?? false
+  );
+  const servers = useDemoState(
+    (state) =>
+      (state.assignments[meal.id] ?? []).filter(
+        (row) => row.position === "Phục vụ"
+      ).length
+  );
   const showToast = useToast();
-  const stage = MEAL_PROGRESS.indexOf(statuses[meal.id]);
-  const action = NEXT_ACTION[stage];
+  const stage = MEAL_PROGRESS.indexOf(status);
+  const action = advanceLabel(status);
+  const serversNeeded = servingStaffNeeded(meal.setupTables);
+  const issuedForStage =
+    issued || stage > MEAL_PROGRESS.indexOf(MEAL_STATUS.Preparing);
 
   return (
-    <>
-      <div className="progress-steps">
-        {MEAL_PROGRESS.map((status, index) => (
-          <div
-            key={status}
-            className={
-              index < stage
-                ? "is-done"
-                : index === stage
-                  ? "is-active"
-                  : undefined
-            }
-          >
-            {MEAL_STATUS_META[status].label}
-          </div>
-        ))}
-      </div>
-      <div className="l-grid l-grid-2">
-        <section className="card l-stack gap-2">
-          <h3 className="card-title card-title-flush">Bước tiếp theo</h3>
-          {action ? (
-            <div>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  updateDemoState({
-                    mealStatuses: {
-                      ...statuses,
-                      [meal.id]: MEAL_PROGRESS[stage + 1],
-                    },
-                  });
-                  showToast("Đã ghi tiến độ");
-                }}
-              >
-                {action}
-              </Button>
-            </div>
+    <div className="l-grid l-grid-2">
+      <section className="card l-stack gap-2">
+        <h3 className="card-title card-title-flush">Trước khi chuyển bước</h3>
+        <div className="check-row">
+          <span>
+            Phục vụ {servers} / {serversNeeded} người
+          </span>
+          {servers >= serversNeeded ? (
+            <Badge tone="good">Đủ</Badge>
           ) : (
-            <p className="text-soft text-small">
-              Bước tiếp theo do thủ kho kiểm đếm hoặc kế toán quyết toán.
-            </p>
+            <Badge tone="wait">Thiếu {serversNeeded - servers}</Badge>
           )}
-          <p className="text-small text-soft">
-            Không nhảy bước, không lùi trạng thái. Không bắt đầu phục vụ khi hợp
-            đồng chưa có hiệu lực.
+        </div>
+        <div className="check-row">
+          <span>Phiếu xuất dụng cụ</span>
+          {issuedForStage ? (
+            <Badge tone="good">Đã xuất</Badge>
+          ) : (
+            <Badge tone="wait">Chưa xuất</Badge>
+          )}
+        </div>
+        {action ? (
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => {
+              const next = advanceMeal(meal.id);
+              showToast(`Đã ghi: ${MEAL_STATUS_META[next].label}`);
+            }}
+          >
+            {action}
+          </Button>
+        ) : (
+          <p className="text-soft text-small">
+            Bước tiếp theo do thủ kho kiểm đếm hoặc kế toán quyết toán.
           </p>
-        </section>
-        <ProgressHistory stage={stage} />
-      </div>
-    </>
+        )}
+        <p className="text-small text-soft">
+          Không nhảy bước, không lùi trạng thái. Không bắt đầu phục vụ khi hợp
+          đồng chưa có hiệu lực.
+        </p>
+      </section>
+      <ProgressHistory stage={stage} />
+    </div>
   );
 }

@@ -1,4 +1,5 @@
 import { KpiBar } from "@/components/ui/KpiBar";
+import { PanelHeader } from "@/components/ui/PanelHeader";
 import { ROLE } from "@/constants/roles";
 import { getStaffRoles } from "@/lib/auth";
 
@@ -10,25 +11,27 @@ import {
 
 import { StockAlertList } from "./StockAlertList";
 import { UpcomingMealList } from "./UpcomingMealList";
-import { WorkQueueTable } from "./WorkQueueTable";
+import { TaskQueue } from "./TaskQueue";
 
 export async function TasksPanel() {
   const roles = await getStaffRoles();
   const isManager = roles.includes(ROLE.BranchManager);
   const tasks = WORK_TASKS.filter(
-    (task) => isManager || roles.includes(task.role),
+    (task) => isManager || roles.includes(task.role)
   ).sort((a, b) => dueRank(a.due) - dueRank(b.due));
   const kpis =
     KPI_BY_ROLE[isManager ? ROLE.BranchManager : (roles[0] ?? ROLE.Consultant)];
 
   return (
     <>
+      <PanelHeader
+        title="Việc cần xử lý"
+        count={tasks.length}
+        subtitle="5 việc gấp nhất của vai trò bạn đang giữ. Bấm một dòng để xử lý."
+      />
       <KpiBar items={kpis} />
       <div className="l-grid l-grid-decision">
-        <WorkQueueTable
-          tasks={tasks}
-          showGroup={isManager || roles.length > 1}
-        />
+        <TaskQueue tasks={tasks} showGroup={isManager || roles.length > 1} />
         <div className="l-stack">
           <UpcomingMealList />
           <StockAlertList />

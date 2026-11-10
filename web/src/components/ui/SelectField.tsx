@@ -1,33 +1,18 @@
-import type { ComponentProps } from "react";
+"use client";
 
 import { Field, type FieldProps } from "./Field";
-import { Select } from "./Select";
-
-type SelectFieldProps = Omit<FieldProps, "children"> &
-  ComponentProps<"select"> & {
-    options: (string | { value: string; label: string })[];
-  };
+import { Select, type SelectProps } from "./Select";
 
 export function SelectField({
   id,
   label,
   hint,
-  options,
+  error,
   ...props
-}: SelectFieldProps) {
+}: Omit<FieldProps, "children"> & SelectProps & { id: string }) {
   return (
-    <Field id={id} label={label} hint={hint}>
-      <Select id={id} {...props}>
-        {options.map((option) => {
-          const value = typeof option === "string" ? option : option.value;
-          const text = typeof option === "string" ? option : option.label;
-          return (
-            <option key={value} value={value}>
-              {text}
-            </option>
-          );
-        })}
-      </Select>
+    <Field id={id} label={label} hint={hint} error={error}>
+      <Select id={id} {...props} />
     </Field>
   );
 }

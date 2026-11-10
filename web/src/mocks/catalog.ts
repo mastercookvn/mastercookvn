@@ -17,6 +17,8 @@ export type MenuSet = {
   description: string;
   dishIds: string[];
   imageDishId: string;
+  /** Missing means active; sample sets predate the flag. */
+  active?: boolean;
 };
 
 export type Service = {
@@ -27,6 +29,8 @@ export type Service = {
   description: string;
   /** Path under /images/services. The card shows the service icon until it is set. */
   image?: string;
+  /** Missing means active. */
+  active?: boolean;
 };
 
 export const DISH_CATEGORY_LABEL: Record<DishCategory, string> = {
@@ -220,6 +224,11 @@ export const menuSetById = (id: string) =>
 export const serviceById = (id: string) =>
   SERVICES.find((service) => service.id === id)!;
 export const dishImage = (id: string) => `/images/dishes/${id}.jpg`;
+
+/** Uploaded photo first, then the bundled sample. Dishes added later have no sample. */
+export const dishPhoto = (dish: Dish & { image?: string }) =>
+  dish.image ??
+  (DISHES.some((sample) => sample.id === dish.id) ? dishImage(dish.id) : null);
 
 /** BR03 */
 export const menuSetPrice = (set: MenuSet) =>

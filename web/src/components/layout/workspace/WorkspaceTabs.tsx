@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 import { Tabs } from "@/components/ui/Tabs";
 import {
-  WORKSPACE_SCREENS,
   canViewScreen,
   visibleTabs,
   type WorkspaceScreenKey,
@@ -10,6 +9,7 @@ import {
 import { getStaffRoles } from "@/lib/auth";
 
 import { NoPermissionState } from "./NoPermissionState";
+import { PageHeader } from "./PageHeader";
 
 /** Hidden tabs never reach the browser. The API still checks permissions. */
 export async function WorkspaceTabs({
@@ -32,22 +32,31 @@ export async function WorkspaceTabs({
     return <NoPermissionState roles={roles} />;
   }
 
+  const title = (
+    <>
+      {showTitle ? <PageHeader screen={screen} /> : null}
+      {header}
+    </>
+  );
+
+  if (tabs.length === 1) {
+    return (
+      <>
+        <div className={`l-stack ${headerGap}`}>{title}</div>
+        <div className="workspace-panel">{panels[tabs[0].value]}</div>
+      </>
+    );
+  }
+
   return (
     <Tabs
       items={tabs.map(({ value, label }) => ({ value, label }))}
       panelClassName="tab-panel workspace-panel"
       panels={Object.fromEntries(
-        tabs.map((tab) => [tab.value, panels[tab.value]]),
+        tabs.map((tab) => [tab.value, panels[tab.value]])
       )}
       headerClassName={`l-stack ${headerGap}`}
-      header={
-        <>
-          {showTitle ? (
-            <h1 className="h1-compact">{WORKSPACE_SCREENS[screen].title}</h1>
-          ) : null}
-          {header}
-        </>
-      }
+      header={title}
     />
   );
 }

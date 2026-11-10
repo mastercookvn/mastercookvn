@@ -24,7 +24,7 @@ export function MenuSetSelect({
       label="Set thực đơn"
       options={OPTIONS}
       value={value}
-      onChange={(event) => onChange(event.target.value)}
+      onValueChange={(value) => onChange(value)}
     />
   );
 }

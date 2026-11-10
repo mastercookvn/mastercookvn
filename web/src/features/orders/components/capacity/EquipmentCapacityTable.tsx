@@ -1,7 +1,8 @@
 "use client";
 
 import { Badge } from "@/components/ui/Badge";
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { formatNumber } from "@/lib/format";
 import { useDemoState } from "@/mocks/demoStore";
 import { capacityRows } from "@/mocks/equipment";

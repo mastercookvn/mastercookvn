@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/Badge";
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 
 const ROWS = [
   ["Phục vụ", 4, 2, 9],

@@ -6,6 +6,7 @@ import {
   MEAL_STATUS_META,
   ORDER_STATUS_META,
   PAYMENT_STATUS_META,
+  SETTLEMENT_STATUS_META,
 } from "@/constants/labels";
 import type {
   AddendumStatus,
@@ -15,6 +16,7 @@ import type {
   MealStatus,
   OrderStatus,
   PaymentStatus,
+  SettlementStatus,
 } from "@/constants/statuses";
 
 import { Badge } from "./Badge";
@@ -26,7 +28,8 @@ type StatusBadgeProps =
   | { domain: "addendum"; status: AddendumStatus }
   | { domain: "payment"; status: PaymentStatus }
   | { domain: "equipmentIssue"; status: EquipmentIssueStatus }
-  | { domain: "inventoryPeriod"; status: InventoryPeriodStatus };
+  | { domain: "inventoryPeriod"; status: InventoryPeriodStatus }
+  | { domain: "settlement"; status: SettlementStatus };
 
 export function StatusBadge(props: StatusBadgeProps) {
   const meta = (() => {
@@ -45,6 +48,8 @@ export function StatusBadge(props: StatusBadgeProps) {
         return EQUIPMENT_ISSUE_STATUS_META[props.status];
       case "inventoryPeriod":
         return INVENTORY_PERIOD_STATUS_META[props.status];
+      case "settlement":
+        return SETTLEMENT_STATUS_META[props.status];
     }
   })();
 

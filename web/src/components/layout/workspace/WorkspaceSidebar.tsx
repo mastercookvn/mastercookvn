@@ -24,7 +24,7 @@ export async function WorkspaceSidebar() {
     <>
       <aside className="workspace-sidebar" id="workspace-sidebar">
         <Link href={ROUTES.workspace} className="workspace-logo">
-          <LogoMark size={28} tone="dark" />
+          <LogoMark size={28} />
           <span>
             <b>MasterCook</b>
             <span>Quản trị vận hành</span>

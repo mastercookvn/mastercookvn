@@ -1,4 +1,5 @@
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { formatMoney, formatPercent } from "@/lib/format";
 import { MONTHLY_REVENUE } from "@/mocks/inventory";
 

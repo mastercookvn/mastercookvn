@@ -11,14 +11,6 @@ export function BusinessSettingsForm() {
       <PanelHeader
         title="Tham số nghiệp vụ"
         subtitle="Áp dụng cho dữ liệu mới từ lúc lưu, không đổi cam kết đã chốt"
-        actions={
-          <ToastButton
-            variant="primary"
-            message="Đã lưu tham số kèm người sửa và thời điểm áp dụng"
-          >
-            Lưu tham số
-          </ToastButton>
-        }
       />
       <div className="l-grid l-grid-3">
         <section className="card l-stack">
@@ -93,9 +85,17 @@ export function BusinessSettingsForm() {
           />
         </section>
       </div>
-      <p className="text-small text-soft">
-        Ngày lễ và phụ thu lễ dùng danh sách cố định, không sửa tại đây.
-      </p>
+      <div className="form-actions l-between">
+        <p className="text-small text-soft">
+          Ngày lễ và phụ thu lễ dùng danh sách cố định, không sửa tại đây.
+        </p>
+        <ToastButton
+          variant="primary"
+          message="Đã lưu tham số kèm người sửa và thời điểm áp dụng"
+        >
+          Lưu tham số
+        </ToastButton>
+      </div>
     </>
   );
 }

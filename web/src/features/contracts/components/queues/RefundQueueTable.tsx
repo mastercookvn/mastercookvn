@@ -1,4 +1,5 @@
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { formatMoney } from "@/lib/format";
 
@@ -24,6 +25,7 @@ export function RefundQueueTable() {
     <>
       <PanelHeader
         title="Khoản phải hoàn"
+        count={ROWS.length}
         subtitle="Trả tiền ngoài hệ thống trước, rồi ghi giao dịch hoàn kèm bằng chứng"
       />
       <DataTable

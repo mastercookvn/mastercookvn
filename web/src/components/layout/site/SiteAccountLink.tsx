@@ -3,6 +3,8 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ROUTES } from "@/constants/routes";
 import { getSession } from "@/lib/auth";
 
+import { CustomerNoticeCount } from "@/features/account/components/orders/CustomerNoticeCount";
+
 import { SignInLink } from "./SignInLink";
 
 export async function SiteAccountLink() {
@@ -15,6 +17,7 @@ export async function SiteAccountLink() {
     >
       <UserIcon size={18} />
       {session.name}
+      {session.kind === "customer" ? <CustomerNoticeCount /> : null}
     </ButtonLink>
   );
 }

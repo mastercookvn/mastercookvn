@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Card } from "@/components/ui/Card";
 import { CardTitle } from "@/components/ui/CardTitle";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -30,11 +32,13 @@ const MEALS = [
   },
 ];
 
+const VISIBLE_MEALS = 3;
+
 export function UpcomingMealList() {
   return (
     <Card>
       <CardTitle>Tiệc sắp tới</CardTitle>
-      {MEALS.map((meal) => (
+      {MEALS.slice(0, VISIBLE_MEALS).map((meal) => (
         <div key={meal.date} className="check-row">
           <span>
             <b className="font-semibold">{meal.date}</b> {meal.time}
@@ -44,6 +48,9 @@ export function UpcomingMealList() {
           <StatusBadge domain="meal" status={meal.status} />
         </div>
       ))}
+      <Link href="?tab=calendar" className="card-link">
+        Mở lịch tiệc ({MEALS.length} tiệc)
+      </Link>
     </Card>
   );
 }

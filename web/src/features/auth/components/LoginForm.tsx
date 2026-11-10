@@ -29,6 +29,7 @@ export function LoginForm() {
         label="Số điện thoại"
         type="tel"
         defaultValue="0903 123 456"
+        hint="Số đã xác thực khi tạo tài khoản. Nhân viên dùng số do quản lý cấp."
       />
       <TextField
         id="login-password"

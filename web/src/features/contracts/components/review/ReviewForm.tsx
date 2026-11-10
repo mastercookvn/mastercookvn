@@ -6,6 +6,7 @@ import { StarIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Field } from "@/components/ui/Field";
+import { PhotoGalleryField } from "@/components/ui/PhotoGalleryField";
 import { useToast } from "@/components/ui/Toast";
 import { updateDemoState, useDemoState } from "@/mocks/demoStore";
 
@@ -14,6 +15,7 @@ import { StarRating } from "./StarRating";
 export function ReviewForm() {
   const submitted = useDemoState((state) => state.reviewSubmitted);
   const [score, setScore] = useState(0);
+  const [photos, setPhotos] = useState<string[]>([]);
   const showToast = useToast();
 
   if (submitted) {
@@ -46,6 +48,14 @@ export function ReviewForm() {
           placeholder="Món ăn, phục vụ, thu dọn..."
         />
       </Field>
+      <PhotoGalleryField
+        id="review-photos"
+        label="Ảnh bữa tiệc"
+        photos={photos}
+        onChange={setPhotos}
+        max={4}
+        hint="Không bắt buộc."
+      />
       <div>
         <Button type="submit" variant="primary" disabled={!score}>
           Gửi đánh giá

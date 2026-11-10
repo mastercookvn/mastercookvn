@@ -71,3 +71,19 @@ export const MEAL_PROGRESS: MealStatus[] = [
   MEAL_STATUS.AwaitingSettlement,
   MEAL_STATUS.Completed,
 ];
+
+export const SETTLEMENT_STATUS = {
+  Draft: "DRAFT",
+  Invoiced: "INVOICED",
+  Paid: "PAID",
+  Closed: "CLOSED",
+} as const;
+export type SettlementStatus =
+  (typeof SETTLEMENT_STATUS)[keyof typeof SETTLEMENT_STATUS];
+
+export const PAYMENT_PURPOSE = {
+  Deposit: "DEPOSIT",
+  Settlement: "SETTLEMENT",
+} as const;
+export type PaymentPurpose =
+  (typeof PAYMENT_PURPOSE)[keyof typeof PAYMENT_PURPOSE];

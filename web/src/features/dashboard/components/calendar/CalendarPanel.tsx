@@ -1,5 +1,3 @@
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 
 import { MealCalendar } from "./MealCalendar";
@@ -9,21 +7,9 @@ export function CalendarPanel() {
     <>
       <PanelHeader
         title="Lịch tiệc"
-        subtitle="Tháng 11/2026"
-        actions={
-          <>
-            <Button size="sm">Tuần</Button>
-            <Button size="sm" variant="primary">
-              Tháng
-            </Button>
-          </>
-        }
+        subtitle="Xem theo tuần để điều phối, theo tháng để nắm tổng quan"
       />
       <MealCalendar />
-      <div className="l-row text-small text-soft">
-        <Badge tone="good">Đã xác nhận</Badge>
-        <Badge tone="wait">Chờ xử lý</Badge>
-      </div>
     </>
   );
 }

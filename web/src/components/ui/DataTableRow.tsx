@@ -5,7 +5,10 @@ import type { ReactNode } from "react";
 
 import { useToast } from "./Toast";
 
-export type RowAction = { href: string } | { toast: string };
+export type RowAction =
+  | { href: string }
+  | { toast: string }
+  | { onSelect: () => void; selected?: boolean };
 
 export function DataTableRow({
   action,
@@ -21,12 +24,15 @@ export function DataTableRow({
 
   const run = () => {
     if ("href" in action) router.push(action.href);
+    else if ("onSelect" in action) action.onSelect();
     else showToast(action.toast);
   };
+  const selected = "onSelect" in action && action.selected;
 
   return (
     <tr
-      className="is-clickable"
+      className={selected ? "is-clickable is-selected" : "is-clickable"}
+      aria-selected={"onSelect" in action ? selected : undefined}
       tabIndex={0}
       onClick={run}
       onKeyDown={(event) => {

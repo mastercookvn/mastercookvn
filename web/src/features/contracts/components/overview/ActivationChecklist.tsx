@@ -12,6 +12,7 @@ import { ConfirmContractDialog } from "./ConfirmContractDialog";
 export function ActivationChecklist() {
   const confirmed = useDemoState((state) => state.contractConfirmed);
   const deposited = useDemoState((state) => state.depositPaid);
+  const signature = useDemoState((state) => state.contractSignature);
   const [, setTab] = useQueryParam("tab");
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -20,7 +21,11 @@ export function ActivationChecklist() {
       <h3 className="card-title card-title-flush">Cần hoàn tất cả hai việc</h3>
       <div className="l-between">
         {confirmed ? (
-          <Badge tone="good">Đã xác nhận</Badge>
+          <Badge tone="good">
+            {signature
+              ? `Đã ký online lúc ${signature.signedAt}`
+              : "Đã xác nhận"}
+          </Badge>
         ) : (
           <>
             <Badge tone="wait">Chưa xác nhận</Badge>
@@ -29,7 +34,7 @@ export function ActivationChecklist() {
               size="sm"
               onClick={() => setDialogOpen(true)}
             >
-              Đồng ý hợp đồng
+              Ký xác nhận hợp đồng
             </Button>
           </>
         )}
@@ -50,6 +55,14 @@ export function ActivationChecklist() {
           </>
         )}
       </div>
+      {signature ? (
+        // eslint-disable-next-line @next/next/no-img-element -- data URL from the signature pad
+        <img
+          className="signature-image"
+          src={signature.image}
+          alt={`Chữ ký của ${signature.name}`}
+        />
+      ) : null}
       <p className="text-small text-soft">
         Làm việc nào trước cũng được. Có thể ký giấy tại quầy thay vì xác nhận
         online.

@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import {
+  Suspense,
   createContext,
   useCallback,
   useContext,
@@ -73,7 +74,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={show}>
       {children}
-      <FlashListener show={show} />
+      <Suspense fallback={null}>
+        <FlashListener show={show} />
+      </Suspense>
       {toast ? (
         <div
           key={toast.id}

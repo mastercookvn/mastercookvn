@@ -1,4 +1,5 @@
 import { NoPermissionState } from "@/components/layout/workspace/NoPermissionState";
+import { PageHeader } from "@/components/layout/workspace/PageHeader";
 import { canViewScreen } from "@/constants/permissions";
 import { getStaffRoles } from "@/lib/auth";
 
@@ -10,5 +11,12 @@ export async function StaffPage() {
     return <NoPermissionState roles={roles} />;
   }
 
-  return <StaffTable />;
+  return (
+    <>
+      <PageHeader screen="staff" />
+      <div className="workspace-panel">
+        <StaffTable />
+      </div>
+    </>
+  );
 }

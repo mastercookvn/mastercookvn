@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Be_Vietnam_Pro } from "next/font/google";
+import { Be_Vietnam_Pro, Playfair_Display } from "next/font/google";
 
 import { siteConfig } from "@/config/site";
 
@@ -8,7 +8,13 @@ import "./globals.css";
 const beVietnamPro = Be_Vietnam_Pro({
   variable: "--font-be-vietnam-pro",
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair-display",
+  subsets: ["latin", "vietnamese"],
+  weight: ["600", "700"],
 });
 
 // Runs before paint. Without JS no hidden reveal state applies.
@@ -37,7 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="vi"
-      className={`${beVietnamPro.variable} h-full`}
+      className={`${beVietnamPro.variable} ${playfairDisplay.variable} h-full`}
       suppressHydrationWarning
     >
       <head>

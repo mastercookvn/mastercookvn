@@ -6,6 +6,7 @@ import type {
   MealStatus,
   OrderStatus,
   PaymentStatus,
+  SettlementStatus,
 } from "./statuses";
 
 export type BadgeTone = "good" | "wait" | "error" | "info" | "neutral";
@@ -70,4 +71,11 @@ export const INVENTORY_PERIOD_STATUS_META: Record<
 > = {
   AWAITING_CLOSE: { label: "Chờ chốt", tone: "wait" },
   CLOSED: { label: "Đã chốt", tone: "good" },
+};
+
+export const SETTLEMENT_STATUS_META: Record<SettlementStatus, StatusMeta> = {
+  DRAFT: { label: "Đang quyết toán", tone: "neutral" },
+  INVOICED: { label: "Chờ khách thanh toán", tone: "wait" },
+  PAID: { label: "Đã thanh toán", tone: "good" },
+  CLOSED: { label: "Đã đóng bữa", tone: "neutral" },
 };

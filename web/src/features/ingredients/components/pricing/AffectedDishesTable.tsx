@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { ToastButton } from "@/components/ui/ToastButton";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { formatMoney } from "@/lib/format";

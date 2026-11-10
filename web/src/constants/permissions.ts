@@ -5,14 +5,20 @@ const { Consultant: TV, Accountant: KT, Storekeeper: TK, HrManager: NS } = ROLE;
 export type WorkspaceTab = { value: string; label: string; roles: Role[] };
 export type WorkspaceScreen = {
   title: string;
+  /** One line under the page title: what this screen is for. */
+  description: string;
   roles: Role[];
   tabs: WorkspaceTab[];
 };
+
+/** Only consultants place orders for walk-in or phone customers. */
+export const ORDER_ON_BEHALF_ROLES: Role[] = [TV];
 
 /** Section 4.4. An empty list means branch manager only. */
 export const WORKSPACE_SCREENS = {
   dashboard: {
     title: "Tổng quan",
+    description: "Việc cần xử lý hôm nay và lịch tiệc sắp tới của cơ sở.",
     roles: [TV, KT, TK, NS],
     tabs: [
       { value: "tasks", label: "Việc cần xử lý", roles: [TV, KT, TK, NS] },
@@ -21,14 +27,15 @@ export const WORKSPACE_SCREENS = {
   },
   orders: {
     title: "Đơn đặt tiệc",
+    description:
+      "Đơn khách đặt online và đơn tư vấn đặt hộ, chờ khảo sát và xác nhận.",
     roles: [TV, KT],
-    tabs: [
-      { value: "list", label: "Danh sách", roles: [TV, KT] },
-      { value: "new", label: "Đặt hộ khách", roles: [TV] },
-    ],
+    tabs: [{ value: "list", label: "Danh sách", roles: [TV, KT] }],
   },
   orderDetail: {
     title: "Chi tiết đơn",
+    description:
+      "Khảo sát từng bữa, kiểm tra tài nguyên rồi nhận hoặc từ chối tiệc.",
     roles: [TV, KT],
     tabs: [
       { value: "meals", label: "Các bữa", roles: [TV, KT] },
@@ -38,6 +45,7 @@ export const WORKSPACE_SCREENS = {
   },
   contracts: {
     title: "Hợp đồng",
+    description: "Hợp đồng đã phát hành, khoản cần thu và khoản phải hoàn.",
     roles: [TV, KT],
     tabs: [
       { value: "list", label: "Danh sách", roles: [TV, KT] },
@@ -47,6 +55,8 @@ export const WORKSPACE_SCREENS = {
   },
   contractDetail: {
     title: "Chi tiết hợp đồng",
+    description:
+      "Phát hành, ký, thu tiền, phụ lục và quyết toán của một hợp đồng.",
     roles: [TV, KT],
     tabs: [
       { value: "overview", label: "Tổng quan, ký", roles: [TV, KT] },
@@ -58,6 +68,7 @@ export const WORKSPACE_SCREENS = {
   },
   meals: {
     title: "Vận hành bữa",
+    description: "Phân công, xuất dụng cụ và kiểm đếm cho từng bữa tiệc.",
     roles: [TV, TK, NS],
     tabs: [
       { value: "progress", label: "Tiến độ", roles: [TV, TK] },
@@ -66,9 +77,17 @@ export const WORKSPACE_SCREENS = {
       { value: "count", label: "Kiểm đếm", roles: [TK] },
     ],
   },
-  staff: { title: "Nhân sự", roles: [NS], tabs: [] },
+  staff: {
+    title: "Nhân sự",
+    description:
+      "Hồ sơ, CV và trạng thái làm việc của nhân viên bếp, phục vụ, vận chuyển.",
+    roles: [NS],
+    tabs: [],
+  },
   ingredients: {
     title: "Nguyên liệu",
+    description:
+      "Phiếu nhập, kiểm kê cuối tháng, chốt food cost và đề xuất giá.",
     roles: [TK, KT],
     tabs: [
       { value: "purchases", label: "Phiếu nhập", roles: [TK] },
@@ -80,6 +99,7 @@ export const WORKSPACE_SCREENS = {
   },
   equipment: {
     title: "Dụng cụ",
+    description: "Tồn kho, nhập mua, đồ hư và danh mục dụng cụ.",
     roles: [TK],
     tabs: [
       { value: "stock", label: "Tồn kho", roles: [TK] },
@@ -90,6 +110,8 @@ export const WORKSPACE_SCREENS = {
   },
   catalog: {
     title: "Thực đơn và dịch vụ",
+    description:
+      "Món, định lượng, giá gợi ý, set thực đơn, dịch vụ và loại tiệc.",
     roles: [],
     tabs: [
       { value: "dishes", label: "Món, định lượng", roles: [] },
@@ -100,6 +122,7 @@ export const WORKSPACE_SCREENS = {
   },
   reports: {
     title: "Báo cáo",
+    description: "Doanh thu, food cost theo tháng và tình hình dụng cụ.",
     roles: [KT, TK],
     tabs: [
       { value: "revenue", label: "Doanh thu, food cost", roles: [KT] },
@@ -108,6 +131,7 @@ export const WORKSPACE_SCREENS = {
   },
   settings: {
     title: "Cài đặt",
+    description: "Mật khẩu của bạn, tham số nghiệp vụ và tài khoản nội bộ.",
     roles: [TV, KT, TK, NS],
     tabs: [
       { value: "password", label: "Mật khẩu của tôi", roles: [TV, KT, TK, NS] },
@@ -121,7 +145,7 @@ export type WorkspaceScreenKey = keyof typeof WORKSPACE_SCREENS;
 
 export function visibleTabs(
   screen: WorkspaceScreenKey,
-  roles: readonly Role[],
+  roles: readonly Role[]
 ) {
   const config: WorkspaceScreen = WORKSPACE_SCREENS[screen];
   return config.tabs.filter((tab) => hasAnyRole(roles, tab.roles));
@@ -129,7 +153,7 @@ export function visibleTabs(
 
 export function canViewScreen(
   screen: WorkspaceScreenKey,
-  roles: readonly Role[],
+  roles: readonly Role[]
 ) {
   return hasAnyRole(roles, WORKSPACE_SCREENS[screen].roles);
 }

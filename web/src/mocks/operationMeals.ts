@@ -54,3 +54,58 @@ export const OPERATION_MEALS: OperationMeal[] = [
 
 export const operationMealById = (id: string) =>
   OPERATION_MEALS.find((meal) => meal.id === id);
+
+export type Assignment = {
+  staff: string;
+  position: string;
+  task: string;
+  hours: string;
+};
+
+export const STAFF_POSITIONS = ["Phục vụ", "Bếp", "Vận chuyển", "Kiểm đếm"];
+
+const DEFAULT_ASSIGNMENTS: Assignment[] = [
+  {
+    staff: "Đỗ Minh Tâm",
+    position: "Phục vụ",
+    task: "Khu A",
+    hours: "09:00–14:00",
+  },
+  {
+    staff: "Vũ Thu Trang",
+    position: "Phục vụ",
+    task: "Khu B",
+    hours: "09:00–14:00",
+  },
+];
+
+export const MEAL_ASSIGNMENTS: Record<string, Assignment[]> = {
+  "0120": DEFAULT_ASSIGNMENTS,
+  "0115": [
+    {
+      staff: "Đỗ Minh Tâm",
+      position: "Phục vụ",
+      task: "Khu A",
+      hours: "16:00–21:30",
+    },
+    {
+      staff: "Nguyễn Văn Hùng",
+      position: "Bếp",
+      task: "Bếp chính",
+      hours: "13:00–20:00",
+    },
+    {
+      staff: "Lê Thị Hoa",
+      position: "Bếp",
+      task: "Sơ chế",
+      hours: "13:00–20:00",
+    },
+    {
+      staff: "Phạm Quốc Bảo",
+      position: "Vận chuyển",
+      task: "Chở dụng cụ",
+      hours: "12:00–22:30",
+    },
+  ],
+  "0128": DEFAULT_ASSIGNMENTS,
+};

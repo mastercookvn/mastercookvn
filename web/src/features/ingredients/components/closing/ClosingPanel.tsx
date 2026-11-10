@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
+import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ToastButton } from "@/components/ui/ToastButton";
@@ -33,6 +34,29 @@ export function ClosingPanel() {
         subtitle="Định giá tồn bình quân gia quyền tháng"
         actions={
           <>
+            <ExportButton
+              fileName={`food-cost-${period.month.replace("/", "-")}`}
+              columns={[
+                "Nguyên liệu",
+                "Giá trị đầu (đ)",
+                "Giá trị nhập (đ)",
+                "Đơn giá tồn (đ)",
+                "Lượng cuối",
+                "Đơn vị",
+                "Giá trị cuối (đ)",
+                "Tiêu thụ (đ)",
+              ]}
+              rows={period.lines.map((line) => [
+                line.name,
+                line.openingValue,
+                line.purchasedValue,
+                Math.round(line.unitCost),
+                line.closingQty,
+                line.unit,
+                line.closingValue,
+                line.consumed,
+              ])}
+            />
             <StatusBadge
               domain="inventoryPeriod"
               status={

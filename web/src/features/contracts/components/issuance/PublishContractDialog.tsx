@@ -6,6 +6,8 @@ import { formatMoney } from "@/lib/format";
 import { CONTRACT_WEDDING as contract } from "@/mocks/contracts";
 import { updateDemoState } from "@/mocks/demoStore";
 
+import { minimumDeposit } from "@/features/contracts/lib/contractState";
+
 export function PublishContractDialog({
   open,
   onOpenChange,
@@ -23,13 +25,16 @@ export function PublishContractDialog({
       confirmLabel="Phát hành"
       onConfirm={() => {
         updateDemoState({ contractIssued: true });
-        showToast("Đã phát hành. Báo khách qua Zalo hoặc điện thoại.");
+        showToast(
+          "Đã phát hành. Khách thấy hợp đồng và số tiền cọc trong tài khoản."
+        );
       }}
     >
       <p className="text-soft">
         Tổng {formatMoney(contract.total)}, cọc tối thiểu{" "}
-        {formatMoney(contract.total * 0.5)}, hạn cọc {contract.depositDeadline}.
-        Sau khi phát hành không sửa được nội dung, chỉ điều chỉnh bằng phụ lục.
+        {formatMoney(minimumDeposit(contract))}, hạn cọc{" "}
+        {contract.depositDeadline}. Sau khi phát hành không sửa được nội dung,
+        chỉ điều chỉnh bằng phụ lục.
       </p>
     </Dialog>
   );

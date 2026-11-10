@@ -1,21 +1,23 @@
 import Link from "next/link";
 
 import type { BadgeTone } from "@/constants/labels";
-import { ROUTES } from "@/constants/routes";
 
 export function CalendarEventChip({
-  label,
+  time,
+  title,
   tone,
+  href,
 }: {
-  label: string;
+  time: string;
+  title: string;
   tone: BadgeTone;
+  href: string;
 }) {
   return (
-    <Link
-      href={ROUTES.workspaceMeals}
-      className={`calendar-event badge-${tone}`}
-    >
-      {label}
+    <Link href={href} className={`calendar-event tone-${tone}`} title={title}>
+      <i className="calendar-dot" aria-hidden="true" />
+      <span className="calendar-event-time">{time}</span>
+      <span className="calendar-event-title">{title}</span>
     </Link>
   );
 }

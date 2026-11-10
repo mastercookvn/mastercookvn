@@ -1,8 +1,12 @@
 "use client";
 
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { formatMoney } from "@/lib/format";
-import type { CountReportRow } from "@/mocks/equipment";
+import {
+  countReportCompensation,
+  type CountReportRow,
+} from "@/mocks/equipment";
 
 import { countRowProblem } from "../../lib/countRowProblem";
 
@@ -17,20 +21,17 @@ const EDITABLE: { key: EditableKey; label: string }[] = [
   { key: "charged", label: "Khách chịu" },
 ];
 
+/** Editable while counting; pass no onChange to show a confirmed report. */
 export function CountReportTable({
   rows,
   onChange,
 }: {
   rows: CountReportRow[];
-  onChange: (rows: CountReportRow[]) => void;
+  onChange?: (rows: CountReportRow[]) => void;
 }) {
-  const totalCharged = rows.reduce(
-    (sum, row) => sum + row.charged * row.price,
-    0,
-  );
-
   return (
     <DataTable
+      searchable={onChange === undefined}
       columns={[
         "Dụng cụ",
         num("Đã xuất"),
@@ -40,40 +41,52 @@ export function CountReportTable({
         num("Khách chịu"),
         num("Giá chốt"),
         num("Bồi thường"),
-        "Kiểm tra",
+        ...(onChange ? ["Kiểm tra"] : []),
       ]}
       rows={rows.map((row, rowIndex) => [
         row.name,
         row.issued,
-        ...EDITABLE.map(({ key, label }) => (
-          <input
-            key={key}
-            id={`count-${rowIndex}-${key}`}
-            type="number"
-            min={0}
-            className="input-cell"
-            value={row[key]}
-            aria-label={`${label} ${row.name}`}
-            onChange={(event) =>
-              onChange(
-                rows.map((current, index) =>
-                  index === rowIndex
-                    ? { ...current, [key]: Number(event.target.value) }
-                    : current,
-                ),
-              )
-            }
-          />
-        )),
+        ...EDITABLE.map(({ key, label }) =>
+          onChange ? (
+            <input
+              key={key}
+              id={`count-${rowIndex}-${key}`}
+              inputMode="numeric"
+              className="input-cell"
+              value={String(row[key])}
+              aria-label={`${label} ${row.name}`}
+              onFocus={(event) => event.currentTarget.select()}
+              onChange={(event) =>
+                onChange(
+                  rows.map((current, index) =>
+                    index === rowIndex
+                      ? {
+                          ...current,
+                          [key]:
+                            Number(event.target.value.replace(/\D/g, "")) || 0,
+                        }
+                      : current
+                  )
+                )
+              }
+            />
+          ) : (
+            row[key]
+          )
+        ),
         formatMoney(row.price),
         formatMoney(row.charged * row.price),
-        <CountRowCheck key="check" problem={countRowProblem(row)} />,
+        ...(onChange
+          ? [<CountRowCheck key="check" problem={countRowProblem(row)} />]
+          : []),
       ])}
       foot={
         <>
           <td colSpan={7}>Tổng bồi thường khách chịu</td>
-          <td className="is-num">{formatMoney(totalCharged)}</td>
-          <td />
+          <td className="is-num">
+            {formatMoney(countReportCompensation(rows))}
+          </td>
+          {onChange ? <td /> : null}
         </>
       }
     />

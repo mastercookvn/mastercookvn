@@ -54,7 +54,7 @@ export function calculateMealPrice({
   const dishAmount = dishesTotal * factor * servingTables;
   const serviceAmount = services.reduce(
     (sum, line) => sum + line.price * line.quantity,
-    0,
+    0
   );
   const subtotal = dishAmount + serviceAmount + surcharge;
   const taxAmount = subtotal * BUSINESS_SETTINGS.taxRate;
@@ -93,7 +93,7 @@ export function calculateCancellation({
   const rate = daysLeft >= 30 ? 1 : daysLeft >= 15 ? 0.5 : 0;
   const basis = Math.min(
     mealValue * BUSINESS_SETTINGS.minimumDepositRate,
-    paid,
+    paid
   );
   const prepaidExcess = paid - basis;
   const refund = basis * rate + prepaidExcess;
@@ -123,23 +123,53 @@ export function servingStaffNeeded(setupTables: number): number {
 export function equipmentNeeded(
   rate: number,
   basis: number,
-  reserveRate = 0,
+  reserveRate = 0
 ): number {
   return Math.ceil(rate * basis * (1 + reserveRate) - 1e-9);
 }
 
 /** BR05. Weights run from oldest to newest window. */
 export function proposedIngredientPrice(
-  purchases: { quantity: number; price: number }[],
+  purchases: { quantity: number; price: number }[]
 ): number | null {
   const weights = [1.5, 1.5, 2];
   const value = purchases.reduce(
     (sum, row, index) => sum + row.quantity * row.price * weights[index],
-    0,
+    0
   );
   const weight = purchases.reduce(
     (sum, row, index) => sum + row.quantity * weights[index],
-    0,
+    0
   );
   return weight === 0 ? null : value / weight;
+}
+
+export type RecipeLine = { ingredient: string; quantity: number };
+
+/** BR04: Σ(định lượng × giá nguyên liệu hiện hành) for one standard table. */
+export function recipeCost(
+  lines: RecipeLine[],
+  prices: { name: string; price: number }[]
+): number {
+  return lines.reduce(
+    (sum, line) =>
+      sum +
+      line.quantity *
+        (prices.find((ingredient) => ingredient.name === line.ingredient)
+          ?.price ?? 0),
+    0
+  );
+}
+
+/** BR04: suggested price = cost / food cost target, shown rounded to 500. */
+export function suggestedDishPrice(
+  cost: number,
+  foodCostTarget: number = BUSINESS_SETTINGS.foodCostTarget
+): number {
+  return foodCostTarget > 0 ? roundTo500(cost / foodCostTarget) : 0;
+}
+
+/** Share of the selling price spent on ingredients; null when there is no price. */
+export function dishFoodCost(cost: number, price: number): number | null {
+  return price > 0 ? cost / price : null;
 }

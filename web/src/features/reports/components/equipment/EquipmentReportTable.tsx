@@ -1,5 +1,7 @@
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { CheckboxLabel } from "@/components/ui/CheckboxLabel";
+import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { formatMoney, formatNumber } from "@/lib/format";
 import { EQUIPMENT } from "@/mocks/equipment";
@@ -17,7 +19,42 @@ export function EquipmentReportTable() {
       <PanelHeader
         title="Báo cáo dụng cụ"
         subtitle="Kỳ 01/10/2026 đến 31/10/2026"
-        actions={<CheckboxLabel>Chỉ loại dưới ngưỡng</CheckboxLabel>}
+        actions={
+          <>
+            <CheckboxLabel>Chỉ loại dưới ngưỡng</CheckboxLabel>
+            <ExportButton
+              fileName="bao-cao-dung-cu-10-2026"
+              columns={[
+                "Dụng cụ",
+                "Sở hữu",
+                "Sẵn sàng",
+                "Đang dùng",
+                "Hư",
+                "Tối thiểu",
+                "Nhập mua",
+                "Hư trong kỳ",
+                "Mất",
+                "Phục hồi",
+                "Loại bỏ",
+                "Bồi thường (đ)",
+              ]}
+              rows={EQUIPMENT.map((item, index) => [
+                item.name,
+                item.owned,
+                item.ready,
+                item.inUse,
+                item.damaged,
+                item.minimum,
+                PURCHASED[index],
+                DAMAGED[index],
+                LOST[index],
+                RESTORED[index],
+                DISCARDED[index],
+                COMPENSATION[index],
+              ])}
+            />
+          </>
+        }
       />
       <DataTable
         columns={[

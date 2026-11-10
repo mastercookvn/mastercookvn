@@ -1,4 +1,5 @@
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ROUTES } from "@/constants/routes";
 import { formatMoney } from "@/lib/format";
@@ -36,7 +37,7 @@ export function OrderTable({ orders }: { orders: OrderRow[] }) {
       rowActions={orders.map((order) =>
         order.code === "DH-0142"
           ? { href: ROUTES.workspaceOrder(order.code) }
-          : { toast: "Bản mẫu chỉ mở chi tiết đơn DH-0142" },
+          : { toast: "Bản mẫu chỉ mở chi tiết đơn DH-0142" }
       )}
     />
   );

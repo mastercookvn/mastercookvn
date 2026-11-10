@@ -1,14 +1,20 @@
+"use client";
+
 import { Badge } from "@/components/ui/Badge";
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { formatNumber } from "@/lib/format";
-import { EQUIPMENT } from "@/mocks/equipment";
+import { useDemoState } from "@/mocks/demoStore";
 
 export function StockTable() {
+  const equipment = useDemoState((state) => state.equipment);
+
   return (
     <>
       <PanelHeader
-        title="Tồn kho"
+        title="Tồn kho dụng cụ"
+        count={equipment.length}
         subtitle="Sở hữu = sẵn sàng + đang sử dụng + hư"
       />
       <DataTable
@@ -21,7 +27,7 @@ export function StockTable() {
           num("Tối thiểu"),
           "Cờ",
         ]}
-        rows={EQUIPMENT.map((item) => [
+        rows={equipment.map((item) => [
           item.name,
           formatNumber(item.owned),
           formatNumber(item.ready),

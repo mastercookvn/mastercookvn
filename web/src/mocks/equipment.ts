@@ -1,14 +1,26 @@
 import { CONTRACT_WEDDING } from "./contracts";
 import { equipmentNeeded } from "@/lib/pricing";
 
+export const EQUIPMENT_BASIS = [
+  "Người",
+  "Bàn bố trí",
+  "Bữa",
+  "Nhập theo bữa",
+] as const;
+export type EquipmentBasis = (typeof EQUIPMENT_BASIS)[number];
+
 export type EquipmentType = {
   name: string;
+  /** Data URL of an uploaded photo. */
+  image?: string;
   unit: string;
-  basis: "Người" | "Bàn bố trí" | "Bữa" | "Nhập theo bữa";
+  basis: EquipmentBasis;
   rate: number | null;
   reserve: number | null;
   minimum: number;
   compensation: number;
+  /** Last purchase price, suggested on a new purchase line. */
+  purchasePrice: number;
   owned: number;
   ready: number;
   inUse: number;
@@ -24,6 +36,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: 0.1,
     minimum: 400,
     compensation: 15000,
+    purchasePrice: 12000,
     owned: 1200,
     ready: 980,
     inUse: 200,
@@ -37,6 +50,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: 0.1,
     minimum: 400,
     compensation: 5000,
+    purchasePrice: 3000,
     owned: 1500,
     ready: 1250,
     inUse: 240,
@@ -50,6 +64,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: 0.15,
     minimum: 300,
     compensation: 20000,
+    purchasePrice: 15000,
     owned: 900,
     ready: 268,
     inUse: 620,
@@ -63,6 +78,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: null,
     minimum: 30,
     compensation: 1200000,
+    purchasePrice: 900000,
     owned: 60,
     ready: 48,
     inUse: 10,
@@ -76,6 +92,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: 0.05,
     minimum: 300,
     compensation: 120000,
+    purchasePrice: 85000,
     owned: 620,
     ready: 510,
     inUse: 100,
@@ -89,6 +106,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: 0.1,
     minimum: 30,
     compensation: 350000,
+    purchasePrice: 250000,
     owned: 50,
     ready: 38,
     inUse: 10,
@@ -102,6 +120,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: null,
     minimum: 30,
     compensation: 180000,
+    purchasePrice: 150000,
     owned: 80,
     ready: 18,
     inUse: 60,
@@ -115,6 +134,7 @@ export const EQUIPMENT: EquipmentType[] = [
     reserve: null,
     minimum: 2,
     compensation: 5000000,
+    purchasePrice: 3500000,
     owned: 6,
     ready: 4,
     inUse: 2,
@@ -122,11 +142,30 @@ export const EQUIPMENT: EquipmentType[] = [
   },
 ];
 
+export type EquipmentPurchaseLine = {
+  equipment: string;
+  quantity: number;
+  price: number;
+};
+
+export type EquipmentPurchase = {
+  code: string;
+  date: string;
+  supplier: string;
+  phone: string;
+  lines: EquipmentPurchaseLine[];
+  /** Data URLs of receipt photos. */
+  photos: string[];
+};
+
+export const equipmentPurchaseTotal = (lines: EquipmentPurchaseLine[]) =>
+  lines.reduce((sum, line) => sum + line.quantity * line.price, 0);
+
 export function equipmentDemand(
   item: EquipmentType,
   guests: number,
   setupTables: number,
-  manual: number,
+  manual: number
 ) {
   if (item.rate === null) return manual;
   const basis =
@@ -187,6 +226,30 @@ export type CountReportRow = {
   charged: number;
   price: number;
 };
+
+export const COUNT_REPORT_STATUS = {
+  Draft: "draft",
+  Confirmed: "confirmed",
+} as const;
+
+export type CountReportStatus =
+  (typeof COUNT_REPORT_STATUS)[keyof typeof COUNT_REPORT_STATUS];
+
+/** BR13 biên bản kiểm đếm, one per meal. */
+export type CountReport = {
+  status: CountReportStatus;
+  rows: CountReportRow[];
+  photos: string[];
+  counter: string;
+  note: string;
+  customerName: string;
+  /** PNG data URL of the customer representative's signature. */
+  customerSignature: string | null;
+  savedAt: string;
+};
+
+export const countReportCompensation = (rows: CountReportRow[]) =>
+  rows.reduce((sum, row) => sum + row.charged * row.price, 0);
 
 export const COUNT_REPORT_ROWS: CountReportRow[] = [
   {

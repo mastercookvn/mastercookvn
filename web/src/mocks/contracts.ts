@@ -177,9 +177,19 @@ export const CONTRACT_BIRTHDAY: Contract = {
   paid: 23328000,
 };
 
+export const CONTRACT_COMPANY: Contract = {
+  number: "HD-2026-0097",
+  orderCode: "DH-0097",
+  status: CONTRACT_STATUS.Active,
+  meals: [MEAL_COMPANY],
+  total: MEAL_COMPANY.price.total,
+  paid: 12000000,
+};
+
 export const CONTRACTS = [
   CONTRACT_WEDDING,
   CONTRACT_HOUSEWARMING,
+  CONTRACT_COMPANY,
   CONTRACT_BIRTHDAY,
 ];
 
@@ -215,12 +225,23 @@ export const ADDENDUM_HOUSEWARMING = (() => {
 
 /** BR11, section 9.5. */
 export const SETTLEMENT_COMPANY = (() => {
-  const compensation = 90000 + 120000;
+  const compensationLines = [
+    { name: "Bát ăn sứ", quantity: 6, price: 15000 },
+    { name: "Ghế nhựa", quantity: 1, price: 120000 },
+  ];
+  const compensation = compensationLines.reduce(
+    (sum, line) => sum + line.quantity * line.price,
+    0
+  );
   const settlementTotal = MEAL_COMPANY.price.total + compensation;
-  const paid = 12000000;
+  const paid = CONTRACT_COMPANY.paid;
   const refunded = 0;
   return {
+    contractNumber: CONTRACT_COMPANY.number,
+    orderCode: CONTRACT_COMPANY.orderCode,
+    invoiceNumber: "HDQT-0097-01",
     mealValue: MEAL_COMPANY.price.total,
+    compensationLines,
     compensation,
     settlementTotal,
     paid,

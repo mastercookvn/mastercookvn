@@ -1,60 +1,208 @@
+"use client";
+
+import { useState } from "react";
+
+import { ImageUploadField } from "@/components/ui/ImageUploadField";
 import { SelectField } from "@/components/ui/SelectField";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
-import { ToastButton } from "@/components/ui/ToastButton";
-import { formatNumber } from "@/lib/format";
-import { dishById, DISH_CATEGORY_LABEL } from "@/mocks/catalog";
+import { useToast } from "@/components/ui/Toast";
+import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
+import { formatMoney, formatNumber, formatPercent } from "@/lib/format";
+import { dishFoodCost, recipeCost, suggestedDishPrice } from "@/lib/pricing";
+import {
+  DISH_CATEGORY_LABEL,
+  dishPhoto,
+  type DishCategory,
+} from "@/mocks/catalog";
+import {
+  readDemoState,
+  updateDemoState,
+  useDemoState,
+  type CatalogDish,
+} from "@/mocks/demoStore";
 
-import { RecipeTable } from "./RecipeTable";
-import { SuggestedPrice } from "./SuggestedPrice";
+import { parseRecipe, RecipeTable, type DraftRecipeLine } from "./RecipeTable";
 
-export function DishForm() {
-  const dish = dishById("ga");
+export const NEW_DISH_ID = "new";
+
+const newDishId = () => `mon-${Date.now().toString(36)}`;
+
+const parseAmount = (text: string) => Number(text.replace(/\D/g, ""));
+
+export function DishForm({
+  formId,
+  dish,
+  onSaved,
+}: {
+  formId: string;
+  dish: CatalogDish | null;
+  onSaved: () => void;
+}) {
+  const showToast = useToast();
+  const [name, setName] = useState(dish?.name ?? "");
+  const [category, setCategory] = useState<DishCategory>(
+    dish?.category ?? "main"
+  );
+  const [description, setDescription] = useState(dish?.description ?? "");
+  const [priceText, setPriceText] = useState(
+    dish ? formatNumber(dish.price) : ""
+  );
+  const [image, setImage] = useState<string | null>(
+    dish ? dishPhoto(dish) : null
+  );
+  const ingredients = useDemoState((state) => state.ingredients);
+  const [recipe, setRecipe] = useState<DraftRecipeLine[]>(() =>
+    (dish ? (readDemoState().recipes[dish.id] ?? []) : []).map((line) => ({
+      ingredient: line.ingredient,
+      quantity: String(line.quantity).replace(".", ","),
+    }))
+  );
+  const [submitted, setSubmitted] = useState(false);
+
+  const price = parseAmount(priceText);
+  const parsedRecipe = parseRecipe(recipe);
+  const cost = recipeCost(parsedRecipe, ingredients);
+  const suggested = suggestedDishPrice(cost);
+  const foodCost = dishFoodCost(cost, price);
+  const target = BUSINESS_SETTINGS.foodCostTarget;
+  const nameError = name.trim() === "" ? "Nhập tên món" : null;
+  const priceError = price <= 0 ? "Nhập giá bán" : null;
+
+  const save = () => {
+    setSubmitted(true);
+    if (nameError || priceError) return;
+
+    const dishes = readDemoState().dishes;
+    const uploaded = image && image.startsWith("data:") ? image : undefined;
+    const fields = {
+      name: name.trim(),
+      category,
+      description: description.trim(),
+      price,
+      image: uploaded,
+    };
+
+    const recipes = readDemoState().recipes;
+
+    if (dish) {
+      updateDemoState({
+        dishes: dishes.map((current) =>
+          current.id === dish.id ? { ...current, ...fields } : current
+        ),
+        recipes: { ...recipes, [dish.id]: parsedRecipe },
+      });
+      showToast("Đã lưu. Hợp đồng đã chốt giữ giá cũ.");
+      onSaved();
+      return;
+    }
+
+    const id = newDishId();
+    updateDemoState({
+      dishes: [{ id, active: true, ...fields }, ...dishes],
+      recipes: { ...recipes, [id]: parsedRecipe },
+    });
+    showToast(`Đã thêm món ${fields.name}`);
+    onSaved();
+  };
 
   return (
-    <section className="card l-stack">
-      <h3 className="card-title card-title-flush">{dish.name}</h3>
+    <form
+      id={formId}
+      className="l-stack"
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault();
+        save();
+      }}
+    >
+      <ImageUploadField
+        id="dish-image"
+        label="Ảnh món"
+        value={image}
+        alt={name || "Ảnh món"}
+        onChange={setImage}
+      />
+      <TextField
+        id="dish-name"
+        label="Tên món"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        error={submitted ? nameError : null}
+      />
       <SelectField
         id="dish-category"
         label="Loại món"
-        options={Object.values(DISH_CATEGORY_LABEL)}
-        defaultValue="Món chính"
+        options={Object.entries(DISH_CATEGORY_LABEL).map(([value, label]) => ({
+          value,
+          label,
+        }))}
+        value={category}
+        onValueChange={(value) => setCategory(value as DishCategory)}
       />
       <TextareaField
         id="dish-description"
         label="Mô tả"
-        defaultValue={dish.description}
+        value={description}
+        onChange={(event) => setDescription(event.target.value)}
       />
-      <TextField
-        id="dish-image"
-        label="Ảnh"
-        defaultValue="ga-hap-la-chanh.jpg"
-      />
-      <h3 className="card-title card-title-flush mt-2 text-15-5">
-        Định lượng cho 1 bàn chuẩn
-      </h3>
-      <RecipeTable />
-      <SuggestedPrice />
+      <fieldset className="form-section">
+        <legend>Định lượng cho 1 bàn chuẩn 10 người</legend>
+        <RecipeTable
+          lines={recipe}
+          ingredients={ingredients}
+          onChange={setRecipe}
+        />
+        <dl className="price-breakdown">
+          <div>
+            <dt>Chi phí nguyên liệu</dt>
+            <dd>{formatMoney(cost)}</dd>
+          </div>
+          <div>
+            <dt>Food cost mục tiêu</dt>
+            <dd>{formatPercent(target, 0)}</dd>
+          </div>
+          <div className="is-strong">
+            <dt>Giá gợi ý = chi phí / {formatPercent(target, 0)}</dt>
+            <dd>{cost > 0 ? formatMoney(suggested) : "Nhập định lượng"}</dd>
+          </div>
+        </dl>
+      </fieldset>
       <TextField
         id="dish-price"
-        label="Giá bán"
-        defaultValue={formatNumber(dish.price)}
-        hint="Chấp nhận giá gợi ý hoặc nhập giá khác."
+        label="Giá bán (đ / bàn chuẩn)"
+        inputMode="numeric"
+        value={priceText}
+        onChange={(event) =>
+          setPriceText(formatNumber(parseAmount(event.target.value)))
+        }
+        error={submitted ? priceError : null}
+        hint="Quản lý chấp nhận giá gợi ý hoặc nhập giá khác. Hợp đồng đã chốt giữ giá cũ."
       />
-      <div className="l-between">
-        <ToastButton
-          variant="danger"
-          message="Món đã dùng chỉ ngưng, không xóa. Set liên quan được liệt kê để điều chỉnh."
-        >
-          Ngưng phục vụ
-        </ToastButton>
-        <ToastButton
-          variant="primary"
-          message="Đã lưu. Hợp đồng đã chốt giữ giá cũ."
-        >
-          Lưu món
-        </ToastButton>
-      </div>
-    </section>
+      {cost > 0 ? (
+        <div className="l-row gap-2">
+          <Button
+            size="sm"
+            disabled={price === suggested}
+            onClick={() => setPriceText(formatNumber(suggested))}
+          >
+            Dùng giá gợi ý {formatMoney(suggested)}
+          </Button>
+          {foodCost !== null ? (
+            <span className="text-small text-soft">
+              Food cost với giá này: {formatPercent(foodCost)}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+      {foodCost !== null && foodCost > target ? (
+        <Alert tone="wait">
+          Giá bán đang cho food cost {formatPercent(foodCost)}, cao hơn mục tiêu{" "}
+          {formatPercent(target, 0)}.
+        </Alert>
+      ) : null}
+    </form>
   );
 }

@@ -6,6 +6,8 @@ import { ROUTES } from "@/constants/routes";
 import { logout } from "@/features/auth/actions";
 import { getStaffSession } from "@/lib/auth";
 
+import { ResetDemoButton } from "./ResetDemoButton";
+
 export async function WorkspaceSidebarFooter() {
   const session = await getStaffSession();
 
@@ -19,6 +21,7 @@ export async function WorkspaceSidebarFooter() {
         <HomeIcon size={15} />
         Xem trang bán hàng
       </Link>
+      <ResetDemoButton />
       <form action={logout.bind(null, ROUTES.login)}>
         <button type="submit">
           <LogoutIcon size={15} />

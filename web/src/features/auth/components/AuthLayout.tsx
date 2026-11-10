@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { ClipboardIcon, PhoneIcon, ShieldIcon } from "@/components/icons";
 import { MaskImage } from "@/components/motion/MaskImage";
 import { Reveal } from "@/components/motion/Reveal";
 
@@ -15,7 +16,23 @@ export function AuthLayout({ children }: { children: ReactNode }) {
         <Reveal as="h2" variant="up" delayMs={400}>
           Chào mừng bạn
         </Reveal>
-        <Reveal as="p" variant="up" delayMs={520}>
+        <Reveal as="div" variant="up" delayMs={520}>
+          <ol className="auth-flow">
+            <li>
+              <PhoneIcon size={18} />
+              Số điện thoại là tên đăng nhập, mỗi số một người.
+            </li>
+            <li>
+              <ShieldIcon size={18} />
+              Tài khoản mới xác thực số qua mã SMS trước khi dùng.
+            </li>
+            <li>
+              <ClipboardIcon size={18} />
+              Đơn nhân viên đặt hộ bằng cùng số sẽ tự hiện trong tài khoản.
+            </li>
+          </ol>
+        </Reveal>
+        <Reveal as="p" variant="up" delayMs={640}>
           Nhân viên dùng chung trang này và được chuyển tới trang quản lý.
         </Reveal>
       </div>

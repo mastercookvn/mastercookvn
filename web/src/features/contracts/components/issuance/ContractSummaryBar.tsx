@@ -19,7 +19,8 @@ import { useDemoState } from "@/mocks/demoStore";
 /** Sample data: each tab shows a contract at the matching stage. */
 function SummaryForTab() {
   const [tab] = useQueryParam("tab");
-  const deposited = useDemoState((state) => state.depositPaid);
+  const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
+  const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
   const issued = useDemoState((state) => state.contractIssued);
 
   const row =
@@ -36,10 +37,10 @@ function SummaryForTab() {
         }
       : tab === "settlement"
         ? {
-            number: "HD-2026-0097",
-            customer: "Công ty Minh Long",
+            number: SETTLEMENT_COMPANY.contractNumber,
+            customer: CUSTOMER.name,
             value: SETTLEMENT_COMPANY.settlementTotal,
-            paid: SETTLEMENT_COMPANY.paid,
+            paid: SETTLEMENT_COMPANY.paid + settlementPaid,
             firstDate: "25/10/2026",
             status: (
               <StatusBadge domain="contract" status={CONTRACT_STATUS.Active} />
@@ -49,7 +50,7 @@ function SummaryForTab() {
             number: CONTRACT_WEDDING.number,
             customer: CUSTOMER.name,
             value: CONTRACT_WEDDING.total,
-            paid: deposited ? CONTRACT_WEDDING.total * 0.5 : 0,
+            paid: depositPaidAmount,
             firstDate: "14/12/2026",
             status: issued ? (
               <StatusBadge
@@ -62,16 +63,18 @@ function SummaryForTab() {
           };
 
   return (
-    <KpiBar
-      items={[
-        { label: row.customer, value: row.number },
-        { label: "Giá trị", value: formatMoney(row.value) },
-        { label: "Đã thu", value: formatMoney(row.paid) },
-        { label: "Còn lại", value: formatMoney(row.value - row.paid) },
-        { label: "Bữa đầu", value: row.firstDate },
-        { label: "Trạng thái", value: row.status, compact: true },
-      ]}
-    />
+    <>
+      <KpiBar
+        items={[
+          { label: row.customer, value: row.number },
+          { label: "Giá trị", value: formatMoney(row.value) },
+          { label: "Đã thu", value: formatMoney(row.paid) },
+          { label: "Còn lại", value: formatMoney(row.value - row.paid) },
+          { label: "Bữa đầu", value: row.firstDate },
+          { label: "Trạng thái", value: row.status, compact: true },
+        ]}
+      />
+    </>
   );
 }
 

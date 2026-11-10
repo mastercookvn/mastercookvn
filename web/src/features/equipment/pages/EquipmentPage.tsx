@@ -2,8 +2,8 @@ import { WorkspaceTabs } from "@/components/layout/workspace/WorkspaceTabs";
 import { getStaffRoles } from "@/lib/auth";
 
 import { EquipmentCatalogTable } from "../components/catalog/EquipmentCatalogTable";
-import { DamageHandlingForm } from "../components/damage/DamageHandlingForm";
-import { EquipmentPurchaseForm } from "../components/purchase/EquipmentPurchaseForm";
+import { DamagePanel } from "../components/damage/DamagePanel";
+import { EquipmentPurchasesPanel } from "../components/purchase/EquipmentPurchasesPanel";
 import { StockTable } from "../components/stock/StockTable";
 
 export async function EquipmentPage() {
@@ -14,8 +14,8 @@ export async function EquipmentPage() {
       screen="equipment"
       panels={{
         stock: <StockTable />,
-        purchase: <EquipmentPurchaseForm />,
-        damaged: <DamageHandlingForm />,
+        purchase: <EquipmentPurchasesPanel />,
+        damaged: <DamagePanel />,
         catalog: <EquipmentCatalogTable roles={roles} />,
       }}
     />

@@ -2,11 +2,19 @@
 
 import { Suspense } from "react";
 
-import { MEAL_STATUS } from "@/constants/statuses";
+import {
+  MEAL_STATUS,
+  SETTLEMENT_STATUS,
+  type MealStatus,
+} from "@/constants/statuses";
 import { useDemoState } from "@/mocks/demoStore";
-import type { Contract } from "@/mocks/contracts";
+import { SETTLEMENT_COMPANY, type Contract } from "@/mocks/contracts";
 
-import { isAwaitingContract } from "@/features/contracts/lib/contractState";
+import {
+  isAwaitingContract,
+  MINIMUM_DEPOSIT_LABEL,
+  minimumDeposit,
+} from "@/features/contracts/lib/contractState";
 
 import { ActivationChecklist } from "./ActivationChecklist";
 import { ContractTerms } from "./ContractTerms";
@@ -16,15 +24,27 @@ import { MealSummaryCard } from "./MealSummaryCard";
 export function ContractOverviewPanel({ contract }: { contract: Contract }) {
   const confirmed = useDemoState((state) => state.contractConfirmed);
   const deposited = useDemoState((state) => state.depositPaid);
-  const depositPercent = useDemoState((state) => state.depositPercent);
+  const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
+  const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
+  const settlementClosed = useDemoState(
+    (state) => state.settlementStatus === SETTLEMENT_STATUS.Closed
+  );
 
   const awaiting = isAwaitingContract(contract);
   const active = awaiting && confirmed && deposited;
+  const isSettlementContract =
+    contract.number === SETTLEMENT_COMPANY.contractNumber;
   const paid = awaiting
-    ? deposited
-      ? (contract.total * depositPercent) / 100
-      : 0
-    : contract.paid;
+    ? depositPaidAmount
+    : isSettlementContract
+      ? contract.paid + settlementPaid
+      : contract.paid;
+  const mealStatus = (status: MealStatus) =>
+    active
+      ? MEAL_STATUS.Confirmed
+      : isSettlementContract && settlementClosed
+        ? MEAL_STATUS.Completed
+        : status;
 
   return (
     <div className="l-grid l-grid-main">
@@ -34,13 +54,24 @@ export function ContractOverviewPanel({ contract }: { contract: Contract }) {
             key={meal.name}
             meal={meal}
             index={index}
-            status={active ? MEAL_STATUS.Confirmed : meal.status}
+            status={mealStatus(meal.status)}
           />
         ))}
         <ContractTerms />
       </div>
       <aside className="l-stack sticky-side gap-4">
-        <ContractTotals total={contract.total} paid={paid} />
+        <ContractTotals
+          total={contract.total}
+          paid={paid}
+          deposit={
+            awaiting
+              ? {
+                  label: MINIMUM_DEPOSIT_LABEL,
+                  amount: minimumDeposit(contract),
+                }
+              : undefined
+          }
+        />
         {awaiting && !active ? (
           <Suspense fallback={null}>
             <ActivationChecklist />

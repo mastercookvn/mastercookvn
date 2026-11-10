@@ -3,10 +3,13 @@ import { describe, expect, it } from "vitest";
 import {
   calculateCancellation,
   calculateMealPrice,
+  dishFoodCost,
   equipmentNeeded,
   proposedIngredientPrice,
+  recipeCost,
   roundTo500,
   servingStaffNeeded,
+  suggestedDishPrice,
 } from "./pricing";
 
 // Examples from section 9.
@@ -83,5 +86,33 @@ describe("pricing", () => {
     ]);
 
     expect(Math.round(price ?? 0)).toBe(115700);
+  });
+});
+
+describe("dish pricing from recipe (BR04)", () => {
+  const prices = [
+    { name: "Gà ta nguyên con", price: 115000 },
+    { name: "Sả, lá chanh, gừng", price: 25000 },
+  ];
+  const recipe = [
+    { ingredient: "Gà ta nguyên con", quantity: 1.2 },
+    { ingredient: "Sả, lá chanh, gừng", quantity: 0.2 },
+  ];
+
+  it("sums quantity × current ingredient price", () => {
+    expect(recipeCost(recipe, prices)).toBe(143000);
+  });
+
+  it("counts an ingredient missing from the catalog as 0", () => {
+    expect(recipeCost([{ ingredient: "Nấm", quantity: 1 }], prices)).toBe(0);
+  });
+
+  it("divides cost by the food cost target and rounds to 500", () => {
+    expect(suggestedDishPrice(143000, 0.35)).toBe(408500);
+  });
+
+  it("reports food cost share of the selling price", () => {
+    expect(dishFoodCost(143000, 420000)).toBeCloseTo(0.3405, 4);
+    expect(dishFoodCost(143000, 0)).toBeNull();
   });
 });

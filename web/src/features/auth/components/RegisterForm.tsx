@@ -8,6 +8,7 @@ import { TextField } from "@/components/ui/TextField";
 import { register, type RegisterState } from "@/features/auth/actions";
 
 import { OtpStep } from "./OtpStep";
+import { REGISTER_STEP, RegisterSteps } from "./RegisterSteps";
 import { SubmitButton } from "./SubmitButton";
 
 const INITIAL: RegisterState = { step: "details" };
@@ -33,6 +34,9 @@ export function RegisterForm() {
 
   return (
     <form action={action} className="contents">
+      <RegisterSteps
+        current={showOtp ? REGISTER_STEP.VerifyPhone : REGISTER_STEP.Details}
+      />
       <div hidden={showOtp} className="contents">
         <TextField id="register-name" label="Họ tên" {...bind("name")} />
         <TextField

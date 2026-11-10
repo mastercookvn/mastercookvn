@@ -14,6 +14,7 @@ import { useDemoState } from "@/mocks/demoStore";
 
 import { ActivationConditions } from "./ActivationConditions";
 import { ContractMealTable } from "./ContractMealTable";
+import { DepositTermsForm } from "./DepositTermsForm";
 import { PaperSignatureForm } from "./PaperSignatureForm";
 import { PublishContractDialog } from "./PublishContractDialog";
 import { SurchargeForm } from "./SurchargeForm";
@@ -52,7 +53,14 @@ export function ContractIssuePanel({ roles }: { roles: Role[] }) {
       <ContractMealTable />
       <div className="l-grid l-grid-main">
         <div className="l-stack gap-4">
-          {issued ? <PaperSignatureForm /> : <SurchargeForm />}
+          {issued ? (
+            <PaperSignatureForm />
+          ) : (
+            <>
+              <DepositTermsForm />
+              <SurchargeForm />
+            </>
+          )}
           <TransactionTable />
         </div>
         <ActivationConditions roles={roles} />

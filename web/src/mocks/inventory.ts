@@ -1,4 +1,4 @@
-import { proposedIngredientPrice } from "@/lib/pricing";
+import { proposedIngredientPrice, type RecipeLine } from "@/lib/pricing";
 
 /** BR06, section 9.3. */
 export const INVENTORY_PERIOD = (() => {
@@ -124,18 +124,65 @@ export const PRICE_PROPOSALS = [
   proposed: Math.round(proposedIngredientPrice(row.purchases) ?? 0),
 }));
 
-export const CHICKEN_RECIPE = [
-  { ingredient: "Gà ta nguyên con", quantity: 1.2, unit: "kg", price: 115000 },
-  { ingredient: "Sả, lá chanh, gừng", quantity: 0.2, unit: "kg", price: 25000 },
-  { ingredient: "Muối tiêu chanh", quantity: 0.1, unit: "kg", price: 40000 },
-];
+/** Quantities for one standard 10-person table, by dish id. */
+export const DISH_RECIPES: Record<string, RecipeLine[]> = {
+  ga: [
+    { ingredient: "Gà ta nguyên con", quantity: 1.2 },
+    { ingredient: "Sả, lá chanh, gừng", quantity: 0.2 },
+  ],
+  laugaa: [
+    { ingredient: "Gà ta nguyên con", quantity: 1.5 },
+    { ingredient: "Rau củ các loại", quantity: 1.2 },
+  ],
+  heo: [
+    { ingredient: "Thịt ba chỉ heo", quantity: 1.6 },
+    { ingredient: "Rau củ các loại", quantity: 0.3 },
+  ],
+  tom: [
+    { ingredient: "Tôm sú", quantity: 1 },
+    { ingredient: "Sả, lá chanh, gừng", quantity: 0.1 },
+  ],
+  bo: [
+    { ingredient: "Thăn bò", quantity: 0.8 },
+    { ingredient: "Rau củ các loại", quantity: 0.6 },
+  ],
+  lauthai: [
+    { ingredient: "Tôm sú", quantity: 0.6 },
+    { ingredient: "Rau củ các loại", quantity: 1.5 },
+    { ingredient: "Sả, lá chanh, gừng", quantity: 0.3 },
+  ],
+};
 
-export const CHICKEN_COST = CHICKEN_RECIPE.reduce(
-  (sum, row) => sum + row.quantity * row.price,
-  0,
-);
+export type Ingredient = {
+  name: string;
+  unit: string;
+  price: number;
+  usedIn: string;
+};
 
-export const INGREDIENTS = [
+export type PurchaseLine = {
+  ingredient: string;
+  unit?: string;
+  quantity: number;
+  price: number;
+};
+
+export type Purchase = {
+  code: string;
+  date: string;
+  supplier: string;
+  phone: string;
+  lines: PurchaseLine[];
+  /** Data URLs of receipt photos. */
+  photos?: string[];
+};
+
+export const INGREDIENT_UNITS = ["kg", "lít", "quả", "bó", "hộp", "gói"];
+
+export const purchaseTotal = (lines: PurchaseLine[]) =>
+  lines.reduce((sum, line) => sum + line.quantity * line.price, 0);
+
+export const INGREDIENTS: Ingredient[] = [
   {
     name: "Gà ta nguyên con",
     unit: "kg",

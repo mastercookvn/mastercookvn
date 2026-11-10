@@ -15,6 +15,7 @@
 @import "../features/meals/meals.css";
 @import "../features/reports/reports.css";
 @import "../features/settings/settings.css";
+@import "../features/equipment/equipment.css";
 @import "../components/motion/motion.css";
 
 /* Tokens from sections 2.3 and 2.8. Tailwind's default palette is removed. */
@@ -57,16 +58,17 @@
   --color-info-soft: #e4ecf6;
   --color-info-ink: #1d4474;
 
-  --color-workspace-canvas: #f5f6f6;
-  --color-workspace-line: #e1e4e8;
-  --color-workspace-line-soft: #eef0f2;
-  --color-workspace-fill: #e9edf2;
-  --color-workspace-hover: #f8f9fa;
-  --color-workspace-active: #f3f0ea;
-  --color-workspace-nav: #dbe4f0;
-  --color-workspace-nav-active: #1f3f72;
-  --color-workspace-nav-muted: #aebdd3;
-  --color-workspace-nav-text: #f3f6fb;
+  --color-workspace-canvas: #f7f7f5;
+  --color-workspace-line: #e7e6e2;
+  --color-workspace-line-soft: #efeeeb;
+  --color-workspace-fill: #efeeea;
+  --color-workspace-hover: #f6f5f2;
+  --color-workspace-active: #f2f1ed;
+  --color-workspace-sidebar: #fbfbf9;
+  --color-workspace-nav: #3a3a37;
+  --color-workspace-nav-active: #e9e8e3;
+  --color-workspace-nav-muted: #8b8a84;
+  --color-workspace-nav-text: #1d1d1b;
   --color-workspace-accent-hover: #6a4e1b;
 
   --text-10-5: 10.5px;
@@ -111,20 +113,27 @@
 @theme inline {
   --font-sans:
     var(--font-be-vietnam-pro), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display:
+    var(--font-playfair-display), "Times New Roman", Georgia, serif;
 }
 
 :root {
   --gutter-left: max(20px, env(safe-area-inset-left, 0px));
   --gutter-right: max(20px, env(safe-area-inset-right, 0px));
-  --icon-accent: var(--color-gold);
 }
 
 [data-surface="workspace"] {
   --color-line: var(--color-workspace-line);
+  --color-line-strong: #d6d5cf;
+  --color-ink: #1d1d1b;
+  --color-ink-muted: #6b6a65;
+  --color-ink-subtle: #9a9993;
+  --color-navy-900: #1d1d1b;
+  --color-primary: #1f2a44;
   --color-good-ink: #2c4e3e;
   --color-info-ink: #2e475c;
-  --radius-control: 3px;
-  --icon-accent: currentColor;
+  --radius-control: 7px;
+  --radius-card: 10px;
 }
 
 @layer base {
@@ -136,9 +145,14 @@
     background-color: var(--color-ivory);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: var(--text-14-5);
-    line-height: 1.65;
+    font-size: var(--text-16);
+    line-height: 1.7;
     font-variant-numeric: tabular-nums;
+    text-rendering: optimizeLegibility;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   small {
@@ -149,6 +163,19 @@
   h2,
   h3 {
     text-wrap: balance;
+  }
+
+  :where(h1, h2):not([data-surface="workspace"] *) {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: 760px) {
+    input,
+    select,
+    textarea {
+      font-size: max(16px, 1em);
+    }
   }
 
   :focus-visible {

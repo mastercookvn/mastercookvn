@@ -9,9 +9,10 @@ export function DepositPolicyCard() {
         <CoinIcon size={22} /> Đặt cọc
       </CardTitle>
       <p className="text-soft">
-        Cọc từ 50% đến 100% tổng hợp đồng trong 24 giờ sau khi cơ sở nhận tiệc.
-        Hợp đồng có hiệu lực khi bạn đã xác nhận và đủ cọc bắt buộc. Quá hạn thì
-        chỗ được nhả, khoản đã thu được hoàn lại.
+        Cọc tối thiểu 50% tổng hợp đồng trong 24 giờ sau khi cơ sở nhận tiệc.
+        Bạn có thể chuyển nhiều hơn, hệ thống tự ghi phần dư là trả trước và trừ
+        khi quyết toán. Hợp đồng có hiệu lực khi bạn đã xác nhận và đủ mức tối
+        thiểu. Quá hạn thì chỗ được nhả, khoản đã thu được hoàn lại.
       </p>
     </Card>
   );

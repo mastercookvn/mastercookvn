@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
-import { Button } from "@/components/ui/Button";
-import { DataTable, num } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/DataTable";
+import { num } from "@/components/ui/tableColumns";
+import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ToastButton } from "@/components/ui/ToastButton";
@@ -12,7 +13,7 @@ import { INVENTORY_PERIOD as period } from "@/mocks/inventory";
 
 export function StocktakeTable() {
   const [counts, setCounts] = useState(
-    period.lines.map((line) => line.closingQty),
+    period.lines.map((line) => line.closingQty)
   );
 
   return (
@@ -26,7 +27,25 @@ export function StocktakeTable() {
               domain="inventoryPeriod"
               status={INVENTORY_PERIOD_STATUS.AwaitingClose}
             />
-            <Button>Lưu tạm</Button>
+            <ExportButton
+              fileName={`kiem-ke-${period.month.replace("/", "-")}`}
+              columns={[
+                "Nguyên liệu",
+                "Đơn vị",
+                "Tồn đầu",
+                "Tổng nhập",
+                "Tối đa",
+                "Lượng thực tế",
+              ]}
+              rows={period.lines.map((line, index) => [
+                line.name,
+                line.unit,
+                line.openingQty,
+                line.purchasedQty,
+                line.maxQty,
+                counts[index],
+              ])}
+            />
             <ToastButton variant="primary" message="Đã chuyển kỳ sang Chờ chốt">
               Gửi kế toán chốt
             </ToastButton>
@@ -61,8 +80,8 @@ export function StocktakeTable() {
               onChange={(event) =>
                 setCounts(
                   counts.map((count, i) =>
-                    i === index ? Number(event.target.value) : count,
-                  ),
+                    i === index ? Number(event.target.value) : count
+                  )
                 )
               }
             />,
