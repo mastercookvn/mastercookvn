@@ -6,7 +6,7 @@ import { PRICE_PROPOSALS } from "@/mocks/inventory";
 
 export function PriceProposalProgress() {
   const done = useDemoState(
-    (state) => Object.keys(state.priceDecisions).length,
+    (state) => Object.keys(state.priceDecisions).length
   );
 
   return (

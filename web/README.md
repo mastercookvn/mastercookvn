@@ -32,12 +32,12 @@ Vào `/login` hoặc bấm "Đăng nhập trang quản lý" ở chân trang, r�
 
 Chạy trong thư mục `web/` (hoặc thêm `--filter @mastercookvn/web` khi chạy ở root):
 
-| Lệnh             | Tác dụng                   |
-| ---------------- | -------------------------- |
-| `pnpm dev`       | Chạy môi trường phát triển |
-| `pnpm build`     | Build production           |
-| `pnpm start`     | Chạy bản đã build          |
-| `pnpm typecheck` | Kiểm tra kiểu              |
+| Lệnh             | Tác dụng                    |
+| ---------------- | --------------------------- |
+| `pnpm dev`       | Chạy môi trường phát triển  |
+| `pnpm build`     | Build production            |
+| `pnpm start`     | Chạy bản đã build           |
+| `pnpm typecheck` | Kiểm tra kiểu               |
 | `pnpm test`      | Chạy test ở chế độ theo dõi |
 
 Lint, format và test toàn repo chạy ở root: `pnpm lint`, `pnpm format:check`, `pnpm typecheck`, `pnpm test:run`.

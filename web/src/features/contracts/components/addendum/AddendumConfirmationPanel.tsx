@@ -50,7 +50,7 @@ export function AddendumConfirmationPanel() {
               variant="inverse"
               onClick={() =>
                 showToast(
-                  `Bản mẫu: mở mã QR với số tiền ${formatMoney(addendum.extraDeposit)}`,
+                  `Bản mẫu: mở mã QR với số tiền ${formatMoney(addendum.extraDeposit)}`
                 )
               }
             >

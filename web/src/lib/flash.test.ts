@@ -5,7 +5,7 @@ import { encodeFlash, readFlash } from "./flash";
 describe("flash", () => {
   it("round-trips a notice with the name filled in", () => {
     expect(
-      readFlash(encodeFlash({ key: "login", name: "Trần Thị Mai" })),
+      readFlash(encodeFlash({ key: "login", name: "Trần Thị Mai" }))
     ).toEqual({
       tone: "success",
       message: "Đăng nhập thành công. Chào mừng Trần Thị Mai!",
@@ -14,7 +14,7 @@ describe("flash", () => {
 
   it("falls back when no name is given", () => {
     expect(readFlash(encodeFlash({ key: "register" }))?.message).toContain(
-      "Chào bạn!",
+      "Chào bạn!"
     );
   });
 
@@ -23,7 +23,7 @@ describe("flash", () => {
     expect(readFlash("%E0%A4%A")).toBeNull();
     expect(readFlash("not-json")).toBeNull();
     expect(
-      readFlash(encodeURIComponent(JSON.stringify({ key: "nope" }))),
+      readFlash(encodeURIComponent(JSON.stringify({ key: "nope" })))
     ).toBeNull();
   });
 });

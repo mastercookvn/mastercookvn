@@ -61,7 +61,7 @@ export function createOtpStore({
       prune(time);
       const entry = entries.get(key);
       const sentAt = (entry?.sentAt ?? []).filter(
-        (at) => time - at < OTP_SEND_WINDOW_MS,
+        (at) => time - at < OTP_SEND_WINDOW_MS
       );
 
       if (entry && time < entry.resendAt) {

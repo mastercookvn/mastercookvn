@@ -43,6 +43,6 @@ export function Reveal({
       "data-reveal": variant,
       style: { ...style, "--delay": `${delayMs}ms` } as CSSProperties,
     },
-    children,
+    children
   );
 }

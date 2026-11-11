@@ -28,7 +28,7 @@ const SECTIONS: { href: string; label: string; detail?: string }[] = [
 export function WorkspaceBreadcrumb() {
   const pathname = usePathname();
   const section = SECTIONS.find(
-    ({ href }) => pathname === href || pathname.startsWith(`${href}/`),
+    ({ href }) => pathname === href || pathname.startsWith(`${href}/`)
   );
 
   if (!section) return <b>Tổng quan</b>;

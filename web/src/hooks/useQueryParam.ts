@@ -21,10 +21,10 @@ export function useQueryParam(name: string) {
       window.history.pushState(
         null,
         "",
-        query ? `${pathname}?${query}` : pathname,
+        query ? `${pathname}?${query}` : pathname
       );
     },
-    [name, pathname],
+    [name, pathname]
   );
 
   return [value, setValue] as const;

@@ -27,7 +27,7 @@ export function NumberTicker({ value }: { value: number }) {
     row?.classList.add("number-flash");
     const flashTimer = setTimeout(
       () => row?.classList.remove("number-flash"),
-      FLASH_MS,
+      FLASH_MS
     );
 
     const startedAt = performance.now();

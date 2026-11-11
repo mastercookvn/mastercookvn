@@ -14,7 +14,7 @@ const AXIS = "var(--color-ink-subtle)";
 
 export function FoodCostLineChart() {
   const points = MONTHLY_REVENUE.map(
-    (row, index) => `${x(index)},${y(row.foodCost).toFixed(1)}`,
+    (row, index) => `${x(index)},${y(row.foodCost).toFixed(1)}`
   ).join(" ");
 
   return (

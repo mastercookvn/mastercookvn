@@ -6,13 +6,13 @@ import { ROLE } from "./roles";
 describe("role filtering", () => {
   it("shows a consultant only their contract tabs", () => {
     expect(
-      visibleTabs("contractDetail", [ROLE.Consultant]).map((tab) => tab.value),
+      visibleTabs("contractDetail", [ROLE.Consultant]).map((tab) => tab.value)
     ).toEqual(["overview", "addendum", "cancel"]);
   });
 
   it("merges tabs for a member with two roles", () => {
     expect(
-      visibleTabs("contracts", [ROLE.Consultant, ROLE.Accountant]),
+      visibleTabs("contracts", [ROLE.Consultant, ROLE.Accountant])
     ).toHaveLength(3);
   });
 
