@@ -64,7 +64,6 @@ export function AccountTable() {
       <PanelHeader
         title="Tài khoản và phân quyền"
         count={accounts.length}
-        subtitle="Một tài khoản có thể kiêm nhiều vai trò. Quyền là hợp các vai trò."
         actions={
           <AddButton onClick={() => setEditingPhone(NEW_ACCOUNT)}>
             Thêm tài khoản
@@ -160,7 +159,6 @@ export function AccountTable() {
         title={
           editing ? `Sửa tài khoản: ${editing.name}` : "Thêm tài khoản nội bộ"
         }
-        description="Tài khoản dùng để đăng nhập trang quản lý."
         formId={FORM_ID}
         submitLabel={editing ? "Lưu thay đổi" : "Lưu tài khoản"}
       >

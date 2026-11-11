@@ -4,3 +4,8 @@ out/
 out-tsc/
 .env*
 !.env.example
+
+# Content photos live in the media bucket (S3); records keep only the object key.
+# Keep a local copy under public/images/<folder>/ for development without S3.
+public/images/
+.DS_Store

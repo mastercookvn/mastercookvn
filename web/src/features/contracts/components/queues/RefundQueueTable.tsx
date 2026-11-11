@@ -23,11 +23,7 @@ const ROWS = [
 export function RefundQueueTable() {
   return (
     <>
-      <PanelHeader
-        title="Khoản phải hoàn"
-        count={ROWS.length}
-        subtitle="Trả tiền ngoài hệ thống trước, rồi ghi giao dịch hoàn kèm bằng chứng"
-      />
+      <PanelHeader title="Khoản phải hoàn" count={ROWS.length} />
       <DataTable
         columns={[
           "Hợp đồng",

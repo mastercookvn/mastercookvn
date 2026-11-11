@@ -18,7 +18,6 @@ export function EquipmentReportTable() {
     <>
       <PanelHeader
         title="Báo cáo dụng cụ"
-        subtitle="Kỳ 01/10/2026 đến 31/10/2026"
         actions={
           <>
             <CheckboxLabel>Chỉ loại dưới ngưỡng</CheckboxLabel>

@@ -1685,17 +1685,17 @@
 }
 
 @layer components {
-  .dish-picker {
+  .search-picker {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .dish-picker-search {
+  .search-picker-field {
     position: relative;
   }
 
-  .dish-picker-search > .icon {
+  .search-picker-field > .icon {
     position: absolute;
     left: 11px;
     top: 13px;
@@ -1703,11 +1703,11 @@
     pointer-events: none;
   }
 
-  .dish-picker-search > .input {
+  .search-picker-field > .input {
     padding-left: 34px;
   }
 
-  .dish-picker-list {
+  .search-picker-list {
     position: absolute;
     top: calc(100% + 6px);
     left: 0;
@@ -1725,13 +1725,13 @@
       0 2px 6px rgb(11 26 51 / 0.06);
   }
 
-  .dish-picker-empty {
+  .search-picker-empty {
     padding: 12px;
     font-size: var(--text-13-5);
     color: var(--color-ink-muted);
   }
 
-  .dish-option {
+  .picker-option {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr) auto;
     gap: 12px;
@@ -1741,27 +1741,27 @@
     cursor: pointer;
   }
 
-  .dish-option[aria-selected="true"] {
+  .picker-option[aria-selected="true"] {
     background: var(--color-workspace-fill);
   }
 
-  .dish-option b {
+  .picker-option b {
     font-size: var(--text-14);
     font-weight: 600;
   }
 
-  .dish-option small {
+  .picker-option small {
     font-size: var(--text-12-5);
     color: var(--color-ink-muted);
   }
 
-  .dish-option-price {
+  .picker-option-price {
     font-size: var(--text-13-5);
     font-variant-numeric: tabular-nums;
     color: var(--color-ink-muted);
   }
 
-  .dish-thumb {
+  .picker-thumb {
     position: relative;
     display: inline-grid;
     place-items: center;
@@ -1773,7 +1773,7 @@
     color: var(--color-ink-subtle);
   }
 
-  .dish-chosen {
+  .picker-chosen {
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -1783,7 +1783,7 @@
     border-radius: 8px;
   }
 
-  .dish-chosen .dish-option {
+  .picker-chosen .picker-option {
     grid-template-columns: 44px minmax(0, 1fr) auto 36px;
     cursor: default;
   }

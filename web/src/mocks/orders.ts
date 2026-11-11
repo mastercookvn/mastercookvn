@@ -1,13 +1,20 @@
 import { BUSINESS_SETTINGS } from "@/constants/settings";
-import { ORDER_STATUS, type OrderStatus } from "@/constants/statuses";
-import { calculateMealPrice } from "@/lib/pricing";
+import {
+  MEAL_STATUS,
+  ORDER_STATUS,
+  type OrderStatus,
+} from "@/constants/statuses";
+import { calculateMealPrice, type MealPrice } from "@/lib/pricing";
+import { waveSpan, waveTotals, type ServingWave } from "@/lib/servingWaves";
 
 import { MENU_SETS, menuSetPrice, serviceById } from "./catalog";
 import {
+  CONTRACT_COMPANY,
   CONTRACT_HOUSEWARMING,
   CONTRACT_WEDDING,
   CUSTOMER,
   MEAL_COMPANY,
+  type Meal,
 } from "./contracts";
 
 const onBehalfPrice = calculateMealPrice({
@@ -18,6 +25,42 @@ const onBehalfPrice = calculateMealPrice({
 });
 
 export const ON_BEHALF_PRICE = onBehalfPrice;
+
+/** What the order screens need from a meal, whether it has a contract yet or not. */
+export type OrderMeal = Pick<
+  Meal,
+  | "name"
+  | "date"
+  | "time"
+  | "address"
+  | "setName"
+  | "waves"
+  | "guestsPerTable"
+  | "servingTables"
+  | "setupTables"
+  | "status"
+> & {
+  price: MealPrice | null;
+  /** Distance already surveyed (BR07); missing until the consultant records it. */
+  distanceKm?: number;
+};
+
+function sampleMeal(input: {
+  name: string;
+  date: string;
+  address: string;
+  waves: ServingWave[];
+  setName: string;
+  price: MealPrice | null;
+}): OrderMeal {
+  return {
+    ...input,
+    ...waveTotals(input.waves),
+    time: waveSpan(input.waves),
+    guestsPerTable: 10,
+    status: MEAL_STATUS.Planned,
+  };
+}
 
 export type OrderRow = {
   code: string;
@@ -82,6 +125,33 @@ export const ORDERS: OrderRow[] = [
     status: ORDER_STATUS.Rejected,
   },
 ];
+
+/** Meals of the sample orders, by order code. */
+export const ORDER_MEALS: Record<string, OrderMeal[]> = {
+  [CONTRACT_WEDDING.orderCode]: CONTRACT_WEDDING.meals,
+  [CONTRACT_HOUSEWARMING.orderCode]: CONTRACT_HOUSEWARMING.meals,
+  [CONTRACT_COMPANY.orderCode]: CONTRACT_COMPANY.meals,
+  "DH-0151": [
+    sampleMeal({
+      name: "Tiệc giỗ ông nội",
+      date: "28/11/2026",
+      address: "15 Nguyễn Trãi, Quận 5, TP.HCM",
+      waves: [{ from: "11:00", to: "13:30", tables: 8 }],
+      setName: MENU_SETS[0].name,
+      price: onBehalfPrice,
+    }),
+  ],
+  "DH-0090": [
+    sampleMeal({
+      name: "Tiệc sinh nhật",
+      date: "10/10/2026",
+      address: "88 Hoàng Văn Thụ, Tân Bình, TP.HCM",
+      waves: [{ from: "18:00", to: "21:00", tables: 7 }],
+      setName: MENU_SETS[2].name,
+      price: null,
+    }),
+  ],
+};
 
 export const SURVEY_QUESTIONS = [
   ["Nguồn điện tại địa điểm", "Có ổ 220V, cần kéo dây 30 m"],

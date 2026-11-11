@@ -33,17 +33,15 @@ const SCREEN_ICONS: Record<WorkspaceScreenKey, ComponentType<IconProps>> = {
   settings: SlidersIcon,
 };
 
-/** Every workspace page opens the same way: icon, title, one line of purpose. */
+/** Every workspace page opens the same way: icon and title. */
 export function PageHeader({
   screen,
   title,
-  description,
   meta,
   aside,
 }: {
   screen: WorkspaceScreenKey;
   title?: string;
-  description?: ReactNode;
   meta?: ReactNode;
   aside?: ReactNode;
 }) {
@@ -57,9 +55,6 @@ export function PageHeader({
         <h1 className="h1-compact">
           {title ?? WORKSPACE_SCREENS[screen].title}
         </h1>
-        <p className="page-title-description">
-          {description ?? WORKSPACE_SCREENS[screen].description}
-        </p>
         {meta ? <div className="page-title-meta">{meta}</div> : null}
       </div>
       {aside ? <div className="page-title-aside">{aside}</div> : null}

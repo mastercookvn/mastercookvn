@@ -57,7 +57,6 @@ export function EventTypeTable() {
       <PanelHeader
         title="Loại tiệc"
         count={eventTypes.length}
-        subtitle="Dùng để lọc đơn và báo cáo doanh thu"
         actions={
           <AddButton onClick={() => openForm(null)}>Thêm loại tiệc</AddButton>
         }
@@ -106,7 +105,6 @@ export function EventTypeTable() {
         open={open}
         onOpenChange={setOpen}
         title={original ? `Đổi tên: ${original}` : "Thêm loại tiệc"}
-        description="Loại tiệc có ngay trong bộ lọc đơn và báo cáo."
         formId={FORM_ID}
         submitLabel={original ? "Lưu tên mới" : "Thêm loại tiệc"}
       >

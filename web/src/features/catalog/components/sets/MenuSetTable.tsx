@@ -60,7 +60,6 @@ export function MenuSetTable() {
       <PanelHeader
         title="Set thực đơn"
         count={menuSets.length}
-        subtitle="Giá set bằng tổng giá món, không cộng lợi nhuận lần nữa"
         actions={
           <AddButton onClick={() => setEditingId(NEW_SET)}>
             Thêm set thực đơn
@@ -143,7 +142,6 @@ export function MenuSetTable() {
           if (!open) setEditingId(null);
         }}
         title={editing ? `Sửa set: ${editing.name}` : "Thêm set thực đơn"}
-        description="Chọn món từ danh mục. Giá set tự tính."
         formId={FORM_ID}
         submitLabel={editing ? "Lưu thay đổi" : "Thêm set"}
       >

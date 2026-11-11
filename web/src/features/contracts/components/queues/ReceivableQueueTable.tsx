@@ -63,7 +63,6 @@ export function ReceivableQueueTable() {
       <PanelHeader
         title="Khoản cần thu"
         count={rows.length}
-        subtitle="Không có công nợ trả chậm: khoản còn lại phải thu đủ trước khi đóng bữa."
         actions={
           <ExportButton
             fileName="khoan-can-thu"

@@ -34,6 +34,7 @@ export type Meal = {
   guestsPerTable: number;
   setupTables: number;
   waves: ServingWave[];
+  setId: string;
   setName: string;
   dishNames: string[];
   services: MealService[];
@@ -44,6 +45,7 @@ export type Meal = {
 export type Contract = {
   number: string;
   orderCode: string;
+  customerName: string;
   status: ContractStatus;
   meals: Meal[];
   total: number;
@@ -61,12 +63,10 @@ const withService = (id: string, quantity = 1): MealService => ({
 type MealInput = Omit<
   Meal,
   "setName" | "dishNames" | "price" | "servingTables" | "setupTables"
-> & {
-  setId: string;
-};
+>;
 
-function createMeal({ setId, ...input }: MealInput): Meal {
-  const set = menuSetById(setId);
+function createMeal(input: MealInput): Meal {
+  const set = menuSetById(input.setId);
   const meal = { ...input, ...waveTotals(input.waves) };
   return {
     ...meal,
@@ -151,12 +151,14 @@ export const MEAL_COMPANY = createMeal({
   status: MEAL_STATUS.AwaitingSettlement,
 });
 
-export const daysUntil = (iso: string) =>
-  Math.floor((new Date(iso).getTime() - DEMO_TODAY.getTime()) / 864e5);
+/** Whole days from `from` to the meal start; negative once the meal has started. */
+export const daysUntil = (iso: string, from: Date = DEMO_TODAY) =>
+  Math.floor((new Date(iso).getTime() - from.getTime()) / 864e5);
 
 export const CONTRACT_WEDDING: Contract = {
   number: "HD-2026-0142",
   orderCode: "DH-0142",
+  customerName: CUSTOMER.name,
   status: CONTRACT_STATUS.AwaitingConfirmationAndDeposit,
   meals: [MEAL_WEDDING, MEAL_ANNOUNCEMENT],
   total: MEAL_WEDDING.price.total + MEAL_ANNOUNCEMENT.price.total,
@@ -167,6 +169,7 @@ export const CONTRACT_WEDDING: Contract = {
 export const CONTRACT_HOUSEWARMING: Contract = {
   number: "HD-2026-0128",
   orderCode: "DH-0128",
+  customerName: "Lý Hoàng Nam",
   status: CONTRACT_STATUS.Active,
   meals: [MEAL_HOUSEWARMING],
   total: MEAL_HOUSEWARMING.price.total,
@@ -176,6 +179,7 @@ export const CONTRACT_HOUSEWARMING: Contract = {
 export const CONTRACT_BIRTHDAY: Contract = {
   number: "HD-2026-0089",
   orderCode: "DH-0089",
+  customerName: CUSTOMER.name,
   status: CONTRACT_STATUS.Completed,
   meals: [
     {
@@ -192,6 +196,7 @@ export const CONTRACT_BIRTHDAY: Contract = {
 export const CONTRACT_COMPANY: Contract = {
   number: "HD-2026-0097",
   orderCode: "DH-0097",
+  customerName: CUSTOMER.name,
   status: CONTRACT_STATUS.Active,
   meals: [MEAL_COMPANY],
   total: MEAL_COMPANY.price.total,

@@ -89,6 +89,7 @@ export function ImageUploadField({
               alt={alt}
               fill
               sizes="132px"
+              unoptimized
               className="object-cover"
             />
           ) : (

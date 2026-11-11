@@ -57,7 +57,6 @@ export function IngredientTable() {
       <PanelHeader
         title="Danh mục nguyên liệu"
         count={ingredients.length}
-        subtitle="Sửa giá trực tiếp sẽ liệt kê món bị ảnh hưởng"
         actions={
           <>
             <ExportButton
@@ -146,11 +145,6 @@ export function IngredientTable() {
           if (!open) setEditingName(null);
         }}
         title={editing ? `Sửa: ${editing.name}` : "Thêm nguyên liệu"}
-        description={
-          editing
-            ? "Đổi giá hiện hành sẽ đổi giá gợi ý của các món dùng nguyên liệu này."
-            : "Nguyên liệu mới dùng được ngay trong phiếu nhập và định lượng món."
-        }
         formId={FORM_ID}
         submitLabel={editing ? "Lưu thay đổi" : "Thêm nguyên liệu"}
       >

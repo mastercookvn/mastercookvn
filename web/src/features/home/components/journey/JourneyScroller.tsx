@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { useEffect, useRef, useState } from "react";
 
 import { JourneyStep } from "./JourneyStep";
@@ -20,7 +20,7 @@ export function JourneyScroller() {
           }
         });
       },
-      { rootMargin: "-45% 0px -45% 0px" },
+      { rootMargin: "-45% 0px -45% 0px" }
     );
     steps.current.forEach((step) => step && observer.observe(step));
     return () => observer.disconnect();
@@ -34,12 +34,10 @@ export function JourneyScroller() {
             key={step.title}
             className={index === active ? "media is-active" : "media"}
           >
-            <Image
-              src={journeyImage(index)}
+            <MediaImage
+              imageKey={journeyImage(index)}
               alt={`Minh họa: ${step.title}`}
-              fill
               sizes="(max-width: 1320px) 55vw, 700px"
-              className="object-cover"
             />
           </span>
         ))}

@@ -1,34 +1,40 @@
-import type { ComponentType } from "react";
+import type { CSSProperties } from "react";
 
-import {
-  CalculatorIcon,
-  CheckIcon,
-  ChecklistIcon,
-  ClipboardIcon,
-  type IconProps,
-} from "@/components/icons";
+import { CheckIcon } from "@/components/icons";
 
-const STEPS: { label: string; icon: ComponentType<IconProps> }[] = [
-  { label: "Tính giá", icon: CalculatorIcon },
-  { label: "Chi tiết tiệc", icon: ClipboardIcon },
-  { label: "Xem lại", icon: ChecklistIcon },
-  { label: "Đã gửi", icon: CheckIcon },
-];
-
-export function BookingStepper({ current }: { current: number }) {
+export function BookingStepper({
+  steps,
+  current,
+  onSelect,
+}: {
+  steps: string[];
+  current: number;
+  onSelect: (index: number) => void;
+}) {
   return (
-    <div className="stepper">
-      {STEPS.map(({ label, icon: Icon }, index) => {
-        const step = index + 1;
-        const state =
-          step < current ? "is-done" : step === current ? "is-active" : "";
+    <ol
+      className="stepper"
+      style={{ "--steps": steps.length } as CSSProperties}
+    >
+      {steps.map((label, index) => {
+        const done = index < current;
         return (
-          <div key={label} className={`stepper-item ${state}`}>
-            <Icon size={18} />
-            {label}
-          </div>
+          <li key={label}>
+            <button
+              type="button"
+              className={`stepper-item ${done ? "is-done" : index === current ? "is-active" : ""}`}
+              aria-current={index === current ? "step" : undefined}
+              disabled={!done}
+              onClick={() => onSelect(index)}
+            >
+              <span className="stepper-number">
+                {done ? <CheckIcon size={14} /> : index + 1}
+              </span>
+              {label}
+            </button>
+          </li>
         );
       })}
-    </div>
+    </ol>
   );
 }

@@ -28,6 +28,12 @@ export type AddendumInput = {
   /** Price change per standard table when one chosen dish is swapped. */
   dishSwapDelta: number | null;
   hasOtherPendingAddendum: boolean;
+  /** Agreed surcharge locked in the contract; it stays as signed. */
+  surcharge?: number;
+  /** Meal value locked in the contract (BR04), the "before" side. */
+  lockedTotal?: number;
+  /** What the added tables would lack, from the resource check (BR09). */
+  resourceShortages?: string[];
 };
 
 export function maxTableReduction(tablesBefore: number) {
@@ -44,6 +50,9 @@ export function evaluateAddendum(input: AddendumInput) {
     tablesAfter,
     dishSwapDelta,
     hasOtherPendingAddendum,
+    surcharge = 0,
+    lockedTotal,
+    resourceShortages = [],
   } = input;
   const tablesChanged = tablesAfter !== tablesBefore;
   const dishChanged = dishSwapDelta !== null;
@@ -93,8 +102,15 @@ export function evaluateAddendum(input: AddendumInput) {
     {
       key: "resources",
       label: "Còn đủ nhân sự, dụng cụ cho phần tăng",
-      result: added > 0 ? CHECK_RESULT.Pass : CHECK_RESULT.NotNeeded,
-      detail: "Kiểm tra lại cùng các bữa chồng giờ trước khi áp dụng.",
+      result:
+        added <= 0
+          ? CHECK_RESULT.NotNeeded
+          : resourceShortages.length
+            ? CHECK_RESULT.Fail
+            : CHECK_RESULT.Pass,
+      detail: resourceShortages.length
+        ? `${resourceShortages.join(", ")} trong khung giờ của bữa.`
+        : "Đã tính cùng các bữa chồng giờ trong ngày.",
     },
     {
       key: "pending",
@@ -110,9 +126,10 @@ export function evaluateAddendum(input: AddendumInput) {
       servingTables: tables,
       guestsPerTable,
       services,
+      surcharge,
     }).total;
 
-  const totalBefore = priceFor(tablesBefore, dishesTotal);
+  const totalBefore = lockedTotal ?? priceFor(tablesBefore, dishesTotal);
   const totalAfter = priceFor(tablesAfter, dishesTotal + (dishSwapDelta ?? 0));
   const difference = totalAfter - totalBefore;
   const needsExtraDeposit =

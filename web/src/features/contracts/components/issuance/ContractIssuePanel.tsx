@@ -8,8 +8,10 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import type { Role } from "@/constants/roles";
 import { ROUTES } from "@/constants/routes";
-import { CONTRACT_WEDDING as contract } from "@/mocks/contracts";
+import type { Contract } from "@/mocks/contracts";
 import { useDemoState } from "@/mocks/demoStore";
+
+import { isAwaitingContract } from "@/features/contracts/lib/contractState";
 
 import { ActivationConditions } from "./ActivationConditions";
 import { ContractMealTable } from "./ContractMealTable";
@@ -19,9 +21,28 @@ import { PublishContractDialog } from "./PublishContractDialog";
 import { SurchargeForm } from "./SurchargeForm";
 import { TransactionTable } from "./TransactionTable";
 
-export function ContractIssuePanel({ roles }: { roles: Role[] }) {
+export function ContractIssuePanel({
+  roles,
+  contract,
+}: {
+  roles: Role[];
+  contract: Contract;
+}) {
   const issued = useDemoState((state) => state.contractIssued);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Issuing and signing only apply before the contract takes effect.
+  if (!isAwaitingContract(contract)) {
+    return (
+      <>
+        <PanelHeader
+          title="Các bữa trong hợp đồng"
+          subtitle={`Đơn ${contract.orderCode}`}
+        />
+        <ContractMealTable contract={contract} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -44,7 +65,7 @@ export function ContractIssuePanel({ roles }: { roles: Role[] }) {
           )
         }
       />
-      <ContractMealTable />
+      <ContractMealTable contract={contract} />
       <div className="l-grid l-grid-main">
         <div className="l-stack gap-4">
           {issued ? (

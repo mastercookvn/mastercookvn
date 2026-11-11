@@ -12,11 +12,7 @@ export function StockTable() {
 
   return (
     <>
-      <PanelHeader
-        title="Tồn kho dụng cụ"
-        count={equipment.length}
-        subtitle="Sở hữu = sẵn sàng + đang sử dụng + hư"
-      />
+      <PanelHeader title="Tồn kho dụng cụ" count={equipment.length} />
       <DataTable
         columns={[
           "Dụng cụ",

@@ -83,9 +83,13 @@ Các chức năng: `home`, `menu`, `services`, `booking`, `auth`, `account`, `co
 - Tên file, component, biến bằng tiếng Anh. Chữ hiển thị bằng tiếng Việt.
 - Ghi chú bằng tiếng Anh, một dòng, chỉ viết khi cần giải thích lý do hoặc tham chiếu đặc tả.
 
-## Thêm ảnh dịch vụ
+## Ảnh
 
-Đặt ảnh vào `public/images/services/`, rồi thêm `image: "/images/services/ten-anh.jpg"` cho dịch vụ trong `src/mocks/catalog.ts`. Khung ảnh tỉ lệ 4:3; khi chưa có ảnh, khung hiện icon của dịch vụ.
+Ảnh không commit vào git. Bản ghi (món, nguyên liệu, dịch vụ) chỉ lưu key của object trên bucket, ví dụ `imageKey: "dishes/goi.jpg"`, không lưu URL (`src/lib/media.ts`).
+
+- `/api/media/<key>` trả về redirect tới URL ký sẵn (presigned) của S3, hết hạn sau 15 phút. Cấu hình bucket và token qua các biến `MEDIA_S3_*` trong `.env.example`.
+- Chưa cấu hình S3 thì route trả về bản local ở `public/images/<key>` (đã nằm trong `.gitignore`), dùng khi phát triển.
+- Ảnh tải lên ở trang quản lý tạm giữ trong trình duyệt theo key, cho tới khi có API upload.
 
 ## Tài liệu
 

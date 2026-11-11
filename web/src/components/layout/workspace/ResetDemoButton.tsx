@@ -10,6 +10,7 @@ export function ResetDemoButton() {
   return (
     <button
       type="button"
+      className="workspace-label"
       onClick={() => {
         resetDemoState();
         showToast("Đã đặt lại toàn bộ dữ liệu mẫu", "info");

@@ -76,3 +76,23 @@ Phải cho khách hàng tra cứu lại đơn đặt và hợp đồng
 Highligh logic sửa hợp đồng trong trang quản lý
 
 Chi tiết hợp đồng nên gọn lại, có thật sự cần các grid về mã hợp đòng, só tiền trạng thái ododf không? Phải có chức năng xuất hợp đồng chuẩn chỉnh theo luật việt nam để gửi khách hang
+
+------ Script 5:
+
+Việc đặt tiệc nên trải qua từng bước, ví dụ điền thông tin tiệc, lưu ý là có cho đặt tiệc mâm ( tức là 1 bàn thức ăn vẫn sẽ có), rồi điền thông tin cá nhân. Sau đó mới thực hiện việc chọn món, rồi chọn dịch vụ ( Dihcj vụ cũng là dropdown rồi selection lên từ cơ sở dữ liệu kèm ảnh)
+
+Bỏ tất cả các ảnh vào gitignore, phần món ăn và nguyên liệu lưu một dạng key-value không lưu url ( sử dụng s3 token để hiện thực)
+
+Giao diện admin nên thêm nút phóng to thu nhỏ sidebar
+
+Thu gọn lại các logic chuyển trang, nội dung của fe, chỉ cần xem được giao diện của từng màn hình để xem có khơp flow không, tránh làm project quá nặng
+
+
+----- Script 6:
+
+Bỏ bớt ghi chú ở trang quản lý, không ai đọc ( ghi chú là các dòng dưới tiêu đề)
+
+Khi kéo xuống web ở khách hàng, thì các thẻ a vẫn giữ nguyên, thuận tiện cho người dùng
+
+Đặt lại icon thu phóng ở giữa và đổi icon khác hiện đại hơn
+

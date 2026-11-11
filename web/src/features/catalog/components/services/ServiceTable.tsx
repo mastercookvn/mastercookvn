@@ -33,7 +33,6 @@ const hasHistory = (service: Service) =>
 
 export function ServiceTable() {
   const services = useDemoState((state) => state.services);
-  const serviceImages = useDemoState((state) => state.serviceImages);
   const [editingId, setEditingId] = useState<string | null>(null);
   const editing = services.find((service) => service.id === editingId) ?? null;
   const [deleting, setDeleting] = useState<DeleteTarget>(null);
@@ -59,7 +58,6 @@ export function ServiceTable() {
       <PanelHeader
         title="Dịch vụ"
         count={services.length}
-        subtitle="Đã có lịch sử thì chỉ ngưng, không xóa. Bấm một dòng để sửa hoặc đổi ảnh."
         actions={
           <AddButton onClick={() => setEditingId(NEW_SERVICE_ID)}>
             Thêm dịch vụ
@@ -87,7 +85,7 @@ export function ServiceTable() {
           </span>,
           service.unit,
           formatMoney(service.price),
-          serviceImages[service.id] || service.image ? (
+          service.imageKey ? (
             <Badge key="image" tone="good">
               Đã có
             </Badge>
@@ -152,7 +150,6 @@ export function ServiceTable() {
           if (!open) setEditingId(null);
         }}
         title={editing ? `Sửa dịch vụ: ${editing.name}` : "Thêm dịch vụ"}
-        description="Đơn giá mới chỉ áp dụng cho đơn tạo sau khi lưu."
         formId={FORM_ID}
         submitLabel={editing ? "Lưu thay đổi" : "Thêm dịch vụ"}
       >

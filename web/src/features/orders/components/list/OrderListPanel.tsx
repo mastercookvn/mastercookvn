@@ -8,8 +8,7 @@ import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { ORDER_STATUS_META } from "@/constants/labels";
 import { ORDER_STATUS } from "@/constants/statuses";
-import { useDemoState } from "@/mocks/demoStore";
-import { ORDERS } from "@/mocks/orders";
+import { useWorkspaceOrders } from "@/features/orders/lib/useOrders";
 
 import { OnBehalfOrderForm } from "../on-behalf/OnBehalfOrderForm";
 
@@ -27,13 +26,10 @@ const FILTERS: OrderFilter[] = [
 const FORM_ID = "on-behalf-order-form";
 
 export function OrderListPanel({ canCreate }: { canCreate: boolean }) {
-  const firstStatus = useDemoState((state) => state.orderStatus);
   const [filter, setFilter] = useState<OrderFilter>("ALL");
   const [adding, setAdding] = useState(false);
 
-  const orders = ORDERS.map((order) =>
-    order.code === "DH-0142" ? { ...order, status: firstStatus } : order
-  );
+  const orders = useWorkspaceOrders();
   const counts = Object.fromEntries(
     FILTERS.map((option) => [
       option,
@@ -48,7 +44,6 @@ export function OrderListPanel({ canCreate }: { canCreate: boolean }) {
       <PanelHeader
         title="Tất cả đơn"
         count={orders.length}
-        subtitle="Đơn khách tự đặt online và đơn tư vấn đặt hộ. Bấm một dòng để xem và xác nhận."
         actions={
           <>
             <ExportButton
@@ -102,7 +97,6 @@ export function OrderListPanel({ canCreate }: { canCreate: boolean }) {
         open={adding}
         onOpenChange={setAdding}
         title="Tạo đơn đặt hộ khách"
-        description="Tìm hoặc tạo hồ sơ theo SĐT. Không tạo tài khoản cho khách."
         size={DRAWER_SIZE.Large}
         formId={FORM_ID}
         submitLabel="Tạo đơn"

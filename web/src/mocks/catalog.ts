@@ -1,4 +1,6 @@
 /* Sample data. Prices are per standard 10-person table. */
+import { MEDIA_FOLDER, mediaKey, type MediaKey } from "@/lib/media";
+
 export type DishCategory =
   "appetizer" | "main" | "hotpot" | "dessert" | "drink";
 
@@ -8,6 +10,7 @@ export type Dish = {
   category: DishCategory;
   price: number;
   description: string;
+  imageKey?: MediaKey;
 };
 
 export type MenuSet = {
@@ -27,8 +30,8 @@ export type Service = {
   unit: string;
   price: number;
   description: string;
-  /** Path under /images/services. The card shows the service icon until it is set. */
-  image?: string;
+  /** The card shows the service icon until it is set. */
+  imageKey?: MediaKey;
   /** Missing means active. */
   active?: boolean;
 };
@@ -41,7 +44,7 @@ export const DISH_CATEGORY_LABEL: Record<DishCategory, string> = {
   drink: "Đồ uống",
 };
 
-export const DISHES: Dish[] = [
+const SAMPLE_DISHES: Dish[] = [
   {
     id: "goi",
     name: "Gỏi ngó sen tôm thịt",
@@ -149,6 +152,11 @@ export const DISHES: Dish[] = [
   },
 ];
 
+export const DISHES: Dish[] = SAMPLE_DISHES.map((dish) => ({
+  ...dish,
+  imageKey: mediaKey(MEDIA_FOLDER.Dishes, `${dish.id}.jpg`),
+}));
+
 export const MENU_SETS: MenuSet[] = [
   {
     id: "sumvay",
@@ -223,16 +231,18 @@ export const menuSetById = (id: string) =>
   MENU_SETS.find((set) => set.id === id)!;
 export const serviceById = (id: string) =>
   SERVICES.find((service) => service.id === id)!;
-export const dishImage = (id: string) => `/images/dishes/${id}.jpg`;
 
-/** Uploaded photo first, then the bundled sample. Dishes added later have no sample. */
-export const dishPhoto = (dish: Dish & { image?: string }) =>
-  dish.image ??
-  (DISHES.some((sample) => sample.id === dish.id) ? dishImage(dish.id) : null);
+/** BR04: a set costs the current selling price of its dishes, no extra margin. */
+export const menuSetPriceFrom = (
+  set: MenuSet,
+  dishes: readonly Pick<Dish, "id" | "price">[]
+) =>
+  set.dishIds.reduce(
+    (sum, id) => sum + (dishes.find((dish) => dish.id === id)?.price ?? 0),
+    0
+  );
 
-/** BR03 */
-export const menuSetPrice = (set: MenuSet) =>
-  set.dishIds.reduce((sum, id) => sum + dishById(id).price, 0);
+export const menuSetPrice = (set: MenuSet) => menuSetPriceFrom(set, DISHES);
 
 export const menuSetDishNames = (set: MenuSet) =>
   set.dishIds.map((id) => dishById(id).name);

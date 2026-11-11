@@ -4,10 +4,12 @@ import { useState } from "react";
 
 import { FlowerIcon } from "@/components/icons";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
+import { useMediaSrc } from "@/components/ui/MediaImage";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatNumber } from "@/lib/format";
+import { MEDIA_FOLDER, newMediaKey } from "@/lib/media";
 import type { Service } from "@/mocks/catalog";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 
@@ -29,11 +31,10 @@ export function ServiceForm({
   const [priceText, setPriceText] = useState(
     service ? formatNumber(service.price) : ""
   );
-  const [image, setImage] = useState<string | null>(
-    service
-      ? (readDemoState().serviceImages[service.id] ?? service.image ?? null)
-      : null
-  );
+  const savedImage = useMediaSrc(service?.imageKey);
+  /** Undefined keeps the saved photo, null removes it, a data URL replaces it. */
+  const [upload, setUpload] = useState<string | null | undefined>(undefined);
+  const image = upload === undefined ? savedImage : upload;
   const [submitted, setSubmitted] = useState(false);
 
   const price = parseAmount(priceText);
@@ -58,15 +59,14 @@ export function ServiceForm({
 
     const current = readDemoState();
     const id = service?.id ?? `dv-${Date.now().toString(36)}`;
+    const imageKey = upload ? newMediaKey(MEDIA_FOLDER.Services) : undefined;
     const fields = {
       name: name.trim(),
       description: description.trim(),
       unit: unit.trim(),
       price,
+      imageKey: upload === undefined ? service?.imageKey : imageKey,
     };
-    const images = { ...current.serviceImages };
-    if (image?.startsWith("data:")) images[id] = image;
-    if (!image) delete images[id];
 
     updateDemoState({
       services: service
@@ -74,7 +74,10 @@ export function ServiceForm({
             other.id === id ? { ...other, ...fields } : other
           )
         : [{ id, ...fields }, ...current.services],
-      serviceImages: images,
+      mediaUploads:
+        upload && imageKey
+          ? { ...current.mediaUploads, [imageKey]: upload }
+          : current.mediaUploads,
     });
     showToast(
       service ? `Đã lưu ${fields.name}` : `Đã thêm dịch vụ ${fields.name}`
@@ -97,7 +100,7 @@ export function ServiceForm({
         label="Ảnh dịch vụ"
         value={image}
         alt={name || "Ảnh dịch vụ"}
-        onChange={setImage}
+        onChange={setUpload}
         placeholder={<FlowerIcon size={30} />}
         hint="Hiển thị trên trang Dịch vụ cho khách. JPG, PNG hoặc WebP, tối đa 5 MB."
       />

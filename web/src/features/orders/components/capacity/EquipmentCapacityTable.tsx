@@ -5,9 +5,11 @@ import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatNumber } from "@/lib/format";
 import { useDemoState } from "@/mocks/demoStore";
-import { capacityRows } from "@/mocks/equipment";
+import type { OrderMeal } from "@/mocks/orders";
 
-export function EquipmentCapacityTable() {
+import { equipmentCapacityRows } from "@/features/orders/lib/capacity";
+
+export function EquipmentCapacityTable({ meal }: { meal: OrderMeal }) {
   const shortage = useDemoState((state) => state.simulateShortage);
 
   return (
@@ -21,7 +23,7 @@ export function EquipmentCapacityTable() {
         num("Khả dụng"),
         "Kết quả",
       ]}
-      rows={capacityRows(shortage).map((row) => [
+      rows={equipmentCapacityRows(meal, shortage).map((row) => [
         row.name,
         <span key="basis" className="text-soft">
           {row.basis}

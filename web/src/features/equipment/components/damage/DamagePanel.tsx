@@ -23,11 +23,7 @@ export function DamagePanel() {
 
   return (
     <>
-      <PanelHeader
-        title="Đồ hư cần xử lý"
-        count={damaged.length}
-        subtitle="Đồ hư ghi nhận khi kiểm đếm sau bữa. Phục hồi về sẵn sàng hoặc loại bỏ khỏi sở hữu."
-      />
+      <PanelHeader title="Đồ hư cần xử lý" count={damaged.length} />
       {damaged.length === 0 ? (
         <EmptyState>Không còn dụng cụ hư cần xử lý.</EmptyState>
       ) : (
@@ -60,7 +56,6 @@ export function DamagePanel() {
           if (!open) setHandlingName(null);
         }}
         title={handling ? `Xử lý đồ hư: ${handling.name}` : "Xử lý đồ hư"}
-        description="Phục hồi cộng vào Sẵn sàng. Loại bỏ trừ khỏi Sở hữu."
         formId={FORM_ID}
         submitLabel="Lưu xử lý"
       >

@@ -1,4 +1,5 @@
 import { BUSINESS_SETTINGS } from "@/constants/settings";
+import { MEDIA_FOLDER, mediaKey } from "@/lib/media";
 
 export type JourneyStepData = { title: string; description: string };
 
@@ -20,4 +21,4 @@ export const JOURNEY_STEPS: JourneyStepData[] = [
 ];
 
 export const journeyImage = (index: number) =>
-  `/images/scenes/journey${index + 1}.jpg`;
+  mediaKey(MEDIA_FOLDER.Scenes, `journey${index + 1}.jpg`);

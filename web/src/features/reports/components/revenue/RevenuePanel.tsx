@@ -15,7 +15,6 @@ export function RevenuePanel() {
     <>
       <PanelHeader
         title="Doanh thu và food cost"
-        subtitle="Doanh thu theo ngày phục vụ của bữa đã thực hiện. Tháng chưa chốt hiển thị chưa xác định."
         actions={
           <ExportButton
             fileName="bao-cao-doanh-thu-food-cost"

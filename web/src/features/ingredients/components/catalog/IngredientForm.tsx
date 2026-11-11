@@ -2,10 +2,14 @@
 
 import { useState } from "react";
 
+import { CarrotIcon } from "@/components/icons";
+import { ImageUploadField } from "@/components/ui/ImageUploadField";
+import { useMediaSrc } from "@/components/ui/MediaImage";
 import { SelectField } from "@/components/ui/SelectField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatNumber } from "@/lib/format";
+import { MEDIA_FOLDER, newMediaKey } from "@/lib/media";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 import { INGREDIENT_UNITS, type Ingredient } from "@/mocks/inventory";
 
@@ -24,6 +28,10 @@ export function IngredientForm({
   const [priceText, setPriceText] = useState(
     ingredient ? formatNumber(ingredient.price) : ""
   );
+  const savedImage = useMediaSrc(ingredient?.imageKey);
+  /** Undefined keeps the saved photo, null removes it, a data URL replaces it. */
+  const [upload, setUpload] = useState<string | null | undefined>(undefined);
+  const image = upload === undefined ? savedImage : upload;
   const [submitted, setSubmitted] = useState(false);
 
   const price = Number(priceText.replace(/\D/g, ""));
@@ -44,6 +52,12 @@ export function IngredientForm({
     setSubmitted(true);
     if (nameError || priceError) return;
     const current = readDemoState();
+    const newKey = upload ? newMediaKey(MEDIA_FOLDER.Ingredients) : undefined;
+    const imageKey = upload === undefined ? ingredient?.imageKey : newKey;
+    const mediaUploads =
+      upload && newKey
+        ? { ...current.mediaUploads, [newKey]: upload }
+        : current.mediaUploads;
     if (ingredient) {
       const renamed = (line: { ingredient: string; quantity: number }) =>
         line.ingredient === ingredient.name
@@ -52,9 +66,10 @@ export function IngredientForm({
       updateDemoState({
         ingredients: current.ingredients.map((other) =>
           other.name === ingredient.name
-            ? { ...other, name: name.trim(), unit, price }
+            ? { ...other, name: name.trim(), unit, price, imageKey }
             : other
         ),
+        mediaUploads,
         recipes: Object.fromEntries(
           Object.entries(current.recipes).map(([dishId, lines]) => [
             dishId,
@@ -72,9 +87,10 @@ export function IngredientForm({
     }
     updateDemoState({
       ingredients: [
-        { name: name.trim(), unit, price, usedIn: "Chưa dùng" },
+        { name: name.trim(), unit, price, usedIn: "Chưa dùng", imageKey },
         ...current.ingredients,
       ],
+      mediaUploads,
     });
     showToast(`Đã thêm ${name.trim()}. Dùng được ngay trong phiếu nhập.`);
     onSaved();
@@ -90,6 +106,14 @@ export function IngredientForm({
         save();
       }}
     >
+      <ImageUploadField
+        id="ingredient-image"
+        label="Ảnh nguyên liệu"
+        value={image}
+        alt={name || "Ảnh nguyên liệu"}
+        onChange={setUpload}
+        placeholder={<CarrotIcon size={30} />}
+      />
       <TextField
         id="ingredient-name"
         label="Tên nguyên liệu"

@@ -8,6 +8,7 @@ import {
   Carrot,
   ChartColumn,
   Check,
+  ChevronLeft,
   ChevronRight,
   ClipboardList,
   Clock,
@@ -81,6 +82,7 @@ export const ChartIcon = fromLucide(ChartColumn);
 export const CheckIcon = fromLucide(Check);
 export const ChecklistIcon = fromLucide(ListChecks);
 export const ChevronIcon = fromLucide(ChevronRight);
+export const ChevronLeftIcon = fromLucide(ChevronLeft);
 export const ClipboardIcon = fromLucide(ClipboardList);
 export const ClocheIcon = fromLucide(ConciergeBell);
 export const ClockIcon = fromLucide(Clock);

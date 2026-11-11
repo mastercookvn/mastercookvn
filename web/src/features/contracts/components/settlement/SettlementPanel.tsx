@@ -15,7 +15,6 @@ export function SettlementPanel() {
     <>
       <PanelHeader
         title="Quyết toán bữa"
-        subtitle="Đối trừ đúng một lần. Không ghi công nợ trả chậm."
         actions={<StatusBadge domain="settlement" status={status} />}
       />
       <div className="l-grid l-grid-main">

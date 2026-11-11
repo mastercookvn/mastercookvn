@@ -74,4 +74,31 @@ describe("evaluateAddendum", () => {
     );
     expect(swap.extraDeposit).toBe(0);
   });
+
+  it("fails the resource check when the added tables lack staff or equipment", () => {
+    const short = { tablesAfter: 17, resourceShortages: ["Thiếu 1 Phục vụ"] };
+
+    expect(result(short, "resources")).toBe(CHECK_RESULT.Fail);
+    expect(result({ tablesAfter: 17 }, "resources")).toBe(CHECK_RESULT.Pass);
+    expect(evaluateAddendum({ ...BASE, ...short }).canSend).toBe(false);
+  });
+
+  it("starts from the locked meal value and keeps the agreed surcharge", () => {
+    const evaluation = evaluateAddendum({
+      ...BASE,
+      tablesAfter: 13,
+      surcharge: 1_000_000,
+      lockedTotal: 30_000_000,
+    });
+    const after = calculateMealPrice({
+      dishesTotal: BASE.dishesTotal,
+      servingTables: 13,
+      guestsPerTable: 10,
+      services: [],
+      surcharge: 1_000_000,
+    }).total;
+
+    expect(evaluation.totalBefore).toBe(30_000_000);
+    expect(evaluation.totalAfter).toBe(after);
+  });
 });

@@ -7,6 +7,7 @@ import {
   ShieldIcon,
 } from "@/components/icons";
 import { MaskImage } from "@/components/motion/MaskImage";
+import { MEDIA_FOLDER, mediaKey } from "@/lib/media";
 import { Reveal } from "@/components/motion/Reveal";
 
 export function AuthLayout({ children }: { children: ReactNode }) {
@@ -14,7 +15,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
     <div className="auth">
       <div className="auth-media">
         <MaskImage
-          src="/images/scenes/auth.jpg"
+          imageKey={mediaKey(MEDIA_FOLDER.Scenes, "auth.jpg")}
           alt=""
           sizes="(max-width: 760px) 100vw, 520px"
         />

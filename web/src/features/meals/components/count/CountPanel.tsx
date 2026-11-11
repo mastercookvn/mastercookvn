@@ -179,7 +179,6 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
     <>
       <PanelHeader
         title="Biên bản kiểm đếm"
-        subtitle="Mặc định mọi dụng cụ về đủ và tốt. Chỉ sửa dòng có hư, mất."
         actions={
           <ExportButton
             fileName={`bien-ban-kiem-dem-${meal.orderCode}`}

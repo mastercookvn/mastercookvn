@@ -26,7 +26,17 @@ export function PaymentPanel({ contract }: { contract: Contract }) {
         paymentIntentKey(contract.number, PAYMENT_PURPOSE.Deposit)
       ]
   );
+  const issued = useDemoState((state) => state.contractIssued);
   const deposit = minimumDeposit(contract);
+
+  if (!issued) {
+    return (
+      <Alert tone="wait">
+        Cơ sở chưa phát hành hợp đồng. Bạn ký và thanh toán cọc được sau khi tư
+        vấn chốt giá, hạn cọc và phát hành.
+      </Alert>
+    );
+  }
 
   if (paidAmount > 0) {
     return (

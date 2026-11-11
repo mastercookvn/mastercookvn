@@ -91,7 +91,6 @@ export function ContractTable() {
       <PanelHeader
         title="Tất cả hợp đồng"
         count={contracts.length}
-        subtitle="Tra cứu hợp đồng, phụ lục và giao dịch. Bấm một dòng để mở."
         actions={
           <ExportButton
             fileName="hop-dong"

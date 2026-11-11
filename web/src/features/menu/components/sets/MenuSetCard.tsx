@@ -2,7 +2,7 @@ import { MaskImage } from "@/components/motion/MaskImage";
 import { Reveal } from "@/components/motion/Reveal";
 import { formatMoney } from "@/lib/format";
 import {
-  dishImage,
+  dishById,
   menuSetDishNames,
   menuSetPrice,
   type MenuSet,
@@ -20,7 +20,7 @@ export function MenuSetCard({
   return (
     <article className="set-card">
       <MaskImage
-        src={dishImage(set.imageDishId)}
+        imageKey={dishById(set.imageDishId).imageKey}
         alt={`Minh họa ${set.name}`}
         sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw"
         delayMs={index * 120}

@@ -13,19 +13,19 @@ export async function WorkspaceSidebarFooter() {
 
   return (
     <div className="workspace-sidebar-foot">
-      <div>
+      <div className="workspace-label">
         <b>{session?.name}</b>
         <span>{session?.roles.map((role) => ROLE_LABEL[role]).join(", ")}</span>
       </div>
-      <Link href={ROUTES.home}>
+      <Link href={ROUTES.home} title="Xem trang bán hàng">
         <HomeIcon size={15} />
-        Xem trang bán hàng
+        <span className="workspace-label">Xem trang bán hàng</span>
       </Link>
       <ResetDemoButton />
       <form action={logout.bind(null, ROUTES.login)}>
-        <button type="submit">
+        <button type="submit" title="Đăng xuất">
           <LogoutIcon size={15} />
-          Đăng xuất
+          <span className="workspace-label">Đăng xuất</span>
         </button>
       </form>
     </div>

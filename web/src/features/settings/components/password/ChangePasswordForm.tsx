@@ -63,10 +63,7 @@ export function ChangePasswordForm({
 
   return (
     <>
-      <PanelHeader
-        title="Mật khẩu và đăng nhập"
-        subtitle="Mật khẩu chỉ bạn biết. Quên mật khẩu thì nhờ Quản lý cơ sở đặt lại, hệ thống không gửi email."
-      />
+      <PanelHeader title="Mật khẩu và đăng nhập" />
       <div className="password-layout">
         <form
           className="card l-stack"

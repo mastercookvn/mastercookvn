@@ -141,7 +141,6 @@ function StaffingEditor({
       <PanelHeader
         title="Phân công nhân sự"
         count={draft.length}
-        subtitle="Hệ thống đề xuất theo số khách, số lượt đãi và số bàn mỗi lượt. Điều chỉnh lại nếu chưa hợp lý rồi lưu."
         actions={
           <Button
             onClick={() => {

@@ -24,14 +24,14 @@ export async function TasksPanel() {
 
   return (
     <>
-      <PanelHeader
-        title="Việc cần xử lý"
-        count={tasks.length}
-        subtitle="5 việc gấp nhất của vai trò bạn đang giữ. Bấm một dòng để xử lý."
-      />
+      <PanelHeader title="Việc cần xử lý" count={tasks.length} />
       <KpiBar items={kpis} />
       <div className="l-grid l-grid-decision">
-        <TaskQueue tasks={tasks} showGroup={isManager || roles.length > 1} />
+        <TaskQueue
+          tasks={tasks}
+          showGroup={isManager || roles.length > 1}
+          showNewOrders={isManager || roles.includes(ROLE.Consultant)}
+        />
         <div className="l-stack">
           <UpcomingMealList />
           <StockAlertList />

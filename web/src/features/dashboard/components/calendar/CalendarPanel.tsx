@@ -5,10 +5,7 @@ import { MealCalendar } from "./MealCalendar";
 export function CalendarPanel() {
   return (
     <>
-      <PanelHeader
-        title="Lịch tiệc"
-        subtitle="Xem theo tuần để điều phối, theo tháng để nắm tổng quan"
-      />
+      <PanelHeader title="Lịch tiệc" />
       <MealCalendar />
     </>
   );

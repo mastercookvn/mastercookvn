@@ -1,3 +1,4 @@
+import type { MediaKey } from "@/lib/media";
 import { proposedIngredientPrice, type RecipeLine } from "@/lib/pricing";
 
 /** BR06, section 9.3. */
@@ -158,6 +159,7 @@ export type Ingredient = {
   unit: string;
   price: number;
   usedIn: string;
+  imageKey?: MediaKey;
 };
 
 export type PurchaseLine = {

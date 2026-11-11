@@ -193,9 +193,18 @@ const HELD_OVERLAPPING: Record<string, number> = {
   "Rạp che": 2,
 };
 
+/** Quantity already held by meals that overlap this one (sample). */
+export const heldByOverlappingMeals = (name: string) =>
+  HELD_OVERLAPPING[name] ?? 0;
+
 /** BR13 */
-export function capacityRows(simulateShortage: boolean) {
-  const meal = CONTRACT_WEDDING.meals[0];
+export function capacityRows(
+  simulateShortage: boolean,
+  meal: Pick<
+    (typeof CONTRACT_WEDDING.meals)[number],
+    "servingTables" | "guestsPerTable" | "setupTables"
+  > = CONTRACT_WEDDING.meals[0]
+) {
   const guests = meal.servingTables * meal.guestsPerTable;
   return EQUIPMENT.map((item) => {
     const needed = equipmentDemand(item, guests, meal.setupTables, 2);

@@ -8,10 +8,7 @@ import { INVENTORY_PERIOD } from "@/mocks/inventory";
 export function BusinessSettingsForm() {
   return (
     <>
-      <PanelHeader
-        title="Tham số nghiệp vụ"
-        subtitle="Áp dụng cho dữ liệu mới từ lúc lưu, không đổi cam kết đã chốt"
-      />
+      <PanelHeader title="Tham số nghiệp vụ" />
       <div className="l-grid l-grid-3">
         <section className="card l-stack">
           <h3 className="card-title card-title-flush">Giá</h3>

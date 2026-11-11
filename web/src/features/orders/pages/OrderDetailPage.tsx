@@ -8,24 +8,24 @@ import { OrderHeader } from "../components/detail/OrderHeader";
 import { OrderMealsPanel } from "../components/detail/OrderMealsPanel";
 import { SiteSurveyForm } from "../components/survey/SiteSurveyForm";
 
-const withRail = (panel: ReactNode) => (
-  <div className="l-grid l-grid-decision">
-    <div className="l-stack">{panel}</div>
-    <AcceptanceRail />
-  </div>
-);
+export function OrderDetailPage({ code }: { code: string }) {
+  const withRail = (panel: ReactNode) => (
+    <div className="l-grid l-grid-decision">
+      <div className="l-stack">{panel}</div>
+      <AcceptanceRail code={code} />
+    </div>
+  );
 
-export function OrderDetailPage() {
   return (
     <WorkspaceTabs
       screen="orderDetail"
       showTitle={false}
       headerGap="gap-3.5"
-      header={<OrderHeader />}
+      header={<OrderHeader code={code} />}
       panels={{
-        meals: withRail(<OrderMealsPanel />),
-        survey: withRail(<SiteSurveyForm />),
-        capacity: withRail(<CapacityCheck />),
+        meals: withRail(<OrderMealsPanel code={code} />),
+        survey: withRail(<SiteSurveyForm code={code} />),
+        capacity: withRail(<CapacityCheck code={code} />),
       }}
     />
   );

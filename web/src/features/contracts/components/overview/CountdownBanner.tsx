@@ -10,9 +10,10 @@ import { isAwaitingContract } from "@/features/contracts/lib/contractState";
 /** Display only. The server enforces the deadline. */
 export function CountdownBanner({ contract }: { contract: Contract }) {
   const active = useDemoState(
-    (state) => state.depositPaid && state.contractConfirmed,
+    (state) => state.depositPaid && state.contractConfirmed
   );
-  if (!isAwaitingContract(contract)) return null;
+  const issued = useDemoState((state) => state.contractIssued);
+  if (!isAwaitingContract(contract) || !issued) return null;
 
   if (active) {
     return (

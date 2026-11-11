@@ -18,15 +18,20 @@ export async function WorkspaceTabs({
   showTitle = true,
   header,
   headerGap = "gap-2",
+  only,
 }: {
   screen: WorkspaceScreenKey;
   panels: Record<string, ReactNode>;
   showTitle?: boolean;
   header?: ReactNode;
   headerGap?: string;
+  /** Tabs that apply to this record's stage; role filtering still applies. */
+  only?: readonly string[];
 }) {
   const roles = await getStaffRoles();
-  const tabs = visibleTabs(screen, roles);
+  const tabs = visibleTabs(screen, roles).filter(
+    (tab) => !only || only.includes(tab.value)
+  );
 
   if (!canViewScreen(screen, roles) || tabs.length === 0) {
     return <NoPermissionState roles={roles} />;

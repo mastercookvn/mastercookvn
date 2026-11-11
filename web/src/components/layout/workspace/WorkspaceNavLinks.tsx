@@ -24,17 +24,20 @@ export function WorkspaceNavLinks({ groups }: { groups: WorkspaceNavGroup[] }) {
 
   return groups.map((group) => (
     <div key={group.label} className="contents">
-      <div className="workspace-nav-group">{group.label}</div>
+      <div className="workspace-nav-group">
+        <span className="workspace-label">{group.label}</span>
+      </div>
       {group.items.map((item) => (
         <Link
           key={item.href}
           href={item.href}
           className="workspace-nav-link"
           aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
+          title={item.label}
           onClick={closeDrawer}
         >
           {item.icon}
-          {item.label}
+          <span className="workspace-label">{item.label}</span>
         </Link>
       ))}
     </div>

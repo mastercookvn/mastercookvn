@@ -36,7 +36,6 @@ export function EquipmentPurchasesPanel() {
       <PanelHeader
         title="Phiếu nhập mua dụng cụ"
         count={purchases.length}
-        subtitle="Lưu phiếu sẽ cộng số lượng vào Sở hữu và Sẵn sàng"
         actions={
           <>
             <ExportButton
@@ -96,7 +95,6 @@ export function EquipmentPurchasesPanel() {
           if (!open) setDraft(DRAFT.Closed);
         }}
         title="Tạo phiếu nhập mua dụng cụ"
-        description="Đơn giá tự điền theo giá mua lần trước, sửa được."
         size={DRAWER_SIZE.Large}
         formId={FORM_ID}
         submitLabel="Lưu phiếu nhập"

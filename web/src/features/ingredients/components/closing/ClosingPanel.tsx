@@ -31,7 +31,6 @@ export function ClosingPanel() {
     <>
       <PanelHeader
         title={`Chốt kỳ food cost ${period.month}`}
-        subtitle="Định giá tồn bình quân gia quyền tháng"
         actions={
           <>
             <ExportButton

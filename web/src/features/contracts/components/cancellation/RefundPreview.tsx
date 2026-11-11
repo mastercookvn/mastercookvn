@@ -1,16 +1,26 @@
 import { MoneyRow } from "@/components/ui/MoneyRow";
 import { formatMoney } from "@/lib/format";
+import type { CancellationResult } from "@/lib/pricing";
 import {
-  CANCELLATION_HOUSEWARMING as result,
+  CANCELLATION_HOUSEWARMING,
   CONTRACT_HOUSEWARMING,
 } from "@/mocks/contracts";
 
-export function RefundPreview({ compact = false }: { compact?: boolean }) {
+export function RefundPreview({
+  compact = false,
+  result = CANCELLATION_HOUSEWARMING,
+  paid = CONTRACT_HOUSEWARMING.paid,
+}: {
+  compact?: boolean;
+  result?: CancellationResult;
+  /** Collected and allocated to this meal. */
+  paid?: number;
+}) {
   return (
     <>
       <MoneyRow
         label={compact ? "Đã thu phân bổ" : "Đã thu phân bổ cho bữa"}
-        value={formatMoney(CONTRACT_HOUSEWARMING.paid)}
+        value={formatMoney(paid)}
       />
       <MoneyRow
         label={

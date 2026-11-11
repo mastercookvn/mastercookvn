@@ -2,33 +2,21 @@ import { BowlIcon } from "@/components/icons";
 import { MaskImage } from "@/components/motion/MaskImage";
 import { Reveal } from "@/components/motion/Reveal";
 import { formatMoney } from "@/lib/format";
-import { dishPhoto, type Dish } from "@/mocks/catalog";
+import type { Dish } from "@/mocks/catalog";
 
 const SIZES = "(max-width: 760px) 50vw, (max-width: 1080px) 50vw, 25vw";
 
-export function DishCard({
-  dish,
-  index = 0,
-}: {
-  dish: Dish & { image?: string };
-  index?: number;
-}) {
-  const photo = dishPhoto(dish);
-
+export function DishCard({ dish, index = 0 }: { dish: Dish; index?: number }) {
   return (
     <article className="dish-card">
-      {photo ? (
-        <MaskImage
-          src={photo}
-          alt={`Minh họa ${dish.name}`}
-          sizes={SIZES}
-          delayMs={index * 120}
-        />
-      ) : (
-        <span className="media dish-card-placeholder">
-          <BowlIcon size={40} />
-        </span>
-      )}
+      <MaskImage
+        imageKey={dish.imageKey}
+        alt={`Minh họa ${dish.name}`}
+        sizes={SIZES}
+        delayMs={index * 120}
+        className="media dish-card-placeholder"
+        fallback={<BowlIcon size={40} />}
+      />
       <Reveal
         variant="up"
         delayMs={index * 120 + 500}

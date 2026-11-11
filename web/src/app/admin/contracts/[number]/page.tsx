@@ -4,6 +4,9 @@ import { ContractManagementPage } from "@/features/contracts/pages/ContractManag
 
 export const metadata: Metadata = { title: "Chi tiết hợp đồng" };
 
-export default function Page() {
-  return <ContractManagementPage />;
+export default async function Page({
+  params,
+}: PageProps<"/admin/contracts/[number]">) {
+  const { number } = await params;
+  return <ContractManagementPage number={decodeURIComponent(number)} />;
 }

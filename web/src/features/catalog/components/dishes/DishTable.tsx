@@ -51,14 +51,14 @@ export function DishTable({
         costOf(dish.id) > 0
           ? formatPercent(dishFoodCost(costOf(dish.id), dish.price) ?? 0)
           : "",
-        dish.image ? (
-          <Badge key="image" tone="info">
-            Đã tải
+        dish.imageKey ? (
+          <Badge key="image" tone="good">
+            Đã có
           </Badge>
         ) : (
-          <span key="image" className="text-soft text-small">
-            Ảnh mẫu
-          </span>
+          <Badge key="image" tone="wait">
+            Chưa có
+          </Badge>
         ),
         dish.active ? (
           <Badge key="status" tone="good">

@@ -9,7 +9,6 @@ export function PricingPanel() {
     <>
       <PanelHeader
         title="Đề xuất giá nguyên liệu tháng 11/2026"
-        subtitle="Tính từ phiếu nhập 02/10–31/10, trọng số 1,5; 1,5; 2 từ cũ đến mới"
         actions={<PriceProposalProgress />}
       />
       <PriceProposalTable />

@@ -1,11 +1,17 @@
+"use client";
+
 import { MealPriceBreakdown } from "@/components/ui/MealPriceBreakdown";
 import { ServingWavesList } from "@/components/ui/ServingWavesList";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { CONTRACT_WEDDING } from "@/mocks/contracts";
 
-export function OrderMealsPanel() {
-  return CONTRACT_WEDDING.meals.map((meal, index) => (
-    <section key={meal.name} className="card">
+import { useWorkspaceOrder } from "@/features/orders/lib/useOrders";
+
+export function OrderMealsPanel({ code }: { code: string }) {
+  const order = useWorkspaceOrder(code);
+  if (!order) return null;
+
+  return order.mealDetails.map((meal, index) => (
+    <section key={index} className="card">
       <div className="l-between mb-1.5">
         <h3 className="card-title card-title-flush">
           Bữa {index + 1}: {meal.name}
@@ -27,7 +33,7 @@ export function OrderMealsPanel() {
           />
         </div>
         <div>
-          <MealPriceBreakdown price={meal.price} />
+          {meal.price ? <MealPriceBreakdown price={meal.price} /> : null}
         </div>
       </div>
     </section>

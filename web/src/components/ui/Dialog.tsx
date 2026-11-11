@@ -12,6 +12,7 @@ type DialogProps = {
   confirmLabel: string;
   confirmVariant?: ComponentProps<typeof Button>["variant"];
   onConfirm: () => void;
+  confirmDisabled?: boolean;
   children: ReactNode;
 };
 
@@ -23,6 +24,7 @@ export function Dialog({
   confirmLabel,
   confirmVariant = "primary",
   onConfirm,
+  confirmDisabled = false,
   children,
 }: DialogProps) {
   const container =
@@ -41,6 +43,7 @@ export function Dialog({
             <BaseDialog.Close className="btn">Quay lại</BaseDialog.Close>
             <Button
               variant={confirmVariant}
+              disabled={confirmDisabled}
               onClick={() => {
                 onOpenChange(false);
                 onConfirm();

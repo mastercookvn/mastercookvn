@@ -25,7 +25,6 @@ export function PurchasesPanel() {
       <PanelHeader
         title="Phiếu nhập nguyên liệu"
         count={purchases.length}
-        subtitle="Không gắn với bữa tiệc. Tháng đã chốt không ghi được."
         actions={
           <>
             <ExportButton
@@ -66,7 +65,6 @@ export function PurchasesPanel() {
         open={adding}
         onOpenChange={setAdding}
         title="Tạo phiếu nhập nguyên liệu"
-        description="Lưu phiếu sẽ ghi vào tổng nhập của tháng để kiểm kê."
         size={DRAWER_SIZE.Large}
         formId={FORM_ID}
         submitLabel="Lưu phiếu nhập"

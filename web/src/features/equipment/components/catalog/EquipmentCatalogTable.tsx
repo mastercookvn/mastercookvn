@@ -50,7 +50,6 @@ export function EquipmentCatalogTable({ roles }: { roles: Role[] }) {
       <PanelHeader
         title="Danh mục dụng cụ"
         count={equipment.length}
-        subtitle="Lượng tồn tăng qua phiếu nhập mua. Giá bồi thường chỉ Quản lý cơ sở được sửa."
         actions={
           <AddButton onClick={() => setEditingName(NEW_EQUIPMENT)}>
             Thêm dụng cụ
@@ -135,11 +134,6 @@ export function EquipmentCatalogTable({ roles }: { roles: Role[] }) {
           if (!open) setEditingName(null);
         }}
         title={editing ? `Sửa: ${editing.name}` : "Thêm dụng cụ"}
-        description={
-          editing
-            ? "Tồn kho chỉ đổi qua phiếu nhập mua, kiểm đếm và xử lý đồ hư."
-            : "Dụng cụ mới có tồn bằng 0. Tạo phiếu nhập mua để có hàng."
-        }
         formId={FORM_ID}
         submitLabel={editing ? "Lưu thay đổi" : "Thêm dụng cụ"}
       >

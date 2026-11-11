@@ -144,6 +144,14 @@ export const STAFF: StaffMember[] = [
     hasAccount: false,
   },
   {
+    name: "Trịnh Quốc Bảo",
+    phone: "0912 000 888",
+    type: "Thời vụ",
+    position: "Phục vụ",
+    active: true,
+    hasAccount: false,
+  },
+  {
     name: "Hoàng Anh Khoa",
     phone: "0912 000 666",
     type: "Cố định",

@@ -23,6 +23,7 @@ import {
   type Contract,
 } from "@/mocks/contracts";
 import { useDemoState } from "@/mocks/demoStore";
+import { mealTitle } from "@/features/booking/lib/mealTitle";
 
 export const ORDER_GROUP = {
   Open: "open",
@@ -81,6 +82,7 @@ export function useCustomerOrders(): CustomerOrder[] {
   const settlementStatus = useDemoState((state) => state.settlementStatus);
   const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
   const submitted = useDemoState((state) => state.submittedOrders);
+  const orderStatuses = useDemoState((state) => state.orderStatuses);
 
   const companyNote = {
     [SETTLEMENT_STATUS.Draft]: "Đang chờ kế toán quyết toán",
@@ -96,14 +98,24 @@ export function useCustomerOrders(): CustomerOrder[] {
       orderCode: order.code,
       contractNumber: null,
       eventType: order.eventType,
-      mealNames: order.meals.map(
-        (meal, index) => meal.name.trim() || `Bữa ${index + 1}`
+      mealNames: order.meals.map((meal, index) =>
+        mealTitle(meal, `Bữa ${index + 1}`)
       ),
       dates: order.meals.map((meal) => meal.date),
       total: order.total,
       group: ORDER_GROUP.Open,
-      badge: <StatusBadge domain="order" status={ORDER_STATUS.Pending} />,
-      note: `Gửi ngày ${order.submittedAt} · Tư vấn sẽ gọi khảo sát rồi lập hợp đồng`,
+      badge: (
+        <StatusBadge
+          domain="order"
+          status={orderStatuses[order.code] ?? ORDER_STATUS.Pending}
+        />
+      ),
+      note:
+        orderStatuses[order.code] === ORDER_STATUS.Rejected
+          ? `Gửi ngày ${order.submittedAt} · Cơ sở không nhận được đơn này`
+          : orderStatuses[order.code] === ORDER_STATUS.Accepted
+            ? `Gửi ngày ${order.submittedAt} · Đã nhận, chờ cơ sở phát hành hợp đồng`
+            : `Gửi ngày ${order.submittedAt} · Tư vấn sẽ gọi khảo sát rồi lập hợp đồng`,
       accent: "var(--color-wait)",
       actions: null,
     })),

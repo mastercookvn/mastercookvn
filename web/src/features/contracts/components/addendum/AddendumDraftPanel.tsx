@@ -21,13 +21,16 @@ import {
 import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { DISHES, dishById, menuSetById, menuSetPrice } from "@/mocks/catalog";
+import { daysUntil, type Contract, type Meal } from "@/mocks/contracts";
 import {
-  CONTRACT_HOUSEWARMING,
-  daysUntil,
-  MEAL_HOUSEWARMING as meal,
-} from "@/mocks/contracts";
+  readDemoState,
+  updateDemoState,
+  useDemoState,
+} from "@/mocks/demoStore";
+import { OPERATION_MEALS } from "@/mocks/operationMeals";
 
-const SET = menuSetById("tatnien");
+import { addedTablesShortages } from "@/features/contracts/lib/addendumResources";
+
 const NO_CHANGE = "none";
 
 const ADDENDUM_STEP = {
@@ -58,13 +61,44 @@ const CHECK_LABEL = {
   [CHECK_RESULT.NotNeeded]: "Không áp dụng",
 };
 
-export function AddendumDraftPanel() {
+export function AddendumDraftPanel({
+  contract,
+  meal,
+}: {
+  contract: Contract;
+  meal: Meal;
+}) {
   const showToast = useToast();
+  const SET = menuSetById(meal.setId);
   const daysLeft = daysUntil(meal.startsAt);
-  const [tablesAfter, setTablesAfter] = useState(17);
+  const staff = useDemoState((state) => state.staff);
+  const equipment = useDemoState((state) => state.equipment);
+  const assignments = useDemoState((state) => state.assignments);
+  const applied = useDemoState(
+    (state) => state.appliedAddenda[contract.number]
+  );
+  const customerConfirmed = useDemoState((state) => state.addendumConfirmed);
+  const [tablesAfter, setTablesAfter] = useState(
+    applied?.tables ?? meal.servingTables + 5
+  );
   const [dishOut, setDishOut] = useState(NO_CHANGE);
   const [dishIn, setDishIn] = useState(NO_CHANGE);
-  const [step, setStep] = useState<AddendumStep>(ADDENDUM_STEP.Draft);
+  const [localStep, setStep] = useState<AddendumStep>(ADDENDUM_STEP.Draft);
+
+  // Other meals the same day hold their staff; this meal's own crew stays available.
+  const busyStaff = OPERATION_MEALS.filter(
+    (other) =>
+      other.date === meal.date.slice(0, 5) &&
+      other.orderCode !== contract.orderCode
+  ).flatMap((other) => (assignments[other.id] ?? []).map((row) => row.staff));
+  const resourceShortages = addedTablesShortages({
+    waves: meal.waves,
+    guestsPerTable: meal.guestsPerTable,
+    added: tablesAfter - meal.servingTables,
+    staff,
+    busyStaff,
+    equipment,
+  });
 
   const swapping = dishOut !== NO_CHANGE && dishIn !== NO_CHANGE;
   const evaluation = evaluateAddendum({
@@ -78,8 +112,32 @@ export function AddendumDraftPanel() {
       ? dishById(dishIn).price - dishById(dishOut).price
       : null,
     hasOtherPendingAddendum: false,
+    surcharge: meal.price.surcharge,
+    lockedTotal: meal.price.total,
+    resourceShortages,
   });
+  // The customer may confirm from their own page; an applied addendum is kept.
+  const step: AddendumStep = applied
+    ? ADDENDUM_STEP.Applied
+    : customerConfirmed && localStep < ADDENDUM_STEP.AwaitingDeposit
+      ? evaluation.needsExtraDeposit
+        ? ADDENDUM_STEP.AwaitingDeposit
+        : ADDENDUM_STEP.Applied
+      : localStep;
   const locked = step !== ADDENDUM_STEP.Draft;
+
+  const apply = () => {
+    updateDemoState({
+      appliedAddenda: {
+        ...readDemoState().appliedAddenda,
+        [contract.number]: {
+          tables: tablesAfter,
+          total: evaluation.totalAfter,
+        },
+      },
+    });
+    setStep(ADDENDUM_STEP.Applied);
+  };
 
   const flow = [
     { title: "Lập phụ lục", hint: "Tư vấn ghi trước, sau, chênh lệch" },
@@ -104,7 +162,9 @@ export function AddendumDraftPanel() {
     const next = evaluation.needsExtraDeposit
       ? ADDENDUM_STEP.AwaitingDeposit
       : ADDENDUM_STEP.Applied;
-    setStep(next);
+    updateDemoState({ addendumConfirmed: true });
+    if (next === ADDENDUM_STEP.Applied) apply();
+    else setStep(next);
     showToast(
       next === ADDENDUM_STEP.Applied
         ? "Khách đã xác nhận, phụ lục được áp dụng vào bữa"
@@ -116,7 +176,7 @@ export function AddendumDraftPanel() {
     <>
       <PanelHeader
         title="Sửa hợp đồng bằng phụ lục"
-        subtitle={`${CONTRACT_HOUSEWARMING.number} · ${meal.name} · Bữa ${meal.date} · Còn ${daysLeft} ngày`}
+        subtitle={`${contract.number} · ${meal.name} · Bữa ${meal.date} · Còn ${daysLeft} ngày`}
         actions={<StatusBadge domain="addendum" status={STEP_STATUS[step]} />}
       />
 
@@ -312,7 +372,7 @@ export function AddendumDraftPanel() {
               <Button
                 variant="primary"
                 onClick={() => {
-                  setStep(ADDENDUM_STEP.Applied);
+                  apply();
                   showToast("Đã đủ cọc bổ sung, phụ lục được áp dụng");
                 }}
               >

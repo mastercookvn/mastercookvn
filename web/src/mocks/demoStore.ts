@@ -5,14 +5,20 @@
 import { useSyncExternalStore } from "react";
 
 import {
+  MENU_MODE,
+  SERVING_FORMAT,
+  type MenuMode,
+  type ServingFormat,
+} from "@/constants/booking";
+import {
   MEAL_STATUS,
-  ORDER_STATUS,
   SETTLEMENT_STATUS,
   type MealStatus,
   type OrderStatus,
   type PaymentPurpose,
   type SettlementStatus,
 } from "@/constants/statuses";
+import type { MediaKey } from "@/lib/media";
 import type { ServingWave } from "@/lib/servingWaves";
 
 import {
@@ -39,22 +45,28 @@ import {
 } from "./people";
 
 export type EstimateMeal = {
+  format: ServingFormat;
   name: string;
   /** Solar date, dd/MM/yyyy. A lunar pick is converted before it lands here. */
   date: string;
   address: string;
   guestsPerTable: number;
+  /** Trays keep a single entry: delivery window and number of trays. */
   waves: ServingWave[];
-  mode: "set" | "custom";
+  mode: MenuMode;
   setId: string;
   dishIds: string[];
   serviceIds: string[];
 };
 
 export type CatalogDish = Dish & {
-  /** Data URL of an uploaded photo. Falls back to the bundled sample image. */
-  image?: string;
   active: boolean;
+};
+
+export type BookingContact = {
+  name: string;
+  phone: string;
+  note: string;
 };
 
 /** Amount the customer locked in before the QR code is shown. */
@@ -70,6 +82,7 @@ export type SubmittedOrder = {
   code: string;
   submittedAt: string;
   eventType: string;
+  contact?: BookingContact;
   meals: EstimateMeal[];
   total: number;
 };
@@ -79,6 +92,7 @@ const DEFAULT_DISH_IDS = ["goi", "chagio", "ga", "bo", "lauthai", "traicay"];
 const INITIAL_STATE = {
   estimate: [
     {
+      format: SERVING_FORMAT.Waves,
       name: "Tiệc cưới nhà gái",
       date: "14/12/2026",
       address: "24 Nguyễn Gia Trí, Bình Thạnh, TP.HCM",
@@ -88,7 +102,7 @@ const INITIAL_STATE = {
         { from: "12:00", to: "13:00", tables: 10 },
         { from: "13:00", to: "14:00", tables: 10 },
       ],
-      mode: "set",
+      mode: MENU_MODE.Set,
       setId: "hysu",
       dishIds: DEFAULT_DISH_IDS,
       serviceIds: ["don", "cong"],
@@ -102,10 +116,14 @@ const INITIAL_STATE = {
   settlementPaidAmount: 0,
   paymentVouchers: ["CT-1104-01", "CT-1104-02"],
   addendumConfirmed: false,
+  /** Meal size and value after an applied addendum, by contract number (BR09). */
+  appliedAddenda: {} as Record<string, { tables: number; total: number }>,
   mealCancelled: false,
   reviewSubmitted: false,
-  orderStatus: ORDER_STATUS.Pending as OrderStatus,
-  surveyDistanceKm: 9.5,
+  /** Consultant decisions by order code; missing means the sample status. */
+  orderStatuses: {} as Record<string, OrderStatus>,
+  /** Surveyed distance by `${orderCode}:${mealIndex}` (BR01, BR07). */
+  surveyDistances: {} as Record<string, number>,
   simulateShortage: false,
   contractIssued: false,
   paperSigned: false,
@@ -136,16 +154,17 @@ const INITIAL_STATE = {
     image: string;
     signedAt: string;
   },
-  /** Uploaded photos by service id, as data URLs. */
-  serviceImages: {} as Record<string, string>,
+  /** Photos uploaded in this browser, by media key, until the presigned upload API exists. */
+  mediaUploads: {} as Record<MediaKey, string>,
   bookingEventType: "Cưới hỏi",
+  bookingContact: { name: "", phone: "", note: "" } as BookingContact,
   submittedOrders: [] as SubmittedOrder[],
 };
 
 export type DemoState = typeof INITIAL_STATE;
 
-const DRAFT_KEY = "mastercook.estimate-draft.v2";
-const STATE_KEY = "mastercook.demo-state.v1";
+const DRAFT_KEY = "mastercook.estimate-draft.v3";
+const STATE_KEY = "mastercook.demo-state.v2";
 
 let state = INITIAL_STATE;
 let loaded = false;
@@ -226,9 +245,20 @@ export function useDemoState<T>(selector: (current: DemoState) => T): T {
   );
 }
 
+/** False until this browser's saved state is read, so pages do not report missing records too early. */
+export function useDemoLoaded(): boolean {
+  return useSyncExternalStore(
+    subscribe,
+    () => loaded,
+    () => false
+  );
+}
+
 export function selectEstimateSet(setId: string) {
   const [first, ...rest] = state.estimate;
-  updateDemoState({ estimate: [{ ...first, mode: "set", setId }, ...rest] });
+  updateDemoState({
+    estimate: [{ ...first, mode: MENU_MODE.Set, setId }, ...rest],
+  });
 }
 
 export const paymentIntentKey = (
@@ -237,12 +267,13 @@ export const paymentIntentKey = (
 ) => `${contractNumber}:${purpose}`;
 
 export const NEW_ESTIMATE_MEAL: EstimateMeal = {
+  format: SERVING_FORMAT.Waves,
   name: "",
   date: "20/12/2026",
   address: "",
   guestsPerTable: 10,
   waves: [{ from: "17:30", to: "20:30", tables: 10 }],
-  mode: "set",
+  mode: MENU_MODE.Set,
   setId: "sumvay",
   dishIds: [],
   serviceIds: ["don"],

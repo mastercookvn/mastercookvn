@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
+import { useMediaSrc } from "@/components/ui/MediaImage";
 import { SelectField } from "@/components/ui/SelectField";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
@@ -11,12 +12,9 @@ import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { formatMoney, formatNumber, formatPercent } from "@/lib/format";
+import { MEDIA_FOLDER, newMediaKey } from "@/lib/media";
 import { dishFoodCost, recipeCost, suggestedDishPrice } from "@/lib/pricing";
-import {
-  DISH_CATEGORY_LABEL,
-  dishPhoto,
-  type DishCategory,
-} from "@/mocks/catalog";
+import { DISH_CATEGORY_LABEL, type DishCategory } from "@/mocks/catalog";
 import {
   readDemoState,
   updateDemoState,
@@ -50,9 +48,10 @@ export function DishForm({
   const [priceText, setPriceText] = useState(
     dish ? formatNumber(dish.price) : ""
   );
-  const [image, setImage] = useState<string | null>(
-    dish ? dishPhoto(dish) : null
-  );
+  const savedImage = useMediaSrc(dish?.imageKey);
+  /** Undefined keeps the saved photo, null removes it, a data URL replaces it. */
+  const [upload, setUpload] = useState<string | null | undefined>(undefined);
+  const image = upload === undefined ? savedImage : upload;
   const ingredients = useDemoState((state) => state.ingredients);
   const [recipe, setRecipe] = useState<DraftRecipeLine[]>(() =>
     (dish ? (readDemoState().recipes[dish.id] ?? []) : []).map((line) => ({
@@ -75,17 +74,19 @@ export function DishForm({
     setSubmitted(true);
     if (nameError || priceError) return;
 
-    const dishes = readDemoState().dishes;
-    const uploaded = image && image.startsWith("data:") ? image : undefined;
+    const { dishes, recipes, mediaUploads } = readDemoState();
+    const imageKey = upload ? newMediaKey(MEDIA_FOLDER.Dishes) : undefined;
     const fields = {
       name: name.trim(),
       category,
       description: description.trim(),
       price,
-      image: uploaded,
+      imageKey: upload === undefined ? dish?.imageKey : imageKey,
     };
-
-    const recipes = readDemoState().recipes;
+    const uploads =
+      upload && imageKey
+        ? { ...mediaUploads, [imageKey]: upload }
+        : mediaUploads;
 
     if (dish) {
       updateDemoState({
@@ -93,6 +94,7 @@ export function DishForm({
           current.id === dish.id ? { ...current, ...fields } : current
         ),
         recipes: { ...recipes, [dish.id]: parsedRecipe },
+        mediaUploads: uploads,
       });
       showToast("Đã lưu. Hợp đồng đã chốt giữ giá cũ.");
       onSaved();
@@ -103,6 +105,7 @@ export function DishForm({
     updateDemoState({
       dishes: [{ id, active: true, ...fields }, ...dishes],
       recipes: { ...recipes, [id]: parsedRecipe },
+      mediaUploads: uploads,
     });
     showToast(`Đã thêm món ${fields.name}`);
     onSaved();
@@ -123,7 +126,7 @@ export function DishForm({
         label="Ảnh món"
         value={image}
         alt={name || "Ảnh món"}
-        onChange={setImage}
+        onChange={setUpload}
       />
       <TextField
         id="dish-name"

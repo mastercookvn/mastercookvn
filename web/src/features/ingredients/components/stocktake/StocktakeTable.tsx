@@ -20,7 +20,6 @@ export function StocktakeTable() {
     <>
       <PanelHeader
         title={`Kiểm kê tháng ${period.month}`}
-        subtitle="Nhập lượng thực tế cuối tháng cho từng nguyên liệu"
         actions={
           <>
             <StatusBadge

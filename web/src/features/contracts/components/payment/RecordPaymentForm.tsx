@@ -33,13 +33,21 @@ const PAYMENT_METHODS = ["Tiền mặt", "Chuyển khoản"];
 
 const parseAmount = (text: string) => Number(text.replace(/\D/g, ""));
 
-export function RecordPaymentForm() {
+/** On a contract page the contract is fixed by the URL. */
+export function RecordPaymentForm({
+  contractNumber: fixedContract,
+}: {
+  contractNumber?: string;
+}) {
   const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
   const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
   const usedVouchers = useDemoState((state) => state.paymentVouchers);
+  const issued = useDemoState((state) => state.contractIssued);
   const showToast = useToast();
 
-  const [contractNumber, setContractNumber] = useState(CONTRACT_WEDDING.number);
+  const [contractNumber, setContractNumber] = useState(
+    fixedContract ?? CONTRACT_WEDDING.number
+  );
   const isSettlement = contractNumber === CONTRACT_COMPANY.number;
   const contract = isSettlement ? CONTRACT_COMPANY : CONTRACT_WEDDING;
 
@@ -53,7 +61,7 @@ export function RecordPaymentForm() {
     ? SETTLEMENT_COMPANY.balance - settlementPaid
     : Math.max(minimumDeposit(CONTRACT_WEDDING) - paid, 0);
 
-  const [amountText, setAmountText] = useState(formatNumber(due));
+  const [amountText, setAmountText] = useState(() => formatNumber(due));
   const [method, setMethod] = useState(PAYMENT_METHODS[0]);
   const [receivedOn, setReceivedOn] = useState("05/11/2026");
   const [voucher, setVoucher] = useState("");
@@ -62,11 +70,13 @@ export function RecordPaymentForm() {
 
   const amount = parseAmount(amountText);
   const amountError =
-    amount <= 0
-      ? "Nhập số tiền thực nhận"
-      : amount > total - paid
-        ? `Vượt số còn phải trả ${formatMoney(total - paid)}`
-        : null;
+    !isSettlement && !issued
+      ? "Hợp đồng chưa phát hành, chưa thu cọc được"
+      : amount <= 0
+        ? "Nhập số tiền thực nhận"
+        : amount > total - paid
+          ? `Vượt số còn phải trả ${formatMoney(total - paid)}`
+          : null;
   const voucherError =
     voucher.trim() === ""
       ? "Nhập mã chứng từ"
@@ -120,14 +130,12 @@ export function RecordPaymentForm() {
 
   return (
     <>
-      <PanelHeader
-        title="Ghi nhận thu tiền"
-        subtitle="Tiền mặt hoặc chuyển khoản ngoài luồng QR"
-      />
+      <PanelHeader title="Ghi nhận thu tiền" />
       <div className="l-grid l-grid-main">
         <section className="card l-stack">
           <div className="l-grid l-grid-2">
             <SelectField
+              disabled={fixedContract !== undefined}
               id="payment-contract"
               label="Hợp đồng"
               options={[

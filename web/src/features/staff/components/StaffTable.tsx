@@ -62,7 +62,6 @@ export function StaffTable() {
       <PanelHeader
         title="Hồ sơ nhân sự"
         count={staff.length}
-        subtitle="Hồ sơ độc lập với tài khoản đăng nhập. Bấm một dòng để xem CV và sửa hồ sơ."
         actions={
           <AddButton onClick={() => setEditingPhone(NEW_STAFF)}>
             Thêm nhân viên
@@ -166,7 +165,7 @@ export function StaffTable() {
         description={
           editing
             ? `${editing.position} · ${editing.type}${editing.hasAccount ? " · Có tài khoản đăng nhập" : ""}`
-            : "Hồ sơ mới có trạng thái Đang làm và chọn được khi phân công bữa."
+            : undefined
         }
         size={DRAWER_SIZE.Large}
         formId={FORM_ID}

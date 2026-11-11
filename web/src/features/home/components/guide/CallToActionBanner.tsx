@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { MediaImage } from "@/components/ui/MediaImage";
+import { MEDIA_FOLDER, mediaKey } from "@/lib/media";
 import Link from "next/link";
 
 import { ArrowIcon } from "@/components/icons";
@@ -11,12 +12,10 @@ export function CallToActionBanner() {
   return (
     <section className="cta on-navy">
       <ScrollParallax factor={0.1} className="media cta-media">
-        <Image
-          src="/images/scenes/cta.jpg"
+        <MediaImage
+          imageKey={mediaKey(MEDIA_FOLDER.Scenes, "cta.jpg")}
           alt=""
-          fill
           sizes="100vw"
-          className="object-cover"
         />
       </ScrollParallax>
       <div className="cta-inner">

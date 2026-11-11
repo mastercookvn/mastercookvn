@@ -98,11 +98,13 @@ export function calculateCancellation({
   const prepaidExcess = paid - basis;
   const refund = basis * rate + prepaidExcess;
   const tierLabel =
-    daysLeft >= 30
-      ? "Còn ít nhất 30 ngày: hoàn 100%"
-      : daysLeft >= 15
-        ? "Còn 15 đến dưới 30 ngày: hoàn 50%"
-        : "Còn dưới 15 ngày: hoàn 0%";
+    daysLeft < 0
+      ? "Đến giờ bắt đầu, khách không có mặt: hoàn 0%"
+      : daysLeft >= 30
+        ? "Còn ít nhất 30 ngày: hoàn 100%"
+        : daysLeft >= 15
+          ? "Còn 15 đến dưới 30 ngày: hoàn 50%"
+          : "Còn dưới 15 ngày: hoàn 0%";
 
   return {
     basis,

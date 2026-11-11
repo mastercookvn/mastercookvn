@@ -71,7 +71,6 @@ export function DishesPanel() {
       <PanelHeader
         title="Món và định lượng"
         count={dishes.length}
-        subtitle="Giá cho bàn ăn chuẩn 10 người. Bấm một dòng để sửa."
         actions={
           <>
             <ExportButton
@@ -138,11 +137,6 @@ export function DishesPanel() {
           if (!open) setEditingId(null);
         }}
         title={editing ? `Sửa món: ${editing.name}` : "Thêm món"}
-        description={
-          editing
-            ? "Hợp đồng đã chốt giữ giá cũ."
-            : "Món mới hiển thị ngay trên thực đơn của khách."
-        }
         size={DRAWER_SIZE.Large}
         formId={FORM_ID}
         submitLabel={editing ? "Lưu thay đổi" : "Thêm món"}

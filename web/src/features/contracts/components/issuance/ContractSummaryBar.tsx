@@ -11,74 +11,69 @@ import { ROUTES } from "@/constants/routes";
 import { CONTRACT_STATUS } from "@/constants/statuses";
 import { useQueryParam } from "@/hooks/useQueryParam";
 import { formatMoney } from "@/lib/format";
-import {
-  CONTRACT_HOUSEWARMING,
-  CONTRACT_WEDDING,
-  CUSTOMER,
-  SETTLEMENT_COMPANY,
-} from "@/mocks/contracts";
+import { SETTLEMENT_COMPANY, type Contract } from "@/mocks/contracts";
 import { useDemoState } from "@/mocks/demoStore";
 
-/**
- * One compact line instead of a grid of tiles: who, when, how much is paid.
- * Sample data: each tab shows a contract at the matching stage.
- */
-function SummaryForTab() {
+import {
+  isAwaitingContract,
+  isAwaitingSettlement,
+  upcomingMeal,
+} from "@/features/contracts/lib/contractState";
+
+/** One compact line instead of a grid of tiles: who, when, how much is paid. */
+function Summary({ contract }: { contract: Contract }) {
   const [tab] = useQueryParam("tab");
   const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
   const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
   const issued = useDemoState((state) => state.contractIssued);
+  const activated = useDemoState(
+    (state) => state.depositPaid && state.contractConfirmed
+  );
+  const applied = useDemoState(
+    (state) => state.appliedAddenda[contract.number]
+  );
+  const edited = applied ? upcomingMeal(contract) : undefined;
 
-  const row =
-    tab === "addendum" || tab === "cancel"
-      ? {
-          number: CONTRACT_HOUSEWARMING.number,
-          customer: "Lý Hoàng Nam",
-          value: CONTRACT_HOUSEWARMING.total,
-          paid: CONTRACT_HOUSEWARMING.paid,
-          firstDate: "22/11/2026",
-          editable: true,
-          status: (
-            <StatusBadge domain="contract" status={CONTRACT_STATUS.Active} />
-          ),
-        }
-      : tab === "settlement"
-        ? {
-            number: SETTLEMENT_COMPANY.contractNumber,
-            customer: CUSTOMER.name,
-            value: SETTLEMENT_COMPANY.settlementTotal,
-            paid: SETTLEMENT_COMPANY.paid + settlementPaid,
-            firstDate: "25/10/2026",
-            editable: false,
-            status: (
-              <StatusBadge domain="contract" status={CONTRACT_STATUS.Active} />
-            ),
+  const awaiting = isAwaitingContract(contract);
+  const settling = isAwaitingSettlement(contract);
+  const row = {
+    number: contract.number,
+    customer: contract.customerName,
+    value: settling
+      ? SETTLEMENT_COMPANY.settlementTotal
+      : edited && applied
+        ? contract.total - edited.price.total + applied.total
+        : contract.total,
+    paid: awaiting
+      ? depositPaidAmount
+      : settling
+        ? SETTLEMENT_COMPANY.paid + settlementPaid
+        : contract.paid,
+    firstDate: contract.meals[0]?.date ?? "",
+    editable: upcomingMeal(contract) !== undefined,
+    status:
+      awaiting && !issued ? (
+        <Badge tone="neutral">Chưa phát hành</Badge>
+      ) : (
+        <StatusBadge
+          domain="contract"
+          status={
+            awaiting && activated ? CONTRACT_STATUS.Active : contract.status
           }
-        : {
-            number: CONTRACT_WEDDING.number,
-            customer: CUSTOMER.name,
-            value: CONTRACT_WEDDING.total,
-            paid: depositPaidAmount,
-            firstDate: "14/12/2026",
-            editable: false,
-            status: issued ? (
-              <StatusBadge
-                domain="contract"
-                status={CONTRACT_STATUS.AwaitingConfirmationAndDeposit}
-              />
-            ) : (
-              <Badge tone="neutral">Chưa phát hành</Badge>
-            ),
-          };
+        />
+      ),
+  };
   const paidShare = row.value ? Math.min(1, row.paid / row.value) : 0;
 
   return (
     <PageHeader
       screen="contractDetail"
       title={`Hợp đồng ${row.number}`}
-      description={`${row.customer} · Bữa đầu ${row.firstDate}`}
       meta={
         <div className="contract-head-meta">
+          <span>
+            {row.customer} · Bữa đầu {row.firstDate}
+          </span>
           {row.status}
           <span className="contract-head-paid">
             Đã thu <b>{formatMoney(row.paid)}</b> / {formatMoney(row.value)}
@@ -107,10 +102,10 @@ function SummaryForTab() {
   );
 }
 
-export function ContractSummaryBar() {
+export function ContractSummaryBar({ contract }: { contract: Contract }) {
   return (
     <Suspense fallback={null}>
-      <SummaryForTab />
+      <Summary contract={contract} />
     </Suspense>
   );
 }

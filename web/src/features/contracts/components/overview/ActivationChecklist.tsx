@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { useQueryParam } from "@/hooks/useQueryParam";
@@ -13,8 +14,19 @@ export function ActivationChecklist() {
   const confirmed = useDemoState((state) => state.contractConfirmed);
   const deposited = useDemoState((state) => state.depositPaid);
   const signature = useDemoState((state) => state.contractSignature);
+  const issued = useDemoState((state) => state.contractIssued);
   const [, setTab] = useQueryParam("tab");
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // BR08: the facility issues first; the customer confirms an issued contract.
+  if (!issued) {
+    return (
+      <Alert tone="wait">
+        Cơ sở chưa phát hành hợp đồng. Bạn ký và thanh toán cọc được sau khi tư
+        vấn chốt giá, hạn cọc và phát hành.
+      </Alert>
+    );
+  }
 
   return (
     <div className="card l-stack">
