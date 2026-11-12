@@ -45,6 +45,31 @@ export default defineConfig([
   },
 
   {
+    files: ["web/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@phosphor-icons/*",
+                "simple-icons",
+                "simple-icons/*",
+                "lucide-react",
+                "react-icons",
+                "react-icons/*",
+                "@heroicons/*",
+              ],
+              message: 'Project icons are custom: "@/components/icons".',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
     ...prettierRecommended,
     files: ["**/*.{js,mjs,cjs,jsx,ts,tsx,mts,cts}"],
   },

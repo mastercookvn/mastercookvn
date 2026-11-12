@@ -3,8 +3,7 @@
     position: sticky;
     top: env(safe-area-inset-top, 0px);
     z-index: 5;
-    background: rgb(248 247 242 / 0.94);
-    backdrop-filter: blur(10px);
+    background: var(--color-ivory);
     border-bottom: 1px solid var(--color-line);
   }
 
@@ -37,7 +36,7 @@
     font-size: var(--text-15);
     color: var(--color-ink);
     transition: color 0.2s var(--ease-in-out-soft);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .nav-link::after {

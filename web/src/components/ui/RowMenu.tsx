@@ -1,7 +1,8 @@
 "use client";
 
 import { Menu } from "@base-ui/react/menu";
-import { MoreHorizontal } from "lucide-react";
+
+import { MoreIcon } from "@/components/icons";
 
 export type RowMenuItem = {
   label: string;
@@ -31,7 +32,7 @@ export function RowMenu({
     >
       <Menu.Root>
         <Menu.Trigger className="row-menu-trigger" aria-label={label}>
-          <MoreHorizontal size={18} strokeWidth={1.75} aria-hidden="true" />
+          <MoreIcon size={18} />
         </Menu.Trigger>
         <Menu.Portal container={container}>
           <Menu.Positioner

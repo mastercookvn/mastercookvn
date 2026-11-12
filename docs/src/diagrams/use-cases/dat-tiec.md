@@ -126,16 +126,16 @@
 
 ## UC-DT-05
 
-| Trường         | Nội dung                                                                                |
-| -------------- | --------------------------------------------------------------------------------------- |
-| Tên            | Xác nhận nhận hoặc từ chối đơn                                                          |
-| Tác nhân       | Nhân viên tư vấn                                                                        |
-| Mục tiêu       | Cơ sở quyết định nhận toàn đơn và giữ tài nguyên tạm.                                   |
-| Kích hoạt      | Đơn đã khảo sát đủ các bữa.                                                             |
-| Tiền điều kiện | Đơn ChoXacNhan; mọi bữa có khảo sát.                                                    |
+| Trường         | Nội dung                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| Tên            | Xác nhận nhận hoặc từ chối đơn                                                                 |
+| Tác nhân       | Nhân viên tư vấn                                                                               |
+| Mục tiêu       | Cơ sở quyết định nhận toàn đơn và giữ tài nguyên tạm.                                          |
+| Kích hoạt      | Đơn đã khảo sát đủ các bữa.                                                                    |
+| Tiền điều kiện | Đơn ChoXacNhan; mọi bữa có khảo sát.                                                           |
 | Hậu điều kiện  | Nhận: đơn DaNhan, giữ tạm 24 giờ (TS16), chuyển lập hợp đồng. Từ chối: đơn BiTuChoi kèm lý do. |
-| Quan hệ        | Include UC-DT-04. Sau khi nhận chuyển UC-HD-01.                                         |
-| Quy tắc        | BR01, BR07                                                                              |
+| Quan hệ        | Include UC-DT-04. Sau khi nhận chuyển UC-HD-01.                                                |
+| Quy tắc        | BR01, BR07                                                                                     |
 
 **Luồng chính**
 

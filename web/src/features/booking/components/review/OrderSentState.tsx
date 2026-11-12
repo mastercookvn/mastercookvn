@@ -6,7 +6,6 @@ export function OrderSentState() {
   return (
     <section className="order-sent" aria-live="polite">
       <div className="order-sent-stage" aria-hidden="true">
-        <span className="order-sent-glow" />
         <Mascot mood="happy" size={180} className="order-sent-mascot" />
       </div>
       <h2 className="order-sent-title">Đặt tiệc thành công!</h2>

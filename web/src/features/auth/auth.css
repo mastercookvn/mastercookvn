@@ -155,8 +155,13 @@
       grid-template-columns: minmax(0, 1fr);
     }
     .auth-media {
-      min-height: 200px;
-      padding: 22px;
+      min-height: 0;
+      padding: 200px 22px 22px;
+      background: var(--color-navy-950);
+    }
+    .auth-media .media {
+      inset: 0 0 auto;
+      height: 260px;
     }
     .auth-media h2 {
       font-size: var(--text-24);
@@ -186,7 +191,6 @@
 
 @layer components {
   .auth-title {
-    font-family: var(--font-display);
     font-size: var(--text-24);
     font-weight: 600;
   }

@@ -1,7 +1,8 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
 import { useState, type ComponentProps } from "react";
+
+import { EyeIcon, EyeOffIcon } from "@/components/icons";
 
 import { Field } from "./Field";
 
@@ -35,11 +36,7 @@ export function PasswordField({
           aria-pressed={visible}
           onClick={() => setVisible(!visible)}
         >
-          {visible ? (
-            <EyeOff size={17} strokeWidth={1.75} aria-hidden="true" />
-          ) : (
-            <Eye size={17} strokeWidth={1.75} aria-hidden="true" />
-          )}
+          {visible ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
         </button>
       </span>
     </Field>

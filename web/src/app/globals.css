@@ -113,13 +113,12 @@
 @theme inline {
   --font-sans:
     var(--font-be-vietnam-pro), system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display:
-    var(--font-playfair-display), "Times New Roman", Georgia, serif;
 }
 
 :root {
   --gutter-left: max(20px, env(safe-area-inset-left, 0px));
   --gutter-right: max(20px, env(safe-area-inset-right, 0px));
+  --icon-accent: var(--color-gold);
 }
 
 [data-surface="workspace"] {
@@ -132,8 +131,7 @@
   --color-primary: #1f2a44;
   --color-good-ink: #2c4e3e;
   --color-info-ink: #2e475c;
-  --radius-control: 7px;
-  --radius-card: 10px;
+  --icon-accent: currentColor;
 }
 
 @layer base {
@@ -166,7 +164,6 @@
   }
 
   :where(h1, h2):not([data-surface="workspace"] *) {
-    font-family: var(--font-display);
     letter-spacing: -0.01em;
   }
 

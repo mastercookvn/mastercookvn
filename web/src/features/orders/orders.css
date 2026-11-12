@@ -4,7 +4,7 @@
     gap: 2px;
     background: var(--color-workspace-fill);
     padding: 2px;
-    border-radius: 3px;
+    border-radius: var(--radius-card);
     width: fit-content;
     max-width: 100%;
     overflow-x: auto;
@@ -12,7 +12,7 @@
 
   .segments button {
     padding: 6px 13px;
-    border-radius: 4px;
+    border-radius: var(--radius-control);
     font-size: var(--text-14);
     font-weight: 600;
     color: var(--color-ink-muted);
@@ -22,7 +22,6 @@
   .segments button.is-on {
     background: var(--color-surface);
     color: var(--color-ink);
-    box-shadow: 0 1px 1px rgb(11 26 51 / 0.1);
   }
 
   .filter-bar {

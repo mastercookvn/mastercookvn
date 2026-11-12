@@ -73,7 +73,7 @@
     align-items: flex-start;
     gap: 8px;
     padding: 20px 22px;
-    border-radius: 10px;
+    border-radius: var(--radius-card);
     background: var(--color-ivory-deep);
     font-size: var(--text-14);
   }

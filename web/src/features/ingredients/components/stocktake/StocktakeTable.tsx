@@ -85,7 +85,7 @@ export function StocktakeTable() {
               }
             />,
             tooHigh ? (
-              <span key="note" className="text-small font-medium text-error">
+              <span key="note" className="text-small font-semibold text-error">
                 Vượt đầu + nhập
               </span>
             ) : (

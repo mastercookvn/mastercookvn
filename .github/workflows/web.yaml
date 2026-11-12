@@ -70,6 +70,8 @@ jobs:
         run: pnpm test:run
 
       - name: Build
+        env:
+          BUILD_STANDALONE: "true"
         run: pnpm --filter @mastercookvn/web build
 
       - name: Docker build

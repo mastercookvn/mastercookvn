@@ -20,7 +20,7 @@ export function HeroSection() {
             variant="fade"
             immediate
             delayMs={200}
-            className="eyebrow text-xl"
+            className="eyebrow text-20"
           >
             Tiệc nấu sẵn, giao tận nơi
           </Reveal>
@@ -34,9 +34,9 @@ export function HeroSection() {
             delayMs={800}
             className="hero-lead"
           >
-            <span className="text-2xl font-bold">MasterCookVN</span> chuẩn bị
-            món tại bếp của cơ sở, rồi mang đến địa điểm của bạn cùng người phục
-            vụ, bàn ghế và dụng cụ. Bạn chỉ việc chọn món và mời khách.
+            <span className="font-semibold">MasterCookVN</span> chuẩn bị món tại
+            bếp của cơ sở, rồi mang đến địa điểm của bạn cùng người phục vụ, bàn
+            ghế và dụng cụ. Bạn chỉ việc chọn món và mời khách.
           </Reveal>
           <Reveal variant="up" immediate delayMs={920} className="l-row gap-5">
             <ButtonLink href={ROUTES.booking} variant="inverse" size="lg">

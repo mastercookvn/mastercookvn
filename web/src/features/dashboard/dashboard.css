@@ -19,7 +19,7 @@
     display: inline-flex;
     padding: 3px;
     border: 1px solid var(--color-line);
-    border-radius: 6px;
+    border-radius: var(--radius-card);
     background: var(--color-surface);
   }
 
@@ -27,7 +27,7 @@
     min-height: 36px;
     padding: 6px 16px;
     border: 0;
-    border-radius: 4px;
+    border-radius: var(--radius-control);
     background: transparent;
     font: inherit;
     font-size: var(--text-14);
@@ -81,7 +81,7 @@
     min-height: 280px;
     min-width: 0;
     padding: 12px 10px;
-    border-radius: 10px;
+    border-radius: var(--radius-card);
     background: rgb(11 26 51 / 0.035);
   }
 
@@ -99,7 +99,7 @@
 
   .calendar-week-head span {
     font-size: var(--text-12-5);
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-ink-muted);
   }
 
@@ -135,19 +135,16 @@
     gap: 4px;
     padding: 10px 12px;
     border: 1px solid var(--color-line);
-    border-radius: 8px;
+    border-radius: var(--radius-control);
     background: var(--color-surface);
     color: var(--color-ink);
     text-decoration: none;
     line-height: 1.4;
-    transition:
-      border-color 0.15s,
-      box-shadow 0.15s;
+    transition: border-color 0.15s;
   }
 
   .calendar-week-event:hover {
     border-color: var(--color-line-strong);
-    box-shadow: 0 2px 8px rgb(11 26 51 / 0.08);
   }
 
   .calendar-event-time {
@@ -155,7 +152,7 @@
     align-items: center;
     gap: 8px;
     font-size: var(--text-12-5);
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-ink-muted);
     font-variant-numeric: tabular-nums;
   }
@@ -181,7 +178,7 @@
     grid-template-columns: repeat(7, minmax(110px, 1fr));
     min-width: 770px;
     border: 1px solid var(--color-line);
-    border-radius: 6px;
+    border-radius: var(--radius-card);
     background: var(--color-surface);
     overflow: hidden;
   }
@@ -199,7 +196,7 @@
 
   .calendar-cell.is-head {
     min-height: 0;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--color-ink-muted);
     text-align: center;
     font-size: var(--text-13-5);
@@ -215,7 +212,7 @@
     min-width: 28px;
     padding: 0 7px;
     border: 0;
-    border-radius: 4px;
+    border-radius: var(--radius-control);
     background: none;
     font: inherit;
     font-weight: 600;
@@ -243,7 +240,7 @@
     gap: 6px;
     min-width: 0;
     padding: 3px 6px;
-    border-radius: 6px;
+    border-radius: var(--radius-control);
     font-size: var(--text-12-5);
     line-height: 1.35;
     color: var(--color-ink);
@@ -262,7 +259,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   @media (max-width: 900px) {
@@ -321,7 +318,7 @@
     flex-wrap: wrap;
     padding: 14px 16px;
     border: 1px solid var(--color-workspace-line);
-    border-radius: 12px;
+    border-radius: var(--radius-card);
     background: var(--color-surface);
   }
 

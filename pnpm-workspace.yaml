@@ -24,7 +24,6 @@ catalog:
   "tailwindcss": ^4.3.3
   "@tailwindcss/postcss": ^4.3.3
   "postcss": ^8.5.32
-  "lucide-react": 1.62.0
 
   # testing
   "vitest": ^5.0.5
