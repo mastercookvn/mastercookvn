@@ -57,7 +57,7 @@
 
 **Ngoại lệ**
 
-- 2e. Sai SĐT/mật khẩu hoặc tài khoản bị khóa: báo lỗi chung, không tạo phiên.
+- 2e. Sai SĐT/mật khẩu hoặc tài khoản bị khóa: báo lỗi chung, không tạo phiên. Quá 5 lần nhập sai liên tiếp (TS57): hệ thống tạm khóa tài khoản để bảo mật.
 
 ## UC-TK-03
 
@@ -280,9 +280,14 @@
 
 **Luồng chính**
 
-1. Hệ thống hiển thị tham số hiện hành: food cost mục tiêu, thuế, phạm vi km, hạn giữ chỗ, % cọc tối thiểu, mốc đổi món/bàn, % giảm bàn tối đa, bậc hoàn, tỷ lệ người phục vụ/bàn.
-2. Quản lý sửa giá trị.
-3. Hệ thống kiểm tra miền giá trị, lưu kèm người sửa, thời điểm áp dụng.
+1. Hệ thống hiển thị danh mục tham số nghiệp vụ toàn hệ thống kèm giá trị hiện hành:
+   - *Tài chính & Giá*: Food cost mục tiêu (mặc định 35%), Thuế suất VAT (8% hoặc 10%), Tỷ lệ cọc tối thiểu (TS06 = 50%), Đơn vị làm tròn tiền (TS51 = 500 VNĐ).
+   - *Quy mô & Thực đơn*: Số người/bàn tối thiểu (TS01 = 10), khuyến nghị tối đa (TS02 = 12), Số món tự chọn tối thiểu (TS03 = 6), Số bàn tối thiểu (TS21 = 1), tối đa/buổi (TS22 = 40), Trần bàn ghế toàn cơ sở/ngày (TS56 = 100 bàn).
+   - *Thời gian & Giữ chỗ*: Số ngày đặt trước [3, 90] ngày (TS18, TS20), Thời hạn giữ chỗ tạm (TS16 = 24h), Hiệu lực QR (TS17 = 15 phút), Hiệu lực snapshot giá (TS15 = 7 ngày).
+   - *Điều chỉnh & Hủy*: Mốc đổi món (TS23 = 5 ngày), Mốc đổi bàn (TS24 = 3 ngày), Tỷ lệ giảm bàn tối đa (TS25 = 15%), Bảng bậc hoàn cọc (TS27: $\ge 30$ ngày 100%, 15–<30 ngày 50%, <15 ngày 0%).
+   - *Vận hành & Tài nguyên*: Bán kính phục vụ tối đa (TS31 = 20 km), Bán kính miễn phí vận chuyển (TS29 = 10 km, phụ phí TS30 = 15.000 đ/km), Tỷ lệ dự trù dụng cụ (TS08 = 10%), Ngưỡng hao hụt miễn bồi thường (TS49 = 1%), Giờ có mặt trước tiệc (TS35 = 3h), Giờ cách ly vệ sinh dụng cụ (TS36 = 12h), Giờ làm tối đa/ngày (TS40 = 12h), Nghỉ giữa ca (TS41 = 8h), Định mức phục vụ ($\lceil \text{bàn}/3 \rceil$), Định mức bếp ($\max(2, \lceil \text{bàn}/5 \rceil)$), Số lần sai mật khẩu trước khi khóa (TS57 = 5 lần).
+2. Quản lý sửa giá trị mong muốn.
+3. Hệ thống kiểm tra miền giá trị hợp lệ, lưu giá trị mới kèm người sửa và thời điểm áp dụng; không thay đổi các hợp đồng và cam kết đã chốt trước thời điểm lưu.
 
 **Luồng thay thế**
 
@@ -290,4 +295,4 @@
 
 **Ngoại lệ**
 
-- 3e. Tỷ lệ ngoài (0, 100%], số âm, mốc không hợp lệ: không lưu.
+- 3e. Tỷ lệ ngoài (0, 100%], số âm, mốc thời gian không hợp lệ, hoặc vi phạm ngưỡng giới hạn an toàn: từ chối lưu, yêu cầu nhập lại.

@@ -16,8 +16,8 @@
 **Luồng chính**
 
 1. Khách xem món, set, dịch vụ, chính sách cọc/hủy.
-2. Khách thêm bữa: ngày, số bàn ăn, số người/bàn, set hoặc món tự chọn, dịch vụ.
-3. Hệ thống tính tiền từng bữa (món × hệ số quy mô × bàn ăn + dịch vụ + phụ thu lễ + thuế, làm tròn 500đ) và tổng.
+2. Khách thêm bữa: ngày tổ chức (đặt trước 3–90 ngày theo TS18, TS20), số bàn ăn (1–40 bàn theo TS21, TS22), số người/bàn (tối thiểu 10 người theo TS01, khuyến nghị $\le 12$ theo TS02), set hoặc món tự chọn (tối thiểu 6 món đang phục vụ theo TS03), dịch vụ.
+3. Hệ thống tính tiền từng bữa (món × hệ số quy mô $n/10$ × bàn ăn + dịch vụ + phụ thu lễ + thuế, làm tròn bội số 500đ theo TS51) và tổng tạm tính.
 4. Hệ thống hiển thị bảng tạm tính, ghi rõ chưa phải cam kết.
 
 **Luồng thay thế**
@@ -27,7 +27,7 @@
 
 **Ngoại lệ**
 
-- 3e. Tự chọn dưới 6 món, món/set đã ngưng, người/bàn dưới 10: báo bữa cần sửa, không tính.
+- 3e. Tự chọn dưới 6 món (TS03), món/set đã ngưng, người/bàn dưới 10 (TS01), số bàn ngoài khoảng [1, 40] (TS21, TS22), hoặc ngày đặt ngoài khoảng [3, 90] ngày (TS18, TS20): báo bữa cần sửa, không tính.
 
 ## UC-DT-02
 
@@ -46,21 +46,21 @@
 
 1. Hệ thống lấy hồ sơ khách từ tài khoản đăng nhập.
 2. Khách chọn loại tiệc, nhập ghi chú chung.
-3. Khách thêm từng bữa: ngày giờ bắt đầu/kết thúc, địa chỉ, số bàn ăn, số người/bàn, số bàn bố trí, set/món, dịch vụ.
+3. Khách thêm từng bữa: ngày giờ bắt đầu/kết thúc (đặt trước 3–90 ngày), địa chỉ, số bàn ăn (1–40 bàn), số người/bàn ($\ge 10$), số bàn bố trí ($\le$ số bàn ăn), set/món ($\ge 6$ món tự chọn), dịch vụ.
 4. Hệ thống kiểm tra dữ liệu từng bữa, tính tiền từng bữa và tổng.
 5. Khách xem tóm tắt, gửi đơn.
 6. Hệ thống lưu đơn ChoXacNhan, các bữa DuKien, báo tư vấn qua dashboard.
 
 **Luồng thay thế**
 
-- 1a. Đặt hộ: tư vấn nhập tên, SĐT; hệ thống tìm hồ sơ theo SĐT, không có thì tạo hồ sơ (không tạo tài khoản). Khách đăng ký sau được liên kết (UC-TK-01).
+- 1a. Đặt hộ: tư vấn nhập tên, SĐT chuẩn hóa 10 chữ số; hệ thống tìm hồ sơ theo SĐT, không có thì tạo hồ sơ (không tạo tài khoản). Khách đăng ký sau được liên kết (UC-TK-01).
 - 3a. Đến từ UC-DT-01: điền sẵn các bữa đã tạm tính.
 - 5a. Chưa gửi: nháp chỉ giữ trên trình duyệt.
 
 **Ngoại lệ**
 
 - 1e. Đặt hộ, SĐT đã thuộc hồ sơ tên khác: hiển thị hồ sơ hiện có, tư vấn xác nhận đúng người; không tạo hồ sơ thứ hai.
-- 4e. Thiếu thông tin, ngày quá khứ, kết thúc trước bắt đầu, bàn bố trí > bàn ăn, dưới 6 món tự chọn: chỉ rõ bữa lỗi, không gửi.
+- 4e. Thiếu thông tin, ngày ngoài khoảng [3, 90] ngày, kết thúc trước bắt đầu, bàn bố trí > bàn ăn, người/bàn < 10, dưới 6 món tự chọn, số bàn ngoài [1, 40]: chỉ rõ bữa lỗi, không gửi.
 
 ## UC-DT-03
 
@@ -80,17 +80,17 @@
 1. Tư vấn chọn đơn, chọn bữa.
 2. Hệ thống hiển thị địa chỉ và các câu hỏi gợi ý (điện, nước, chỗ nấu, tầng/thang máy, xe tiếp cận, diện tích).
 3. Tư vấn nhập câu trả lời, ghi chú hiện trạng, khoảng cách km (tra thủ công).
-4. Hệ thống kiểm tra khoảng cách ≤ 20 km, lưu khảo sát gắn bữa.
+4. Hệ thống kiểm tra khoảng cách ≤ 20 km (TS31), lưu khảo sát gắn bữa.
 
 **Luồng thay thế**
 
 - 1a. Đơn nhiều bữa cùng địa chỉ: vẫn khảo sát riêng từng bữa, có thể chép câu trả lời rồi sửa.
-- 3a. Hiện trạng cần phụ thu: ghi khoản phụ thu thỏa thuận vào bữa.
+- 3a. Hiện trạng cần phụ thu: ghi khoản phụ thu thỏa thuận vào bữa (ví dụ: khoảng cách > 10 km tính cước vận chuyển 15.000 đ/km theo TS29, TS30; phục vụ kết thúc sau 22h tính phụ thu 500.000 đ/giờ theo TS33; lên tầng không thang máy).
 - 4a. Sửa khảo sát trước khi nhận đơn: cập nhật, lưu người/thời điểm sửa.
 
 **Ngoại lệ**
 
-- 4e. Khoảng cách > 20 km: lưu khảo sát, đánh dấu ngoài phạm vi; UC-DT-05 không cho nhận.
+- 4e. Khoảng cách > 20 km (TS31): lưu khảo sát, đánh dấu ngoài phạm vi; UC-DT-05 không cho nhận.
 
 ## UC-DT-04
 
@@ -107,11 +107,11 @@
 
 **Luồng chính**
 
-1. Tư vấn nhập/kiểm tra khung sử dụng dụng cụ và giờ làm nhân sự từng bữa.
-2. Hệ thống loại các giữ tạm đã hết hạn.
-3. Hệ thống tính nhu cầu dụng cụ từng loại = ceil(định mức × cơ sở × (1 + dự trù)); đồ cồng kềnh lấy lượng nhập tay.
-4. Hệ thống gom lượng đã giữ chồng giờ (đơn khác + các bữa khác cùng đơn), so với lượng sở hữu dùng được.
-5. Hệ thống gợi ý phục vụ = ceil(bàn bố trí / 3), cộng nhu cầu nhân sự dự kiến của các bữa chồng giờ, so với nhân sự đang làm.
+1. Tư vấn nhập/kiểm tra khung sử dụng dụng cụ (tính cả 12 giờ cách ly vệ sinh TS36) và giờ làm nhân sự (nhân sự có mặt trước 3 giờ TS35).
+2. Hệ thống loại các giữ tạm đã hết hạn (quá 24 giờ TS16).
+3. Hệ thống tính nhu cầu dụng cụ từng loại = ceil(định mức × cơ sở × (1 + dự trù 10% theo TS08)); đồ cồng kềnh lấy lượng nhập tay.
+4. Hệ thống gom lượng đã giữ chồng giờ (đơn khác + các bữa khác cùng đơn), so với lượng sở hữu dùng được; kiểm tra trần năng lực toàn cơ sở $\le 100$ bàn/ngày (TS56) và $\le 3$ tiệc/ngày (TS11).
+5. Hệ thống tính gợi ý nhân sự: phục vụ = ceil(bàn bố trí / 3) (TS42), bếp = max(2, ceil(bàn ăn / 5)) (TS43), bốc vác = 2 người / 10 bàn có rạp (TS44); cộng nhu cầu nhân sự dự kiến của các bữa chồng giờ, so với nhân sự khả dụng (đảm bảo $\le 12$h làm/ngày theo TS40 và nghỉ giữa 2 ca $\ge 8$h theo TS41).
 6. Hệ thống trả kết quả đủ/thiếu theo từng bữa, từng loại.
 
 **Luồng thay thế**
@@ -122,7 +122,7 @@
 **Ngoại lệ**
 
 - 1e. Khung tài nguyên không bao phủ giờ phục vụ: yêu cầu sửa.
-- 6e. Thiếu thực tế: trả danh sách thiếu; tư vấn điều chỉnh bữa hoặc chờ bổ sung.
+- 6e. Thiếu thực tế hoặc vượt trần năng lực cơ sở (100 bàn/ngày hoặc 3 tiệc/ngày): trả danh sách thiếu; tư vấn điều chỉnh bữa hoặc từ chối nhận.
 
 ## UC-DT-05
 
@@ -133,7 +133,7 @@
 | Mục tiêu       | Cơ sở quyết định nhận toàn đơn và giữ tài nguyên tạm.                                   |
 | Kích hoạt      | Đơn đã khảo sát đủ các bữa.                                                             |
 | Tiền điều kiện | Đơn ChoXacNhan; mọi bữa có khảo sát.                                                    |
-| Hậu điều kiện  | Nhận: đơn DaNhan, giữ tạm 24 giờ, chuyển lập hợp đồng. Từ chối: đơn BiTuChoi kèm lý do. |
+| Hậu điều kiện  | Nhận: đơn DaNhan, giữ tạm 24 giờ (TS16), chuyển lập hợp đồng. Từ chối: đơn BiTuChoi kèm lý do. |
 | Quan hệ        | Include UC-DT-04. Sau khi nhận chuyển UC-HD-01.                                         |
 | Quy tắc        | BR01, BR07                                                                              |
 
@@ -142,7 +142,7 @@
 1. Tư vấn mở đơn, xem khảo sát và tiền từng bữa.
 2. Hệ thống chạy UC-DT-04 cho toàn đơn.
 3. Tư vấn chọn nhận.
-4. Hệ thống kiểm tra lại tài nguyên và ghi giữ tạm cho mọi bữa trong cùng một giao dịch, hạn 24 giờ.
+4. Hệ thống kiểm tra lại tài nguyên và ghi giữ tạm cho mọi bữa trong cùng một giao dịch, hạn 24 giờ (TS16).
 5. Hệ thống chuyển đơn DaNhan, mở UC-HD-01.
 
 **Luồng thay thế**
@@ -152,7 +152,7 @@
 
 **Ngoại lệ**
 
-- 2e. Bữa ngoài 20 km hoặc thiếu tài nguyên: không cho nhận; không nhận một phần đơn.
+- 2e. Bữa ngoài 20 km (TS31) hoặc thiếu tài nguyên: không cho nhận; không nhận một phần đơn.
 - 4e. Tài nguyên vừa bị đơn khác chiếm: hủy giao dịch, hiển thị thiếu.
 
 ## UC-DT-06

@@ -44,9 +44,9 @@
 **Luồng chính**
 
 1. Quản lý nhân sự chọn bữa từ dashboard/lịch tiệc.
-2. Hệ thống hiển thị bàn bố trí, gợi ý phục vụ ceil(bàn bố trí / 3), nhu cầu dự kiến theo vị trí, số đã phân công.
-3. Quản lý nhân sự chọn người, vị trí, nhiệm vụ, giờ bắt đầu/kết thúc.
-4. Hệ thống kiểm tra người đang làm, không trùng khung với phân công khác.
+2. Hệ thống hiển thị bàn bố trí, gợi ý định mức nhân sự: phục vụ = ceil(bàn bố trí / 3) (TS42), bếp = max(2, ceil(bàn ăn / 5)) (TS43), bốc vác = 2 người / 10 bàn có rạp (TS44); hiển thị nhu cầu dự kiến theo vị trí và số đã phân công.
+3. Quản lý nhân sự chọn người, vị trí, nhiệm vụ, giờ bắt đầu/kết thúc (giờ bắt đầu trước giờ tiệc ít nhất 3 giờ chuẩn bị theo TS35).
+4. Hệ thống kiểm tra người đang làm, không trùng khung giờ, đảm bảo giờ làm việc ≤ 12h/ngày (TS40) và nghỉ giữa 2 ca liên tiếp ≥ 8h (TS41).
 5. Hệ thống lưu phân công.
 6. Quản lý nhân sự báo nhân viên qua Zalo/điện thoại.
 
@@ -58,7 +58,7 @@
 
 **Ngoại lệ**
 
-- 4e. Trùng giờ hoặc người ngưng làm: yêu cầu chọn người khác.
+- 4e. Trùng giờ, vượt trần 12h làm/ngày (TS40), nghỉ giữa ca < 8h (TS41), hoặc người ngưng làm: yêu cầu chọn người khác.
 
 ## UC-VH-01
 

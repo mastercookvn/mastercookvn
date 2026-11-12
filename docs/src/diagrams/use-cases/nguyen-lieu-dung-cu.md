@@ -169,7 +169,7 @@
 **Luồng chính**
 
 1. Thủ kho chọn bữa.
-2. Hệ thống lập phiếu nháp với lượng cần theo định mức, dự trù (đồ cồng kềnh lấy lượng nhập tay).
+2. Hệ thống lập phiếu nháp với lượng cần theo định mức và tỷ lệ dự trù mặc định 10% theo TS08 (đồ cồng kềnh lấy lượng nhập tay); kiểm tra đảm bảo khoảng cách ly vệ sinh 12 giờ giữa hai lượt sử dụng (TS36).
 3. Thủ kho chỉnh lượng thực xuất.
 4. Hệ thống kiểm tra lượng sẵn sàng thực tế, không lấn giữ của bữa khác.
 5. Thủ kho xác nhận xuất.
@@ -202,7 +202,7 @@
 1. Thủ kho chọn bữa.
 2. Hệ thống hiển thị lượng đã xuất, giá bồi thường đã chốt trong hợp đồng.
 3. Thủ kho nhập mỗi loại: tốt, hư, mất; số khách chịu.
-4. Hệ thống kiểm tra tốt + hư + mất = xuất, khách chịu ≤ hư + mất; tính bồi thường = khách chịu × giá chốt.
+4. Hệ thống kiểm tra cân bằng tốt + hư + mất = xuất, khách chịu ≤ hư + mất; áp dụng ngưỡng hao hụt miễn bồi thường 1% số lượng xuất (TS49); tính tiền bồi thường = khách chịu × đơn giá bồi thường đã chốt trong hợp đồng.
 5. Thủ kho xác nhận biên bản.
 6. Hệ thống cộng tốt vào sẵn sàng, hư vào lượng hư, mất giảm sở hữu; nhả giữ; bữa ChoQuyetToan.
 
