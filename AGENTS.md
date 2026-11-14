@@ -17,6 +17,8 @@ tsconfig.base.json
 ## Docs
 
 - Should read and use this as source of specification, always reflect the current state of the system
+- Do not introduce new concepts, business rules that are out of scope, not in docs with no asking and confirmation
+- Docs is the contract, the specification, always
 - Ensure do not commit any generated svg diagrams
 
 ## Technologies
