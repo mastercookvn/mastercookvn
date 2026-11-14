@@ -172,3 +172,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,java
 
 tmp/
+
+.DS_Store
