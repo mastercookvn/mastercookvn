@@ -24,7 +24,8 @@
     "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "modern-web-guidance": "catalog:"
   },
   "devEngines": {
     "packageManager": {

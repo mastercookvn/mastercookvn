@@ -45,7 +45,7 @@ tsconfig.base.json
 
 - Use convetional commits, scope allowed (docs, web, backend, repo), others are not
 - Might use variable and function name in vietnamese, not english
-- Use pnpm workspace, packages catalog, in `pnpm-workspace.yaml`
+- Use pnpm workspace, packages catalog, in `pnpm-workspace.yaml`, `pnpm dlx` over npx
 - Do not wrap small/obvious logic (error handling, simple mapping) into a function, inline it for readability
 - **No writing unnecessary comments** in the code
 - If something is not worth to code/fix, but might have issue in the future, then comments
