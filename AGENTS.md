@@ -5,11 +5,14 @@ Vietnamese Catering service web app
 ## Structure
 
 ```
-docs/        # Vitepress Documentation (business spec, use cases, class, sequence, architecture diagrams, database, etc.)
-...
+docs/                     # Vitepress Documentation (business spec, use cases, class, sequence, architecture diagrams, database, etc.)
+web/                      # Frontend
+backend/                  # Backend
+pom.xml                   # Maven root pom.xml
+package.json
+tsconfig.json             # tsconfig monorepo
+tsconfig.base.json
 ```
-
-To be define: backend, frontend brief structure by team member
 
 ## Docs
 
@@ -20,6 +23,7 @@ To be define: backend, frontend brief structure by team member
 
 - Both frontend and backend are developed with local running process, not docker
 - Prefer test driven development, but skip if not worth to test, or too obvious to test
+- Each sub projects have their own `AGENTS.md`, should be maintained and synchronized, briefly, cohesive, comprehensive
 
 ### Tool chains
 
@@ -42,8 +46,6 @@ To be define: backend, frontend brief structure by team member
 - Use convetional commits, scope allowed (docs, web, backend, repo), others are not
 - Might use variable and function name in vietnamese, not english
 - Use pnpm workspace, packages catalog, in `pnpm-workspace.yaml`
-- Have root `package.json`, for future monorepo if need
-- tsconfig for momorepo structure
 - Do not wrap small/obvious logic (error handling, simple mapping) into a function, inline it for readability
 - **No writing unnecessary comments** in the code
 - If something is not worth to code/fix, but might have issue in the future, then comments
