@@ -7,7 +7,7 @@ import { ChevronIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { DEMO_TODAY } from "@/constants/settings";
-import { formatLunarLong, solarToLunar } from "@/lib/lunar";
+import { formatLunarLong, formatLunarShort, solarToLunar } from "@/lib/lunar";
 import { CALENDAR_EVENTS, type CalendarEvent } from "@/mocks/calendar";
 
 import { CalendarEventChip } from "./CalendarEventChip";
@@ -56,9 +56,7 @@ const eventsOn = (date: Date): CalendarEvent[] =>
 /** Day 1 shows the month too, as printed Vietnamese calendars do. */
 const lunarLabel = (date: Date) => {
   const lunar = solarToLunar(date);
-  return lunar.day === 1
-    ? `1/${lunar.month}${lunar.leap ? "N" : ""}`
-    : String(lunar.day);
+  return lunar.day === 1 ? formatLunarShort(lunar) : String(lunar.day);
 };
 
 const isLunarMark = (date: Date) => {

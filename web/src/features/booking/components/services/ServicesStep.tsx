@@ -1,9 +1,8 @@
 "use client";
 
+import { ServicePicker } from "@/components/ui/ServicePicker";
 import { BookingMealCard } from "@/features/booking/components/flow/BookingMealCard";
 import { useBookingMeals } from "@/features/booking/lib/useBookingMeals";
-
-import { ServicePicker } from "./ServicePicker";
 
 export function ServicesStep() {
   const { meals, updateMeal } = useBookingMeals();

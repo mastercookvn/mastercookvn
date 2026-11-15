@@ -2,31 +2,22 @@
 
 import { useState } from "react";
 
-import { CloseIcon, PlusIcon, UserIcon } from "@/components/icons";
-import { Button } from "@/components/ui/Button";
+import { UserIcon } from "@/components/icons";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
-import { PhotoGalleryField } from "@/components/ui/PhotoGalleryField";
 import { SelectField } from "@/components/ui/SelectField";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 import { STAFF_POSITIONS } from "@/mocks/operationMeals";
-import {
-  STAFF_GENDERS,
-  STAFF_TYPES,
-  type StaffMember,
-  type WorkExperience,
-} from "@/mocks/people";
+import { STAFF_GENDERS, STAFF_TYPES, type StaffMember } from "@/mocks/people";
 
 const PHONE = /^0\d{9}$/;
 const DATE = /^\d{2}\/\d{2}\/\d{4}$/;
 
-const BLANK_EXPERIENCE: WorkExperience = { place: "", role: "", period: "" };
-
 const digitsOf = (phone: string) => phone.replace(/\D/g, "");
 
-/** Add with `member` null; edit the whole profile and CV otherwise. */
+/** Add with `member` null; edit the whole profile otherwise. */
 export function StaffForm({
   formId,
   member,
@@ -55,12 +46,6 @@ export function StaffForm({
     member?.position ?? STAFF_POSITIONS[0]
   );
   const [startDate, setStartDate] = useState(member?.startDate ?? "");
-  const [skills, setSkills] = useState(member?.skills?.join(", ") ?? "");
-  const [experience, setExperience] = useState<WorkExperience[]>(
-    member?.experience?.length ? member.experience : [BLANK_EXPERIENCE]
-  );
-  const [certificates, setCertificates] = useState(member?.certificates ?? "");
-  const [cvFiles, setCvFiles] = useState<string[]>(member?.cvFiles ?? []);
   const [note, setNote] = useState(member?.note ?? "");
   const [submitted, setSubmitted] = useState(false);
 
@@ -82,11 +67,6 @@ export function StaffForm({
       startDate === "" || DATE.test(startDate) ? null : "Dạng dd/mm/yyyy",
   };
 
-  const updateExperience = (index: number, patch: Partial<WorkExperience>) =>
-    setExperience(
-      experience.map((row, i) => (i === index ? { ...row, ...patch } : row))
-    );
-
   const save = () => {
     setSubmitted(true);
     if (Object.values(errors).some(Boolean)) return;
@@ -103,13 +83,6 @@ export function StaffForm({
       address: address.trim(),
       startDate,
       emergencyContact: emergencyContact.trim(),
-      skills: skills
-        .split(",")
-        .map((skill) => skill.trim())
-        .filter(Boolean),
-      experience: experience.filter((row) => row.place.trim()),
-      certificates: certificates.trim(),
-      cvFiles,
       note: note.trim(),
     };
     const staff = readDemoState().staff;
@@ -225,86 +198,7 @@ export function StaffForm({
             onChange={(event) => setStartDate(event.target.value)}
             error={submitted ? errors.startDate : null}
           />
-          <TextField
-            id="staff-skills"
-            label="Kỹ năng"
-            placeholder="Bếp chính, món Á"
-            value={skills}
-            onChange={(event) => setSkills(event.target.value)}
-            hint="Cách nhau bằng dấu phẩy."
-          />
         </div>
-      </fieldset>
-
-      <fieldset className="form-section">
-        <legend>CV, kinh nghiệm làm việc</legend>
-        <div className="l-stack gap-2">
-          {experience.map((row, index) => (
-            <div key={index} className="experience-row">
-              <input
-                className="input"
-                aria-label={`Nơi làm việc ${index + 1}`}
-                placeholder="Nơi làm việc"
-                value={row.place}
-                onChange={(event) =>
-                  updateExperience(index, { place: event.target.value })
-                }
-              />
-              <input
-                className="input"
-                aria-label={`Vị trí ${index + 1}`}
-                placeholder="Vị trí"
-                value={row.role}
-                onChange={(event) =>
-                  updateExperience(index, { role: event.target.value })
-                }
-              />
-              <input
-                className="input"
-                aria-label={`Thời gian ${index + 1}`}
-                placeholder="2019–2022"
-                value={row.period}
-                onChange={(event) =>
-                  updateExperience(index, { period: event.target.value })
-                }
-              />
-              <Button
-                size="sm"
-                variant="text"
-                aria-label={`Xóa kinh nghiệm ${index + 1}`}
-                disabled={experience.length === 1}
-                onClick={() =>
-                  setExperience(experience.filter((_, i) => i !== index))
-                }
-              >
-                <CloseIcon size={16} />
-              </Button>
-            </div>
-          ))}
-          <Button
-            size="sm"
-            className="self-start"
-            onClick={() => setExperience([...experience, BLANK_EXPERIENCE])}
-          >
-            <PlusIcon size={16} />
-            Thêm kinh nghiệm
-          </Button>
-        </div>
-        <TextField
-          id="staff-certificates"
-          label="Bằng cấp, chứng chỉ"
-          placeholder="Tập huấn an toàn thực phẩm 2024"
-          value={certificates}
-          onChange={(event) => setCertificates(event.target.value)}
-        />
-        <PhotoGalleryField
-          id="staff-cv"
-          label="Ảnh CV, bằng cấp"
-          photos={cvFiles}
-          onChange={setCvFiles}
-          max={6}
-          hint="Chụp CV giấy hoặc chứng chỉ để lưu kèm hồ sơ."
-        />
         <TextareaField
           id="staff-note"
           label="Ghi chú"

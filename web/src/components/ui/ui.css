@@ -1,4 +1,13 @@
 @layer components {
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
   .icon {
     display: inline;
     flex: none;
@@ -321,7 +330,8 @@
   }
 
   .field > label,
-  .field-legend {
+  .field-legend,
+  .search-picker-label {
     font-size: var(--text-14);
     font-weight: 600;
     color: var(--color-ink);
@@ -1623,13 +1633,6 @@
     color: var(--color-ink);
   }
 
-  .experience-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.8fr) 36px;
-    gap: 8px;
-    align-items: center;
-  }
-
   .person-cell {
     display: inline-flex;
     gap: 10px;
@@ -1654,16 +1657,6 @@
     font-size: var(--text-12-5);
     font-weight: 600;
     color: var(--color-ink-muted);
-  }
-
-  @media (max-width: 640px) {
-    .experience-row {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px;
-    }
-
-    .experience-row > input:first-child {
-      grid-column: 1 / 3;
-    }
   }
 }
 
@@ -2197,5 +2190,124 @@
   .wave-list small {
     font-size: var(--text-12-5);
     color: var(--color-ink-muted);
+  }
+}
+
+@layer components {
+  .waves {
+    container: waves / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .waves-head {
+    display: none;
+  }
+
+  .waves-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .waves-row {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) minmax(0, 1fr) 36px;
+    grid-template-areas:
+      "index from to remove"
+      ". tables guests .";
+    gap: 8px;
+    align-items: end;
+    padding-block-end: 10px;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .waves-index {
+    grid-area: index;
+    align-self: center;
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: var(--color-ivory-deep);
+    font-size: var(--text-12-5);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .waves-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .waves-field > label {
+    font-size: var(--text-12);
+    font-weight: 600;
+    color: var(--color-ink-subtle);
+  }
+
+  .waves-from {
+    grid-area: from;
+  }
+
+  .waves-to {
+    grid-area: to;
+  }
+
+  .waves-tables {
+    grid-area: tables;
+  }
+
+  .waves-guests {
+    grid-area: guests;
+    align-self: center;
+  }
+
+  .waves-remove {
+    grid-area: remove;
+    align-self: center;
+  }
+
+  .waves-guests,
+  .waves-total {
+    font-size: var(--text-13-5);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-muted);
+  }
+
+  @container waves (min-width: 520px) {
+    .waves-head,
+    .waves-row {
+      grid-template-columns: 36px minmax(0, 1fr) minmax(0, 1fr) 96px 88px 36px;
+      grid-template-areas: "index from to tables guests remove";
+      align-items: center;
+    }
+
+    .waves-head {
+      display: grid;
+      gap: 8px;
+      font-size: var(--text-12);
+      font-weight: 600;
+      color: var(--color-ink-subtle);
+    }
+
+    .waves-row {
+      padding-block-end: 0;
+      border-block-end: 0;
+    }
+
+    .waves-field > label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
   }
 }

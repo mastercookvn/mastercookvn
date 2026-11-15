@@ -72,6 +72,7 @@ export function SearchPicker({
   emptyText: string;
   fallbackIcon: ReactNode;
 }) {
+  const inputId = useId();
   const listId = useId();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -98,14 +99,26 @@ export function SearchPicker({
 
   return (
     <div className="search-picker">
+      <label htmlFor={inputId} className="search-picker-label">
+        {label}
+      </label>
       <div className="search-picker-field">
         <SearchIcon size={16} />
         <input
+          id={inputId}
           className="input"
           role="combobox"
+          type="search"
+          autoComplete="off"
+          spellCheck={false}
+          aria-autocomplete="list"
           aria-expanded={open && results.length > 0}
           aria-controls={listId}
-          aria-label={label}
+          aria-activedescendant={
+            open && results[highlight]
+              ? `${listId}-${results[highlight].id}`
+              : undefined
+          }
           placeholder={placeholder}
           value={query}
           onFocus={() => setOpen(true)}
@@ -135,6 +148,7 @@ export function SearchPicker({
             {results.map((option, index) => (
               <li
                 key={option.id}
+                id={`${listId}-${option.id}`}
                 role="option"
                 aria-selected={index === highlight}
                 className="picker-option"
