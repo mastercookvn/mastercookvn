@@ -1,3 +1,7 @@
+---
+exclude: true
+---
+
 # **CHƯƠNG 1: TỔNG QUAN ĐỀ TÀI**
 
 1. ## **Khảo sát hiện trạng** {#khảo-sát-hiện-trạng}

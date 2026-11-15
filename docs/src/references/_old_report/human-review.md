@@ -1,3 +1,7 @@
+---
+exclude: true
+---
+
 # MasterCookVN - 2026-10-24
 
 ## Deferred - Phát triển trong tương lai

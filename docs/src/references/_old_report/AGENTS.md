@@ -1,3 +1,7 @@
+---
+exclude: true
+---
+
 # Old Report
 
 These files are discussed from team and with AI for the specification of the application. This is not the final compiled specification for the application/business, just take as reference if you need from the past discussion

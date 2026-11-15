@@ -1,3 +1,7 @@
+---
+exclude: true
+---
+
 # BỔ SUNG PHÂN TÍCH NGHIỆP VỤ — ĐỀ TÀI QUẢN LÝ TIỆC NẤU ĂN LƯU ĐỘNG
 
 ## Phần 1. Rà soát báo cáo hiện tại — lỗi, mâu thuẫn, chỗ cần sửa

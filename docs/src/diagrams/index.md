@@ -1,3 +1,7 @@
+---
+order: 2
+---
+
 # Danh mục use case và sơ đồ
 
 Đây là danh mục UC duy nhất. Đặc tả chính dẫn vào trang này; các trang nhóm chỉ ghi chi tiết UC. Mã UC bên dưới thay cho danh sách đề xuất rộng trong bản review AI cũ. Quản lý cơ sở được dùng mọi UC nội bộ (kế thừa các vai trò nội bộ); bảng chỉ ghi tác nhân chính.
