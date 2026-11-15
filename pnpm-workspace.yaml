@@ -69,3 +69,12 @@ minimumReleaseAgeExclude:
   - "@vitejs/plugin-react@6.2.1"
   - eslint-config-next@16.4.4
   - next@16.4.4
+
+permissions:
+  modern-web-guidance:
+    skills: true
+
+skills:
+  dirs:
+    - .claude/skills
+    - .agents/skills

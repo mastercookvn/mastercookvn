@@ -148,7 +148,7 @@ Mỗi bữa hoàn tất tối đa một đánh giá, không bắt buộc; ngư�
 
 ## 6. Mô hình và tài liệu liên quan
 
-[Mô hình lớp](./diagrams/class.md) là nguồn thuộc tính, quan hệ và ràng buộc dữ liệu. [Trạng thái đơn/hợp đồng/bữa](./diagrams/state/don-tiec.md) tách tiến độ khỏi thanh toán; [trạng thái dụng cụ](./diagrams/state/phieu-xuat-dung-cu.md) tách giữ trước khỏi xuất thực tế. [Nội dung hợp đồng](./contracts/service-contract.md) phục vụ lập hợp đồng, không thay đặc tả.
+[Mô hình lớp](./diagrams/class.md) là nguồn thuộc tính, quan hệ và ràng buộc dữ liệu. [Trạng thái đơn/hợp đồng/bữa](./diagrams/state/don-tiec.md) tách tiến độ khỏi thanh toán; [trạng thái dụng cụ](./diagrams/state/phieu-xuat-dung-cu.md) tách giữ trước khỏi xuất thực tế. [Nội dung hợp đồng](./references/service-contract.md) phục vụ lập hợp đồng, không thay đặc tả.
 
 ## 7. Phi chức năng
 
