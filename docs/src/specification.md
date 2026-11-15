@@ -52,7 +52,7 @@ Bếp, phục vụ, vận chuyển là vị trí để phân công, không bắt
 6. Thu hồi/kiểm đếm, ghi bồi thường; quyết toán từng bữa. Đóng hợp đồng khi mọi bữa kết thúc/hủy và đã thu/hoàn đủ.
 7. Cuối tháng kiểm kê, chốt tiêu thụ và food cost; đầu tháng sau tạo đợt đề xuất giá để quản lý xử lý.
 
-Danh mục UC chỉ duy trì tại [chỉ mục phân tích](./diagrams/index.md), không lập lại ở đây.
+Danh mục UC chỉ duy trì tại [danh mục Use Case](./nghiep-vu/danh-muc-use-case.md), không lập lại ở đây. Tra cứu [tham số và giới hạn hệ thống](./nghiep-vu/tham-so.md).
 
 ## 5. Quy tắc nghiệp vụ
 
@@ -148,7 +148,7 @@ Mỗi bữa hoàn tất tối đa một đánh giá, không bắt buộc; ngư�
 
 ## 6. Mô hình và tài liệu liên quan
 
-[Mô hình lớp](./diagrams/class.md) là nguồn thuộc tính, quan hệ và ràng buộc dữ liệu. [Trạng thái đơn/hợp đồng/bữa](./diagrams/state/don-tiec.md) tách tiến độ khỏi thanh toán; [trạng thái dụng cụ](./diagrams/state/phieu-xuat-dung-cu.md) tách giữ trước khỏi xuất thực tế. [Nội dung hợp đồng](./references/service-contract.md) phục vụ lập hợp đồng, không thay đặc tả.
+[Mô hình lớp](./mo-hinh/mo-hinh-lop-class.md) là nguồn thuộc tính, quan hệ và ràng buộc dữ liệu. [Trạng thái đơn/hợp đồng/bữa](./nghiep-vu/trang-thai-don-hop-dong-va-bua.md) tách tiến độ khỏi thanh toán; [trạng thái dụng cụ](./nghiep-vu/nguyen-lieu-va-dung-cu/trang-thai-dung-cu.md) tách giữ trước khỏi xuất thực tế. [Nội dung hợp đồng](./references/service-contract.md) phục vụ lập hợp đồng, không thay đặc tả.
 
 ## 7. Phi chức năng
 

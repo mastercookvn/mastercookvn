@@ -1,3 +1,7 @@
+---
+order: 10
+---
+
 # Nội dung hợp đồng dịch vụ tiệc lưu động
 
 Tài liệu này mô tả nội dung hợp đồng dùng trong đề tài. Dữ liệu từng hợp đồng lấy từ hồ sơ đặt tiệc; không nhập lại qua một biểu mẫu riêng.

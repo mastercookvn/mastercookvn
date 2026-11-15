@@ -10,6 +10,6 @@ hero:
       text: Đặc tả phần mềm
       link: /specification
     - theme: alt
-      text: Use case và sơ đồ
-      link: /diagrams
+      text: Nghiệp vụ và Use Case
+      link: /nghiep-vu/
 ---
