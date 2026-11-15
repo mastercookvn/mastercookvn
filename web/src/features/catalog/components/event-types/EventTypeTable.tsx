@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { AddButton } from "@/components/ui/AddButton";
 import { Badge } from "@/components/ui/Badge";
@@ -14,6 +17,7 @@ import { PanelHeader } from "@/components/ui/PanelHeader";
 import { RowMenu } from "@/components/ui/RowMenu";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
+import { LIVE_VALIDATION_MODE, requiredTextSchema } from "@/lib/validation";
 import { EVENT_TYPES } from "@/mocks/catalog";
 import {
   readDemoState,
@@ -31,24 +35,32 @@ export function EventTypeTable() {
   const eventTypes = useDemoState((state) => state.eventTypes);
   const [open, setOpen] = useState(false);
   const [original, setOriginal] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [deleting, setDeleting] = useState<DeleteTarget>(null);
-
-  const nameError = !name.trim()
-    ? "Nhập tên loại tiệc"
-    : eventTypes.some(
-          (other) =>
-            other !== original &&
-            other.toLowerCase() === name.trim().toLowerCase()
-        )
-      ? "Đã có loại tiệc này"
-      : null;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(
+      z.object({
+        name: requiredTextSchema("tên loại tiệc").refine(
+          (name) =>
+            !eventTypes.some(
+              (other) =>
+                other !== original && other.toLowerCase() === name.toLowerCase()
+            ),
+          "Đã có loại tiệc này"
+        ),
+      })
+    ),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: { name: "" },
+  });
 
   const openForm = (eventType: string | null) => {
     setOriginal(eventType);
-    setName(eventType ?? "");
-    setSubmitted(false);
+    reset({ name: eventType ?? "" });
     setOpen(true);
   };
 
@@ -112,33 +124,27 @@ export function EventTypeTable() {
           id={FORM_ID}
           className="l-stack"
           noValidate
-          onSubmit={(event) => {
-            event.preventDefault();
-            setSubmitted(true);
-            if (nameError) return;
+          onSubmit={handleSubmit(({ name }) => {
             const current = readDemoState().eventTypes;
             updateDemoState({
               eventTypes: original
-                ? current.map((other) =>
-                    other === original ? name.trim() : other
-                  )
-                : [name.trim(), ...current],
+                ? current.map((other) => (other === original ? name : other))
+                : [name, ...current],
             });
             showToast(
               original
-                ? `Đã đổi ${original} thành ${name.trim()}`
-                : `Đã thêm loại tiệc ${name.trim()}`
+                ? `Đã đổi ${original} thành ${name}`
+                : `Đã thêm loại tiệc ${name}`
             );
             setOpen(false);
-          }}
+          })}
         >
           <TextField
             id="event-type-name"
             label="Tên loại tiệc"
             placeholder="Thôi nôi"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            error={submitted ? nameError : null}
+            {...register("name")}
+            error={errors.name?.message}
           />
         </form>
       </Drawer>

@@ -148,11 +148,12 @@ const INITIAL_STATE = {
   equipment: EQUIPMENT,
   equipmentPurchases: [] as EquipmentPurchase[],
   countReports: {} as Record<string, CountReport>,
-  /** Customer's drawn signature when confirming the contract online. */
-  contractSignature: null as null | {
-    name: string;
-    image: string;
-    signedAt: string;
+  /** BR08: online confirmation is the signed-in account agreeing to one contract version. */
+  contractConfirmation: null as null | {
+    accountName: string;
+    accountPhone: string;
+    version: number;
+    confirmedAt: string;
   },
   /** Photos uploaded in this browser, by media key, until the presigned upload API exists. */
   mediaUploads: {} as Record<MediaKey, string>,
@@ -164,7 +165,7 @@ const INITIAL_STATE = {
 export type DemoState = typeof INITIAL_STATE;
 
 const DRAFT_KEY = "mastercook.estimate-draft.v3";
-const STATE_KEY = "mastercook.demo-state.v2";
+const STATE_KEY = "mastercook.demo-state.v3";
 
 let state = INITIAL_STATE;
 let loaded = false;

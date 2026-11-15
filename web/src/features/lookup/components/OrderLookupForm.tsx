@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
@@ -8,13 +11,17 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { TextField } from "@/components/ui/TextField";
 import { ROUTES } from "@/constants/routes";
 import { CUSTOMER } from "@/mocks/contracts";
+import {
+  LIVE_VALIDATION_MODE,
+  phoneSchema,
+  requiredTextSchema,
+} from "@/lib/validation";
 
 import { OrderCard } from "@/features/account/components/orders/OrderCard";
 import {
   useCustomerOrders,
   type CustomerOrder,
 } from "@/features/account/lib/useCustomerOrders";
-import { toLocalPhone } from "@/features/auth/schemas";
 
 type LookupResult =
   | { kind: "found"; order: CustomerOrder; phone: string }
@@ -24,19 +31,29 @@ type LookupResult =
 const normalizeCode = (code: string) =>
   code.trim().toUpperCase().replaceAll(" ", "");
 
+const lookupSchema = z.object({
+  phone: phoneSchema,
+  code: requiredTextSchema("mã đơn hoặc số hợp đồng").transform(normalizeCode),
+});
+
 export function OrderLookupForm() {
   const orders = useCustomerOrders();
-  const [phone, setPhone] = useState("");
-  const [code, setCode] = useState("");
   const [result, setResult] = useState<LookupResult>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(lookupSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: { phone: "", code: "" },
+  });
 
   // Placeholder for GET /orders/lookup. The backend should answer only after an
   // SMS code for this phone, so a leaked order code alone shows nothing.
-  const lookUp = () => {
-    const localPhone = toLocalPhone(phone);
-    const wanted = normalizeCode(code);
+  const lookUp = handleSubmit(({ phone: localPhone, code: wanted }) => {
     const order =
-      localPhone === toLocalPhone(CUSTOMER.phone)
+      localPhone === phoneSchema.parse(CUSTOMER.phone)
         ? orders.find(
             (item) =>
               item.orderCode === wanted || item.contractNumber === wanted
@@ -45,7 +62,7 @@ export function OrderLookupForm() {
     setResult(
       order ? { kind: "found", order, phone: localPhone } : { kind: "missing" }
     );
-  };
+  });
 
   const detailHref = (order: CustomerOrder, localPhone: string) => {
     const target = order.contractNumber
@@ -56,36 +73,26 @@ export function OrderLookupForm() {
 
   return (
     <div className="lookup">
-      <form
-        className="card l-stack lookup-form"
-        noValidate
-        onSubmit={(event) => {
-          event.preventDefault();
-          lookUp();
-        }}
-      >
+      <form className="card l-stack lookup-form" noValidate onSubmit={lookUp}>
         <TextField
           id="lookup-phone"
           label="Số điện thoại đặt tiệc"
           type="tel"
           autoComplete="tel"
           placeholder="0903 123 456"
-          value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          inputMode="tel"
+          {...register("phone")}
+          error={errors.phone?.message}
         />
         <TextField
           id="lookup-code"
           label="Mã đơn hoặc số hợp đồng"
           placeholder="DH-0142 hoặc HD-2026-0142"
           hint="Mã có trong tin nhắn Zalo hoặc SMS tư vấn gửi bạn."
-          value={code}
-          onChange={(event) => setCode(event.target.value)}
+          {...register("code")}
+          error={errors.code?.message}
         />
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={!phone.trim() || !code.trim()}
-        >
+        <Button type="submit" variant="primary">
           Tra cứu
         </Button>
       </form>
@@ -113,8 +120,8 @@ export function OrderLookupForm() {
               }
             />
             <p className="text-small text-soft">
-              Xem chi tiết, ký và thanh toán cần đăng nhập bằng số điện thoại
-              này để bảo vệ thông tin của bạn.
+              Xem chi tiết, xác nhận hợp đồng và thanh toán cần đăng nhập bằng
+              số điện thoại này để bảo vệ thông tin của bạn.
             </p>
           </>
         ) : null}

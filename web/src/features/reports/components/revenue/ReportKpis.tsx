@@ -11,7 +11,7 @@ export function ReportKpis() {
       />
       <StatTile
         value={formatPercent(period.foodCost)}
-        label="Food cost 10/2026"
+        label="Food cost thực tế 10/2026"
       />
       <StatTile
         value={formatMoney(period.margin)}

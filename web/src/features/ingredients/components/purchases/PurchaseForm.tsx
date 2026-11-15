@@ -1,12 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { PhotoGalleryField } from "@/components/ui/PhotoGalleryField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
+import { LIVE_VALIDATION_MODE, purchaseHeaderSchema } from "@/lib/validation";
 import {
   readDemoState,
   updateDemoState,
@@ -20,8 +23,6 @@ import {
   sameName,
   type DraftLine,
 } from "./PurchaseLinesTable";
-
-const DATE = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
 export function PurchaseForm({
   formId,
@@ -41,26 +42,27 @@ export function PurchaseForm({
     price: "",
   });
 
-  const [date, setDate] = useState("05/11/2026");
-  const [supplier, setSupplier] = useState("");
-  const [phone, setPhone] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors: headerErrors },
+  } = useForm({
+    resolver: zodResolver(purchaseHeaderSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: { date: "05/11/2026", supplier: "", phone: "" },
+  });
   const [lines, setLines] = useState<DraftLine[]>(() => [blankLine()]);
   const [photos, setPhotos] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const save = () => {
+  const save = handleSubmit(({ date, supplier, phone }) => {
     const parsed = parseLines(lines);
-    const match = DATE.exec(date.trim());
     const problems = [
-      ...(match ? [] : ["Ngày nhập theo dạng dd/mm/yyyy."]),
-      ...(match &&
-      periodClosed &&
-      `${match[2]}/${match[3]}` === INVENTORY_PERIOD.month
+      ...(periodClosed && date.slice(3) === INVENTORY_PERIOD.month
         ? [
             `Tháng ${INVENTORY_PERIOD.month} đã chốt, không ghi phiếu nhập được.`,
           ]
         : []),
-      ...(supplier.trim() ? [] : ["Nhập tên nhà cung cấp."]),
       ...(parsed.some((line) => line.ingredient === "")
         ? ["Nhập tên nguyên liệu cho mọi dòng."]
         : []),
@@ -94,9 +96,9 @@ export function PurchaseForm({
       purchases: [
         {
           code,
-          date: date.trim(),
-          supplier: supplier.trim(),
-          phone: phone.trim(),
+          date,
+          supplier,
+          phone,
           lines: parsed,
           photos,
         },
@@ -110,39 +112,33 @@ export function PurchaseForm({
         : `Đã lưu phiếu ${code} với ${parsed.length} dòng`
     );
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack" noValidate onSubmit={save}>
       <section className="card l-grid l-grid-3">
         <TextField
           id="purchase-date"
           label="Ngày nhập"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
+          placeholder="dd/mm/yyyy"
+          {...register("date")}
+          error={headerErrors.date?.message}
         />
         <TextField
           id="purchase-supplier"
           label="Nhà cung cấp"
           placeholder="Chợ Bà Chiểu"
-          value={supplier}
-          onChange={(event) => setSupplier(event.target.value)}
+          {...register("supplier")}
+          error={headerErrors.supplier?.message}
           hint="Mua ở chợ có thể bỏ trống SĐT."
         />
         <TextField
           id="purchase-phone"
           label="SĐT nhà cung cấp"
+          type="tel"
           inputMode="tel"
-          value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          {...register("phone")}
+          error={headerErrors.phone?.message}
         />
       </section>
       <PurchaseLinesTable

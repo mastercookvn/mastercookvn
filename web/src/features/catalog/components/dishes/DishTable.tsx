@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
-import { formatMoney, formatPercent } from "@/lib/format";
-import { dishFoodCost, recipeCost } from "@/lib/pricing";
+import { formatMoney } from "@/lib/format";
+import { recipeCost, suggestedDishPrice } from "@/lib/pricing";
 import { DISH_CATEGORY_LABEL } from "@/mocks/catalog";
 import { useDemoState, type CatalogDish } from "@/mocks/demoStore";
 
@@ -32,7 +32,7 @@ export function DishTable({
         "Loại",
         num("Giá bán"),
         num("Chi phí NL"),
-        num("Food cost"),
+        num("Giá gợi ý"),
         "Ảnh",
         "Trạng thái",
         "",
@@ -49,7 +49,7 @@ export function DishTable({
           </span>
         ),
         costOf(dish.id) > 0
-          ? formatPercent(dishFoodCost(costOf(dish.id), dish.price) ?? 0)
+          ? formatMoney(suggestedDishPrice(costOf(dish.id)))
           : "",
         dish.imageKey ? (
           <Badge key="image" tone="good">

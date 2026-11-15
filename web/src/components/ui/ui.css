@@ -1964,12 +1964,6 @@
 }
 
 @layer components {
-  .dialog.dialog-wide {
-    width: min(560px, calc(100% - 32px));
-  }
-}
-
-@layer components {
   .card-link {
     display: inline-block;
     margin-top: 10px;

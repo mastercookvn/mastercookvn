@@ -5,11 +5,12 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { CheckboxLabel } from "@/components/ui/CheckboxLabel";
-import { SignaturePad } from "@/components/ui/SignaturePad";
-import { TextField } from "@/components/ui/TextField";
+import { MoneyRow } from "@/components/ui/MoneyRow";
 import { useToast } from "@/components/ui/Toast";
 import { CUSTOMER } from "@/mocks/contracts";
 import { updateDemoState } from "@/mocks/demoStore";
+
+import { ISSUED_CONTRACT_VERSION } from "@/features/contracts/lib/contractState";
 
 const now = () =>
   new Date().toLocaleString("vi-VN", {
@@ -20,7 +21,7 @@ const now = () =>
     minute: "2-digit",
   });
 
-/** BR08: online confirmation by the account holder, with a drawn signature. */
+/** BR08, UC-HD-02: the signed-in account agrees to the issued version. No OTP, no drawn or digital signature. */
 export function ConfirmContractDialog({
   open,
   onOpenChange,
@@ -29,16 +30,9 @@ export function ConfirmContractDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const showToast = useToast();
-  const [name, setName] = useState(CUSTOMER.name);
-  const [signature, setSignature] = useState<string | null>(null);
   const [agreed, setAgreed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const errors = {
-    name: name.trim() ? null : "Nhập họ tên người ký",
-    signature: signature ? null : "Ký tên vào ô bên trên",
-    agreed: agreed ? null : "Đánh dấu đồng ý với nội dung hợp đồng",
-  };
   const container =
     typeof document === "undefined"
       ? undefined
@@ -46,16 +40,17 @@ export function ConfirmContractDialog({
 
   const confirm = () => {
     setSubmitted(true);
-    if (Object.values(errors).some(Boolean) || !signature) return;
+    if (!agreed) return;
     updateDemoState({
       contractConfirmed: true,
-      contractSignature: {
-        name: name.trim(),
-        image: signature,
-        signedAt: now(),
+      contractConfirmation: {
+        accountName: CUSTOMER.name,
+        accountPhone: CUSTOMER.phone,
+        version: ISSUED_CONTRACT_VERSION,
+        confirmedAt: now(),
       },
     });
-    showToast("Đã ký và xác nhận hợp đồng. Bước tiếp theo là đặt cọc.");
+    showToast("Đã xác nhận hợp đồng. Bước tiếp theo là đặt cọc.");
     onOpenChange(false);
   };
 
@@ -63,42 +58,38 @@ export function ConfirmContractDialog({
     <BaseDialog.Root open={open} onOpenChange={onOpenChange}>
       <BaseDialog.Portal container={container}>
         <BaseDialog.Backdrop className="dialog-backdrop" />
-        <BaseDialog.Popup className="dialog dialog-wide">
+        <BaseDialog.Popup className="dialog">
           <BaseDialog.Title className="dialog-title">
-            Ký xác nhận hợp đồng
+            Xác nhận đồng ý hợp đồng
           </BaseDialog.Title>
           <BaseDialog.Description className="text-small text-soft">
-            Chữ ký có giá trị như ký giấy tại quầy. Hệ thống lưu tài khoản, thời
-            điểm và phiên bản hợp đồng bạn ký.
+            Bạn xác nhận bằng tài khoản đang đăng nhập. Hệ thống lưu tài khoản,
+            thời điểm và phiên bản hợp đồng bạn đồng ý.
           </BaseDialog.Description>
-          <TextField
-            id="contract-signer"
-            label="Họ tên người ký"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            error={submitted ? errors.name : null}
-          />
-          <SignaturePad
-            id="contract-signature"
-            label="Chữ ký"
-            value={signature}
-            onChange={setSignature}
-            error={submitted ? errors.signature : null}
-          />
+          <div className="l-stack gap-1">
+            <MoneyRow label="Tài khoản" value={CUSTOMER.name} />
+            <MoneyRow label="Số điện thoại" value={CUSTOMER.phone} />
+            <MoneyRow
+              label="Phiên bản hợp đồng"
+              value={ISSUED_CONTRACT_VERSION}
+            />
+          </div>
           <CheckboxLabel
             checked={agreed}
             onChange={(event) => setAgreed(event.target.checked)}
           >
             Tôi đã đọc và đồng ý nội dung, giá đã chốt, điều khoản cọc và hủy
-            của hợp đồng phiên bản 1.
+            của hợp đồng phiên bản {ISSUED_CONTRACT_VERSION}.
           </CheckboxLabel>
-          {submitted && errors.agreed ? (
-            <span className="field-error">{errors.agreed}</span>
+          {submitted && !agreed ? (
+            <span className="field-error">
+              Đánh dấu đồng ý với nội dung hợp đồng
+            </span>
           ) : null}
           <div className="l-row justify-end">
             <BaseDialog.Close className="btn">Để sau</BaseDialog.Close>
             <Button variant="primary" onClick={confirm}>
-              Ký và xác nhận
+              Xác nhận đồng ý
             </Button>
           </div>
         </BaseDialog.Popup>

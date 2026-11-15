@@ -8,6 +8,7 @@ import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ToastButton } from "@/components/ui/ToastButton";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { INVENTORY_PERIOD_STATUS } from "@/constants/statuses";
 import { useQueryParam } from "@/hooks/useQueryParam";
 import { formatPercent } from "@/lib/format";
@@ -86,8 +87,9 @@ export function ClosingPanel() {
       {closed ? (
         <Alert tone="info">
           Đã chốt. Quản lý cơ sở có thể dùng {formatPercent(period.foodCost)}{" "}
-          làm mục tiêu tháng sau, giữ 35% hoặc nhập mức khác trong Tham số
-          nghiệp vụ.
+          làm mục tiêu tháng sau, giữ{" "}
+          {formatPercent(BUSINESS_SETTINGS.foodCostTarget, 0)} hoặc nhập mức
+          khác trong Tham số nghiệp vụ. Hệ thống không tự ghi đè mục tiêu.
         </Alert>
       ) : null}
       <ClosePeriodDialog open={dialogOpen} onOpenChange={setDialogOpen} />

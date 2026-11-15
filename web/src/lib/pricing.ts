@@ -170,8 +170,3 @@ export function suggestedDishPrice(
 ): number {
   return foodCostTarget > 0 ? roundTo500(cost / foodCostTarget) : 0;
 }
-
-/** Share of the selling price spent on ingredients; null when there is no price. */
-export function dishFoodCost(cost: number, price: number): number | null {
-  return price > 0 ? cost / price : null;
-}

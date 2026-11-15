@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import {
   calculateCancellation,
   calculateMealPrice,
-  dishFoodCost,
   equipmentNeeded,
   proposedIngredientPrice,
   recipeCost,
@@ -109,10 +108,5 @@ describe("dish pricing from recipe (BR04)", () => {
 
   it("divides cost by the food cost target and rounds to 500", () => {
     expect(suggestedDishPrice(143000, 0.35)).toBe(408500);
-  });
-
-  it("reports food cost share of the selling price", () => {
-    expect(dishFoodCost(143000, 420000)).toBeCloseTo(0.3405, 4);
-    expect(dishFoodCost(143000, 0)).toBeNull();
   });
 });

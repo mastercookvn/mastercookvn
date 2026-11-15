@@ -54,7 +54,10 @@ describe("booking estimate", () => {
 
   it("requires an address", () => {
     expect(mealInfoErrors(meal({ address: " " }))).toContain(
-      "Nhập địa chỉ tổ chức."
+      "Vui lòng nhập địa chỉ."
+    );
+    expect(mealInfoErrors(meal({ address: "Q1" }))).toContain(
+      "Địa chỉ cần ít nhất 5 ký tự, gồm số nhà, đường, phường/quận."
     );
   });
 
@@ -63,8 +66,14 @@ describe("booking estimate", () => {
       contactErrors({ name: "Mai", phone: "0903 123 456", note: "" })
     ).toEqual({ name: null, phone: null });
     expect(contactErrors({ name: "", phone: "123", note: "" })).toEqual({
-      name: "Nhập họ tên người đặt",
-      phone: "Số điện thoại gồm 10 số, bắt đầu bằng 0",
+      name: "Vui lòng nhập họ tên.",
+      phone: "Số di động gồm 10 số, bắt đầu bằng 03, 05, 07, 08, 09.",
+    });
+    expect(
+      contactErrors({ name: "Mai 9", phone: "0903 abc 456", note: "" })
+    ).toEqual({
+      name: "Họ tên chỉ gồm chữ cái và khoảng trắng.",
+      phone: "Số điện thoại chỉ gồm chữ số.",
     });
   });
 

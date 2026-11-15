@@ -9,6 +9,7 @@ import {
 } from "@/mocks/catalog";
 
 import { ChooseSetButton } from "./ChooseSetButton";
+import { MenuSetDetailsDialog } from "./MenuSetDetailsDialog";
 
 export function MenuSetCard({
   set,
@@ -47,7 +48,10 @@ export function MenuSetCard({
           ))}
         </ul>
         <p className="text-soft text-small flex-1">{set.description}</p>
-        <ChooseSetButton setId={set.id} />
+        <div className="set-card-actions">
+          <MenuSetDetailsDialog set={set} />
+          <ChooseSetButton setId={set.id} />
+        </div>
       </Reveal>
     </article>
   );

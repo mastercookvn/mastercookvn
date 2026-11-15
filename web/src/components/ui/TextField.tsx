@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { Field, type FieldProps } from "./Field";
+import { Field, fieldMessageId, type FieldProps } from "./Field";
 
 export function TextField({
   id,
@@ -19,6 +19,8 @@ export function TextField({
         id={id}
         type={type}
         className={cn("input", error ? "has-error" : null, className)}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error || hint ? fieldMessageId(id) : undefined}
         {...props}
       />
     </Field>

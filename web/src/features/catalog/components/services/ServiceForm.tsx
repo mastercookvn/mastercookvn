@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { FlowerIcon } from "@/components/icons";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
@@ -10,10 +13,32 @@ import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatNumber } from "@/lib/format";
 import { MEDIA_FOLDER, newMediaKey } from "@/lib/media";
+import {
+  amountTextSchema,
+  LIVE_VALIDATION_MODE,
+  parseAmountText,
+  requiredTextSchema,
+} from "@/lib/validation";
 import type { Service } from "@/mocks/catalog";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 
-const parseAmount = (text: string) => Number(text.replace(/\D/g, ""));
+const newServiceId = () => `dv-${Date.now().toString(36)}`;
+
+const serviceSchema = (ownId: string | undefined) =>
+  z.object({
+    name: requiredTextSchema("tên dịch vụ").refine(
+      (name) =>
+        !readDemoState().services.some(
+          (other) =>
+            other.id !== ownId &&
+            other.name.toLowerCase() === name.toLowerCase()
+        ),
+      "Đã có dịch vụ cùng tên"
+    ),
+    description: z.string().trim(),
+    unit: requiredTextSchema("đơn vị tính"),
+    price: amountTextSchema("Nhập đơn giá"),
+  });
 
 export function ServiceForm({
   formId,
@@ -25,46 +50,34 @@ export function ServiceForm({
   onSaved: () => void;
 }) {
   const showToast = useToast();
-  const [name, setName] = useState(service?.name ?? "");
-  const [description, setDescription] = useState(service?.description ?? "");
-  const [unit, setUnit] = useState(service?.unit ?? "gói");
-  const [priceText, setPriceText] = useState(
-    service ? formatNumber(service.price) : ""
-  );
   const savedImage = useMediaSrc(service?.imageKey);
   /** Undefined keeps the saved photo, null removes it, a data URL replaces it. */
   const [upload, setUpload] = useState<string | null | undefined>(undefined);
   const image = upload === undefined ? savedImage : upload;
-  const [submitted, setSubmitted] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(serviceSchema(service?.id)),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: {
+      name: service?.name ?? "",
+      description: service?.description ?? "",
+      unit: service?.unit ?? "gói",
+      price: service ? formatNumber(service.price) : "",
+    },
+  });
+  const name = useWatch({ control, name: "name" });
 
-  const price = parseAmount(priceText);
-  const duplicate = readDemoState().services.some(
-    (other) =>
-      other.id !== service?.id &&
-      other.name.toLowerCase() === name.trim().toLowerCase()
-  );
-  const errors = {
-    name: !name.trim()
-      ? "Nhập tên dịch vụ"
-      : duplicate
-        ? "Đã có dịch vụ cùng tên"
-        : null,
-    unit: unit.trim() ? null : "Nhập đơn vị tính",
-    price: price > 0 ? null : "Nhập đơn giá",
-  };
-
-  const save = () => {
-    setSubmitted(true);
-    if (Object.values(errors).some(Boolean)) return;
-
+  const save = handleSubmit((values) => {
     const current = readDemoState();
-    const id = service?.id ?? `dv-${Date.now().toString(36)}`;
+    const id = service?.id ?? newServiceId();
     const imageKey = upload ? newMediaKey(MEDIA_FOLDER.Services) : undefined;
     const fields = {
-      name: name.trim(),
-      description: description.trim(),
-      unit: unit.trim(),
-      price,
+      ...values,
       imageKey: upload === undefined ? service?.imageKey : imageKey,
     };
 
@@ -83,18 +96,10 @@ export function ServiceForm({
       service ? `Đã lưu ${fields.name}` : `Đã thêm dịch vụ ${fields.name}`
     );
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack" noValidate onSubmit={save}>
       <ImageUploadField
         id="service-image"
         label="Ảnh dịch vụ"
@@ -108,33 +113,33 @@ export function ServiceForm({
         id="service-name"
         label="Tên dịch vụ"
         placeholder="Ban nhạc acoustic"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-        error={submitted ? errors.name : null}
+        {...register("name")}
+        error={errors.name?.message}
       />
       <TextareaField
         id="service-description"
         label="Mô tả"
-        value={description}
-        onChange={(event) => setDescription(event.target.value)}
+        {...register("description")}
       />
       <div className="l-grid l-grid-2">
         <TextField
           id="service-unit"
           label="Đơn vị tính"
-          value={unit}
-          onChange={(event) => setUnit(event.target.value)}
-          error={submitted ? errors.unit : null}
+          {...register("unit")}
+          error={errors.unit?.message}
         />
         <TextField
           id="service-price"
           label="Đơn giá (đ)"
           inputMode="numeric"
-          value={priceText}
-          onChange={(event) =>
-            setPriceText(formatNumber(parseAmount(event.target.value)))
-          }
-          error={submitted ? errors.price : null}
+          {...register("price", {
+            onChange: (event) =>
+              setValue(
+                "price",
+                formatNumber(parseAmountText(event.target.value))
+              ),
+          })}
+          error={errors.price?.message}
         />
       </div>
     </form>

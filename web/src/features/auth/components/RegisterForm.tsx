@@ -1,17 +1,22 @@
 "use client";
 
-import { useActionState, useState, type ChangeEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useActionState, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Alert } from "@/components/ui/Alert";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { TextField } from "@/components/ui/TextField";
+import { LIVE_VALIDATION_MODE } from "@/lib/validation";
 
 import { register, type RegisterState } from "@/features/auth/actions";
-import { PASSWORD_MIN_LENGTH } from "@/features/auth/schemas";
+import { PASSWORD_MIN_LENGTH, registerSchema } from "@/features/auth/schemas";
 
 import { AuthSteps } from "./AuthSteps";
 import { OtpStep } from "./OtpStep";
 import { SubmitButton } from "./SubmitButton";
+
+type RegisterField = "name" | "phone" | "password" | "confirmPassword";
 
 const INITIAL: RegisterState = { step: "details" };
 
@@ -23,28 +28,42 @@ const STEPS = [
 
 export function RegisterForm() {
   const [state, action] = useActionState(register, INITIAL);
-  // Controlled so the values survive React's form reset between the two steps.
-  const [values, setValues] = useState({
-    name: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
+  const {
+    register: field,
+    control,
+    trigger,
+    getValues,
+    formState: { errors: liveErrors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: { name: "", phone: "", password: "", confirmPassword: "" },
   });
   // "Đổi số" goes back to the details for this response only; the next send shows the code step again.
   const [editedFrom, setEditedFrom] = useState<RegisterState | null>(null);
   const showOtp = state.step === "otp" && editedFrom !== state;
-  const errors = state.step === "details" ? state.fieldErrors : undefined;
+  const serverErrors = state.step === "details" ? state.fieldErrors : undefined;
 
-  const bind = (field: keyof typeof values) => ({
-    name: field,
-    value: values[field],
-    error: errors?.[field],
-    onChange: (event: ChangeEvent<HTMLInputElement>) =>
-      setValues((current) => ({ ...current, [field]: event.target.value })),
+  const values = useWatch({ control });
+
+  // Controlled so the values survive React's form reset between the two steps.
+  const bind = (name: RegisterField) => ({
+    ...field(name),
+    value: values[name] ?? "",
+    error: liveErrors[name]?.message ?? serverErrors?.[name],
   });
 
   return (
-    <form action={action} className="contents" noValidate>
+    <form
+      action={action}
+      className="contents"
+      noValidate
+      onSubmit={(event) => {
+        if (showOtp || registerSchema.safeParse(getValues()).success) return;
+        event.preventDefault();
+        void trigger();
+      }}
+    >
       <AuthSteps
         label="Các bước tạo tài khoản"
         steps={STEPS}
@@ -62,6 +81,7 @@ export function RegisterForm() {
           id="register-phone"
           label="Số điện thoại"
           type="tel"
+          inputMode="tel"
           autoComplete="tel"
           placeholder="0903 123 456"
           hint="Số này là tên đăng nhập. Chúng tôi gửi mã SMS để chắc chắn số là của bạn."

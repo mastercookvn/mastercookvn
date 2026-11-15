@@ -8,13 +8,23 @@ export type FieldProps = {
   children: ReactNode;
 };
 
+export const fieldMessageId = (id: string) => `${id}-message`;
+
 export function Field({ id, label, hint, error, children }: FieldProps) {
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>
       {children}
-      {error ? <span className="field-error">{error}</span> : null}
-      {!error && hint ? <span className="field-hint">{hint}</span> : null}
+      {error ? (
+        <span id={fieldMessageId(id)} className="field-error">
+          {error}
+        </span>
+      ) : null}
+      {!error && hint ? (
+        <span id={fieldMessageId(id)} className="field-hint">
+          {hint}
+        </span>
+      ) : null}
     </div>
   );
 }

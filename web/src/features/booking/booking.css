@@ -126,9 +126,47 @@
     border-bottom: 0;
   }
 
+  /* A short pick list reads as one choice, not a page-wide bar. */
+  [data-surface="site"] .field:has(> .select-trigger) {
+    max-width: 480px;
+  }
+
   .meal-field-group h4 {
     font-size: var(--text-15);
     font-weight: 600;
+  }
+
+  /* Several groups in one meal: each sits in its own framed box with room around it. */
+  .meal-card-body:has(> .meal-field-group + .meal-field-group) {
+    gap: 14px;
+    padding: 20px 22px 22px;
+  }
+
+  .meal-card-body:has(> .meal-field-group + .meal-field-group)
+    > .meal-field-group {
+    gap: 14px;
+    padding: 18px 20px 20px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .meal-card-body:has(> .meal-field-group + .meal-field-group)
+    > .meal-field-group
+    > :first-child:is(h4, .l-between) {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  @media (max-width: 640px) {
+    .meal-card-body:has(> .meal-field-group + .meal-field-group) {
+      padding: 14px;
+    }
+
+    .meal-card-body:has(> .meal-field-group + .meal-field-group)
+      > .meal-field-group {
+      padding: 14px 14px 16px;
+    }
   }
 
   .meal-card-foot {

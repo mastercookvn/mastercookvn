@@ -9,6 +9,7 @@ import { BookingMealCard } from "@/features/booking/components/flow/BookingMealC
 import { mealMenuErrors } from "@/features/booking/lib/estimate";
 import { withMenuMode } from "@/features/booking/lib/mealForm";
 import { useBookingMeals } from "@/features/booking/lib/useBookingMeals";
+import { MenuSetDishList } from "@/features/menu/components/sets/MenuSetDishList";
 
 import { MenuSetSelect } from "./MenuSetSelect";
 
@@ -40,11 +41,20 @@ export function MenuStep({ showErrors }: { showErrors: boolean }) {
           onChange={(mode) => updateMeal(index, withMenuMode(meal, mode))}
         />
         {meal.mode === MENU_MODE.Set ? (
-          <MenuSetSelect
-            id={`menu-set-${index}`}
-            value={meal.setId}
-            onChange={(setId) => updateMeal(index, { setId })}
-          />
+          <>
+            <MenuSetSelect
+              id={`menu-set-${index}`}
+              value={meal.setId}
+              onChange={(setId) => updateMeal(index, { setId })}
+            />
+            <MenuSetDishList
+              dishes={allDishes.filter((dish) =>
+                menuSets
+                  .find((set) => set.id === meal.setId)
+                  ?.dishIds.includes(dish.id)
+              )}
+            />
+          </>
         ) : (
           <DishPicker
             dishes={dishes}

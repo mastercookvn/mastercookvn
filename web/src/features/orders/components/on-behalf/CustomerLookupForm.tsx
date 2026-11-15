@@ -1,7 +1,18 @@
+"use client";
+
+import { useFormContext } from "react-hook-form";
+
 import { Alert } from "@/components/ui/Alert";
 import { TextField } from "@/components/ui/TextField";
 
+import type { OnBehalfFields } from "./onBehalfSchema";
+
 export function CustomerLookupForm() {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<OnBehalfFields>();
+
   return (
     <section className="card l-stack">
       <h3 className="card-title card-title-flush">Hồ sơ khách</h3>
@@ -10,12 +21,15 @@ export function CustomerLookupForm() {
           id="behalf-phone"
           label="Số điện thoại"
           type="tel"
-          defaultValue="0978 222 333"
+          inputMode="tel"
+          {...register("customerPhone")}
+          error={errors.customerPhone?.message}
         />
         <TextField
-          id="behalf-name"
+          id="behalf-customer-name"
           label="Họ tên"
-          defaultValue="Nguyễn Minh Đức"
+          {...register("customerName")}
+          error={errors.customerName?.message}
         />
       </div>
       <Alert tone="wait">

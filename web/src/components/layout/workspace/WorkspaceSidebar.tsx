@@ -35,7 +35,7 @@ export async function WorkspaceSidebar() {
         data-state={sidebarState}
       >
         <Link href={ROUTES.workspace} className="workspace-logo">
-          <LogoMark size={28} />
+          <LogoMark size={32} tone="dark" />
           <span className="workspace-label">
             <b>MasterCook</b>
             <span>Quản trị vận hành</span>

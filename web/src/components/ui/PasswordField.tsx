@@ -4,7 +4,7 @@ import { useState, type ComponentProps } from "react";
 
 import { EyeIcon, EyeOffIcon } from "@/components/icons";
 
-import { Field } from "./Field";
+import { Field, fieldMessageId } from "./Field";
 
 export function PasswordField({
   id,
@@ -26,7 +26,9 @@ export function PasswordField({
         <input
           id={id}
           type={visible ? "text" : "password"}
-          className="input"
+          className={error ? "input has-error" : "input"}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error || hint ? fieldMessageId(id) : undefined}
           {...props}
         />
         <button

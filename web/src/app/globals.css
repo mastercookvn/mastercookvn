@@ -16,6 +16,7 @@
 @import "../features/reports/reports.css";
 @import "../features/settings/settings.css";
 @import "../features/equipment/equipment.css";
+@import "../components/layout/workspace/workspace-theme.css";
 @import "../components/motion/motion.css";
 
 /* Tokens from sections 2.3 and 2.8. Tailwind's default palette is removed. */

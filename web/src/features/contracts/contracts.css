@@ -266,10 +266,11 @@
     font-size: 11pt;
   }
 
-  .contract-doc-signatures img {
-    max-width: 180px;
-    max-height: 80px;
-    object-fit: contain;
+  .contract-doc-signatures .contract-doc-online-confirmation {
+    display: flex;
+    align-items: center;
+    min-height: 72pt;
+    max-width: 220pt;
   }
 
   .contract-doc-sign-space {
