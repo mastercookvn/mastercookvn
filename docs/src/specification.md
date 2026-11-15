@@ -102,6 +102,8 @@ Tồn tối thiểu chỉ cảnh báo; thiếu tài nguyên thực tế thì kh�
 
 ### BR08 — Ký và cọc
 
+Tạm thời, ký online chỉ là khách dùng tài khoản để xác nhận đồng ý nội dung hợp đồng trên hệ thống; không triển khai OTP, chữ ký số hoặc quy trình xác minh chữ ký phức tạp.
+
 Tư vấn phát hành là xác nhận phía cơ sở. Khách xác nhận online bằng tài khoản hoặc nhân viên ghi ký giấy kèm file. Cọc 50%–100% tổng hợp đồng trong 24 giờ. Phân bổ theo giá trị từng bữa; cọc bắt buộc ban đầu bằng 50% giá trị bữa, phần vượt là trả trước. Sau phụ lục chỉ yêu cầu cọc bổ sung khi thuộc BR09, không tự làm hợp đồng mất hiệu lực do tỷ lệ cọc mới thấp hơn 50%. Khi hủy, phần cọc làm căn cứ là mức nhỏ hơn giữa 50% giá trị bữa hiện hành và số tiền đã thu còn phân bổ cho bữa; phần vượt căn cứ đó là trả trước được hoàn đủ.
 
 Hợp đồng có hiệu lực khi khách đã xác nhận và thu đủ cọc bắt buộc. Online dùng thông báo dịch vụ thanh toán; tiền mặt/chuyển khoản ngoài luồng do kế toán ghi. Không công nhận chỉ từ nút khách bấm đã trả. Mã giao dịch bên cung cấp duy nhất, không cộng trùng khi nhận lại thông báo.
