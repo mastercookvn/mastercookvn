@@ -49,7 +49,7 @@ sequenceDiagram
     activate TR
     TR->>TR: Tính nhu cầu nhân sự từ bàn bố trí
     deactivate TR
-    alt Đủ tài nguyên và trong phạm vi 20km
+    alt Đủ tài nguyên
         TR-->>DH: Tài nguyên hợp lệ
         DH->>HD: Phát hành hợp đồng chung
         activate HD
@@ -58,7 +58,7 @@ sequenceDiagram
         DB-->>HD: Xác nhận giữ
         deactivate HD
         DH-->>UI: Hợp đồng đã phát hành
-    else Thiếu tài nguyên hoặc ngoài 20km
+    else Thiếu tài nguyên
         TR-->>DH: Trả lý do từ chối
         DH-->>UI: Thông báo lý do, không giữ một phần
     end
@@ -75,6 +75,8 @@ sequenceDiagram
     end
 ```
 
+<!-- diagram id="vitepress-plugin-digrams-sequence-dat-tiec-va-dat-ho" -->
+
 ## Phạm vi
 
 UC liên quan: UC-DT-01, UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD-02. Tra tại [danh mục chung](../danh-muc-use-case.md).
@@ -82,5 +84,5 @@ UC liên quan: UC-DT-01, UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD
 ## Lưu ý và giới hạn
 
 - Hai nhánh tự đặt/đặt hộ hợp nhất trước khi lưu đơn; hai nhánh ký online/ký giấy hợp nhất tại ghi xác nhận.
-- Thiếu tài nguyên hoặc ngoài 20 km trả lý do từ chối, không giữ một phần đơn.
+- Thiếu tài nguyên thực tế thì không nhận và không giữ một phần đơn; khoảng cách do tư vấn tự đánh giá.
 - Giao tiếp qua điện thoại/Zalo được thực hiện thủ công ngoài hệ thống, không qua API tự động.

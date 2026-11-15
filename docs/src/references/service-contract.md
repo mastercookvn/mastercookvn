@@ -16,17 +16,17 @@ Một hợp đồng có thể gồm nhiều bữa tiệc. Mỗi bữa xác đị
 
 - Ngày giờ bắt đầu, kết thúc và địa điểm tổ chức.
 - Thông tin khảo sát địa điểm, điều kiện phục vụ và người liên hệ.
-- Số bàn ăn, số người trên một bàn ăn và thực đơn đã chọn.
+- Số bàn ăn chuẩn 10 suất và thực đơn đã chọn.
 - Số bàn ghế bố trí đồng thời, dụng cụ và dịch vụ đi kèm.
 - Đơn giá, phụ thu, tổng giá trị và phần cọc phân bổ.
 
-Số bàn ăn là căn cứ tính thực đơn. Số bàn ghế là số lượng bố trí phục vụ tại địa điểm; hai số lượng này có thể khác nhau khi phục vụ cuốn chiếu.
+Số bàn ăn là căn cứ tính thực đơn và định lượng theo bàn chuẩn 10 suất, không phụ thuộc số người thực tế ngồi mỗi bàn. Số bàn ghế là số lượng bố trí phục vụ tại địa điểm; hai số lượng này có thể khác nhau khi phục vụ cuốn chiếu.
 
 Cơ sở cung cấp món ăn và các dịch vụ đã ghi trong hợp đồng tại địa điểm của khách; không cung cấp mặt bằng tổ chức.
 
 ## 2. Giá trị và đơn giá
 
-Giá trị mỗi bữa gồm tiền thực đơn theo số bàn ăn, tiền dịch vụ và phụ thu đã thống nhất. Hợp đồng thể hiện cách tính từng khoản và tổng giá trị các bữa.
+Giá trị mỗi bữa gồm tiền thực đơn theo số bàn ăn, tiền dịch vụ, phí vận chuyển theo khoảng cách khảo sát và phụ thu đã thống nhất. Hợp đồng thể hiện cách tính từng khoản và tổng giá trị các bữa.
 
 Giá món, dịch vụ, phụ thu và đơn giá bồi thường dụng cụ được lưu theo nội dung đã chốt. Hệ thống không tự tăng giá hợp đồng khi giá nguyên liệu hoặc giá danh mục thay đổi.
 

@@ -7,8 +7,7 @@ order: 30
 ```mermaid
 flowchart TD
     subgraph TuVan["Tư vấn"]
-        TV1["Nhận các bữa cần kiểm tra\n(số bàn ăn, số người, bàn ghế bố trí, khung tài nguyên)"]
-        TV2{"Khoảng cách <= 20 km?"}
+        TV1["Nhận các bữa cần kiểm tra\n(số bàn ăn, bàn ghế bố trí, khung tài nguyên)"]
         TV3{"Thời gian & khung tài nguyên hợp lệ?"}
         TV4["Xác nhận nhận đơn / áp phụ lục"]
         TV5["Báo thiếu — chưa nhận"]
@@ -33,9 +32,7 @@ flowchart TD
         DL3[("Tồn kho dụng cụ")]
     end
 
-    TV1 --> TV2
-    TV2 -- "Không" --> TV5
-    TV2 -- "Có" --> TV3
+    TV1 --> TV3
     TV3 -- "Không hợp lệ" --> TV5
     TV3 -- "Hợp lệ" --> KT1
     KT1 --> KT2
@@ -56,6 +53,8 @@ flowchart TD
     KT10 --> DL3
 ```
 
+<!-- diagram id="vitepress-plugin-digrams-flowchart-kiem-tra-kha-nang-phuc-vu" -->
+
 ## Phạm vi
 
 UC liên quan: UC-DT-04, UC-DT-05, UC-HD-05, UC-NS-02, UC-KHO-06. Tra tại [danh mục chung](../danh-muc-use-case.md).
@@ -63,5 +62,6 @@ UC liên quan: UC-DT-04, UC-DT-05, UC-HD-05, UC-NS-02, UC-KHO-06. Tra tại [dan
 ## Lưu ý và giới hạn
 
 - Không kiểm tra xe vận chuyển, thời tiết, giấy chứng nhận sức khỏe, lịch nghỉ phép cá nhân, API bản đồ tự động hoặc tồn kho nguyên liệu (chỉ kiểm tra dụng cụ và nhân sự).
+- Không tự kiểm tra khoảng cách theo mốc tham khảo; tư vấn tự đánh giá địa điểm. Dụng cụ theo người được tính theo số bàn ăn × 10 suất chuẩn.
 - Lượng giữ chỗ đã xuất kho thực tế không bị trừ hai lần vào năng lực khả dụng (tuân thủ bất biến tại [`class.md`](../../mo-hinh/mo-hinh-lop-class.md)).
 - Ngưỡng tồn tối thiểu chỉ đóng vai trò cảnh báo trên Dashboard; chỉ khi thiếu thực tế so với sở hữu khả dụng mới từ chối nhận đơn.

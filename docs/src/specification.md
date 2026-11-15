@@ -66,13 +66,13 @@ Một đơn có ít nhất một bữa và tối đa một hợp đồng. Mỗi 
 
 ### BR03 — Bàn ăn và bàn ghế
 
-Giá/định lượng cho bàn ăn chuẩn 10 người; một bữa dùng cùng số người/bàn ăn, tối thiểu 10. Hệ số quy mô = số người/bàn ăn / 10. Nhập số bàn ăn và số bàn bố trí riêng; số bàn bố trí không vượt số bàn ăn. Dụng cụ theo người, bố trí hoặc nhu cầu bữa; không đồng nhất số bàn ăn với bàn ghế. Ví dụ 30 bàn ăn trên 10 bàn bố trí cuốn chiếu: gợi ý 4 người phục vụ.
+Giá và định lượng theo bàn ăn chuẩn 10 suất; hệ thống không nhập số người thực tế trên mỗi bàn. Khách tự quyết định số người ngồi, không làm thay đổi giá hay định lượng bàn chuẩn. Nhập số bàn ăn và số bàn bố trí riêng; số bàn bố trí không vượt số bàn ăn. Dụng cụ theo người tính theo số suất chuẩn = số bàn ăn × 10, kể cả khi phục vụ cuốn chiếu; dụng cụ khác tính theo bàn bố trí hoặc nhu cầu bữa. Không đồng nhất số bàn ăn với bàn ghế. Ví dụ 30 bàn ăn trên 10 bàn bố trí cuốn chiếu: dự trù dụng cụ theo người cho 300 suất, gợi ý 4 người phục vụ.
 
 ### BR04 — Giá và chốt giá
 
 - Giá gợi ý món/bàn ăn chuẩn = Σ(định lượng × giá nguyên liệu hiện hành) / food cost mục tiêu. Quản lý chấp nhận hoặc nhập giá khác, không tự đổi giá bán.
-- Set là tổng giá bán món trong set, không cộng lợi nhuận lần nữa. Tự chọn tối thiểu 6 món đang phục vụ.
-- Tiền món bữa = tổng giá món chuẩn × hệ số quy mô × số bàn ăn. Cộng dịch vụ (đơn giá × lượng), phụ thu thỏa thuận, rồi thuế theo tham số. Phụ thu lễ dùng danh sách ngày cố định âm/dương, không có UC quản lý ngày lễ riêng.
+- Set là tổng giá bán món trong set, không cộng lợi nhuận lần nữa. Thực đơn tự chọn phải có ít nhất một món đang phục vụ; dưới ngưỡng khuyến nghị hiện hành (mặc định 6 món) thì cảnh báo nhưng vẫn được tạm tính và gửi đơn để tư vấn xem xét.
+- Tiền món bữa = tổng giá món chuẩn × số bàn ăn. Cộng dịch vụ (đơn giá × lượng), phí vận chuyển theo khảo sát, phụ thu thỏa thuận, rồi thuế theo tham số; không cộng phí vận chuyển hai lần. Phụ thu lễ dùng danh sách ngày cố định âm/dương, không có UC quản lý ngày lễ riêng.
 - Tạm tính chưa phải cam kết. Phát hành hợp đồng lưu bản chốt tên, lượng, đơn giá, thuế, phụ thu, điều khoản và giá bồi thường; sửa danh mục không đổi hợp đồng cũ.
 - VNĐ nguyên; tổng mỗi bữa làm tròn tới bội số 500 gần nhất, đúng nửa làm tròn lên; lưu chênh lệch riêng. Tổng hợp đồng bằng tổng các bữa; giao dịch ghi đúng tiền thực thu/hoàn.
 
@@ -94,7 +94,7 @@ Mục tiêu khởi tạo 35%; sau chốt tháng quản lý có thể dùng tỷ 
 
 ### BR07 — Nhận tiệc và giữ chỗ
 
-Tư vấn nhập khoảng cách thủ công; phạm vi tối đa 20 km, không tích hợp bản đồ. Nhập khoảng sử dụng dụng cụ và giờ làm nhân sự cho từng bữa, không tự tính lộ trình/vệ sinh. Kiểm tra cả các bữa cùng đơn và hợp đồng khác trong khung chồng lấn.
+Tư vấn nhập khoảng cách thủ công; hệ thống hiển thị mốc tham khảo 20 km, không tự đối chiếu, cảnh báo theo khoảng cách hoặc từ chối nhận theo mốc này. Tư vấn tự đánh giá địa điểm ngoài hệ thống; không tích hợp bản đồ. Phí vận chuyển miễn 10 km đầu, tính 15.000 đồng/km vượt 10 km, kể cả khi khoảng cách vượt 20 km; dùng khoảng cách do tư vấn nhập. Nhập khoảng sử dụng dụng cụ và giờ làm nhân sự cho từng bữa, không tự tính lộ trình/vệ sinh. Kiểm tra cả các bữa cùng đơn và hợp đồng khác trong khung chồng lấn.
 
 Xác nhận nhận tiệc giữ tài nguyên tạm 24 giờ chờ cọc; đủ BR08 thì giữ chính thức. Server loại giữ hết hạn khi tra cứu/kiểm tra/xử lý đơn, không phụ thuộc cron riêng. Hết hạn chưa đủ ký/cọc thì đánh dấu hết hạn, nhả giữ; khoản đã thu vẫn lưu để hoàn, không xóa giao dịch.
 

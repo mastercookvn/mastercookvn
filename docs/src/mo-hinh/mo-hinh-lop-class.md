@@ -474,7 +474,6 @@ classDiagram
         +datetime dungCuDen
         +int soBanAnBanDau
         +int soBanAn
-        +int soNguoiMoiBan
         +int soBanBoTri
         +int soGheBoTri
         +map nhanSuDuKienTheoViTri
@@ -526,7 +525,6 @@ classDiagram
         +UUID monId
         +string tenMonChot
         +money donGiaChuanChot
-        +decimal heSoQuyMo
         +text? ghiChu
         +thanhTien(soBanAn)
     }
@@ -602,7 +600,6 @@ object "buaB01 : BuaTiec" as bua1 {
   dungCuDen = "2026-11-20T18:00:00+07:00"
   soBanAnBanDau = 20
   soBanAn = 20
-  soNguoiMoiBan = 10
   soBanBoTri = 10
   soGheBoTri = 100
   nhanSuDuKienTheoViTri = {Phục vụ: 4, Bếp: 4}
@@ -614,7 +611,6 @@ object "buaB02 : BuaTiec" as bua2 {
   batDau = "2026-11-21T11:00:00+07:00"
   ketThuc = "2026-11-21T14:00:00+07:00"
   soBanAn = 10
-  soNguoiMoiBan = 10
   soBanBoTri = 5
   soGheBoTri = 50
   trangThai = "DuKien"
@@ -646,33 +642,27 @@ object "traLoiB02 : TraLoiKhaoSat" as tl2 {
 object "goi : MonTrongBua" as m1 {
   tenMonChot = "Gỏi"
   donGiaChuanChot = 100000
-  heSoQuyMo = 1
 }
 object "sup : MonTrongBua" as m2 {
   tenMonChot = "Súp"
   donGiaChuanChot = 120000
-  heSoQuyMo = 1
 }
 object "rauXao : MonTrongBua" as m3 {
   tenMonChot = "Rau xào"
   donGiaChuanChot = 140000
-  heSoQuyMo = 1
 }
 object "comChien : MonTrongBua" as m4 {
   tenMonChot = "Cơm chiên"
   donGiaChuanChot = 160000
-  heSoQuyMo = 1
 }
 object "caHap : MonTrongBua" as m5 {
   tenMonChot = "Cá hấp"
   donGiaChuanChot = 180000
-  heSoQuyMo = 1
 }
 object "gaHap : MonTrongBua" as m6 {
   monId = M06
   tenMonChot = "Gà hấp"
   donGiaChuanChot = 200000
-  heSoQuyMo = 1
 }
 object "trangTriB01 : DichVuTrongBua" as dv {
   buaId = B01
@@ -1113,7 +1103,7 @@ classDiagram
 
 ### Ràng buộc nghiệp vụ
 
-- **LoaiMon & MonAn**: Phân nhóm để lọc danh mục; món ăn tự chọn tối thiểu 6 món cho một tiệc. Đơn giá chuẩn áp dụng cho bàn ăn chuẩn 10 người. Ảnh món tùy chọn, tham chiếu `TepDinhKem` qua `anhId`; không lưu URL ảnh trực tiếp.
+- **LoaiMon & MonAn**: Phân nhóm để lọc danh mục; thực đơn tự chọn không được rỗng, dưới ngưỡng khuyến nghị thì cảnh báo nhưng không chặn. Đơn giá chuẩn áp dụng cho bàn ăn chuẩn 10 suất. Ảnh món tùy chọn, tham chiếu `TepDinhKem` qua `anhId`; không lưu URL ảnh trực tiếp.
 - **SetThucDon**: Đơn giá set tính bằng tổng đơn giá các món thành phần, không cộng thêm biên lợi nhuận kép. Bữa tiệc lưu danh sách món chốt, không trỏ động vào set.
 - **MonTrongSet**: Cặp set–món là duy nhất.
 - **NguyenLieu & DinhLuongMon**: Định lượng xác định lượng nguyên liệu cho 1 bàn ăn chuẩn 10 người (cặp món–nguyên liệu là duy nhất). Đơn giá hiện hành dùng để tính chi phí ước tính và đề xuất giá bán món.

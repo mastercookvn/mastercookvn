@@ -21,7 +21,7 @@ order: 10
 
 1. Hệ thống sinh hợp đồng từ đơn: bên A, khách, từng bữa (thời gian, địa điểm, bàn ăn, bàn bố trí, món, dịch vụ, phụ thu), điều khoản cọc/sửa/hủy/bồi thường.
 2. Tư vấn kiểm tra, chỉnh phụ thu thỏa thuận nếu có.
-3. Hệ thống tính tổng từng bữa, tổng hợp đồng, cọc tối thiểu 50% (TS06), hạn cọc = hạn giữ tạm 24 giờ (TS16). Bản chốt báo giá có thời hạn hiệu lực 7 ngày (TS15).
+3. Hệ thống tính tổng từng bữa, tổng hợp đồng, cọc tối thiểu 50% (TS02), hạn cọc = hạn giữ tạm 24 giờ (TS06). Bản chốt báo giá có thời hạn hiệu lực 7 ngày (TS05).
 4. Tư vấn phát hành.
 5. Hệ thống lưu bản chốt (tên, lượng, đơn giá, thuế, phụ thu, giá bồi thường dụng cụ), không đổi theo danh mục sau này.
 6. Hợp đồng hiện trong hồ sơ khách (UC-DT-06); tư vấn báo khách qua Zalo/điện thoại.
@@ -80,9 +80,9 @@ order: 10
 
 **Luồng chính**
 
-1. Hệ thống hiển thị số cần thu: cọc (50–100% tổng theo TS06, TS07), cọc bổ sung, hoặc số dư quyết toán.
+1. Hệ thống hiển thị số cần thu: cọc (50–100% tổng theo TS02, TS03), cọc bổ sung, hoặc số dư quyết toán.
 2. Khách chọn số tiền (với cọc: trong dải 50–100%).
-3. Hệ thống tạo giao dịch Cho với mã tham chiếu, phân bổ dự kiến theo giá trị bữa; hiển thị mã QR có hiệu lực 15 phút (TS17).
+3. Hệ thống tạo giao dịch Cho với mã tham chiếu, phân bổ dự kiến theo giá trị bữa; hiển thị mã QR có hiệu lực 15 phút (TS07).
 4. Khách chuyển tiền.
 5. Dịch vụ thanh toán gửi thông báo kết quả.
 6. Hệ thống kiểm tra nguồn, mã giao dịch, số tiền; ghi ThanhCong, phân bổ.
@@ -146,7 +146,7 @@ order: 10
 
 1. Tư vấn chọn hợp đồng, chọn bữa.
 2. Tư vấn nhập thay đổi: thay món (không tăng số món) và/hoặc số bàn ăn.
-3. Hệ thống kiểm tra hạn: đổi món còn ≥ 5 ngày (TS23), đổi bàn còn ≥ 3 ngày (TS24); giảm ≤ 15% số bàn ký ban đầu (TS25, làm tròn xuống).
+3. Hệ thống kiểm tra hạn: đổi món còn ≥ 5 ngày (TS11), đổi bàn còn ≥ 3 ngày (TS12); giảm ≤ 15% số bàn ký ban đầu (TS13, làm tròn xuống).
 4. Tăng bàn: hệ thống chạy UC-DT-04.
 5. Hệ thống tính chênh lệch (món mới giá hiện hành, món không đổi giữ giá), cọc bổ sung = 50% phần tăng nếu tăng > 3 bàn.
 6. Hệ thống lập phụ lục trước/sau, chênh lệch, cọc bổ sung; trạng thái ChoXacNhan.
@@ -183,7 +183,7 @@ order: 10
 
 1. Khách (từ UC-DT-06) hoặc tư vấn chọn một/nhiều bữa cần hủy.
 2. Hệ thống lưu thời điểm yêu cầu.
-3. Hệ thống tính từng bữa: căn cứ cọc (50% giá trị bữa), phần trả trước vượt cọc (hoàn 100%), và bậc hoàn cọc bắt buộc theo số ngày còn lại (TS27: $\ge 30$ ngày hoàn 100% cọc bắt buộc với phí 0đ; 15–<30 ngày hoàn 50%; < 15 ngày hoặc đến giờ tiệc khách vắng mặt hoàn 0%).
+3. Hệ thống tính từng bữa: căn cứ cọc (50% giá trị bữa), phần trả trước vượt cọc (hoàn 100%), và bậc hoàn cọc bắt buộc theo số ngày còn lại (TS14: $\ge 30$ ngày hoàn 100% cọc bắt buộc với phí 0đ; 15–<30 ngày hoàn 50%; < 15 ngày hoặc đến giờ tiệc khách vắng mặt hoàn 0%).
 4. Hệ thống hiển thị tiền hoàn, tiền giữ lại từng bữa và tổng.
 5. Người yêu cầu xác nhận hủy.
 6. Hệ thống chuyển bữa DaHuy, nhả giữ dụng cụ, hủy phân công, ghi nghĩa vụ hoàn.
