@@ -199,7 +199,7 @@ export function createDiagramsWithKroki({
 const vitePressOptions = {
   title: "Mastercookvn",
   description: "MastercookVN",
-  lang: "en-GB",
+  lang: "vi-VN",
   base: "/mastercookvn/",
   srcDir: "src",
   markdown: {
