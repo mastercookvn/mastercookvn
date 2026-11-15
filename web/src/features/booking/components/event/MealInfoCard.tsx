@@ -5,15 +5,11 @@ import { EventDatePicker } from "@/components/ui/EventDatePicker";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ServingWavesEditor } from "@/components/ui/ServingWavesEditor";
 import { TextField } from "@/components/ui/TextField";
-import {
-  SERVING_FORMAT,
-  SERVING_FORMAT_LABEL,
-  TRAY_WINDOW_MINUTES,
-  type ServingFormat,
-} from "@/constants/booking";
+import { SERVING_FORMAT, SERVING_FORMAT_LABEL } from "@/constants/booking";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
-import { fromMinutes, nextWave, toMinutes } from "@/lib/servingWaves";
 import type { EstimateMeal } from "@/mocks/demoStore";
+
+import { withServingFormat } from "@/features/booking/lib/mealForm";
 
 import { BookingMealCard } from "../flow/BookingMealCard";
 
@@ -39,22 +35,6 @@ export function MealInfoCard({
   onChange: (patch: Partial<EstimateMeal>) => void;
   onRemove: () => void;
 }) {
-  const switchFormat = (format: ServingFormat) => {
-    const first = meal.waves[0] ?? nextWave([]);
-    onChange({
-      format,
-      name: format === SERVING_FORMAT.Trays ? "" : meal.name,
-      waves: [
-        format === SERVING_FORMAT.Trays
-          ? {
-              ...first,
-              to: fromMinutes(toMinutes(first.from) + TRAY_WINDOW_MINUTES),
-            }
-          : first,
-      ],
-    });
-  };
-
   return (
     <BookingMealCard
       meal={meal}
@@ -75,7 +55,7 @@ export function MealInfoCard({
           label="Hình thức tổ chức"
           options={FORMAT_OPTIONS}
           value={meal.format}
-          onChange={switchFormat}
+          onChange={(format) => onChange(withServingFormat(meal, format))}
         />
         <p className="text-small text-soft">
           {meal.format === SERVING_FORMAT.Trays

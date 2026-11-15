@@ -1,6 +1,8 @@
 "use client";
 
+import { Field } from "@/components/ui/Field";
 import { TextField } from "@/components/ui/TextField";
+import { TimeSelect } from "@/components/ui/TimeSelect";
 import { TRAY_WINDOW_MINUTES } from "@/constants/booking";
 import { fromMinutes, toMinutes } from "@/lib/servingWaves";
 import type { EstimateMeal } from "@/mocks/demoStore";
@@ -22,6 +24,7 @@ export function TrayFields({
         id={`tray-count-${index}`}
         label="Số mâm"
         type="number"
+        inputMode="numeric"
         min={1}
         hint="Đặt từ 1 mâm."
         value={tray.tables}
@@ -41,26 +44,23 @@ export function TrayFields({
           onChange({ guestsPerTable: Number(event.target.value) })
         }
       />
-      <TextField
-        id={`tray-time-${index}`}
-        label="Giờ giao mâm"
-        type="time"
-        step={900}
-        value={tray.from}
-        onChange={(event) =>
-          onChange({
-            waves: [
-              {
-                ...tray,
-                from: event.target.value,
-                to: fromMinutes(
-                  toMinutes(event.target.value) + TRAY_WINDOW_MINUTES
-                ),
-              },
-            ],
-          })
-        }
-      />
+      <Field id={`tray-time-${index}`} label="Giờ giao mâm">
+        <TimeSelect
+          id={`tray-time-${index}`}
+          value={tray.from}
+          onChange={(from) =>
+            onChange({
+              waves: [
+                {
+                  ...tray,
+                  from,
+                  to: fromMinutes(toMinutes(from) + TRAY_WINDOW_MINUTES),
+                },
+              ],
+            })
+          }
+        />
+      </Field>
     </div>
   );
 }

@@ -2,25 +2,8 @@
 
 import { CloseIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
-import { Select } from "@/components/ui/Select";
-import {
-  describeWaves,
-  fromMinutes,
-  nextWave,
-  type ServingWave,
-} from "@/lib/servingWaves";
-
-const MINUTES_PER_DAY = 24 * 60;
-const TIME_STEP_MINUTES = 15;
-
-/** 24-hour slots; a native time input follows the OS clock and may show AM/PM. */
-const TIME_OPTIONS = Array.from(
-  { length: MINUTES_PER_DAY / TIME_STEP_MINUTES },
-  (_, index) => fromMinutes(index * TIME_STEP_MINUTES)
-);
-
-const timeOptionsWith = (time: string) =>
-  TIME_OPTIONS.includes(time) ? TIME_OPTIONS : [...TIME_OPTIONS, time].sort();
+import { TimeSelect } from "@/components/ui/TimeSelect";
+import { describeWaves, nextWave, type ServingWave } from "@/lib/servingWaves";
 
 /**
  * One bữa, several lượt đãi on the same tables: 400 invited guests arrive in
@@ -63,20 +46,18 @@ export function ServingWavesEditor({
               </span>
               <div className="waves-field waves-from">
                 <label htmlFor={`${id}-from`}>Từ</label>
-                <Select
+                <TimeSelect
                   id={`${id}-from`}
-                  options={timeOptionsWith(wave.from)}
                   value={wave.from}
-                  onValueChange={(from) => update(index, { from })}
+                  onChange={(from) => update(index, { from })}
                 />
               </div>
               <div className="waves-field waves-to">
                 <label htmlFor={`${id}-to`}>Đến</label>
-                <Select
+                <TimeSelect
                   id={`${id}-to`}
-                  options={timeOptionsWith(wave.to)}
                   value={wave.to}
-                  onValueChange={(to) => update(index, { to })}
+                  onChange={(to) => update(index, { to })}
                 />
               </div>
               <div className="waves-field waves-tables">

@@ -19,6 +19,11 @@ export const MENU_MODE = {
 
 export type MenuMode = (typeof MENU_MODE)[keyof typeof MENU_MODE];
 
+export const MENU_MODE_LABEL: Record<MenuMode, string> = {
+  [MENU_MODE.Set]: "Chọn set có sẵn",
+  [MENU_MODE.Custom]: "Tự chọn món",
+};
+
 export const BOOKING_STEP = {
   Event: "event",
   Contact: "contact",

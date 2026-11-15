@@ -2,19 +2,20 @@
 
 import { DishPicker } from "@/components/ui/DishPicker";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { MENU_MODE, type MenuMode } from "@/constants/booking";
-import { DEFAULT_DISH_IDS, useDemoState } from "@/mocks/demoStore";
+import { MENU_MODE, MENU_MODE_LABEL } from "@/constants/booking";
+import { useDemoState } from "@/mocks/demoStore";
 
 import { BookingMealCard } from "@/features/booking/components/flow/BookingMealCard";
 import { mealMenuErrors } from "@/features/booking/lib/estimate";
+import { withMenuMode } from "@/features/booking/lib/mealForm";
 import { useBookingMeals } from "@/features/booking/lib/useBookingMeals";
 
 import { MenuSetSelect } from "./MenuSetSelect";
 
-const MODE_OPTIONS: { value: MenuMode; label: string }[] = [
-  { value: MENU_MODE.Set, label: "Chọn set có sẵn" },
-  { value: MENU_MODE.Custom, label: "Tự chọn món" },
-];
+const MODE_OPTIONS = Object.values(MENU_MODE).map((value) => ({
+  value,
+  label: MENU_MODE_LABEL[value],
+}));
 
 export function MenuStep({ showErrors }: { showErrors: boolean }) {
   const { meals, updateMeal } = useBookingMeals();
@@ -36,15 +37,7 @@ export function MenuStep({ showErrors }: { showErrors: boolean }) {
           label="Cách chọn thực đơn"
           options={MODE_OPTIONS}
           value={meal.mode}
-          onChange={(mode) =>
-            updateMeal(index, {
-              mode,
-              dishIds:
-                mode === MENU_MODE.Custom && !meal.dishIds.length
-                  ? DEFAULT_DISH_IDS
-                  : meal.dishIds,
-            })
-          }
+          onChange={(mode) => updateMeal(index, withMenuMode(meal, mode))}
         />
         {meal.mode === MENU_MODE.Set ? (
           <MenuSetSelect
