@@ -510,6 +510,7 @@ classDiagram
 - **PhuLucHopDong**: Một phụ lục cho đúng một bữa tiệc; không cho phép dời ngày tiệc. Mỗi bữa chỉ có tối đa một phụ lục chưa xử lý để tránh xung đột dữ liệu.
 - **HuyBuaTiec**: Lưu kết quả và căn cứ hoàn tiền độc lập cho từng bữa tiệc; hủy toàn hợp đồng tạo kết quả cho từng bữa tương ứng.
 - **GiaoDichThanhToan & PhanBoThanhToan**: Mọi số tiền giao dịch là số dương (loại `Hoan` quyết định chiều chi). Tổng tiền phân bổ cho các bữa phải bằng chính xác số tiền giao dịch.
+- **TepDinhKem**: Nội dung tệp lưu trong bucket public trên S3 hoặc dịch vụ lưu trữ object tương thích; `khoaLuuTru` là object key, không phải URL. Cơ sở dữ liệu lưu key và metadata; tên bucket cấu hình riêng cho từng môi trường triển khai. Ảnh món, bản ký giấy và chứng từ dùng chung mô hình này. URL truy cập được tạo từ cấu hình lưu trữ và key, không lưu thay key. Vì bucket public, bất kỳ ai biết URL đều có thể truy cập trực tiếp, kể cả bản ký và chứng từ.
 - **QuyetToanBua**: Số tiền đã thu/hoàn và số dư tính từ các giao dịch thành công. Bữa tiệc bị hủy thay thế tiền phục vụ bằng nghĩa vụ thanh toán sau hủy.
 
 ## Danh mục món và nguyên liệu
@@ -531,7 +532,7 @@ classDiagram
         +UUID loaiMonId
         +string ten
         +text? moTa
-        +string? anh
+        +UUID? anhId
         +money giaBanChuan
         +bool dangPhucVu
         +chiPhiUocTinh()
@@ -594,7 +595,13 @@ classDiagram
         +apDungChoDuLieuMoi()
     }
 
+    class TepDinhKem {
+        +UUID id
+        +string khoaLuuTru
+    }
+
     LoaiMon "1" --> "0..*" MonAn : phanLoai
+    MonAn "0..*" --> "0..1" TepDinhKem : anh
     SetThucDon "1" *-- "0..*" MonTrongSet : gom
     MonAn "1" <-- "0..*" MonTrongSet : chua
     MonAn "1" *-- "0..*" DinhLuongMon : dinhLuong
@@ -603,7 +610,7 @@ classDiagram
 
 ### Ràng buộc nghiệp vụ
 
-- **LoaiMon & MonAn**: Phân nhóm để lọc danh mục; món ăn tự chọn tối thiểu 6 món cho một tiệc. Đơn giá chuẩn áp dụng cho bàn ăn chuẩn 10 người.
+- **LoaiMon & MonAn**: Phân nhóm để lọc danh mục; món ăn tự chọn tối thiểu 6 món cho một tiệc. Đơn giá chuẩn áp dụng cho bàn ăn chuẩn 10 người. Ảnh món tùy chọn, tham chiếu `TepDinhKem` qua `anhId`; không lưu URL ảnh trực tiếp.
 - **SetThucDon**: Đơn giá set tính bằng tổng đơn giá các món thành phần, không cộng thêm biên lợi nhuận kép. Bữa tiệc lưu danh sách món chốt, không trỏ động vào set.
 - **MonTrongSet**: Cặp set–món là duy nhất.
 - **NguyenLieu & DinhLuongMon**: Định lượng xác định lượng nguyên liệu cho 1 bàn ăn chuẩn 10 người (cặp món–nguyên liệu là duy nhất). Đơn giá hiện hành dùng để tính chi phí ước tính và đề xuất giá bán món.

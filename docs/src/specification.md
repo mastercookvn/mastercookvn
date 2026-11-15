@@ -156,7 +156,8 @@ Mỗi bữa hoàn tất tối đa một đánh giá, không bắt buộc; ngư�
 - Server kiểm tra quyền/sở hữu hồ sơ, tự tính tiền/kiểm tra tài nguyên; mật khẩu băm.
 - Lưu người, thời điểm, mã tham chiếu/bằng chứng cho ký, thu/hoàn, phụ lục, kiểm kê, chấp nhận giá. Danh mục đã dùng chỉ ngưng, không xóa.
 - Ghi tiền, giữ tài nguyên, chốt kỳ, tạo đợt giá nguyên tử và không ghi hai lần; lượng/tiền dùng số chính xác.
-- Sao lưu, phục hồi; file hợp đồng/bằng chứng theo quyền hồ sơ.
+- Ảnh món, bản ký giấy và chứng từ lưu trong bucket public trên S3 hoặc dịch vụ lưu trữ object tương thích; cơ sở dữ liệu lưu object key và metadata qua `TepDinhKem`, không lưu URL thay key. Tên bucket cấu hình riêng cho từng môi trường triển khai; URL được tạo từ cấu hình lưu trữ và key. Bất kỳ ai biết URL đều có thể truy cập tệp trực tiếp, kể cả bản ký và chứng từ.
+- Sao lưu, phục hồi dữ liệu và tệp lưu trữ.
 - SĐT là căn cứ liên kết theo phạm vi đã chốt, không xác minh OTP.
 
 ## 8. Giả định triển khai đã chọn
