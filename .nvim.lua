@@ -2,7 +2,7 @@ local lsp = vim.lsp
 local root = vim.fn.expand("%:p:h")
 
 lsp.config("tsc", {
-	cmd = { "./node_modules/bin/tsc", "--lsp", "--stdio" },
+	cmd = { "./node_modules/.bin/tsc", "--lsp", "--stdio" },
 	root_dir = function(_, on_dir)
 		on_dir(root)
 	end,
