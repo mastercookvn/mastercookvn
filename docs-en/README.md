@@ -9,10 +9,11 @@ This package is the English review copy of the maintained documentation in `../d
 
 ## Local commands
 
-Run from the repository root:
+Run these commands from this directory:
 
 ```bash
-pnpm --filter @mastercookvn/docs-en dev
-pnpm --filter @mastercookvn/docs-en build
-pnpm --filter @mastercookvn/docs-en preview
+pnpm install
+pnpm dev
+pnpm build
+pnpm preview
 ```

@@ -8,15 +8,16 @@
     "diagram:clean": "vitepress-plugin-diagrams clean --delete"
   },
   "devDependencies": {
-    "@catppuccin/vitepress": "catalog:",
-    "pagefind": "catalog:",
-    "vitepress-mermaid-renderer": "catalog:",
-    "vitepress-plugin-pagefind": "catalog:",
-    "get-port": "catalog:",
-    "vitepress": "catalog:",
-    "vitepress-plugin-diagrams": "catalog:",
-    "vitepress-sidebar": "catalog:",
-    "wait-on": "catalog:",
-    "markdown-it-mathjax3": "catalog:"
-  }
+    "@catppuccin/vitepress": "0.1.4",
+    "pagefind": "1.6.0",
+    "vitepress-mermaid-renderer": "1.2.2",
+    "vitepress-plugin-pagefind": "0.4.27",
+    "get-port": "7.2.0",
+    "vitepress": "2.0.0-alpha.20",
+    "vitepress-plugin-diagrams": "1.3.1",
+    "vitepress-sidebar": "1.40.0",
+    "wait-on": "9.0.10",
+    "markdown-it-mathjax3": "4.3.2"
+  },
+  "packageManager": "pnpm@12.14.0"
 }
