@@ -66,7 +66,7 @@ sequenceDiagram
 
 ## Phạm vi
 
-UC liên quan: UC-HD-05, UC-HD-03, UC-HD-04. Tra tại [danh mục chung](../danh-muc-use-case.md). Quy tắc tại [đặc tả](../../specification.md); lớp tại [mô hình](../../mo-hinh/mo-hinh-lop-class.md).
+UC liên quan: UC-HD-05, UC-HD-03, UC-HD-04. Tra tại [danh mục chung](../danh-muc-use-case.md).
 
 ## Lưu ý và giới hạn
 

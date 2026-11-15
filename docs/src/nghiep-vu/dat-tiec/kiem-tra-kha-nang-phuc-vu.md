@@ -58,7 +58,7 @@ flowchart TD
 
 ## Phạm vi
 
-UC liên quan: UC-DT-04, UC-DT-05, UC-HD-05, UC-NS-02, UC-KHO-06. Tra tại [danh mục chung](../danh-muc-use-case.md). Quy tắc tại [đặc tả](../../specification.md); lớp tại [mô hình](../../mo-hinh/mo-hinh-lop-class.md).
+UC liên quan: UC-DT-04, UC-DT-05, UC-HD-05, UC-NS-02, UC-KHO-06. Tra tại [danh mục chung](../danh-muc-use-case.md).
 
 ## Lưu ý và giới hạn
 
