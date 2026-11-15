@@ -243,6 +243,7 @@ const vitePressSidebarOptions = {
   sortMenusByFrontmatterOrder: true,
   collapsed: true,
   collapseDepth: 2,
+  excludeByGlobPattern: ["_old_report/*"],
 } satisfies VitePressSidebarOptions;
 
 export default defineConfig(
