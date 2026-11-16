@@ -2,6 +2,7 @@
 
 import { CloseIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
+import { TimeSelect } from "@/components/ui/TimeSelect";
 import { describeWaves, nextWave, type ServingWave } from "@/lib/servingWaves";
 
 /**
@@ -39,53 +40,54 @@ export function ServingWavesEditor({
           const id = `${idPrefix}-wave-${index}`;
           return (
             <li key={index} className="waves-row">
-              <span className="waves-index">{index + 1}</span>
-              <input
-                id={`${id}-from`}
-                type="time"
-                step={900}
-                className="input"
-                aria-label={`Lượt ${index + 1} bắt đầu`}
-                value={wave.from}
-                onChange={(event) =>
-                  update(index, { from: event.target.value })
-                }
-              />
-              <input
-                id={`${id}-to`}
-                type="time"
-                step={900}
-                className="input"
-                aria-label={`Lượt ${index + 1} kết thúc`}
-                value={wave.to}
-                onChange={(event) => update(index, { to: event.target.value })}
-              />
-              <input
-                id={`${id}-tables`}
-                type="number"
-                min={1}
-                className="input"
-                aria-label={`Lượt ${index + 1} số bàn`}
-                value={wave.tables}
-                onChange={(event) =>
-                  update(index, { tables: Number(event.target.value) })
-                }
-              />
-              <span className="waves-guests">
-                {wave.tables * guestsPerTable}
+              <span className="waves-index">
+                <span className="visually-hidden">Lượt </span>
+                {index + 1}
               </span>
+              <div className="waves-field waves-from">
+                <label htmlFor={`${id}-from`}>Từ</label>
+                <TimeSelect
+                  id={`${id}-from`}
+                  value={wave.from}
+                  onChange={(from) => update(index, { from })}
+                />
+              </div>
+              <div className="waves-field waves-to">
+                <label htmlFor={`${id}-to`}>Đến</label>
+                <TimeSelect
+                  id={`${id}-to`}
+                  value={wave.to}
+                  onChange={(to) => update(index, { to })}
+                />
+              </div>
+              <div className="waves-field waves-tables">
+                <label htmlFor={`${id}-tables`}>Số bàn</label>
+                <input
+                  id={`${id}-tables`}
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  className="input"
+                  value={wave.tables}
+                  onChange={(event) =>
+                    update(index, { tables: Number(event.target.value) })
+                  }
+                />
+              </div>
+              <output className="waves-guests" htmlFor={`${id}-tables`}>
+                {wave.tables * guestsPerTable} khách
+              </output>
               {waves.length > 1 ? (
                 <Button
                   size="sm"
                   variant="text"
+                  className="waves-remove"
                   aria-label={`Bỏ lượt ${index + 1}`}
                   onClick={() => onChange(waves.filter((_, i) => i !== index))}
                 >
                   <CloseIcon size={16} />
                 </Button>
-              ) : (
-                <span />
-              )}
+              ) : null}
             </li>
           );
         })}

@@ -50,12 +50,6 @@ export const STAFF_TYPES = ["Cố định", "Thời vụ"] as const;
 
 export const STAFF_GENDERS = ["Nam", "Nữ", "Khác"] as const;
 
-export type WorkExperience = {
-  place: string;
-  role: string;
-  period: string;
-};
-
 export type StaffMember = {
   name: string;
   phone: string;
@@ -70,11 +64,6 @@ export type StaffMember = {
   address?: string;
   startDate?: string;
   emergencyContact?: string;
-  skills?: string[];
-  experience?: WorkExperience[];
-  certificates?: string;
-  /** Data URLs of CV pages or certificate photos. */
-  cvFiles?: string[];
   note?: string;
 };
 
@@ -91,12 +80,6 @@ export const STAFF: StaffMember[] = [
     address: "Q. Gò Vấp, TP.HCM",
     startDate: "01/06/2019",
     emergencyContact: "Vợ: 0912 111 222",
-    skills: ["Bếp chính", "Món Á", "Lẩu"],
-    experience: [
-      { place: "Nhà hàng Hoa Viên", role: "Phụ bếp", period: "2012–2016" },
-      { place: "Tiệc cưới Kim Ngân", role: "Bếp chính", period: "2016–2019" },
-    ],
-    certificates: "Chứng nhận tập huấn an toàn thực phẩm 2024",
   },
   {
     name: "Lê Thị Hoa",
@@ -125,14 +108,6 @@ export const STAFF: StaffMember[] = [
     birthDate: "08/09/2002",
     address: "Q. Bình Thạnh, TP.HCM",
     startDate: "15/03/2025",
-    skills: ["Bưng bê", "Set bàn tiệc cưới"],
-    experience: [
-      {
-        place: "Trung tâm tiệc White Palace",
-        role: "Phục vụ",
-        period: "2022–2024",
-      },
-    ],
     note: "Sinh viên, nhận ca tối và cuối tuần.",
   },
   {

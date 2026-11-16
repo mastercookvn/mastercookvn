@@ -47,7 +47,7 @@ export function isHoliday(date: string) {
   const lunar = solarToLunar(solar);
   return (
     SOLAR_HOLIDAYS.includes(date.slice(0, 5)) ||
-    (!lunar.leap &&
+    (!lunar.isLeap &&
       LUNAR_HOLIDAYS.some(
         ([day, month]) => lunar.day === day && lunar.month === month
       ))

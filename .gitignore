@@ -174,3 +174,9 @@ dist
 tmp/
 
 .DS_Store
+
+# Agent skills installed by pnpm, not part of the project
+/.agents/skills/modern-web-guidance
+/.claude/skills/modern-web-guidance
+/.agents/skills/chrome-extensions
+/.claude/skills/chrome-extensions

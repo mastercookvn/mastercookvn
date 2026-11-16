@@ -24,8 +24,6 @@ const onBehalfPrice = calculateMealPrice({
   services: [{ price: serviceById("don").price, quantity: 1 }],
 });
 
-export const ON_BEHALF_PRICE = onBehalfPrice;
-
 /** What the order screens need from a meal, whether it has a contract yet or not. */
 export type OrderMeal = Pick<
   Meal,

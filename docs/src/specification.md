@@ -1,3 +1,7 @@
+---
+order: 1
+---
+
 # Đặc tả phần mềm MasterCookVN
 
 ## 1. Mục tiêu và phạm vi
@@ -48,7 +52,7 @@ Bếp, phục vụ, vận chuyển là vị trí để phân công, không bắt
 6. Thu hồi/kiểm đếm, ghi bồi thường; quyết toán từng bữa. Đóng hợp đồng khi mọi bữa kết thúc/hủy và đã thu/hoàn đủ.
 7. Cuối tháng kiểm kê, chốt tiêu thụ và food cost; đầu tháng sau tạo đợt đề xuất giá để quản lý xử lý.
 
-Danh mục UC chỉ duy trì tại [chỉ mục phân tích](./diagrams/index.md), không lập lại ở đây.
+Danh mục UC chỉ duy trì tại [danh mục Use Case](./nghiep-vu/danh-muc-use-case.md), không lập lại ở đây. Tra cứu [tham số và giới hạn hệ thống](./nghiep-vu/tham-so.md).
 
 ## 5. Quy tắc nghiệp vụ
 
@@ -62,13 +66,13 @@ Một đơn có ít nhất một bữa và tối đa một hợp đồng. Mỗi 
 
 ### BR03 — Bàn ăn và bàn ghế
 
-Giá/định lượng cho bàn ăn chuẩn 10 người; một bữa dùng cùng số người/bàn ăn, tối thiểu 10. Hệ số quy mô = số người/bàn ăn / 10. Nhập số bàn ăn và số bàn bố trí riêng; số bàn bố trí không vượt số bàn ăn. Dụng cụ theo người, bố trí hoặc nhu cầu bữa; không đồng nhất số bàn ăn với bàn ghế. Ví dụ 30 bàn ăn trên 10 bàn bố trí cuốn chiếu: gợi ý 4 người phục vụ.
+Giá và định lượng theo bàn ăn chuẩn 10 suất; hệ thống không nhập số người thực tế trên mỗi bàn. Khách tự quyết định số người ngồi, không làm thay đổi giá hay định lượng bàn chuẩn. Nhập số bàn ăn và số bàn bố trí riêng; số bàn bố trí không vượt số bàn ăn. Dụng cụ theo người tính theo số suất chuẩn = số bàn ăn × 10, kể cả khi phục vụ cuốn chiếu; dụng cụ khác tính theo bàn bố trí hoặc nhu cầu bữa. Không đồng nhất số bàn ăn với bàn ghế. Ví dụ 30 bàn ăn trên 10 bàn bố trí cuốn chiếu: dự trù dụng cụ theo người cho 300 suất, gợi ý 4 người phục vụ.
 
 ### BR04 — Giá và chốt giá
 
 - Giá gợi ý món/bàn ăn chuẩn = Σ(định lượng × giá nguyên liệu hiện hành) / food cost mục tiêu. Quản lý chấp nhận hoặc nhập giá khác, không tự đổi giá bán.
-- Set là tổng giá bán món trong set, không cộng lợi nhuận lần nữa. Tự chọn tối thiểu 6 món đang phục vụ.
-- Tiền món bữa = tổng giá món chuẩn × hệ số quy mô × số bàn ăn. Cộng dịch vụ (đơn giá × lượng), phụ thu thỏa thuận, rồi thuế theo tham số. Phụ thu lễ dùng danh sách ngày cố định âm/dương, không có UC quản lý ngày lễ riêng.
+- Set là tổng giá bán món trong set, không cộng lợi nhuận lần nữa. Thực đơn tự chọn phải có ít nhất một món đang phục vụ; dưới ngưỡng khuyến nghị hiện hành (mặc định 6 món) thì cảnh báo nhưng vẫn được tạm tính và gửi đơn để tư vấn xem xét.
+- Tiền món bữa = tổng giá món chuẩn × số bàn ăn. Cộng dịch vụ (đơn giá × lượng), phí vận chuyển theo khảo sát, phụ thu thỏa thuận, rồi thuế theo tham số; không cộng phí vận chuyển hai lần. Phụ thu lễ dùng danh sách ngày cố định âm/dương, không có UC quản lý ngày lễ riêng.
 - Tạm tính chưa phải cam kết. Phát hành hợp đồng lưu bản chốt tên, lượng, đơn giá, thuế, phụ thu, điều khoản và giá bồi thường; sửa danh mục không đổi hợp đồng cũ.
 - VNĐ nguyên; tổng mỗi bữa làm tròn tới bội số 500 gần nhất, đúng nửa làm tròn lên; lưu chênh lệch riêng. Tổng hợp đồng bằng tổng các bữa; giao dịch ghi đúng tiền thực thu/hoàn.
 
@@ -90,13 +94,15 @@ Mục tiêu khởi tạo 35%; sau chốt tháng quản lý có thể dùng tỷ 
 
 ### BR07 — Nhận tiệc và giữ chỗ
 
-Tư vấn nhập khoảng cách thủ công; phạm vi tối đa 20 km, không tích hợp bản đồ. Nhập khoảng sử dụng dụng cụ và giờ làm nhân sự cho từng bữa, không tự tính lộ trình/vệ sinh. Kiểm tra cả các bữa cùng đơn và hợp đồng khác trong khung chồng lấn.
+Tư vấn nhập khoảng cách thủ công; hệ thống hiển thị mốc tham khảo 20 km, không tự đối chiếu, cảnh báo theo khoảng cách hoặc từ chối nhận theo mốc này. Tư vấn tự đánh giá địa điểm ngoài hệ thống; không tích hợp bản đồ. Phí vận chuyển miễn 10 km đầu, tính 15.000 đồng/km vượt 10 km, kể cả khi khoảng cách vượt 20 km; dùng khoảng cách do tư vấn nhập. Nhập khoảng sử dụng dụng cụ và giờ làm nhân sự cho từng bữa, không tự tính lộ trình/vệ sinh. Kiểm tra cả các bữa cùng đơn và hợp đồng khác trong khung chồng lấn.
 
 Xác nhận nhận tiệc giữ tài nguyên tạm 24 giờ chờ cọc; đủ BR08 thì giữ chính thức. Server loại giữ hết hạn khi tra cứu/kiểm tra/xử lý đơn, không phụ thuộc cron riêng. Hết hạn chưa đủ ký/cọc thì đánh dấu hết hạn, nhả giữ; khoản đã thu vẫn lưu để hoàn, không xóa giao dịch.
 
 Tồn tối thiểu chỉ cảnh báo; thiếu tài nguyên thực tế thì không xác nhận nhận đến khi bổ sung/điều chỉnh. Không dùng trần số tiệc/ngày độc lập với tài nguyên.
 
 ### BR08 — Ký và cọc
+
+Tạm thời, ký online chỉ là khách dùng tài khoản để xác nhận đồng ý nội dung hợp đồng trên hệ thống; không triển khai OTP, chữ ký số hoặc quy trình xác minh chữ ký phức tạp.
 
 Tư vấn phát hành là xác nhận phía cơ sở. Khách xác nhận online bằng tài khoản hoặc nhân viên ghi ký giấy kèm file. Cọc 50%–100% tổng hợp đồng trong 24 giờ. Phân bổ theo giá trị từng bữa; cọc bắt buộc ban đầu bằng 50% giá trị bữa, phần vượt là trả trước. Sau phụ lục chỉ yêu cầu cọc bổ sung khi thuộc BR09, không tự làm hợp đồng mất hiệu lực do tỷ lệ cọc mới thấp hơn 50%. Khi hủy, phần cọc làm căn cứ là mức nhỏ hơn giữa 50% giá trị bữa hiện hành và số tiền đã thu còn phân bổ cho bữa; phần vượt căn cứ đó là trả trước được hoàn đủ.
 
@@ -144,7 +150,7 @@ Mỗi bữa hoàn tất tối đa một đánh giá, không bắt buộc; ngư�
 
 ## 6. Mô hình và tài liệu liên quan
 
-[Mô hình lớp](./diagrams/class.md) là nguồn thuộc tính, quan hệ và ràng buộc dữ liệu. [Trạng thái đơn/hợp đồng/bữa](./diagrams/state/don-tiec.md) tách tiến độ khỏi thanh toán; [trạng thái dụng cụ](./diagrams/state/phieu-xuat-dung-cu.md) tách giữ trước khỏi xuất thực tế. [Nội dung hợp đồng](./contracts/service-contract.md) phục vụ lập hợp đồng, không thay đặc tả.
+[Mô hình lớp](./mo-hinh/mo-hinh-lop-class.md) là nguồn thuộc tính, quan hệ và ràng buộc dữ liệu. [Trạng thái đơn/hợp đồng/bữa](./nghiep-vu/trang-thai-don-hop-dong-va-bua.md) tách tiến độ khỏi thanh toán; [trạng thái dụng cụ](./nghiep-vu/nguyen-lieu-va-dung-cu/trang-thai-dung-cu.md) tách giữ trước khỏi xuất thực tế. [Nội dung hợp đồng](./references/service-contract.md) phục vụ lập hợp đồng, không thay đặc tả.
 
 ## 7. Phi chức năng
 
@@ -152,7 +158,8 @@ Mỗi bữa hoàn tất tối đa một đánh giá, không bắt buộc; ngư�
 - Server kiểm tra quyền/sở hữu hồ sơ, tự tính tiền/kiểm tra tài nguyên; mật khẩu băm.
 - Lưu người, thời điểm, mã tham chiếu/bằng chứng cho ký, thu/hoàn, phụ lục, kiểm kê, chấp nhận giá. Danh mục đã dùng chỉ ngưng, không xóa.
 - Ghi tiền, giữ tài nguyên, chốt kỳ, tạo đợt giá nguyên tử và không ghi hai lần; lượng/tiền dùng số chính xác.
-- Sao lưu, phục hồi; file hợp đồng/bằng chứng theo quyền hồ sơ.
+- Ảnh món, bản ký giấy và chứng từ lưu trong bucket public trên S3 hoặc dịch vụ lưu trữ object tương thích; cơ sở dữ liệu lưu object key và metadata qua `TepDinhKem`, không lưu URL thay key. Tên bucket cấu hình riêng cho từng môi trường triển khai; URL được tạo từ cấu hình lưu trữ và key. Bất kỳ ai biết URL đều có thể truy cập tệp trực tiếp, kể cả bản ký và chứng từ.
+- Sao lưu, phục hồi dữ liệu và tệp lưu trữ.
 - SĐT là căn cứ liên kết theo phạm vi đã chốt, không xác minh OTP.
 
 ## 8. Giả định triển khai đã chọn

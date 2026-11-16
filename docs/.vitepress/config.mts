@@ -199,7 +199,7 @@ export function createDiagramsWithKroki({
 const vitePressOptions = {
   title: "Mastercookvn",
   description: "MastercookVN",
-  lang: "en-GB",
+  lang: "vi-VN",
   base: "/mastercookvn/",
   srcDir: "src",
   markdown: {
@@ -243,6 +243,7 @@ const vitePressSidebarOptions = {
   sortMenusByFrontmatterOrder: true,
   collapsed: true,
   collapseDepth: 2,
+  excludeFilesByFrontmatterFieldName: "exclude",
 } satisfies VitePressSidebarOptions;
 
 export default defineConfig(

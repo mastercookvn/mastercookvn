@@ -69,13 +69,12 @@ export function StaffTable() {
         }
       />
       <DataTable
-        searchPlaceholder="Tìm theo tên, SĐT, vị trí, kỹ năng"
+        searchPlaceholder="Tìm theo tên, SĐT, vị trí"
         columns={[
           "Nhân viên",
           "Vị trí",
           "Loại",
           "Ngày vào làm",
-          "Kỹ năng",
           "Trạng thái",
           "",
         ]}
@@ -106,9 +105,6 @@ export function StaffTable() {
           member.position,
           member.type,
           member.startDate || "Chưa ghi",
-          <span key="skills" className="text-small text-soft">
-            {member.skills?.length ? member.skills.join(", ") : "Chưa ghi"}
-          </span>,
           member.active ? (
             <Badge key="status" tone="good">
               Đang làm
