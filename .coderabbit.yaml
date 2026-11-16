@@ -1,0 +1,42 @@
+language: en-GB
+
+inheritance: true
+
+reviews:
+  profile: assertive
+  poem: false
+
+  tools:
+    ruff:
+      enabled: false
+    markdownlint:
+      enabled: false
+    biome:
+      enabled: false
+    tflint:
+      enabled: false
+    flake8:
+      enabled: false
+    prismaLint:
+      enabled: false
+    oxc:
+      enabled: false
+    pylint:
+      enabled: false
+
+  path_instructions:
+    - path: backend/**
+      instructions: |
+
+    - path: web/note/**
+      instructions: |
+
+    - path: docs/**
+      instructions: |
+
+  path_filters:
+    - "!**/AGENTS.md"
+    - "!**/CLAUDE.md"
+    - "!**/.gitignore"
+    - "!**/.editorconfig"
+    - "!.claude/settings.json"
