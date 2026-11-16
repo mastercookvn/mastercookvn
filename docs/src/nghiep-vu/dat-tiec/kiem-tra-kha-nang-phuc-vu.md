@@ -2,7 +2,7 @@
 order: 30
 ---
 
-# Kiểm tra khả năng phục vụ
+# Kiểm tra Service Capacity
 
 ```mermaid
 flowchart TD
@@ -61,7 +61,7 @@ UC liên quan: UC-DT-04, UC-DT-05, UC-HD-05, UC-NS-02, UC-KHO-06. Tra tại [dan
 
 ## Lưu ý và giới hạn
 
-- Không kiểm tra xe vận chuyển, thời tiết, giấy chứng nhận sức khỏe, lịch nghỉ phép cá nhân, API bản đồ tự động hoặc tồn kho nguyên liệu (chỉ kiểm tra dụng cụ và nhân sự).
-- Không tự kiểm tra khoảng cách theo mốc tham khảo; tư vấn tự đánh giá địa điểm. Dụng cụ theo người được tính theo số bàn ăn × 10 suất chuẩn.
+- Không kiểm tra xe vận chuyển, thời tiết, giấy chứng nhận sức khỏe, lịch nghỉ phép cá nhân, API bản đồ tự động hoặc tồn kho Ingredient (chỉ kiểm tra Equipment và nhân sự).
+- Không tự kiểm tra khoảng cách theo mốc tham khảo; Consultant tự đánh giá địa điểm. Equipment theo người được tính theo số Serving Table × 10 suất chuẩn.
 - Lượng giữ chỗ đã xuất kho thực tế không bị trừ hai lần vào năng lực khả dụng (tuân thủ bất biến tại [`class.md`](../../mo-hinh/mo-hinh-lop-class.md)).
-- Ngưỡng tồn tối thiểu chỉ đóng vai trò cảnh báo trên Dashboard; chỉ khi thiếu thực tế so với sở hữu khả dụng mới từ chối nhận đơn.
+- Ngưỡng tồn tối thiểu chỉ đóng Role cảnh báo trên Dashboard; chỉ khi thiếu thực tế so với sở hữu khả dụng mới từ chối nhận Order.

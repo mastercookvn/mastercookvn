@@ -2,7 +2,7 @@
 order: 20
 ---
 
-# Đặt tiệc và đặt hộ
+# Booking và đặt hộ
 
 ```mermaid
 sequenceDiagram
@@ -83,6 +83,6 @@ UC liên quan: UC-DT-01, UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD
 
 ## Lưu ý và giới hạn
 
-- Hai nhánh tự đặt/đặt hộ hợp nhất trước khi lưu đơn; hai nhánh ký online/ký giấy hợp nhất tại ghi xác nhận.
-- Thiếu tài nguyên thực tế thì không nhận và không giữ một phần đơn; khoảng cách do tư vấn tự đánh giá.
+- Hai nhánh tự đặt/đặt hộ hợp nhất trước khi lưu Order; hai nhánh ký online/ký giấy hợp nhất tại ghi xác nhận.
+- Thiếu tài nguyên thực tế thì không nhận và không giữ một phần Order; khoảng cách do Consultant tự đánh giá.
 - Giao tiếp qua điện thoại/Zalo được thực hiện thủ công ngoài hệ thống, không qua API tự động.

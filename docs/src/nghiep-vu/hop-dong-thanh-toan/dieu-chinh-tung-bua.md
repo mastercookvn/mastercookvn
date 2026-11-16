@@ -2,7 +2,7 @@
 order: 30
 ---
 
-# Điều chỉnh từng bữa
+# Điều chỉnh từng Meal
 
 ```mermaid
 sequenceDiagram
@@ -70,6 +70,6 @@ UC liên quan: UC-HD-05, UC-HD-03, UC-HD-04. Tra tại [danh mục chung](../dan
 
 ## Lưu ý và giới hạn
 
-- Không hỗ trợ dời ngày tiệc qua phụ lục điều chỉnh.
-- Đổi món yêu cầu trước tiệc $\ge 5$ ngày (chỉ thay món, không tăng số món); đổi bàn yêu cầu trước tiệc $\ge 3$ ngày (giảm tối đa 15%).
-- Giảm bàn làm dư tiền cọc sẽ được lưu lại để đối trừ khi quyết toán (không hoàn ngay, không hủy hợp đồng).
+- Không hỗ trợ dời ngày tiệc qua Addendum điều chỉnh.
+- Đổi Dish yêu cầu trước tiệc $\ge 5$ ngày (chỉ thay Dish, không tăng số Dish); đổi bàn yêu cầu trước tiệc $\ge 3$ ngày (giảm tối đa 15%).
+- Giảm bàn làm dư Deposit sẽ được lưu lại để đối trừ khi Settlement (không hoàn ngay, không hủy Contract).

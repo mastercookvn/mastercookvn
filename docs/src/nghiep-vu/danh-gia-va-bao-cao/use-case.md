@@ -8,51 +8,51 @@ order: 10
 
 | Trường         | Nội dung                                           |
 | -------------- | -------------------------------------------------- |
-| Tên            | Ghi nhận đánh giá sau bữa                          |
-| Tác nhân       | Khách hàng, Nhân viên tư vấn                       |
-| Mục tiêu       | Lưu phản hồi của người đặt cho bữa đã hoàn tất.    |
+| Tên            | Ghi nhận đánh giá sau Meal                          |
+| Tác nhân       | Customer, Consultant                       |
+| Mục tiêu       | Lưu phản hồi của người đặt cho Meal đã hoàn tất.    |
 | Kích hoạt      | Người đặt muốn đánh giá.                           |
-| Tiền điều kiện | Bữa HoanTat, thuộc hồ sơ khách, chưa có đánh giá.  |
-| Hậu điều kiện  | Một đánh giá gắn đúng bữa, lưu người nhập thực tế. |
+| Tiền điều kiện | Meal HoanTat, thuộc Customer Profile, chưa có đánh giá.  |
+| Hậu điều kiện  | Một đánh giá gắn đúng Meal, lưu người nhập thực tế. |
 | Quan hệ        | Điểm vào từ UC-DT-06.                              |
 | Quy tắc        | BR14                                               |
 
 **Luồng chính**
 
-1. Khách chọn bữa HoanTat trong lịch sử đặt.
-2. Khách nhập điểm 1–5, nhận xét.
+1. Customer chọn Meal HoanTat trong lịch sử đặt.
+2. Customer nhập điểm 1–5, nhận xét.
 3. Hệ thống kiểm tra, lưu đánh giá, người nhập.
 
 **Luồng thay thế**
 
-- 1a. Tư vấn nhập hộ: chọn bữa theo hồ sơ khách, nhập ý kiến người đặt; lưu tư vấn là người nhập.
+- 1a. Consultant nhập hộ: chọn Meal theo Customer Profile, nhập ý kiến người đặt; lưu Consultant là người nhập.
 
 **Ngoại lệ**
 
-- 3e. Bữa chưa hoàn tất, đã có đánh giá hoặc không thuộc hồ sơ: không tạo.
+- 3e. Meal chưa hoàn tất, đã có đánh giá hoặc không thuộc hồ sơ: không tạo.
 
 ## UC-BC-01
 
 | Trường         | Nội dung                                                                  |
 | -------------- | ------------------------------------------------------------------------- |
 | Tên            | Xem dashboard và cảnh báo                                                 |
-| Tác nhân       | Nhân viên nội bộ                                                          |
-| Mục tiêu       | Thấy việc cần xử lý và cảnh báo trong phạm vi vai trò.                    |
+| Tác nhân       | Internal Staff                                                          |
+| Mục tiêu       | Thấy việc cần xử lý và cảnh báo trong phạm vi Role.                    |
 | Kích hoạt      | Đăng nhập nội bộ hoặc mở dashboard.                                       |
-| Tiền điều kiện | Đã đăng nhập tài khoản nội bộ.                                            |
+| Tiền điều kiện | Đã đăng nhập Account nội bộ.                                            |
 | Hậu điều kiện  | Hiển thị danh sách việc, dẫn tới hồ sơ tương ứng; không thay đổi dữ liệu. |
 | Quan hệ        | Điểm vào các UC xử lý.                                                    |
 | Quy tắc        | BR07, BR11, BR12, BR13                                                    |
 
 **Luồng chính**
 
-1. Hệ thống xác định vai trò người dùng.
-2. Hệ thống tổng hợp khối theo vai trò:
-   - Tư vấn: đơn chờ khảo sát/nhận, hợp đồng chờ ký/cọc sắp hết hạn, phụ lục chờ.
-   - Kế toán: chờ cọc, chờ quyết toán, khoản phải hoàn, kỳ nguyên liệu chờ chốt.
-   - Thủ kho: bữa sắp tới cần xuất, bữa chờ kiểm đếm, dụng cụ dưới tồn tối thiểu.
-   - Quản lý nhân sự: bữa sắp tới thiếu phân công so với gợi ý.
-   - Quản lý cơ sở: tất cả khối, đợt đề xuất giá chưa xử lý.
+1. Hệ thống xác định Role người dùng.
+2. Hệ thống tổng hợp khối theo Role:
+   - Consultant: Order chờ khảo sát/nhận, Contract chờ ký/Deposit sắp hết hạn, Addendum chờ.
+   - Accountant: chờ Deposit, chờ Settlement, khoản phải hoàn, kỳ Ingredient chờ chốt.
+   - Storekeeper: Meal sắp tới cần xuất, Meal chờ kiểm đếm, Equipment dưới tồn tối thiểu.
+   - HR Manager: Meal sắp tới thiếu Staff Assignment so với gợi ý.
+   - Branch Manager: tất cả khối, đợt đề xuất giá chưa xử lý.
 3. Hệ thống hiển thị lịch tiệc sắp tới (ngày/tuần) và các khối.
 4. Người dùng chọn mục, chuyển tới UC tương ứng.
 
@@ -62,15 +62,15 @@ order: 10
 
 **Ngoại lệ**
 
-- 1e. Tài khoản khách: không truy cập dashboard nội bộ.
+- 1e. Account Customer: không truy cập dashboard nội bộ.
 
 ## UC-BC-02
 
 | Trường         | Nội dung                                                                                   |
 | -------------- | ------------------------------------------------------------------------------------------ |
 | Tên            | Xem báo cáo doanh thu và food cost                                                         |
-| Tác nhân       | Quản lý cơ sở, Kế toán                                                                     |
-| Mục tiêu       | Xem doanh thu, thu/hoàn, food cost, lãi theo nguyên liệu, tình hình đơn, đánh giá theo kỳ. |
+| Tác nhân       | Branch Manager, Accountant                                                                     |
+| Mục tiêu       | Xem doanh thu, thu/hoàn, food cost, Ingredient Margin, tình hình Order, đánh giá theo kỳ. |
 | Kích hoạt      | Cần xem kết quả kinh doanh.                                                                |
 | Tiền điều kiện | Đã đăng nhập đúng quyền.                                                                   |
 | Hậu điều kiện  | Hiển thị báo cáo; không thay đổi dữ liệu.                                                  |
@@ -79,11 +79,11 @@ order: 10
 
 **Luồng chính**
 
-1. Người dùng chọn khoảng thời gian (tháng/quý/năm hoặc từ–đến), lọc loại tiệc (tùy chọn).
-2. Hệ thống tổng hợp doanh thu bữa đã thực hiện theo ngày phục vụ, tách món/dịch vụ/bồi thường.
+1. Người dùng chọn khoảng thời gian (tháng/quý/năm hoặc từ–đến), lọc Event Type (tùy chọn).
+2. Hệ thống tổng hợp doanh thu Meal đã thực hiện theo ngày phục vụ, tách Dish/dịch vụ/bồi thường.
 3. Hệ thống tổng hợp tiền thu, tiền hoàn, tiền giữ lại do hủy.
-4. Hệ thống lấy kỳ nguyên liệu đã chốt: chi phí tiêu thụ, food cost, lãi theo nguyên liệu = doanh thu món − chi phí.
-5. Hệ thống tổng hợp số đơn theo trạng thái, tỷ lệ hủy, điểm đánh giá trung bình.
+4. Hệ thống lấy kỳ Ingredient đã chốt: chi phí tiêu thụ, food cost, Ingredient Margin = doanh thu Dish − chi phí.
+5. Hệ thống tổng hợp số Order theo trạng thái, tỷ lệ hủy, điểm đánh giá trung bình.
 6. Hệ thống hiển thị bảng, biểu đồ.
 
 **Luồng thay thế**
@@ -98,10 +98,10 @@ order: 10
 
 | Trường         | Nội dung                                                          |
 | -------------- | ----------------------------------------------------------------- |
-| Tên            | Xem báo cáo dụng cụ                                               |
-| Tác nhân       | Quản lý cơ sở, Thủ kho                                            |
-| Mục tiêu       | Xem tồn dụng cụ, loại dưới ngưỡng, hao hụt và bồi thường theo kỳ. |
-| Kích hoạt      | Cần xem tình trạng kho dụng cụ.                                   |
+| Tên            | Xem báo cáo Equipment                                               |
+| Tác nhân       | Branch Manager, Storekeeper                                            |
+| Mục tiêu       | Xem tồn Equipment, loại dưới ngưỡng, hao hụt và bồi thường theo kỳ. |
+| Kích hoạt      | Cần xem tình trạng kho Equipment.                                   |
 | Tiền điều kiện | Đã đăng nhập đúng quyền.                                          |
 | Hậu điều kiện  | Hiển thị báo cáo; không thay đổi dữ liệu.                         |
 | Quan hệ        | Dữ liệu từ UC-KHO-05 đến UC-KHO-08.                               |
@@ -111,7 +111,7 @@ order: 10
 
 1. Người dùng chọn khoảng thời gian.
 2. Hệ thống hiển thị từng loại: sở hữu, sẵn sàng, đang sử dụng, hư, tồn tối thiểu, cờ dưới ngưỡng.
-3. Hệ thống tổng hợp trong kỳ: lượng nhập mua, hư, mất, phục hồi, loại bỏ; tiền bồi thường khách chịu.
+3. Hệ thống tổng hợp trong kỳ: lượng nhập mua, hư, mất, phục hồi, loại bỏ; tiền bồi thường Customer chịu.
 
 **Luồng thay thế**
 

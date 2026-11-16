@@ -2,6 +2,6 @@
 order: 100
 ---
 
-# Tài khoản và danh mục
+# Account và Catalog
 
 - [Đặc tả Use Case](./use-case.md)

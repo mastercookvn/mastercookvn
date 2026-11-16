@@ -159,21 +159,21 @@ flowchart LR
 
 | Tác nhân           | Loại                                  | Ghi chú                                                                     |
 | ------------------ | ------------------------------------- | --------------------------------------------------------------------------- |
-| Khách hàng         | Người                                 | Không cần đăng nhập vẫn xem danh mục và tạm tính (UC-DT-01).                |
-| Nhân viên nội bộ   | Trừu tượng                            | Vai trò cha chung cho nhân sự nội bộ (UC-TK-02, UC-BC-01).                  |
-| Nhân viên tư vấn   | Người, kế thừa Nhân viên nội bộ       | Tiếp nhận đơn, khảo sát địa điểm, lập hợp đồng và phụ lục.                  |
-| Kế toán            | Người, kế thừa Nhân viên nội bộ       | Xác nhận thu tiền, ghi nhận hoàn tiền, chốt kỳ kiểm kê, quyết toán.         |
-| Thủ kho            | Người, kế thừa Nhân viên nội bộ       | Nhập/xuất/thu hồi dụng cụ, nhập nguyên liệu, kiểm kê cuối tháng.            |
-| Quản lý nhân sự    | Người, kế thừa Nhân viên nội bộ       | Quản lý hồ sơ nhân viên, phân công ca làm việc theo từng bữa tiệc.          |
-| Quản lý cơ sở      | Người, kế thừa toàn bộ vai trò nội bộ | Quản trị hệ thống, xử lý đề xuất giá nguyên liệu tháng, điều chỉnh tham số. |
-| Dịch vụ thanh toán | Hệ thống ngoài                        | Cổng thanh toán trực tuyến xử lý webhook giao dịch (UC-HD-03).              |
+| Customer         | Người                                 | Không cần đăng nhập vẫn xem Catalog và tạm tính (UC-DT-01).                |
+| Internal Staff   | Trừu tượng                            | Role cha chung cho nhân sự nội bộ (UC-TK-02, UC-BC-01).                  |
+| Consultant   | Người, kế thừa Internal Staff       | Tiếp nhận Order, Site Survey, lập Contract và Addendum.                  |
+| Accountant            | Người, kế thừa Internal Staff       | Xác nhận thu tiền, ghi nhận Refund, chốt kỳ Inventory Count, Settlement.         |
+| Storekeeper            | Người, kế thừa Internal Staff       | Nhập/xuất/thu hồi Equipment, nhập Ingredient, thực hiện Inventory Count cuối tháng.  |
+| HR Manager    | Người, kế thừa Internal Staff       | Quản lý Staff Profile, Staff Assignment theo ca làm việc của từng Meal.      |
+| Branch Manager      | Người, kế thừa toàn bộ Role nội bộ | Quản trị hệ thống, xử lý đề xuất giá Ingredient tháng, điều chỉnh tham số. |
+| Payment Service | Hệ thống ngoài                        | Cổng Payment trực tuyến xử lý webhook giao dịch (UC-HD-03).              |
 
 ## Quan hệ include và extend
 
 | Quan hệ     | Từ                               | Đến                                | Ghi chú                                                                         |
 | ----------- | -------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------- |
-| `«include»` | UC-DT-05 Xác nhận nhận đơn       | UC-DT-04 Kiểm tra khả năng phục vụ | Luôn kiểm tra tài nguyên trước khi nhận đơn và giữ chỗ                          |
-| `«include»` | UC-HD-05 Điều chỉnh bằng phụ lục | UC-DT-04 Kiểm tra khả năng phục vụ | Bắt buộc kiểm tra lại tài nguyên khi điều chỉnh tăng số bàn ăn                  |
-| `«extend»`  | UC-HD-04 Thanh toán thủ công     | UC-HD-03 Thanh toán online         | Mở rộng khi khách thanh toán trực tiếp bằng tiền mặt / chuyển khoản ngoài luồng |
-| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-06 Hủy bữa hoặc hợp đồng     | Mở rộng kích hoạt khi phát sinh nghĩa vụ hoàn tiền cọc                          |
-| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-08 Quyết toán                | Mở rộng kích hoạt khi số dư quyết toán của bữa là âm                            |
+| `«include»` | UC-DT-05 Xác nhận nhận Order       | UC-DT-04 Kiểm tra Service Capacity | Luôn kiểm tra tài nguyên trước khi nhận Order và giữ chỗ                          |
+| `«include»` | UC-HD-05 Điều chỉnh bằng Addendum | UC-DT-04 Kiểm tra Service Capacity | Bắt buộc kiểm tra lại tài nguyên khi điều chỉnh tăng số Serving Table                  |
+| `«extend»`  | UC-HD-04 Payment thủ công     | UC-HD-03 Payment online         | Mở rộng khi Customer thực hiện Payment trực tiếp bằng tiền mặt / chuyển khoản ngoài luồng |
+| `«extend»`  | UC-HD-07 Ghi nhận Refund      | UC-HD-06 Hủy Meal hoặc Contract     | Mở rộng kích hoạt khi phát sinh nghĩa vụ Refund cho Deposit                          |
+| `«extend»`  | UC-HD-07 Ghi nhận Refund      | UC-HD-08 Settlement                | Mở rộng kích hoạt khi số dư Settlement của Meal là âm                            |

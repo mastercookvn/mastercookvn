@@ -89,5 +89,5 @@ UC liên quan: UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD-02, UC-HD
 
 ## Lưu ý và giới hạn
 
-- Không vẽ các bước nghiệp vụ hiện trường (check-in, ký bàn giao giấy tờ, chụp ảnh hiện trạng hay thu hồi dụng cụ nhiều đợt).
-- Các nhánh hủy tiệc hoặc điều chỉnh hợp đồng được chi tiết hóa tại các sơ đồ sequence riêng biệt tương ứng.
+- Không vẽ các bước nghiệp vụ hiện trường (check-in, ký bàn giao giấy tờ, chụp ảnh hiện trạng hay thu hồi Equipment nhiều đợt).
+- Các nhánh hủy tiệc hoặc điều chỉnh Contract được chi tiết hóa tại các sơ đồ sequence riêng biệt tương ứng.

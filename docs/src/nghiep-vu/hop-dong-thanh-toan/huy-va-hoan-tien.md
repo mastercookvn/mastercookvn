@@ -2,7 +2,7 @@
 order: 40
 ---
 
-# Hủy và hoàn theo từng bữa
+# Hủy và hoàn theo từng Meal
 
 ```mermaid
 sequenceDiagram
@@ -66,7 +66,7 @@ UC liên quan: UC-HD-06, UC-HD-07. Tra tại [danh mục chung](../danh-muc-use-
 
 ## Lưu ý và giới hạn
 
-- Bậc hoàn tiền cọc căn cứ số ngày còn lại đến tiệc: $\ge 30$ ngày hoàn 100%; từ $15$ đến dưới $30$ ngày hoàn 50%; dưới $15$ ngày hoàn 0%. Phần tiền trả trước vượt cọc được hoàn đủ 100%.
-- Hủy trước khi cọc không phát sinh chi phí.
-- Khách không có mặt tại tiệc là trường hợp ghi nhận riêng, không tính là khách chủ động yêu cầu hủy.
-- Quy trình hoàn tiền do Kế toán chi trả và ghi nhận trực tiếp, không qua phê duyệt nhiều cấp phức tạp.
+- Mức Refund đối với Deposit căn cứ số ngày còn lại đến tiệc: $\ge 30$ ngày hoàn 100%; từ $15$ đến dưới $30$ ngày hoàn 50%; dưới $15$ ngày hoàn 0%. Phần tiền trả trước vượt Deposit được hoàn đủ 100%.
+- Hủy trước khi Deposit không phát sinh chi phí.
+- Customer không có mặt tại tiệc là trường hợp ghi nhận riêng, không tính là Customer chủ động yêu cầu hủy.
+- Quy trình Refund do Accountant chi trả và ghi nhận trực tiếp, không qua phê duyệt nhiều cấp phức tạp.

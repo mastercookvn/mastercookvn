@@ -2,7 +2,7 @@
 order: 40
 ---
 
-# Thu hồi dụng cụ và quyết toán
+# Thu hồi Equipment và Settlement
 
 ```mermaid
 sequenceDiagram
@@ -69,6 +69,6 @@ UC liên quan: UC-KHO-06, UC-KHO-07, UC-HD-08, UC-HD-03, UC-HD-04, UC-HD-07. Tra
 
 ## Lưu ý và giới hạn
 
-- Bữa tiệc không sử dụng dụng cụ thì bỏ qua bước lập biên bản kiểm đếm.
-- Không trừ nguyên liệu theo từng bữa tiệc (nguyên liệu tính theo kỳ kiểm kê tháng).
-- Không hỗ trợ công nợ trả chậm; đóng hợp đồng chỉ khi mọi bữa đã kết thúc/hủy và số dư công nợ về 0.
+- Meal không sử dụng Equipment thì bỏ qua bước lập Count Report.
+- Không trừ Ingredient theo từng Meal (Ingredient tính theo kỳ Inventory Count tháng).
+- Không hỗ trợ công nợ trả chậm; đóng Contract chỉ khi mọi Meal đã kết thúc/hủy và số dư công nợ về 0.

@@ -2,7 +2,7 @@
 order: 20
 ---
 
-# Xác nhận, cọc và thanh toán
+# Xác nhận, Deposit và Payment
 
 ```mermaid
 sequenceDiagram
@@ -70,6 +70,6 @@ UC liên quan: UC-HD-02, UC-HD-03, UC-HD-04. Tra tại [danh mục chung](../dan
 
 ## Lưu ý và giới hạn
 
-- Tách biệt việc ký hợp đồng và thu tiền; thứ tự có thể linh hoạt nhưng phải thỏa mãn cả hai điều kiện để hợp đồng có hiệu lực.
+- Tách biệt việc ký Contract và thu tiền; thứ tự có thể linh hoạt nhưng phải thỏa mãn cả hai điều kiện để Contract có hiệu lực.
 - Chống ghi nhận trùng lặp giao dịch (idempotency qua mã tham chiếu).
-- Hết hạn giữ chỗ mà chưa đủ cọc sẽ tự động nhả tài nguyên; tiền nhận muộn được chuyển kế toán xử lý hoàn trả, không tự ý khôi phục chỗ.
+- Hết hạn giữ chỗ mà chưa đủ Deposit sẽ tự động nhả tài nguyên; tiền nhận muộn được chuyển Accountant xử lý hoàn trả, không tự ý khôi phục chỗ.
