@@ -38,7 +38,6 @@ flowchart LR
         DM03(["UC-DM-03: Quản lý nguyên liệu & định lượng món"])
         DM04(["UC-DM-04: Quản lý dịch vụ"])
         DM05(["UC-DM-05: Quản lý danh mục dụng cụ"])
-        DM06(["UC-DM-06: Quản lý loại tiệc"])
         DM07(["UC-DM-07: Quản lý tham số nghiệp vụ"])
     end
 
@@ -139,7 +138,6 @@ flowchart LR
     QLCS --- DM03
     QLCS --- DM04
     QLCS --- DM05
-    QLCS --- DM06
     QLCS --- DM07
     QLCS --- KHO04
     QLCS --- BC02
@@ -149,8 +147,7 @@ flowchart LR
 
     %% Quan hệ include và extend
     DT05 -.->|&laquo;include&raquo;| DT04
-    HD05 -.->|&laquo;include&raquo;| DT04
-    HD04 -.->|&laquo;extend&raquo;| HD03
+    HD05 -.->|&laquo;include&raquo; khi tăng bàn| DT04
     HD07 -.->|&laquo;extend&raquo;| HD06
     HD07 -.->|&laquo;extend&raquo;| HD08
 ```
@@ -170,10 +167,11 @@ flowchart LR
 
 ## Quan hệ include và extend
 
-| Quan hệ     | Từ                               | Đến                                | Ghi chú                                                                         |
-| ----------- | -------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------- |
-| `«include»` | UC-DT-05 Xác nhận nhận đơn       | UC-DT-04 Kiểm tra khả năng phục vụ | Luôn kiểm tra tài nguyên trước khi nhận đơn và giữ chỗ                          |
-| `«include»` | UC-HD-05 Điều chỉnh bằng phụ lục | UC-DT-04 Kiểm tra khả năng phục vụ | Bắt buộc kiểm tra lại tài nguyên khi điều chỉnh tăng số bàn ăn                  |
-| `«extend»`  | UC-HD-04 Thanh toán thủ công     | UC-HD-03 Thanh toán online         | Mở rộng khi khách thanh toán trực tiếp bằng tiền mặt / chuyển khoản ngoài luồng |
-| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-06 Hủy bữa hoặc hợp đồng     | Mở rộng kích hoạt khi phát sinh nghĩa vụ hoàn tiền cọc                          |
-| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-08 Quyết toán                | Mở rộng kích hoạt khi số dư quyết toán của bữa là âm                            |
+| Quan hệ     | Từ                               | Đến                                | Ghi chú                                                        |
+| ----------- | -------------------------------- | ---------------------------------- | -------------------------------------------------------------- |
+| `«include»` | UC-DT-05 Xác nhận nhận đơn       | UC-DT-04 Kiểm tra khả năng phục vụ | Luôn kiểm tra tài nguyên trước khi nhận đơn và giữ chỗ         |
+| `«include»` | UC-HD-05 Điều chỉnh bằng phụ lục | UC-DT-04 Kiểm tra khả năng phục vụ | Bắt buộc kiểm tra lại tài nguyên khi điều chỉnh tăng số bàn ăn |
+| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-06 Hủy bữa hoặc hợp đồng     | Mở rộng kích hoạt khi phát sinh nghĩa vụ hoàn tiền cọc         |
+| `«extend»`  | UC-HD-07 Ghi nhận hoàn tiền      | UC-HD-08 Quyết toán                | Mở rộng kích hoạt khi số dư quyết toán của bữa là âm           |
+
+UC-HD-03 và UC-HD-04 là hai phương án thanh toán độc lập. Thanh toán thủ công không phải `«extend»` của thanh toán online và không cần tạo QR trước. Loại tiệc là chuỗi nhập tại từng bữa trong UC-DT-02, không còn UC quản lý danh mục riêng.

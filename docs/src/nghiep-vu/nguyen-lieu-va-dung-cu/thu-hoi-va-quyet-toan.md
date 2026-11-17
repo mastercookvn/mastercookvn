@@ -26,21 +26,21 @@ sequenceDiagram
     TK->>DC: Nhập thu hồi tốt, hư, mất và số khách chịu
     activate DC
     DC->>DC: Kiểm tra tổng cân bằng và giới hạn khách chịu
-    DC->>DC: Tính đền bù
+    DC->>DC: Miễn theo TS25 nếu trong ngưỡng, còn lại tính số khách chịu × giá chốt
     DC-->>TK: Xác nhận kiểm đếm
     deactivate DC
 
     TK->>DC: Cập nhật trạng thái dụng cụ
     activate DC
     DC->>DC: Tốt vào sẵn sàng, hư vào không khả dụng, mất giảm sở hữu
-    DC->>DC: Nhả giữ bữa (không cập nhật hai lần)
+    DC->>DC: Giữ khung vệ sinh TS19, không cập nhật kho hai lần
     DC-->>TK: Xác nhận cập nhật tồn kho
     deactivate DC
 
-    TK->>QT: Lập quyết toán bữa
+    KT->>QT: Lập quyết toán bữa
     activate QT
-    QT->>QT: Tính từ giá hiện hành, đền bù và giao dịch phân bổ thành công
-    QT-->>TK: Trả số dư quyết toán
+    QT->>QT: Dùng giá hiện hành hoặc nghĩa vụ sau hủy, đền bù và giao dịch thành công
+    QT-->>KT: Trả số dư quyết toán
     deactivate QT
 
     alt Số dư dương (còn thiếu)
@@ -49,11 +49,14 @@ sequenceDiagram
     else Số dư âm (cần hoàn)
         QT->>KT: Ghi nghĩa vụ hoàn
         KT->>KT: Xử lý hoàn tiền
+        KT->>TT: Ghi giao dịch hoàn và bằng chứng
+        TT-->>QT: Cập nhật giao dịch hoàn
     else Số dư bằng 0
         note over QT: Đủ điều kiện đóng bữa
     end
 
-    QT->>HD: Đóng bữa đã quyết toán
+    QT->>QT: Kiểm tra số dư 0 rồi chốt quyết toán
+    QT->>HD: Bữa đã phục vụ chuyển HoanTat, bữa hủy giữ DaHuy
     HD->>HD: Kiểm tra mọi bữa đã kết thúc/hủy và đủ tiền
     alt Tất cả bữa đã xử lý
         HD->>HD: Đóng hợp đồng

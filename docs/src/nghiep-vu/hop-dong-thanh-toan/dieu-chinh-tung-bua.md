@@ -19,11 +19,12 @@ sequenceDiagram
     UI->>HD: Kiểm tra bữa thuộc hợp đồng và không có phụ lục đang chờ
     HD-->>UI: Xác nhận bữa hợp lệ
 
-    alt Đổi món (còn ít nhất 5 ngày)
+    opt Đổi món (còn ít nhất TS11, mặc định 5 ngày)
         TV->>UI: Thay thế món đã chọn (không tăng số món)
-        UI->>TG: Tính chênh lệch giá món, giữ giá gốc
+        UI->>TG: Tính chênh lệch món thay, giữ giá món không đổi
         TG-->>UI: Trả chênh lệch
-    else Đổi bàn ăn (còn ít nhất 3 ngày)
+    end
+    opt Đổi bàn ăn (còn ít nhất TS12, mặc định 3 ngày)
         TV->>UI: Nhập số bàn mới (giảm không quá 15% so với ký ban đầu)
         UI->>TG: Tính chênh lệch giá bàn
         TG-->>UI: Trả chênh lệch
@@ -52,7 +53,7 @@ sequenceDiagram
         TT-->>UI: Xác nhận thu cọc
     end
 
-    TT->>TT: Kiểm tra đủ điều kiện áp phụ lục
+    HD->>HD: Kiểm tra đã xác nhận và đủ cọc bổ sung nếu có
     alt Đủ điều kiện
         UI->>TR: Kiểm tra lại tài nguyên
         TR-->>UI: Tài nguyên xác nhận

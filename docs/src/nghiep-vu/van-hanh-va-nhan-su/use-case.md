@@ -48,7 +48,7 @@ order: 10
 **Luồng chính**
 
 1. Quản lý nhân sự chọn bữa từ dashboard/lịch tiệc.
-2. Hệ thống hiển thị bàn bố trí, gợi ý định mức nhân sự: phục vụ = ceil(bàn bố trí / 3) (TS22), bếp = max(2, ceil(bàn ăn / 5)) (TS23), bốc vác = 2 người / 10 bàn có rạp (TS24); hiển thị nhu cầu dự kiến theo vị trí và số đã phân công.
+2. Hệ thống hiển thị bàn bố trí, gợi ý định mức nhân sự: phục vụ = ceil(bàn bố trí / 3) (TS22), bếp = max(2, ceil(bàn ăn / 5)) (TS23), bốc vác = 2 người / 10 bàn có rạp (TS24); hiển thị nhu cầu dự kiến theo vị trí, khung dự kiến từ giờ bắt đầu bữa trừ TS18 đến giờ kết thúc bữa và số đã phân công.
 3. Quản lý nhân sự chọn người, vị trí, nhiệm vụ, giờ bắt đầu/kết thúc (giờ bắt đầu trước giờ tiệc ít nhất 3 giờ chuẩn bị theo TS18).
 4. Hệ thống kiểm tra người đang làm, không trùng khung giờ, đảm bảo giờ làm việc ≤ 12h/ngày (TS20) và nghỉ giữa 2 ca liên tiếp ≥ 8h (TS21).
 5. Hệ thống lưu phân công.

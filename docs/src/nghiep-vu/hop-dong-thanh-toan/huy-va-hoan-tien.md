@@ -38,17 +38,19 @@ sequenceDiagram
     end
 
     UI->>HD: Lưu kết quả hủy và tạo nghĩa vụ hoàn
-    UI->>GD: Nhả tài nguyên và hủy phân công đúng bữa
+    UI->>GD: Nhả giữ chưa xuất và hủy phân công đúng bữa
     GD-->>UI: Xác nhận nhả tài nguyên
-    note over HD: Các bữa khác và quyết toán bữa đã thực hiện không đổi
+    note over HD,GD: Đã xuất thì vẫn thu hồi/kiểm đếm và bảo đảm vệ sinh TS19<br/>Bữa hủy giữ DaHuy, các bữa khác không đổi
 
-    KT->>KT: Trả tiền hoàn ngoài hệ thống
-    KT->>UI: Ghi giao dịch hoàn cùng phân bổ và bằng chứng
-    UI->>PT: Cập nhật giao dịch hoàn
-    PT->>PT: Tính lại số dư bữa hủy
+    opt Có tiền phải hoàn
+        KT->>KT: Trả tiền hoàn ngoài hệ thống
+        KT->>UI: Ghi giao dịch hoàn cùng phân bổ và bằng chứng
+        UI->>PT: Cập nhật giao dịch hoàn
+        PT->>PT: Tính lại số dư bữa hủy
+    end
 
-    alt Không còn thu/hoàn
-        PT->>HD: Hoàn tất bữa hủy
+    alt Không còn thu/hoàn và đã kiểm đếm nếu có xuất
+        PT->>HD: Chốt quyết toán, bữa vẫn DaHuy
         HD->>HD: Kiểm tra tất cả bữa đã xử lý
         alt Tất cả bữa đã xử lý
             HD->>HD: Đóng hợp đồng

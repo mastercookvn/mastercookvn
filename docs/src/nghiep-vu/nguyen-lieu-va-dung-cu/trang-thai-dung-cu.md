@@ -9,7 +9,7 @@ stateDiagram-v2
     [*] --> Tam : Nhận đơn, đủ tài nguyên
     Tam --> ChinhThuc : Hợp đồng hiệu lực
     Tam --> DaNha : Hết hạn hoặc hủy
-    ChinhThuc --> DaNha : Hủy hoặc hoàn tất thu hồi
+    ChinhThuc --> DaNha : Hủy chưa xuất hoặc thu hồi và hết khung vệ sinh TS19
     DaNha --> [*]
 
     note right of Tam
@@ -19,6 +19,7 @@ stateDiagram-v2
     note right of ChinhThuc
         Giữ chính thức năng lực
         Phụ lục thay lượng/khung trong giao dịch áp dụng
+        Sau kiểm đếm vẫn bảo đảm khung vệ sinh TS19
     end note
     note right of DaNha
         Giải phóng năng lực
@@ -62,4 +63,4 @@ UC-DT-04, UC-DT-05, UC-HD-05, UC-HD-06, UC-KHO-05 đến UC-KHO-08. Theo [BR07, 
   - Thu hồi mất mát: Giảm đang sử dụng và giảm sở hữu.
   - Phục hồi hư: Hư $\rightarrow$ Sẵn sàng.
   - Loại bỏ hư: Giảm hư và giảm sở hữu.
-- **Giữ và Xuất**: Giữ tạm/chính thức và xuất kho là hai khái niệm độc lập; giữ đã xuất kho không bị trừ hai lần vào năng lực khả dụng. Nếu hủy sau khi đã xuất kho thực tế, vẫn bắt buộc lập biên bản thu hồi/kiểm đếm dụng cụ.
+- **Giữ và Xuất**: Giữ tạm/chính thức và xuất kho là hai khái niệm độc lập; giữ đã xuất kho không bị trừ hai lần vào năng lực khả dụng. Khung giữ gồm thời gian vệ sinh TS19; kiểm đếm xong chưa hết khung thì vẫn giữ cho đến hết khung. Nếu hủy sau khi đã xuất, vẫn phải thu hồi/kiểm đếm và bảo đảm vệ sinh trước lượt dùng tiếp theo; bữa vẫn DaHuy.

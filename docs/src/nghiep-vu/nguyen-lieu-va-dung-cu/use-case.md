@@ -52,7 +52,7 @@ order: 10
 
 1. Hệ thống tạo phiếu kiểm kê tháng, liệt kê nguyên liệu: tồn đầu, tổng nhập, lượng tối đa = đầu + nhập.
 2. Thủ kho nhập lượng thực tế cuối kỳ từng nguyên liệu.
-3. Hệ thống kiểm tra, lưu; đánh dấu kỳ ChoChot.
+3. Hệ thống kiểm tra, lưu người kiểm kê và thời điểm; đánh dấu kỳ ChoChot.
 
 **Luồng thay thế**
 
@@ -173,7 +173,7 @@ order: 10
 **Luồng chính**
 
 1. Thủ kho chọn bữa.
-2. Hệ thống lập phiếu nháp với lượng cần theo định mức và tỷ lệ dự trù mặc định 10% theo TS04 (đồ cồng kềnh lấy lượng nhập tay); kiểm tra đảm bảo khoảng cách ly vệ sinh 12 giờ giữa hai lượt sử dụng (TS19).
+2. Hệ thống lập phiếu nháp theo định mức và dự trù của loại dụng cụ; trống dùng TS04 (mặc định 10%), nhập 0 nếu không dự trù; đồ cồng kềnh lấy lượng nhập tay. Kiểm tra khoảng cách ly vệ sinh TS19 (mặc định 12 giờ) sau thu hồi trước lượt dùng tiếp theo.
 3. Thủ kho chỉnh lượng thực xuất.
 4. Hệ thống kiểm tra lượng sẵn sàng thực tế, không lấn giữ của bữa khác.
 5. Thủ kho xác nhận xuất.
@@ -190,25 +190,25 @@ order: 10
 
 ## UC-KHO-07
 
-| Trường         | Nội dung                                                                      |
-| -------------- | ----------------------------------------------------------------------------- |
-| Tên            | Thu hồi, kiểm đếm và bồi thường                                               |
-| Tác nhân       | Thủ kho                                                                       |
-| Mục tiêu       | Đối chiếu dụng cụ trở về, ghi hư/mất, tính tiền khách chịu.                   |
-| Kích hoạt      | Bữa ChoKiemDem, hoặc bữa hủy sau khi đã xuất.                                 |
-| Tiền điều kiện | Có phiếu DaXuat.                                                              |
-| Hậu điều kiện  | Phiếu DaKiemDem; kho cập nhật; giữ nhả; bữa ChoQuyetToan với tiền bồi thường. |
-| Quan hệ        | Tiếp theo UC-HD-08.                                                           |
-| Quy tắc        | BR11, BR13                                                                    |
+| Trường         | Nội dung                                                                                                                                           |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tên            | Thu hồi, kiểm đếm và bồi thường                                                                                                                    |
+| Tác nhân       | Thủ kho                                                                                                                                            |
+| Mục tiêu       | Đối chiếu dụng cụ trở về, ghi hư/mất, tính tiền khách chịu.                                                                                        |
+| Kích hoạt      | Bữa ChoKiemDem, hoặc bữa hủy sau khi đã xuất.                                                                                                      |
+| Tiền điều kiện | Có phiếu DaXuat.                                                                                                                                   |
+| Hậu điều kiện  | Phiếu DaKiemDem; kho cập nhật; bữa đã phục vụ chuyển ChoQuyetToan, bữa hủy giữ DaHuy; ghi tiền bồi thường. Giữ dụng cụ đến hết khung vệ sinh TS19. |
+| Quan hệ        | Tiếp theo UC-HD-08.                                                                                                                                |
+| Quy tắc        | BR11, BR13                                                                                                                                         |
 
 **Luồng chính**
 
 1. Thủ kho chọn bữa.
 2. Hệ thống hiển thị lượng đã xuất, giá bồi thường đã chốt trong hợp đồng.
 3. Thủ kho nhập mỗi loại: tốt, hư, mất; số khách chịu.
-4. Hệ thống kiểm tra cân bằng tốt + hư + mất = xuất, khách chịu ≤ hư + mất; áp dụng ngưỡng hao hụt miễn bồi thường 1% số lượng xuất (TS25); tính tiền bồi thường = khách chịu × đơn giá bồi thường đã chốt trong hợp đồng.
+4. Hệ thống kiểm tra cân bằng tốt + hư + mất = xuất, khách chịu ≤ hư + mất. Theo từng loại, hư + mất ≤ TS25 (mặc định 1%) số xuất thì miễn bồi thường, khách chịu = 0; vượt ngưỡng thì tiền bồi thường = số khách chịu × đơn giá đã chốt, không khấu trừ thêm 1%.
 5. Thủ kho xác nhận biên bản.
-6. Hệ thống cộng tốt vào sẵn sàng, hư vào lượng hư, mất giảm sở hữu; nhả giữ; bữa ChoQuyetToan.
+6. Hệ thống cộng tốt vào sẵn sàng, hư vào lượng hư, mất giảm sở hữu và giảm đang sử dụng đúng lượng đã xuất. Giữ khung dụng cụ đến hết thời gian vệ sinh đã nhập; khi tra cứu/kiểm tra, khoảng giữ đã kết thúc không chiếm năng lực. Bữa đã phục vụ chuyển ChoQuyetToan; bữa hủy giữ DaHuy, tiếp tục xử lý nghĩa vụ tiền qua UC-HD-08.
 
 **Luồng thay thế**
 

@@ -52,21 +52,21 @@ Bếp, phục vụ, vận chuyển là vị trí để phân công, không bắt
 6. Thu hồi/kiểm đếm, ghi bồi thường; quyết toán từng bữa. Đóng hợp đồng khi mọi bữa kết thúc/hủy và đã thu/hoàn đủ.
 7. Cuối tháng kiểm kê, chốt tiêu thụ và food cost; đầu tháng sau tạo đợt đề xuất giá để quản lý xử lý.
 
-Danh mục UC chỉ duy trì tại [danh mục Use Case](./nghiep-vu/danh-muc-use-case.md), không lập lại ở đây. Tra cứu [tham số và giới hạn hệ thống](./nghiep-vu/tham-so.md).
+Danh mục UC chỉ duy trì tại [danh mục Use Case](./nghiep-vu/danh-muc-use-case.md), không lập lại ở đây. [Tham số và giới hạn hệ thống](./nghiep-vu/tham-so.md) là nguồn chuẩn cho giá trị và giới hạn. Các con số trong BR bên dưới là mặc định; khi tham số thay đổi, dùng giá trị hiện hành cho dữ liệu mới và giữ nguyên cam kết đã chốt.
 
 ## 5. Quy tắc nghiệp vụ
 
 ### BR01 — Hợp đồng nhiều bữa
 
-Một đơn có ít nhất một bữa và tối đa một hợp đồng. Mỗi bữa có thực đơn, dịch vụ, thời gian phục vụ, khoảng sử dụng tài nguyên, số bàn ăn, số bàn ghế, địa điểm và khảo sát riêng. Cùng địa chỉ vẫn khảo sát riêng. Thu/hoàn gắn hợp đồng, phân bổ theo bữa để sửa/hủy và quyết toán; tổng phân bổ bằng số tiền giao dịch.
+Một đơn có ít nhất một bữa và tối đa một hợp đồng. Mỗi bữa có thực đơn, dịch vụ, thời gian phục vụ, khoảng sử dụng tài nguyên, số bàn ăn, số bàn ghế, địa điểm và khảo sát riêng. Loại tiệc là chuỗi nhập tự do trên từng bữa, cho phép nhập loại khác; không dùng enum hoặc danh mục quản lý riêng, không tự gợi ý món theo loại tiệc. Bữa mới gửi có thể chưa khảo sát; phải đủ khảo sát trước khi nhận đơn, kể cả cùng địa chỉ. Thu/hoàn gắn hợp đồng, phân bổ theo bữa để sửa/hủy và quyết toán; tổng phân bổ bằng số tiền giao dịch.
 
 ### BR02 — Tài khoản và hồ sơ khách
 
-Đăng ký/đăng nhập bằng SĐT và mật khẩu, không OTP. SĐT chuẩn hóa duy nhất cho hồ sơ khách; một SĐT ứng với một người/tên. Nhân viên đặt hộ nhập tên, SĐT để tìm/tạo hồ sơ, không tự tạo tài khoản. Khách đăng ký cùng SĐT được liên kết hồ sơ, thấy đơn/hợp đồng chờ xác nhận. Không cần tài khoản nếu ký tại quầy. Quản lý tạo tài khoản nội bộ; đặt lại mật khẩu qua nhân viên, không email.
+Đăng ký/đăng nhập bằng SĐT và mật khẩu, không OTP. Sai mật khẩu liên tiếp tới TS27 (mặc định 5 lần) thì khóa tạm, quản lý mở khóa. SĐT chuẩn hóa duy nhất cho hồ sơ khách; một SĐT ứng với một người/tên. Nhân viên đặt hộ nhập tên, SĐT để tìm/tạo hồ sơ, không tự tạo tài khoản. Khách đăng ký cùng SĐT được liên kết hồ sơ, thấy đơn/hợp đồng chờ xác nhận. Không cần tài khoản nếu ký tại quầy. Quản lý tạo tài khoản nội bộ; đặt lại mật khẩu qua nhân viên, không email.
 
 ### BR03 — Bàn ăn và bàn ghế
 
-Giá và định lượng theo bàn ăn chuẩn 10 suất; hệ thống không nhập số người thực tế trên mỗi bàn. Khách tự quyết định số người ngồi, không làm thay đổi giá hay định lượng bàn chuẩn. Nhập số bàn ăn và số bàn bố trí riêng; số bàn bố trí không vượt số bàn ăn. Dụng cụ theo người tính theo số suất chuẩn = số bàn ăn × 10, kể cả khi phục vụ cuốn chiếu; dụng cụ khác tính theo bàn bố trí hoặc nhu cầu bữa. Không đồng nhất số bàn ăn với bàn ghế. Ví dụ 30 bàn ăn trên 10 bàn bố trí cuốn chiếu: dự trù dụng cụ theo người cho 300 suất, gợi ý 4 người phục vụ.
+Giá và định lượng theo bàn ăn chuẩn 10 suất; hệ thống không nhập số người thực tế trên mỗi bàn. Khách tự quyết định số người ngồi, không làm thay đổi giá hay định lượng bàn chuẩn. Nhập số bàn ăn và số bàn bố trí riêng; số bàn bố trí không vượt số bàn ăn. Số bàn ăn tối thiểu theo TS10 (mặc định 1); ngày đặt trước theo TS08–TS09 (mặc định 3–90 ngày). Dụng cụ theo người tính theo số suất chuẩn = số bàn ăn × 10, kể cả khi phục vụ cuốn chiếu; dụng cụ khác tính theo bàn bố trí hoặc nhu cầu bữa. Không đồng nhất số bàn ăn với bàn ghế. Ví dụ 30 bàn ăn trên 10 bàn bố trí cuốn chiếu: dự trù dụng cụ theo người cho 300 suất, gợi ý 4 người phục vụ.
 
 ### BR04 — Giá và chốt giá
 
@@ -74,7 +74,7 @@ Giá và định lượng theo bàn ăn chuẩn 10 suất; hệ thống không n
 - Set là tổng giá bán món trong set, không cộng lợi nhuận lần nữa. Thực đơn tự chọn phải có ít nhất một món đang phục vụ; dưới ngưỡng khuyến nghị hiện hành (mặc định 6 món) thì cảnh báo nhưng vẫn được tạm tính và gửi đơn để tư vấn xem xét.
 - Tiền món bữa = tổng giá món chuẩn × số bàn ăn. Cộng dịch vụ (đơn giá × lượng), phí vận chuyển theo khảo sát, phụ thu thỏa thuận, rồi thuế theo tham số; không cộng phí vận chuyển hai lần. Phụ thu lễ dùng danh sách ngày cố định âm/dương, không có UC quản lý ngày lễ riêng.
 - Tạm tính chưa phải cam kết. Phát hành hợp đồng lưu bản chốt tên, lượng, đơn giá, thuế, phụ thu, điều khoản và giá bồi thường; sửa danh mục không đổi hợp đồng cũ.
-- VNĐ nguyên; tổng mỗi bữa làm tròn tới bội số 500 gần nhất, đúng nửa làm tròn lên; lưu chênh lệch riêng. Tổng hợp đồng bằng tổng các bữa; giao dịch ghi đúng tiền thực thu/hoàn.
+- VNĐ nguyên; tổng mỗi bữa làm tròn tới bội số TS26 (mặc định 500) gần nhất, đúng nửa làm tròn lên; lưu chênh lệch riêng. Tổng hợp đồng bằng tổng các bữa; giao dịch ghi đúng tiền thực thu/hoàn. Hiệu lực báo giá TS05 (mặc định 7 ngày) không gia hạn giữ chỗ, ký hoặc cọc theo TS06.
 
 ### BR05 — Đề xuất giá nguyên liệu theo tháng
 
@@ -94,7 +94,7 @@ Mục tiêu khởi tạo 35%; sau chốt tháng quản lý có thể dùng tỷ 
 
 ### BR07 — Nhận tiệc và giữ chỗ
 
-Tư vấn nhập khoảng cách thủ công; hệ thống hiển thị mốc tham khảo 20 km, không tự đối chiếu, cảnh báo theo khoảng cách hoặc từ chối nhận theo mốc này. Tư vấn tự đánh giá địa điểm ngoài hệ thống; không tích hợp bản đồ. Phí vận chuyển miễn 10 km đầu, tính 15.000 đồng/km vượt 10 km, kể cả khi khoảng cách vượt 20 km; dùng khoảng cách do tư vấn nhập. Nhập khoảng sử dụng dụng cụ và giờ làm nhân sự cho từng bữa, không tự tính lộ trình/vệ sinh. Kiểm tra cả các bữa cùng đơn và hợp đồng khác trong khung chồng lấn.
+Tư vấn nhập khoảng cách thủ công; hệ thống chỉ hiển thị TS17 (mặc định 20 km), không tự đối chiếu, cảnh báo theo khoảng cách hoặc từ chối nhận theo mốc này. Tư vấn tự đánh giá địa điểm ngoài hệ thống; không tích hợp bản đồ. Phí vận chuyển = max(0, khoảng cách − TS15) × TS16, mặc định miễn 10 km đầu, 15.000 đồng/km vượt, kể cả khi vượt TS17; lưu riêng với phụ thu. Nhập khoảng sử dụng dụng cụ cho từng bữa, bao gồm TS19 (mặc định 12 giờ) cách ly vệ sinh sau thu hồi. Khung nhân sự dự kiến lấy giờ bắt đầu bữa trừ TS18 (mặc định 3 giờ) đến giờ kết thúc bữa; giờ phân công cụ thể nhập thủ công. Không tự tính lộ trình. Kiểm tra cả các bữa cùng đơn và hợp đồng khác trong khung chồng lấn.
 
 Xác nhận nhận tiệc giữ tài nguyên tạm 24 giờ chờ cọc; đủ BR08 thì giữ chính thức. Server loại giữ hết hạn khi tra cứu/kiểm tra/xử lý đơn, không phụ thuộc cron riêng. Hết hạn chưa đủ ký/cọc thì đánh dấu hết hạn, nhả giữ; khoản đã thu vẫn lưu để hoàn, không xóa giao dịch.
 
@@ -104,9 +104,9 @@ Tồn tối thiểu chỉ cảnh báo; thiếu tài nguyên thực tế thì kh�
 
 Tạm thời, ký online chỉ là khách dùng tài khoản để xác nhận đồng ý nội dung hợp đồng trên hệ thống; không triển khai OTP, chữ ký số hoặc quy trình xác minh chữ ký phức tạp.
 
-Tư vấn phát hành là xác nhận phía cơ sở. Khách xác nhận online bằng tài khoản hoặc nhân viên ghi ký giấy kèm file. Cọc 50%–100% tổng hợp đồng trong 24 giờ. Phân bổ theo giá trị từng bữa; cọc bắt buộc ban đầu bằng 50% giá trị bữa, phần vượt là trả trước. Sau phụ lục chỉ yêu cầu cọc bổ sung khi thuộc BR09, không tự làm hợp đồng mất hiệu lực do tỷ lệ cọc mới thấp hơn 50%. Khi hủy, phần cọc làm căn cứ là mức nhỏ hơn giữa 50% giá trị bữa hiện hành và số tiền đã thu còn phân bổ cho bữa; phần vượt căn cứ đó là trả trước được hoàn đủ.
+Tư vấn phát hành là xác nhận phía cơ sở. Khách xác nhận online bằng tài khoản hoặc nhân viên ghi ký giấy kèm file. Cọc từ TS02 đến TS03 (mặc định 50%–100%) tổng hợp đồng trong TS06 (mặc định 24 giờ). Phân bổ theo giá trị từng bữa; cọc bắt buộc ban đầu bằng TS02 × giá trị bữa, phần vượt là trả trước. Sau phụ lục chỉ yêu cầu cọc bổ sung khi thuộc BR09, không tự làm hợp đồng mất hiệu lực do tỷ lệ cọc mới thấp hơn TS02. Khi hủy, căn cứ cọc = min(TS02 × giá trị bữa hiện hành, tiền đã thu còn phân bổ cho bữa); phần vượt căn cứ đó là trả trước được hoàn đủ.
 
-Hợp đồng có hiệu lực khi khách đã xác nhận và thu đủ cọc bắt buộc. Online dùng thông báo dịch vụ thanh toán; tiền mặt/chuyển khoản ngoài luồng do kế toán ghi. Không công nhận chỉ từ nút khách bấm đã trả. Mã giao dịch bên cung cấp duy nhất, không cộng trùng khi nhận lại thông báo.
+Hợp đồng có hiệu lực khi khách đã xác nhận và thu đủ cọc bắt buộc. Online dùng thông báo dịch vụ thanh toán; QR có hiệu lực TS07 (mặc định 15 phút), hết hạn thì tạo lại. Tiền mặt/chuyển khoản ngoài luồng do kế toán ghi. Không công nhận chỉ từ nút khách bấm đã trả. Mã giao dịch bên cung cấp duy nhất, không cộng trùng khi nhận lại thông báo.
 
 ### BR09 — Điều chỉnh từng bữa
 
@@ -126,23 +126,23 @@ Hủy từng bữa/cả hợp đồng; tính riêng theo thời điểm yêu c�
 | Còn dưới 15 ngày                    | 0%                                                                        |
 | Đến giờ bắt đầu, khách không có mặt | 0%; nguyên liệu đã chế biến chỉ thu thêm theo thỏa thuận, không thu trùng |
 
-Phần trả vượt cọc bắt buộc hoàn đủ. Hủy hợp đồng cộng kết quả các bữa chưa thực hiện, giữ quyết toán bữa đã thực hiện. Nhả tài nguyên/hủy phân công ngay khi hủy; hoàn tiền ghi riêng, xử lý sau. Không xây luồng khách hủy giữa lúc phục vụ. Không UC cơ sở hủy riêng; trách nhiệm ghi trong hợp đồng, xử lý thỏa thuận ngoài luồng chuẩn.
+Phần trả vượt cọc bắt buộc hoàn đủ. Hủy hợp đồng cộng kết quả các bữa chưa thực hiện, giữ quyết toán bữa đã thực hiện. Nhả giữ dụng cụ chưa xuất và hủy phân công ngay khi hủy; nếu đã xuất thì vẫn thu hồi/kiểm đếm, bảo đảm khung vệ sinh TS19 trước khi dùng lại. Hoàn tiền ghi riêng, xử lý sau. Không xây luồng khách hủy giữa lúc phục vụ. Không UC cơ sở hủy riêng; trách nhiệm ghi trong hợp đồng, xử lý thỏa thuận ngoài luồng chuẩn.
 
 ### BR11 — Quyết toán và báo cáo
 
-Tổng quyết toán bữa = giá trị hiện hành + bồi thường ghi nhận. Số dư = tổng quyết toán − thu thành công phân bổ + hoàn đã thực hiện. Dương: cần thu trước khi đóng, không công nợ trả chậm; âm: cần hoàn. Thu/hoàn là giao dịch riêng, không sửa cọc, không trừ cọc hai lần. Bữa hủy dùng nghĩa vụ sau hủy thay giá trị phục vụ để tính số dư.
+Tổng quyết toán bữa = giá trị hiện hành + bồi thường ghi nhận. Số dư = tổng quyết toán − thu thành công phân bổ + hoàn đã thực hiện. Dương: cần thu trước khi đóng, không công nợ trả chậm; âm: cần hoàn. Thu/hoàn là giao dịch riêng, không sửa cọc, không trừ cọc hai lần. Bữa hủy dùng nghĩa vụ sau hủy thay giá trị phục vụ để tính số dư; sau thu hồi và quyết toán vẫn giữ `DaHuy`, chỉ chốt `QuyetToanBua`, không chuyển thành `HoanTat` phục vụ.
 
 Báo cáo: doanh thu bữa thực hiện theo kỳ; chi phí tiêu thụ, food cost và lãi theo nguyên liệu theo tháng; tình hình đơn/bữa; thu/hoàn, tiền giữ lại do hủy; hao hụt/bồi thường; đánh giá. Lãi theo nguyên liệu = doanh thu món − chi phí tiêu thụ, chưa phải lợi nhuận ròng. Dashboard có tiệc sắp tới, chờ ký/cọc/quyết toán và cảnh báo nhân sự/dụng cụ. Chưa xuất PDF/Excel báo cáo.
 
 ### BR12 — Nhân sự
 
-Gợi ý phục vụ = làm tròn lên (số bàn bố trí đồng thời / 3). Tư vấn ghi nhu cầu nhân sự dự kiến theo vị trí khi nhận bữa; kiểm tra năng lực phải cộng nhu cầu các bữa giữ tạm/chính thức chồng giờ kể cả chưa phân công tên cụ thể, không chỉ trừ người đã có lịch. Quản lý nhân sự chọn người, vị trí, giờ làm thủ công và điều chỉnh lượng theo thực tế; gợi ý không chặn cứng. Không phân một người vào hai khung chồng lấn; người ngưng làm không nhận việc mới. Đổi người bằng sửa phân công, liên hệ ngoài hệ thống. Không xác nhận ca, chấm công hoặc tính lương.
+Gợi ý theo TS22–TS24: phục vụ = làm tròn lên (bàn bố trí / 3), bếp = max(2, làm tròn lên (bàn ăn / 5)), vận chuyển = 2 người / 10 bàn có rạp theo mặc định. Tư vấn ghi nhu cầu dự kiến theo vị trí khi nhận bữa; khung dự kiến suy ra từ giờ bữa và TS18 theo BR07, không cần lưu thêm khung nhân sự. Kiểm tra năng lực cộng nhu cầu các bữa giữ tạm/chính thức chồng giờ kể cả chưa phân công tên cụ thể, không chỉ trừ người đã có lịch. Quản lý nhân sự chọn người, vị trí, giờ làm thủ công; phải có mặt trước ít nhất TS18, không vượt TS20 (mặc định 12 giờ/ngày), nghỉ ít nhất TS21 (mặc định 8 giờ) giữa ca và không trùng khung giờ. Số người được lệch gợi ý, không chặn cứng. Người ngưng làm không nhận việc mới. Đổi người bằng sửa phân công, liên hệ ngoài hệ thống. Không xác nhận ca, chấm công hoặc tính lương.
 
 ### BR13 — Dụng cụ
 
-Mỗi loại có đơn vị, định mức theo người/bàn bố trí/bữa, tồn tối thiểu, dự trù % tùy chọn, giá bồi thường. Lượng cần = làm tròn lên (định mức × cơ sở tính × (1 + dự trù)); dự trù trống là 0, không thêm cờ bật/tắt. Đồ cồng kềnh có thể nhập lượng theo bữa trực tiếp.
+Mỗi loại có đơn vị, định mức theo người/bàn bố trí/bữa, tồn tối thiểu, dự trù % tùy chọn, giá bồi thường và trạng thái sử dụng. Lượng cần = làm tròn lên (định mức × cơ sở tính × (1 + dự trù)); dự trù trống dùng TS04 (mặc định 10%), nhập 0 nếu không dự trù, không thêm cờ bật/tắt. Đồ cồng kềnh có thể nhập lượng theo bữa trực tiếp. Loại ngưng không chọn cho bữa mới.
 
-Giữ trước không trừ kho vật lý; xuất chuyển sẵn sàng sang đang sử dụng. Thu hồi tốt cộng sẵn sàng; hư/mất ghi riêng. Số xuất = tốt + hư + mất. Nhân viên chọn số khách chịu không vượt hư/mất; tiền bồi thường = số khách chịu × giá chốt, không miễn tự động theo ngưỡng/khấu trừ lương. Đồ hư chỉ về sẵn sàng khi ghi phục hồi; mua mới tăng sở hữu. Không cộng thu hồi hai lần.
+Giữ trước không trừ kho vật lý; xuất chuyển sẵn sàng sang đang sử dụng. Thu hồi tốt cộng sẵn sàng; hư/mất ghi riêng. Số xuất = tốt + hư + mất. Theo từng loại, hư + mất ≤ TS25 (mặc định 1%) số xuất thì miễn bồi thường, số khách chịu = 0. Vượt ngưỡng, nhân viên chọn số khách chịu không vượt hư + mất; tiền bồi thường = số khách chịu × giá chốt, không khấu trừ thêm 1% hoặc khấu trừ lương. Vẫn phải bảo đảm khoảng vệ sinh TS19 trước lượt dùng tiếp theo. Đồ hư chỉ về sẵn sàng khi ghi phục hồi; mua mới tăng sở hữu. Không cộng thu hồi hai lần.
 
 ### BR14 — Đánh giá
 

@@ -15,6 +15,7 @@ Bên cung cấp là cơ sở MasterCookVN. Bên đặt tiệc là khách hàng �
 Một hợp đồng có thể gồm nhiều bữa tiệc. Mỗi bữa xác định riêng:
 
 - Ngày giờ bắt đầu, kết thúc và địa điểm tổ chức.
+- Loại tiệc dạng chuỗi nhập tự do, có thể nhập loại khác; không dùng danh mục hoặc enum riêng.
 - Thông tin khảo sát địa điểm, điều kiện phục vụ và người liên hệ.
 - Số bàn ăn chuẩn 10 suất và thực đơn đã chọn.
 - Số bàn ghế bố trí đồng thời, dụng cụ và dịch vụ đi kèm.
@@ -86,7 +87,7 @@ Danh sách dụng cụ cùng đơn giá bồi thường là một phần nội d
 
 Sau bữa tiệc, nhân viên đối chiếu số lượng xuất với số lượng thu hồi nguyên vẹn, hư hỏng và thất lạc. Dụng cụ hư hoặc mất không được tính là còn khả dụng.
 
-Nhân viên ghi nhận số lượng hư hoặc mất do khách chịu trách nhiệm và quyết định khoản nào yêu cầu bồi thường theo thỏa thuận với khách. Tiền bồi thường dựa trên số lượng đó và đơn giá đã chốt; không tự áp ngưỡng hao hụt phần trăm.
+Theo từng loại dụng cụ, tổng hư + mất không vượt TS25 (mặc định 1%) số xuất thì miễn bồi thường. Vượt ngưỡng, nhân viên ghi nhận số lượng do khách chịu trách nhiệm theo thỏa thuận; tiền bồi thường = số khách chịu × đơn giá đã chốt, không khấu trừ thêm 1%. Dự trù trống dùng TS04 (mặc định 10%); nhập 0 nếu không dự trù.
 
 Hư hỏng do nhân viên không tính cho khách và không xử lý khấu trừ lương trên hệ thống.
 
@@ -98,7 +99,7 @@ Giao dịch cọc, cọc bổ sung, thanh toán cuối và hoàn tiền cùng li
 
 Khách thanh toán đủ số còn phải trả bằng tiền mặt hoặc online. Nhân viên ghi nhận khoản tiền mặt đã nhận; khoản online được xác nhận theo kết quả thanh toán.
 
-Hợp đồng hoàn tất khi các bữa đã thực hiện hoặc hủy, dụng cụ đã được đối chiếu và các khoản thu, hoàn đã xử lý xong. Không đóng hợp đồng khi còn khoản phải thu hoặc phải hoàn; không có nghiệp vụ cho khách mua chịu.
+Hợp đồng hoàn tất khi các bữa đã thực hiện hoặc hủy, dụng cụ đã được đối chiếu và các khoản thu, hoàn đã xử lý xong. Bữa hủy vẫn giữ trạng thái đã hủy sau khi quyết toán xong, không trở thành bữa đã phục vụ. Không đóng hợp đồng khi còn khoản phải thu hoặc phải hoàn; không có nghiệp vụ cho khách mua chịu.
 
 ## 8. Nội dung đính kèm
 

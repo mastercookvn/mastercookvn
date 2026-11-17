@@ -19,7 +19,7 @@ flowchart TD
         KT3["Gom giữ chồng lấn + bữa của đơn đang xét"]
         KT4{"So với số sở hữu dùng được — đủ?"}
         KT5["Gợi ý nhân sự: ceil(bàn bố trí / 3)"]
-        KT6["Cộng nhu cầu dự kiến theo vị trí\n(mọi bữa đang giữ trong khung giờ)"]
+        KT6["Cộng nhu cầu dự kiến theo vị trí\nKhung: bắt đầu bữa trừ TS18 đến kết thúc bữa"]
         KT7{"Năng lực nhân sự đủ?"}
         KT8["Tồn < mức tối thiểu → Cảnh báo (không chặn)"]
         KT9["Kiểm tra lại & ghi giữ nguyên tử"]

@@ -79,7 +79,7 @@ order: 10
 
 **Luồng chính**
 
-1. Người dùng chọn khoảng thời gian (tháng/quý/năm hoặc từ–đến), lọc loại tiệc (tùy chọn).
+1. Người dùng chọn khoảng thời gian (tháng/quý/năm hoặc từ–đến), lọc theo chuỗi loại tiệc đã nhập tại bữa (tùy chọn), không dựa vào enum hoặc danh mục loại tiệc.
 2. Hệ thống tổng hợp doanh thu bữa đã thực hiện theo ngày phục vụ, tách món/dịch vụ/bồi thường.
 3. Hệ thống tổng hợp tiền thu, tiền hoàn, tiền giữ lại do hủy.
 4. Hệ thống lấy kỳ nguyên liệu đã chốt: chi phí tiêu thụ, food cost, lãi theo nguyên liệu = doanh thu món − chi phí.

@@ -27,14 +27,11 @@ sequenceDiagram
     end
     HD-->>UI: Xác nhận đã ký
 
-    K->>UI: Chọn số tiền cọc (50% - 100%)
-    UI->>TT: Tạo yêu cầu thanh toán online
-    activate TT
-    TT->>TT: Sinh mã tham chiếu và phân bổ dự kiến theo bữa
-    TT-->>UI: Trả thông tin yêu cầu thanh toán
-    deactivate TT
-
     alt Thanh toán online qua dịch vụ
+        K->>UI: Chọn số tiền cọc theo TS02 - TS03
+        UI->>TT: Tạo yêu cầu thanh toán online
+        TT->>TT: Sinh mã tham chiếu và phân bổ dự kiến theo bữa
+        TT-->>UI: Trả QR có hiệu lực TS07
         K->>DV: Thực hiện thanh toán
         DV-->>TT: Báo kết quả giao dịch
         activate TT

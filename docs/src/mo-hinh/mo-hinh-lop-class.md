@@ -4,7 +4,7 @@ order: 10
 
 # Mô hình lớp chi tiết
 
-Đây là mô hình lớp chi tiết và đặc tả nghiệp vụ. [Đặc tả phần mềm](../specification.md) làm gốc quy tắc BR. Không sao chép mô hình sang spec.
+Đây là mô hình lớp chi tiết và đặc tả nghiệp vụ. [Đặc tả phần mềm](../specification.md) làm gốc quy tắc BR; [tham số](../nghiep-vu/tham-so.md) làm chuẩn giá trị và giới hạn. Không sao chép mô hình sang spec.
 
 ## Quy ước
 
@@ -20,6 +20,10 @@ order: 10
 Sơ đồ thể hiện toàn bộ kiến trúc miền (domain model), đầy đủ các thực thể, thuộc tính, phương thức và mối liên kết giữa các phân hệ:
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction TB
 
@@ -97,11 +101,12 @@ classDiagram
     class BuaTiec {
         +UUID id
         +UUID donId
-        +UUID loaiTiecId
+        +string loaiTiec
+        +text diaChi
         +datetime batDau
         +datetime ketThuc
-        +datetime dungCuTu
-        +datetime dungCuDen
+        +datetime? dungCuTu
+        +datetime? dungCuDen
         +int soBanAnBanDau
         +int soBanAn
         +int soBanBoTri
@@ -110,6 +115,8 @@ classDiagram
         +string? nguoiLienHe
         +string? soDienThoaiLienHe
         +string trangThai
+        +UUID? nguoiCapNhatTrangThaiId
+        +datetime? capNhatTrangThaiLuc
         +text? ghiChu
         +tinhTienMon()
         +nhuCauDungCu()
@@ -119,25 +126,14 @@ classDiagram
         +hoanTat()
     }
 
-    class LoaiTiec {
-        +UUID id
-        +string ten
-        +text? moTa
-        +bool dangSuDung
-        +capNhat()
-        +ngung()
-    }
-
     class KhaoSatDiaDiem {
         +UUID id
         +UUID buaId
-        +text diaChi
         +decimal khoangCachKm
         +text? ghiChu
         +UUID nguoiGhiId
         +datetime ngayGhi
         +capNhat()
-        +kiemTraPhamVi()
     }
 
     class TraLoiKhaoSat {
@@ -175,6 +171,7 @@ classDiagram
         +UUID buaId
         +money tienMon
         +money tienDichVu
+        +money phiVanChuyen
         +money phuThu
         +text? lyDoPhuThu
         +decimal thueSuat
@@ -382,6 +379,34 @@ classDiagram
         +UUID id
         +decimal foodCostMucTieu
         +decimal thueSuat
+        +int soMonKhuyenNghi
+        +decimal tyLeCocToiThieu
+        +decimal tyLeCocToiDa
+        +decimal tyLeDuTruDungCuMacDinh
+        +int hieuLucBaoGiaNgay
+        +int giuChoTamGio
+        +int hieuLucQrPhut
+        +int datTruocToiThieuNgay
+        +int datTruocToiDaNgay
+        +int soBanAnToiThieu
+        +int mocDoiMonNgay
+        +int mocDoiBanNgay
+        +decimal tyLeGiamBanToiDa
+        +map bacHoanCoc
+        +decimal banKinhMienPhiKm
+        +money phiVanChuyenMoiKm
+        +decimal banKinhThamKhaoKm
+        +int nhanSuCoMatTruocGio
+        +int cachLyVeSinhDungCuGio
+        +int gioLamToiDaMoiNgay
+        +int gioNghiToiThieuGiuaCa
+        +int soBanBoTriMoiNguoiPhucVu
+        +int soBanAnMoiNguoiBep
+        +int soNguoiBepToiThieu
+        +int soNguoiVanChuyenMoi10Ban
+        +decimal tyLeHaoHutMienBoiThuong
+        +money donViLamTronTien
+        +int soLanDangNhapSaiToiDa
         +datetime mocHieuLuc
         +UUID nguoiCapNhatId
         +apDungChoDuLieuMoi()
@@ -420,6 +445,8 @@ classDiagram
         +money chiPhiTieuThu
         +decimal? foodCostThucTe
         +money laiTheoNguyenLieu
+        +UUID? nguoiKiemId
+        +datetime? kiemLuc
         +UUID? nguoiChotId
         +datetime? chotLuc
         +tongHop()
@@ -482,7 +509,7 @@ classDiagram
         +string ten
         +string donVi
         +string coSoDinhMuc
-        +decimal dinhMuc
+        +decimal? dinhMuc
         +decimal? duTru
         +int soLuongToiThieu
         +money giaBoiThuong
@@ -490,10 +517,12 @@ classDiagram
         +int soLuongSanSang
         +int soLuongDangSuDung
         +int soLuongHu
+        +bool dangSuDung
         +tinhNhuCau()
         +canhBaoThieu()
         +phucHoi()
         +loaiBo()
+        +ngung()
     }
 
     class GiuDungCu {
@@ -640,7 +669,7 @@ classDiagram
         +tinhBua()
         +tinhGiaMonGoiY()
         +tinhChenhLechPhuLuc()
-        +lamTron500()
+        +lamTronTien()
     }
 
     class ThanhToan {
@@ -682,14 +711,13 @@ classDiagram
     %% ==========================================
     %% QUAN HỆ LIÊN KẾT GIỮA CÁC LỚP
     %% ==========================================
-    KhachHang "1" --> "0..1" TaiKhoan : lienKetTaiKhoan
-    NhanVien "1" --> "0..1" TaiKhoan : lienKetTaiKhoan
+    KhachHang "0..1" --> "0..1" TaiKhoan : lienKetTaiKhoan
+    NhanVien "0..1" --> "0..1" TaiKhoan : lienKetTaiKhoan
     TaiKhoan "1" --> "0..*" GanVaiTro : co
     VaiTro "1" --> "0..*" GanVaiTro : duocGan
     KhachHang "1" --> "0..*" DonDatTiec : datTiec
     DonDatTiec "1" *-- "1..*" BuaTiec : chua
-    LoaiTiec "1" --> "0..*" BuaTiec : phanLoai
-    BuaTiec "1" *-- "1" KhaoSatDiaDiem : co
+    BuaTiec "1" *-- "0..1" KhaoSatDiaDiem : co
     KhaoSatDiaDiem "1" *-- "0..*" TraLoiKhaoSat : gom
     BuaTiec "1" *-- "1..*" MonTrongBua : gom
     BuaTiec "1" *-- "0..*" DichVuTrongBua : gom
@@ -697,8 +725,8 @@ classDiagram
     DonDatTiec "1" --> "0..1" HopDong : phatHanh
     HopDong "1" --> "0..*" PhuLucHopDong : co
     PhuLucHopDong "0..*" --> "1" BuaTiec : apDung
-    HopDong "1" --> "0..1" XacNhanVanBan : xacNhan
-    PhuLucHopDong "1" --> "0..1" XacNhanVanBan : xacNhan
+    HopDong "0..1" --> "0..1" XacNhanVanBan : xacNhan
+    PhuLucHopDong "0..1" --> "0..1" XacNhanVanBan : xacNhan
     HopDong "1" --> "0..*" GiaoDichThanhToan : phatSinh
     GiaoDichThanhToan "1" *-- "1..*" PhanBoThanhToan : phanBo
     PhanBoThanhToan "0..*" --> "1" BuaTiec : choBua
@@ -731,7 +759,7 @@ classDiagram
     DongXuatDungCu "0..*" --> "1" DungCu : xuat
     PhieuXuatDungCu "1" --> "0..1" BienBanKiemDem : lapBienBan
     BienBanKiemDem "1" *-- "1..*" DongKiemDem : gom
-    DongXuatDungCu "1" <-- "1" DongKiemDem : kiemTheoDongXuat
+    DongXuatDungCu "1" <-- "0..1" DongKiemDem : kiemTheoDongXuat
     XuLyDungCuHu "0..*" --> "1" DungCu : xuLy
     BuaTiec "1" --> "0..*" PhanCongNhanSu : phanCong
     PhanCongNhanSu "0..*" --> "1" NhanVien : giaoCho
@@ -759,6 +787,7 @@ object "taiKhoanLan : TaiKhoan" as taiKhoan {
 object "vaiTroKhach : VaiTro" as vaiTro {
   ma = "KhachHang"
 }
+object "ganVaiTroKhach : GanVaiTro" as ganVaiTro
 object "nhanVienAn : NhanVien" as nhanVien {
   id = NV01
   viTri = "Phục vụ"
@@ -812,6 +841,8 @@ object "thitGa : NguyenLieu" as nguyenLieu {
   donViChuan = "kg"
   giaHienHanh = 70000
 }
+object "gaTrongBua : MonTrongBua" as monTrongBua
+object "dinhLuongGa : DinhLuongMon" as dinhLuong
 object "dia : DungCu" as dungCu {
   id = DC01
   ten = "Đĩa"
@@ -833,7 +864,8 @@ object "danhGiaB01 : DanhGia" as danhGia {
   diem = 5
 }
 khach --> taiKhoan : lienKet
-taiKhoan --> vaiTro : coVaiTro
+taiKhoan --> ganVaiTro : co
+vaiTro --> ganVaiTro : duocGan
 khach --> don : datTiec
 don *-- bua1 : gom
 don *-- bua2 : gom
@@ -847,8 +879,10 @@ phanBo1 --> bua1 : choBua
 phanBo2 --> bua2 : choBua
 bua1 --> quyetToan : quyetToan
 bua2 --> huy : huy
-bua1 --> mon : chonMon
-mon --> nguyenLieu : dinhLuong
+bua1 *-- monTrongBua : gom
+monTrongBua --> mon : chonMon
+mon *-- dinhLuong : dinhLuong
+dinhLuong --> nguyenLieu : thanhPhan
 bua1 --> giu : giu
 giu --> dungCu : loai
 bua1 --> xuat : xuat
@@ -865,7 +899,7 @@ bua1 --> danhGia : nhanDanhGia
 
 ### Ràng buộc nghiệp vụ
 
-- **TaiKhoan**: Không bắt buộc phải có tài khoản để lưu hồ sơ khách hàng hoặc hồ sơ nhân sự.
+- **TaiKhoan**: Không bắt buộc phải có tài khoản để lưu hồ sơ khách hàng hoặc hồ sơ nhân sự. Tài khoản có vai trò khách hàng phải liên kết đúng một hồ sơ khách; liên kết nhân sự là tùy chọn.
 - **VaiTro**: Vai trò hệ thống cố định theo bảng quyền đặc tả, không có quy trình phê duyệt cấp quyền động.
 - **GanVaiTro**: Cặp tài khoản–vai trò là duy nhất; quyền của người dùng là hợp các vai trò được gán.
 - **KhachHang**: Khóa định danh hồ sơ là số điện thoại chuẩn hóa. Khách hàng đăng ký tài khoản mới cùng số điện thoại sẽ tự động liên kết với hồ sơ khách đã tạo qua đặt hộ trước đó.
@@ -951,11 +985,10 @@ keToan --> gan3 : duocGan
 ### Ràng buộc nghiệp vụ
 
 - **DonDatTiec**: Đơn tiệc hỗ trợ một hoặc nhiều bữa tiệc; bản nháp chưa gửi chỉ lưu ở trình duyệt, hệ thống chỉ lưu khi người dùng gửi đơn (`ChoXacNhan`).
-- **BuaTiec**: Phân biệt rõ số bàn ăn và số bàn ghế bố trí thực tế. Khung thời gian sử dụng tài nguyên được nhập thủ công. Thực đơn, khảo sát và phân công độc lập theo từng bữa.
-- **LoaiTiec**: Phân loại phục vụ quản lý và thống kê, không tự động gợi ý món tâm linh/văn hóa.
-- **KhaoSatDiaDiem & TraLoiKhaoSat**: Mỗi bữa tiệc có một bản khảo sát địa điểm riêng; câu hỏi và câu trả lời lưu trực tiếp tại khảo sát, không dùng chung câu trả lời giữa các bữa.
+- **BuaTiec**: Phân biệt rõ số bàn ăn và số bàn ghế bố trí thực tế. `loaiTiec` là chuỗi nhập tự do theo từng bữa, không phải enum hoặc khóa ngoại danh mục; có thể nhập loại khác. Địa chỉ lưu ngay khi gửi đơn. Khung dụng cụ được nhập sau, tính cả thời gian vệ sinh TS19 và bắt buộc đầy đủ trước khi nhận đơn. Khung nhân sự dự kiến dùng `batDau` trừ TS18 đến `ketThuc`, không lưu thêm khung giờ riêng; giờ phân công thực tế nằm ở `PhanCongNhanSu`. Thực đơn, khảo sát và phân công độc lập theo từng bữa.
+- **KhaoSatDiaDiem & TraLoiKhaoSat**: Bữa mới gửi có thể chưa khảo sát; trước khi nhận đơn, mỗi bữa bắt buộc có một khảo sát riêng tại địa chỉ của bữa. Câu hỏi và câu trả lời lưu trực tiếp tại khảo sát, không dùng chung câu trả lời giữa các bữa. Khoảng cách chỉ dùng tính phí vận chuyển, không tự kiểm tra theo bán kính tham khảo.
 - **MonTrongBua & DichVuTrongBua**: Lưu danh sách món và dịch vụ chốt cố định của bữa tiệc, không liên kết động theo danh mục hiện hành sau khi hợp đồng phát hành.
-- **KhoanGiaBua**: Đúng một bảng tính giá hiện hành cho mỗi bữa tiệc. Giá trong hợp đồng chốt là dữ liệu lịch sử bất biến.
+- **KhoanGiaBua**: Đúng một bảng tính giá hiện hành cho mỗi bữa tiệc. Tiền trước thuế = tiền món + dịch vụ + phí vận chuyển + phụ thu; phí vận chuyển không cộng lại vào phụ thu. Tổng sau thuế làm tròn theo TS26, lưu chênh lệch riêng. Giá trong hợp đồng chốt là dữ liệu lịch sử bất biến.
 
 ### Ví dụ sơ đồ đối tượng
 
@@ -970,17 +1003,15 @@ object "donDT01 : DonDatTiec" as don {
   trangThai = "ChoXacNhan"
   ngayTao = "2026-10-01T09:00:00+07:00"
 }
-object "tiecGiaDinh : LoaiTiec" as loai {
-  id = LT01
-  ten = "Tiệc gia đình"
-}
 object "buaB01 : BuaTiec" as bua1 {
   id = B01
   donId = DT01
+  loaiTiec = "Tiệc gia đình"
+  diaChi = "Địa điểm A do khách cung cấp"
   batDau = "2026-11-20T11:00:00+07:00"
   ketThuc = "2026-11-20T14:00:00+07:00"
   dungCuTu = "2026-11-20T08:00:00+07:00"
-  dungCuDen = "2026-11-20T18:00:00+07:00"
+  dungCuDen = "2026-11-21T04:30:00+07:00"
   soBanAnBanDau = 20
   soBanAn = 20
   soBanBoTri = 10
@@ -991,6 +1022,8 @@ object "buaB01 : BuaTiec" as bua1 {
 object "buaB02 : BuaTiec" as bua2 {
   id = B02
   donId = DT01
+  loaiTiec = "Tiệc khác do khách nhập"
+  diaChi = "Địa điểm B do khách cung cấp"
   batDau = "2026-11-21T11:00:00+07:00"
   ketThuc = "2026-11-21T14:00:00+07:00"
   soBanAn = 10
@@ -1001,13 +1034,11 @@ object "buaB02 : BuaTiec" as bua2 {
 object "khaoSatB01 : KhaoSatDiaDiem" as ks1 {
   id = KS01
   buaId = B01
-  diaChi = "Địa điểm A do khách cung cấp"
   khoangCachKm = 8
 }
 object "khaoSatB02 : KhaoSatDiaDiem" as ks2 {
   id = KS02
   buaId = B02
-  diaChi = "Địa điểm B do khách cung cấp"
   khoangCachKm = 6
 }
 object "traLoiB01 : TraLoiKhaoSat" as tl1 {
@@ -1056,8 +1087,9 @@ object "trangTriB01 : DichVuTrongBua" as dv {
 }
 object "giaB01 : KhoanGiaBua" as gia1 {
   buaId = B01
-  tienMon = 19800000
+  tienMon = 18000000
   tienDichVu = 2000000
+  phiVanChuyen = 0
   phuThu = 0
   thueSuat = 0.1
   tienThue = 2000000
@@ -1068,6 +1100,7 @@ object "giaB02 : KhoanGiaBua" as gia2 {
   buaId = B02
   tienMon = 9000000
   tienDichVu = 1000000
+  phiVanChuyen = 0
   phuThu = 0
   thueSuat = 0.1
   tienThue = 1000000
@@ -1076,8 +1109,6 @@ object "giaB02 : KhoanGiaBua" as gia2 {
 }
 don *-- bua1 : chua
 don *-- bua2 : chua
-loai --> bua1 : phanLoai
-loai --> bua2 : phanLoai
 bua1 *-- ks1 : co
 bua2 *-- ks2 : co
 ks1 *-- tl1 : gom
@@ -1262,7 +1293,7 @@ hoan *-- pb4 : phanBo
 - **MonTrongSet**: Cặp set–món là duy nhất.
 - **NguyenLieu & DinhLuongMon**: Định lượng xác định lượng nguyên liệu cho 1 bàn ăn chuẩn 10 người (cặp món–nguyên liệu là duy nhất). Đơn giá hiện hành dùng để tính chi phí ước tính và đề xuất giá bán món.
 - **DichVu**: Do cơ sở tự cung cấp (trang trí, âm thanh,...); không quản lý đối tác thuê ngoài.
-- **CauHinhNghiepVu**: Tham số nghiệp vụ toàn hệ thống (food cost mục tiêu, thuế suất,...), áp dụng cho các tính toán và đơn tiệc tạo mới.
+- **CauHinhNghiepVu**: Tham số nghiệp vụ toàn hệ thống theo TS01–TS27, food cost mục tiêu và thuế suất. Bảng tham số là chuẩn giá trị/giới hạn; thay đổi không sửa cam kết đã chốt. `bacHoanCoc` lưu mốc số ngày và tỷ lệ hoàn của TS14.
 
 ### Ví dụ sơ đồ đối tượng
 
@@ -1479,16 +1510,16 @@ dot *-- dx : gom
 
 ### Ràng buộc nghiệp vụ
 
-- **DungCu**: Bất biến sở hữu: $\text{Sở hữu} = \text{Sẵn sàng} + \text{Đang sử dụng} + \text{Hư}$. Tồn tối thiểu là ngưỡng cảnh báo bổ sung, không chặn cứng quy trình nếu đủ lượng dùng được.
-- **GiuDungCu**: Giữ tạm (24 giờ) hoặc giữ chính thức; phân biệt rõ với xuất kho để tránh trừ kho hai lần vào năng lực khả dụng tương lai.
+- **DungCu**: Bất biến sở hữu: $\text{Sở hữu} = \text{Sẵn sàng} + \text{Đang sử dụng} + \text{Hư}$. Tồn tối thiểu chỉ cảnh báo. Dự trù trống dùng TS04 (mặc định 10%); nhập 0 nếu không dự trù. Đồ nhập lượng theo bữa có thể để trống định mức. Loại ngưng sử dụng không được chọn cho bữa mới, vẫn giữ lịch sử.
+- **GiuDungCu**: Giữ tạm theo TS06 (mặc định 24 giờ) hoặc giữ chính thức; phân biệt với xuất kho để tránh trừ hai lần. Khung giữ bao gồm vệ sinh TS19; đã kiểm đếm nhưng chưa hết khung thì vẫn giữ, khoảng đã kết thúc không chiếm năng lực khi tra cứu/kiểm tra. Hủy trước xuất thì nhả ngay; đã xuất phải thu hồi/kiểm đếm và bảo đảm khung vệ sinh trước lượt dùng tiếp theo.
 - **GiaBoiThuongBua**: Đơn giá bồi thường được chốt trong hợp đồng trước khi diễn ra tiệc, không áp dụng đơn giá thị trường tại thời điểm kiểm đếm.
 - **PhieuNhapDungCu & DongNhapDungCu**: Nhập mua bổ sung trực tiếp làm tăng sẵn sàng và tăng sở hữu.
-- **PhieuXuatDungCu, BienBanKiemDem & DongKiemDem**: Một bữa tối đa một phiếu xuất và một biên bản kiểm đếm đầy đủ. Điều kiện cân bằng bắt buộc: $\text{Tốt} + \text{Hư} + \text{Mất} = \text{Xuất}$; $0 \le \text{Khách chịu} \le \text{Hư} + \text{Mất}$.
+- **PhieuXuatDungCu, BienBanKiemDem & DongKiemDem**: Một bữa tối đa một phiếu xuất và một biên bản kiểm đếm đầy đủ. Trước thu hồi, dòng xuất chưa có dòng kiểm đếm; khi xác nhận biên bản phải đủ mọi dòng xuất. Điều kiện cân bằng: $\text{Tốt} + \text{Hư} + \text{Mất} = \text{Xuất}$; $0 \le \text{Khách chịu} \le \text{Hư} + \text{Mất}$. Theo từng loại, nếu hư + mất không vượt TS25 (mặc định 1%) số xuất thì miễn bồi thường, khách chịu = 0; vượt ngưỡng thì tính số khách chịu × giá chốt, không khấu trừ thêm 1%. Bữa đã hủy vẫn giữ `DaHuy` sau kiểm đếm và quyết toán.
 - **XuLyDungCuHu**: Ghi nhận lượng phục hồi (chuyển sang sẵn sàng) hoặc loại bỏ (giảm lượng hư và giảm sở hữu).
 
 ### Ví dụ sơ đồ đối tượng
 
-Sau khi tăng `B01` lên 22 bàn × 10 người, nhu cầu đĩa là làm tròn lên (220 × 1 × 1,1) = 242 chiếc. Phiếu mua trước đó nhập 300 chiếc; bữa xuất 242 chiếc, thu tốt 239, hư 2, mất 1. Khách chịu cả 3 chiếc hư/mất theo giá chốt 50.000 đồng, thành 150.000 đồng bồi thường. Ngày 21/11 phục hồi 1 chiếc hư; trạng thái tồn sau xử lý là sở hữu 299 = sẵn sàng 298 + đang sử dụng 0 + hư 1. Giữ đã xuất được nhả sau thu hồi, không trừ thêm vào kho vật lý. Đây là góc nhìn sau xử lý, không phải tồn ngay lúc xuất.
+Sau khi tăng `B01` lên 22 bàn × 10 người, nhu cầu đĩa là làm tròn lên (220 × 1 × 1,1) = 242 chiếc. Phiếu mua trước đó nhập 300 chiếc; bữa xuất 242 chiếc, thu tốt 239, hư 2, mất 1. Hao hụt 3/242 ≈ 1,24% vượt TS25 = 1%, nên khách chịu cả 3 chiếc theo giá chốt 50.000 đồng, thành 150.000 đồng bồi thường. Khung dụng cụ đến 04:30 ngày 21/11 đã gồm 12 giờ vệ sinh sau khi thu hồi lúc 16:30 ngày 20/11; nhả giữ khi thu hồi và vệ sinh xong. Ngày 21/11 phục hồi 1 chiếc hư; trạng thái tồn sau xử lý là sở hữu 299 = sẵn sàng 298 + đang sử dụng 0 + hư 1. Đây là góc nhìn sau xử lý, không phải tồn ngay lúc xuất.
 
 ```plantuml
 @startuml
@@ -1512,7 +1543,7 @@ object "giuB01 : GiuDungCu" as giu {
   dungCuId = DC01
   soLuong = 242
   tuLuc = "2026-11-20T08:00:00+07:00"
-  denLuc = "2026-11-20T18:00:00+07:00"
+  denLuc = "2026-11-21T04:30:00+07:00"
   trangThai = "DaNha"
   daXuat = true
 }
@@ -1581,7 +1612,7 @@ kd --> dx : kiemTheoDongXuat
 
 ### Ràng buộc nghiệp vụ
 
-- **PhanCongNhanSu**: Khung giờ làm việc có thể bao phủ hoặc lệch so với giờ phục vụ của bữa. Kiểm tra chặn trùng lịch khi phân công người cụ thể. Năng lực nhân sự chung được dự trù theo vị trí của các bữa đang giữ trước khi gán người đích danh.
+- **PhanCongNhanSu**: Giờ phân công nhập thủ công, có mặt trước giờ tiệc ít nhất TS18, không trùng lịch, không vượt TS20 giờ/ngày và nghỉ ít nhất TS21 giờ giữa ca. Năng lực chung trước phân công lấy số lượng theo vị trí tại bữa và khung từ `batDau` trừ TS18 đến `ketThuc` của các bữa đang giữ, không cần lớp giữ nhân sự riêng.
 - **DanhGia**: Mỗi bữa tiệc tối đa một đánh giá (điểm 1–5), chỉ mở khi bữa tiệc đã chuyển trạng thái `HoanTat`. Người đánh giá phải là người đặt của đơn chứa bữa đó.
 
 ### Ví dụ sơ đồ đối tượng
@@ -1664,7 +1695,7 @@ end note
 1. Bữa tiệc, phụ lục, giao dịch phân bổ, quyết toán và giữ tài nguyên không được trỏ chéo giữa hai hợp đồng.
 2. Khách hàng online chỉ xem hồ sơ liên kết số điện thoại của mình; quyền nội bộ xác định theo bảng phân quyền của vai trò.
 3. Tổng thu/hoàn tiền tính từ các giao dịch thành công; tổng phân bổ theo bữa phải bằng đúng số tiền giao dịch; số dư chỉ tính một lần tiền cọc.
-4. Hủy một bữa tiệc chỉ nhả giữ tài nguyên và hủy phân công của bữa đó, không làm ảnh hưởng đến dữ liệu các bữa khác trong cùng đơn.
+4. Hủy một bữa chỉ nhả giữ chưa xuất và hủy phân công của bữa đó, không ảnh hưởng các bữa khác; dụng cụ đã xuất vẫn thu hồi/kiểm đếm và bảo đảm khung vệ sinh TS19.
 5. Tính khả dụng tương lai theo tổng sở hữu dùng được trừ đi các khoảng giữ chồng lấn; tại thời điểm xuất kho kiểm tra thêm lượng sẵn sàng thực tế. Giữ đã xuất kho không bị trừ hai lần.
 6. Kho nguyên liệu chỉ kiểm kê theo chu kỳ tháng và lưu phiếu nhập; không phát sinh phiếu xuất kho hay tính tiêu hao nguyên liệu chi tiết theo từng tiệc.
 7. Giá trị tồn kho sử dụng đơn giá bình quân tháng; giá nguyên liệu hiện hành dùng đơn giá đề xuất bình quân gia quyền 30 ngày; hai giá trị không dùng thay thế lẫn nhau.

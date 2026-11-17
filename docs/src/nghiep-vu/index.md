@@ -8,7 +8,7 @@ Tài liệu nghiệp vụ và đặc tả Use Case chi tiết của hệ thống
 
 ## Quy ước chung
 
-- **Quy tắc nghiệp vụ**: Tra cứu mã BR tại [Đặc tả phần mềm](../specification.md).
+- **Quy tắc nghiệp vụ**: Tra cứu mã BR tại [Đặc tả phần mềm](../specification.md); giá trị và giới hạn lấy [bảng tham số](./tham-so.md) làm chuẩn.
 - **Danh mục Use Case**: Tra cứu mã và tên UC chuẩn tại [Danh mục chung](./danh-muc-use-case.md).
 - **Sơ đồ tổng quan**: Xem [Sơ đồ Use Case tổng quát](./tong-quan-use-case.md).
 - **Mô hình nghiệp vụ**: Xem lớp và quan hệ tại [Mô hình lớp](../mo-hinh/mo-hinh-lop-class.md).
@@ -19,7 +19,7 @@ Tài liệu nghiệp vụ và đặc tả Use Case chi tiết của hệ thống
 
 ## Phân hệ chi tiết
 
-- [Tài khoản và danh mục](./tai-khoan-va-danh-muc/use-case.md) — UC-TK-01 → UC-TK-03, UC-DM-01 → UC-DM-07.
+- [Tài khoản và danh mục](./tai-khoan-va-danh-muc/use-case.md) — UC-TK-01 → UC-TK-03, UC-DM-01 → UC-DM-05, UC-DM-07.
 - [Đặt tiệc](./dat-tiec/use-case.md) — UC-DT-01 → UC-DT-06.
 - [Hợp đồng và thanh toán](./hop-dong-thanh-toan/use-case.md) — UC-HD-01 → UC-HD-08.
 - [Nhân sự và vận hành](./van-hanh-va-nhan-su/use-case.md) — UC-NS-01, UC-NS-02, UC-VH-01.

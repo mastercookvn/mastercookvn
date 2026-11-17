@@ -18,6 +18,8 @@ src
 
 Keep the UC catalog and business topic indexes synchronized with their documents. Use numeric frontmatter `order` to arrange sidebar items within each folder.
 
+`src/nghiep-vu/tham-so.md` is the source of truth for parameter values and limits; keep BRs, use cases and models aligned with it. Keep the domain model simple and implementable.
+
 ## Rules
 
 ### Class
@@ -26,7 +28,7 @@ Spring Boot Java designed, Use hibernate ORM
 
 ### Description around diagram
 
-Each diagram inside markdown codeblock has to have a comment below of it, for npm package `vitepress-plugin-diagrams` to work with cache. If not provide, the cache will flood the storage.
+PlantUML diagrams inside markdown codeblocks need a comment below for `vitepress-plugin-diagrams` cache management. Mermaid diagrams do not require this comment.
 
 Every change in the diagram will be detected to clean up the old diagram, and create new, in `./src/public/diagrams/`
 

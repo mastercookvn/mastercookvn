@@ -31,7 +31,7 @@ flowchart TD
 
     subgraph QuanLy["Quản lý cơ sở"]
         QL1["Cân nhắc food cost mục tiêu kỳ sau\n(mặc định 35%)"]
-        QL2["Chọn chấp nhận / chỉnh / bỏ qua từng dòng giá nguyên liệu"]
+        QL2["Chỉ xử lý dòng chưa quyết định\nChấp nhận / chỉnh / bỏ qua"]
         QL3["Cập nhật giá nguyên liệu được chọn\nLiệt kê món bị ảnh hưởng"]
         QL4["Quyết định giá bán món\n(không đổi hợp đồng đã chốt)"]
     end
@@ -51,7 +51,7 @@ flowchart TD
     SV1 -- "Đã có" --> SV2
     SV1 -- "Chưa có" --> SV3
     SV3 --> SV4
-    SV2 --> SV4
+    SV2 --> QL2
     SV4 --> SV5
     SV5 --> QL2
     QL2 --> QL3

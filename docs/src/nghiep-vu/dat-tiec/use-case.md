@@ -36,22 +36,22 @@ order: 10
 
 ## UC-DT-02
 
-| Trường         | Nội dung                                                            |
-| -------------- | ------------------------------------------------------------------- |
-| Tên            | Tạo đơn đặt tiệc                                                    |
-| Tác nhân       | Khách hàng, Nhân viên tư vấn                                        |
-| Mục tiêu       | Lưu yêu cầu đặt một hoặc nhiều bữa vào đúng hồ sơ khách.            |
-| Kích hoạt      | Khách tự đặt online hoặc liên hệ tư vấn đặt hộ.                     |
-| Tiền điều kiện | Khách tự đặt: đã đăng nhập. Đặt hộ: tư vấn đã đăng nhập.            |
-| Hậu điều kiện  | Đơn ChoXacNhan và các bữa DuKien lưu ở server; chưa giữ tài nguyên. |
-| Quan hệ        | Extend: đặt hộ (tư vấn). Dùng cách tính của UC-DT-01.               |
-| Quy tắc        | BR01, BR02, BR03, BR04                                              |
+| Trường         | Nội dung                                                                    |
+| -------------- | --------------------------------------------------------------------------- |
+| Tên            | Tạo đơn đặt tiệc                                                            |
+| Tác nhân       | Khách hàng, Nhân viên tư vấn                                                |
+| Mục tiêu       | Lưu yêu cầu đặt một hoặc nhiều bữa vào đúng hồ sơ khách.                    |
+| Kích hoạt      | Khách tự đặt online hoặc liên hệ tư vấn đặt hộ.                             |
+| Tiền điều kiện | Khách tự đặt: đã đăng nhập. Đặt hộ: tư vấn đã đăng nhập.                    |
+| Hậu điều kiện  | Đơn ChoXacNhan và các bữa DuKien lưu ở server; chưa giữ tài nguyên.         |
+| Quan hệ        | Hai cách tạo: khách tự đặt hoặc tư vấn đặt hộ. Dùng cách tính của UC-DT-01. |
+| Quy tắc        | BR01, BR02, BR03, BR04                                                      |
 
 **Luồng chính**
 
 1. Hệ thống lấy hồ sơ khách từ tài khoản đăng nhập.
-2. Khách chọn loại tiệc, nhập ghi chú chung.
-3. Khách thêm từng bữa: ngày giờ bắt đầu/kết thúc (đặt trước 3–90 ngày), địa chỉ, số bàn ăn (tối thiểu 1 bàn chuẩn 10 suất), số bàn bố trí ($\le$ số bàn ăn), set hoặc ít nhất một món tự chọn đang phục vụ, dịch vụ.
+2. Khách nhập ghi chú chung.
+3. Khách thêm từng bữa: loại tiệc dạng chuỗi nhập tự do (có thể nhập loại khác), ngày giờ bắt đầu/kết thúc (đặt trước 3–90 ngày), địa chỉ, số bàn ăn (tối thiểu 1 bàn chuẩn 10 suất), số bàn bố trí ($\le$ số bàn ăn), set hoặc ít nhất một món tự chọn đang phục vụ, dịch vụ. Không có danh mục/enum loại tiệc; đám tang vẫn ngoài phạm vi.
 4. Hệ thống kiểm tra dữ liệu từng bữa, tính tiền từng bữa và tổng.
 5. Khách xem tóm tắt, gửi đơn.
 6. Hệ thống lưu đơn ChoXacNhan, các bữa DuKien, báo tư vấn qua dashboard.
@@ -113,9 +113,9 @@ order: 10
 
 **Luồng chính**
 
-1. Tư vấn nhập/kiểm tra khung sử dụng dụng cụ (tính cả 12 giờ cách ly vệ sinh TS19) và giờ làm nhân sự (nhân sự có mặt trước 3 giờ TS18).
+1. Tư vấn nhập/kiểm tra khung sử dụng dụng cụ (tính cả thời gian cách ly vệ sinh TS19 sau thu hồi, mặc định 12 giờ). Hệ thống lấy khung nhân sự dự kiến từ giờ bắt đầu bữa trừ TS18 (mặc định 3 giờ) đến giờ kết thúc bữa, không lưu thêm khung dự kiến riêng.
 2. Hệ thống loại các giữ tạm đã hết hạn (quá 24 giờ TS06).
-3. Hệ thống tính nhu cầu dụng cụ từng loại = ceil(định mức × cơ sở × (1 + dự trù 10% theo TS04)); cơ sở theo người là số bàn ăn × 10 suất chuẩn, kể cả phục vụ cuốn chiếu; đồ cồng kềnh lấy lượng nhập tay.
+3. Hệ thống tính nhu cầu dụng cụ từng loại = ceil(định mức × cơ sở × (1 + dự trù)); dự trù trống dùng TS04 (mặc định 10%), nhập 0 nếu không dự trù. Cơ sở theo người là số bàn ăn × 10 suất chuẩn, kể cả phục vụ cuốn chiếu; đồ cồng kềnh lấy lượng nhập tay.
 4. Hệ thống gom lượng đã giữ chồng giờ (đơn khác + các bữa khác cùng đơn), so với lượng sở hữu dùng được, bao gồm bàn ghế; không dùng trần số bàn hoặc số tiệc theo ngày.
 5. Hệ thống tính gợi ý nhân sự: phục vụ = ceil(bàn bố trí / 3) (TS22), bếp = max(2, ceil(bàn ăn / 5)) (TS23), bốc vác = 2 người / 10 bàn có rạp (TS24); cộng nhu cầu nhân sự dự kiến của các bữa chồng giờ, so với nhân sự khả dụng (đảm bảo $\le 12$h làm/ngày theo TS20 và nghỉ giữa 2 ca $\ge 8$h theo TS21).
 6. Hệ thống trả kết quả đủ/thiếu theo từng bữa, từng loại.

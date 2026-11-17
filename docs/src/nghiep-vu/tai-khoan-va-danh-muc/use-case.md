@@ -141,7 +141,7 @@ order: 10
 
 **Luồng chính**
 
-1. Quản lý nhập tên set, mô tả, loại tiệc phù hợp (tùy chọn).
+1. Quản lý nhập tên set, mô tả.
 2. Quản lý chọn các món đang phục vụ.
 3. Hệ thống tính giá set/bàn ăn chuẩn = tổng giá bán các món.
 4. Quản lý lưu set ở trạng thái đang phục vụ.
@@ -229,7 +229,7 @@ order: 10
 **Luồng chính**
 
 1. Thủ kho nhập tên, đơn vị, cơ sở định mức (theo người / bàn bố trí / bữa), định mức.
-2. Thủ kho nhập tồn tối thiểu, dự trù % (bỏ trống nếu không dự trù).
+2. Thủ kho nhập tồn tối thiểu, dự trù % (bỏ trống dùng TS04, mặc định 10%; nhập 0 nếu không dự trù).
 3. Quản lý cơ sở nhập/duyệt giá bồi thường.
 4. Hệ thống kiểm tra, lưu.
 
@@ -242,32 +242,6 @@ order: 10
 
 - 3e. Thủ kho sửa giá bồi thường: không có quyền.
 - 4e. Định mức, dự trù, tồn tối thiểu hoặc giá âm: không lưu.
-
-## UC-DM-06
-
-| Trường         | Nội dung                                                           |
-| -------------- | ------------------------------------------------------------------ |
-| Tên            | Quản lý loại tiệc                                                  |
-| Tác nhân       | Quản lý cơ sở                                                      |
-| Mục tiêu       | Phân loại đơn (cưới, sinh nhật, giỗ, tất niên...) để lọc, báo cáo. |
-| Kích hoạt      | Thêm/sửa/ngưng loại tiệc.                                          |
-| Tiền điều kiện | Đã đăng nhập đúng quyền.                                           |
-| Hậu điều kiện  | Loại tiệc dùng khi tạo đơn và báo cáo.                             |
-| Quan hệ        | —                                                                  |
-| Quy tắc        | Ngoài phạm vi: đám tang, gợi ý món theo loại tiệc.                 |
-
-**Luồng chính**
-
-1. Quản lý nhập tên, mô tả loại tiệc.
-2. Hệ thống kiểm tra trùng tên, lưu.
-
-**Luồng thay thế**
-
-- 1a. Ngưng loại tiệc: ẩn khỏi đơn mới, giữ ở đơn cũ.
-
-**Ngoại lệ**
-
-- 2e. Trùng tên: không lưu.
 
 ## UC-DM-07
 
@@ -285,11 +259,11 @@ order: 10
 **Luồng chính**
 
 1. Hệ thống hiển thị danh mục tham số nghiệp vụ toàn hệ thống kèm giá trị hiện hành:
-   - _Tài chính & Giá_: Food cost mục tiêu (mặc định 35%), Thuế suất VAT (8% hoặc 10%), Tỷ lệ cọc tối thiểu (TS02 = 50%), Đơn vị làm tròn tiền (TS26 = 500 VNĐ).
+   - _Tài chính & Giá_: Food cost mục tiêu (mặc định 35%), Thuế suất VAT theo cấu hình, Tỷ lệ cọc tối thiểu/tối đa (TS02 = 50%, TS03 = 100%), Đơn vị làm tròn tiền (TS26 = 500 VNĐ).
    - _Quy mô & Thực đơn_: Ngưỡng khuyến nghị số món tự chọn (TS01 = 6), Số bàn tối thiểu (TS10 = 1). Bàn chuẩn 10 suất là cơ sở tính giá và định lượng, không phải ngưỡng số người nhập vào.
    - _Thời gian & Giữ chỗ_: Số ngày đặt trước [3, 90] ngày (TS08, TS09), Thời hạn giữ chỗ tạm (TS06 = 24h), Hiệu lực QR (TS07 = 15 phút), Hiệu lực snapshot giá (TS05 = 7 ngày).
    - _Điều chỉnh & Hủy_: Mốc đổi món (TS11 = 5 ngày), Mốc đổi bàn (TS12 = 3 ngày), Tỷ lệ giảm bàn tối đa (TS13 = 15%), Bảng bậc hoàn cọc (TS14: $\ge 30$ ngày 100%, 15–<30 ngày 50%, <15 ngày 0%).
-   - _Vận hành & Tài nguyên_: Bán kính phục vụ tham khảo chỉ hiển thị (TS17 = 20 km), Bán kính miễn phí vận chuyển (TS15 = 10 km, phụ phí TS16 = 15.000 đ/km vượt), Tỷ lệ dự trù dụng cụ (TS04 = 10%), Ngưỡng hao hụt miễn bồi thường (TS25 = 1%), Giờ có mặt trước tiệc (TS18 = 3h), Giờ cách ly vệ sinh dụng cụ (TS19 = 12h), Giờ làm tối đa/ngày (TS20 = 12h), Nghỉ giữa ca (TS21 = 8h), Định mức phục vụ ($\lceil \text{bàn}/3 \rceil$), Định mức bếp ($\max(2, \lceil \text{bàn}/5 \rceil)$), Số lần sai mật khẩu trước khi khóa (TS27 = 5 lần).
+   - _Vận hành & Tài nguyên_: Bán kính phục vụ tham khảo chỉ hiển thị (TS17 = 20 km), Bán kính miễn phí vận chuyển (TS15 = 10 km, phụ phí TS16 = 15.000 đ/km vượt), Tỷ lệ dự trù dụng cụ (TS04 = 10%), Ngưỡng hao hụt miễn bồi thường (TS25 = 1%), Giờ có mặt trước tiệc (TS18 = 3h), Giờ cách ly vệ sinh dụng cụ (TS19 = 12h), Giờ làm tối đa/ngày (TS20 = 12h), Nghỉ giữa ca (TS21 = 8h), Định mức phục vụ (TS22: $\lceil \text{bàn bố trí}/3 \rceil$), Định mức bếp (TS23: $\max(2, \lceil \text{bàn ăn}/5 \rceil)$), Định mức vận chuyển (TS24: 2 người / 10 bàn có rạp), Số lần sai mật khẩu trước khi khóa (TS27 = 5 lần).
 2. Quản lý sửa giá trị mong muốn.
 3. Hệ thống kiểm tra miền giá trị hợp lệ, lưu giá trị mới kèm người sửa và thời điểm áp dụng; không thay đổi các hợp đồng và cam kết đã chốt trước thời điểm lưu.
 
@@ -299,4 +273,4 @@ order: 10
 
 **Ngoại lệ**
 
-- 3e. Tỷ lệ ngoài (0, 100%], số âm, mốc thời gian không hợp lệ, hoặc vi phạm ngưỡng giới hạn an toàn: từ chối lưu, yêu cầu nhập lại.
+- 3e. Giá trị ngoài miền của tham số, số âm hoặc mốc thời gian không hợp lệ: từ chối lưu. Food cost mục tiêu phải dương; thuế suất, dự trù và ngưỡng miễn bồi thường được phép bằng 0; cọc tối thiểu không vượt cọc tối đa; ngày đặt trước tối thiểu không vượt tối đa.

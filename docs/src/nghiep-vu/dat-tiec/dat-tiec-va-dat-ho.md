@@ -31,10 +31,11 @@ sequenceDiagram
         end
     end
 
-    TV->>UI: Nhập khảo sát Q&A riêng từng bữa
-    TV->>UI: Nhập khoảng cách và khung sử dụng tài nguyên
-
-    K->>UI: Gửi danh sách bữa (thời gian, địa điểm, bàn ăn, bàn ghế, món, dịch vụ)
+    alt Tự đặt
+        K->>UI: Gửi danh sách bữa (loại tiệc nhập tự do, thời gian, địa chỉ, quy mô, món, dịch vụ)
+    else Đặt hộ
+        TV->>UI: Gửi danh sách bữa thay khách
+    end
     UI->>DH: Tạo đơn đặt tiệc
     activate DH
     DH->>DH: Tính tiền toàn bộ bữa
@@ -42,20 +43,24 @@ sequenceDiagram
     DB-->>DH: Xác nhận lưu
     deactivate DH
 
+    TV->>UI: Nhập khảo sát Q&A, khoảng cách riêng từng bữa đã lưu
+    UI->>DH: Lưu khảo sát và tính phí vận chuyển riêng
+    TV->>UI: Nhập khung dụng cụ gồm vệ sinh TS19, nhu cầu nhân sự theo vị trí
+    UI->>DH: Lấy khung nhân sự từ giờ bữa và TS18
+
     TV->>UI: Xác nhận nhận đơn
     UI->>DH: Yêu cầu xác nhận và giữ tạm
     activate DH
-    DH->>TR: Kiểm tra tất cả bữa và giữ hiệu lực bên ngoài
-    activate TR
-    TR->>TR: Tính nhu cầu nhân sự từ bàn bố trí
-    deactivate TR
+    DH->>TR: Kiểm tra mọi bữa cùng đơn và các giữ còn hiệu lực
+    TR->>TR: Kiểm tra dụng cụ và nhu cầu nhân sự theo vị trí/khung giờ
     alt Đủ tài nguyên
+        TR->>DB: Kiểm tra lại và ghi giữ tạm toàn bộ bữa nguyên tử
+        DB-->>TR: Xác nhận giữ và hạn TS06
         TR-->>DH: Tài nguyên hợp lệ
         DH->>HD: Phát hành hợp đồng chung
         activate HD
-        HD->>HD: Chốt nội dung và hạn 24 giờ
-        HD->>DB: Giữ tạm toàn bộ bữa trong một giao dịch
-        DB-->>HD: Xác nhận giữ
+        HD->>DB: Lưu nội dung chốt, hạn cọc bằng hạn giữ tạm
+        DB-->>HD: Xác nhận lưu hợp đồng
         deactivate HD
         DH-->>UI: Hợp đồng đã phát hành
     else Thiếu tài nguyên
@@ -64,14 +69,16 @@ sequenceDiagram
     end
     deactivate DH
 
-    alt Khách có tài khoản
-        UI->>HS: Gửi hợp đồng chờ xác nhận vào hồ sơ
-        HS-->>K: Nhận hợp đồng qua tài khoản
-    else Khách không đăng ký
-        note over K,TV: Khách ký giấy tại quầy
-        TV->>UI: Upload bản ký giấy
-        UI->>HD: Lưu bản ký
-        HD-->>UI: Xác nhận lưu
+    opt Đã phát hành hợp đồng
+        alt Khách có tài khoản
+            UI->>HS: Gửi hợp đồng chờ xác nhận vào hồ sơ
+            HS-->>K: Nhận hợp đồng qua tài khoản
+        else Khách không đăng ký
+            note over K,TV: Khách ký giấy tại quầy
+            TV->>UI: Upload bản ký giấy
+            UI->>HD: Lưu bản ký
+            HD-->>UI: Xác nhận lưu
+        end
     end
 ```
 

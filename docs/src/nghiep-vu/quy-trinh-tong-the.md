@@ -18,8 +18,11 @@ flowchart TD
         T2["Khảo sát Q&A, nhập khoảng cách & khung tài nguyên"]
         T3{"Nhận hoặc từ chối đơn?"}
         T4["Ký giấy & xác nhận"]
-        T5["Phân công nhân sự/kho cho bữa"]
         T6["Xử lý yêu cầu sửa/hủy bữa"]
+    end
+
+    subgraph QuanLyNhanSu["Quản lý nhân sự"]
+        NS1["Phân công nhân sự cho bữa"]
     end
 
     subgraph HeTong["Hệ thống"]
@@ -37,14 +40,18 @@ flowchart TD
         NK1["Chuẩn bị & xuất dụng cụ"]
         NK2["Phục vụ tiệc"]
         NK3["Kiểm đếm dụng cụ thu hồi"]
-        NK4["Cuối tháng: tổng hợp phiếu nhập, kiểm kê thực tế, chốt tồn/food cost"]
+        NK4["Cuối tháng: tổng hợp phiếu nhập, kiểm kê thực tế"]
     end
 
     subgraph KeToan["Kế toán"]
         KT1["Thu cọc"]
         KT2["Xử lý tiền đã thu (nếu có)"]
         KT3["Thu/hoàn từng bữa & quyết toán"]
-        KT4["Đầu tháng: tạo đề xuất giá nguyên liệu"]
+        KT4["Đối chiếu, chốt tồn và food cost tháng"]
+    end
+
+    subgraph Server["Server"]
+        SV1["Đầu tháng: tạo đợt đề xuất giá độc lập với chốt kỳ"]
     end
 
     K1 --> H1
@@ -65,27 +72,27 @@ flowchart TD
     H6 --> HetHan(["Giữ chỗ kết thúc"])
     H3 -- "Đủ ký + cọc" --> H4
 
-    H4 --> LoopBua["Lặp từng bữa"]
-    LoopBua --> T5
-    T5 --> NK1
+    H4 --> LoopBua["Lặp từng bữa chưa hủy"]
+    LoopBua --> NS1
+    NS1 --> NK1
     NK1 --> NK2
     NK2 --> NK3
     NK3 --> KT3
     KT3 --> H7
+    KT3 --> DanhGiaDuoc{"Bữa đã phục vụ và HoanTat?"}
+    DanhGiaDuoc -- "Có" --> K3
 
     K2 --> T6
-    T6 --> LoopBua
+    T6 --> H7
 
     H7 -- "Chưa" --> LoopBua
     H7 -- "Đủ" --> H8
-    H8 --> K3
-
     NK4 --> KT4
 ```
 
 ## Phạm vi
 
-UC liên quan: UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01, UC-HD-02, UC-HD-03, UC-HD-04, UC-NS-02, UC-KHO-06, UC-KHO-07, UC-HD-08. Tra tại [danh mục chung](./danh-muc-use-case.md).
+UC liên quan: UC-DT-02, UC-DT-03, UC-DT-04, UC-DT-05, UC-HD-01 đến UC-HD-08, UC-NS-02, UC-KHO-02 đến UC-KHO-04, UC-KHO-06, UC-KHO-07, UC-CS-01. Tra tại [danh mục chung](./danh-muc-use-case.md).
 
 ## Lưu ý và giới hạn
 

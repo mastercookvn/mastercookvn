@@ -21,7 +21,7 @@ order: 10
 
 1. Hệ thống sinh hợp đồng từ đơn: bên A, khách, từng bữa (thời gian, địa điểm, bàn ăn, bàn bố trí, món, dịch vụ, phụ thu), điều khoản cọc/sửa/hủy/bồi thường.
 2. Tư vấn kiểm tra, chỉnh phụ thu thỏa thuận nếu có.
-3. Hệ thống tính tổng từng bữa, tổng hợp đồng, cọc tối thiểu 50% (TS02), hạn cọc = hạn giữ tạm 24 giờ (TS06). Bản chốt báo giá có thời hạn hiệu lực 7 ngày (TS05).
+3. Hệ thống tính tổng từng bữa, tổng hợp đồng, cọc tối thiểu 50% (TS02), hạn cọc = hạn giữ tạm 24 giờ (TS06). Hiệu lực báo giá 7 ngày (TS05) không gia hạn giữ chỗ hoặc thời hạn ký/cọc TS06.
 4. Tư vấn phát hành.
 5. Hệ thống lưu bản chốt (tên, lượng, đơn giá, thuế, phụ thu, giá bồi thường dụng cụ), không đổi theo danh mục sau này.
 6. Hợp đồng hiện trong hồ sơ khách (UC-DT-06); tư vấn báo khách qua Zalo/điện thoại.
@@ -168,25 +168,25 @@ order: 10
 
 ## UC-HD-06
 
-| Trường         | Nội dung                                                                     |
-| -------------- | ---------------------------------------------------------------------------- |
-| Tên            | Hủy bữa hoặc hợp đồng                                                        |
-| Tác nhân       | Khách hàng, Nhân viên tư vấn                                                 |
-| Mục tiêu       | Dừng phục vụ bữa được chọn, tính nghĩa vụ hoàn theo thời điểm yêu cầu.       |
-| Kích hoạt      | Khách yêu cầu hủy.                                                           |
-| Tiền điều kiện | Bữa chưa bắt đầu phục vụ, chưa hủy.                                          |
-| Hậu điều kiện  | Bữa DaHuy, nhả giữ, hủy phân công, có khoản hoàn/giữ lại; bữa khác tiếp tục. |
-| Quan hệ        | Có khoản phải hoàn thì tiếp UC-HD-07.                                        |
-| Quy tắc        | BR01, BR08, BR10, BR11                                                       |
+| Trường         | Nội dung                                                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Tên            | Hủy bữa hoặc hợp đồng                                                                                                                            |
+| Tác nhân       | Khách hàng, Nhân viên tư vấn                                                                                                                     |
+| Mục tiêu       | Dừng phục vụ bữa được chọn, tính nghĩa vụ hoàn theo thời điểm yêu cầu.                                                                           |
+| Kích hoạt      | Khách yêu cầu hủy.                                                                                                                               |
+| Tiền điều kiện | Bữa chưa bắt đầu phục vụ, chưa hủy.                                                                                                              |
+| Hậu điều kiện  | Bữa DaHuy, nhả giữ dụng cụ chưa xuất, hủy phân công, có khoản hoàn/giữ lại; bữa khác tiếp tục. Dụng cụ đã xuất vẫn phải thu hồi và bảo đảm TS19. |
+| Quan hệ        | Có khoản phải hoàn thì tiếp UC-HD-07.                                                                                                            |
+| Quy tắc        | BR01, BR08, BR10, BR11                                                                                                                           |
 
 **Luồng chính**
 
 1. Khách (từ UC-DT-06) hoặc tư vấn chọn một/nhiều bữa cần hủy.
 2. Hệ thống lưu thời điểm yêu cầu.
-3. Hệ thống tính từng bữa: căn cứ cọc (50% giá trị bữa), phần trả trước vượt cọc (hoàn 100%), và bậc hoàn cọc bắt buộc theo số ngày còn lại (TS14: $\ge 30$ ngày hoàn 100% cọc bắt buộc với phí 0đ; 15–<30 ngày hoàn 50%; < 15 ngày hoặc đến giờ tiệc khách vắng mặt hoàn 0%).
+3. Hệ thống tính từng bữa: căn cứ cọc = min(TS02 × giá trị bữa hiện hành, tiền đã thu còn phân bổ cho bữa), TS02 mặc định 50%; phần trả trước vượt căn cứ được hoàn 100%. Áp bậc hoàn theo thời điểm yêu cầu (TS14: $\ge 30$ ngày hoàn 100% cọc bắt buộc với phí 0đ; 15–<30 ngày hoàn 50%; < 15 ngày hoặc đến giờ tiệc khách vắng mặt hoàn 0%).
 4. Hệ thống hiển thị tiền hoàn, tiền giữ lại từng bữa và tổng.
 5. Người yêu cầu xác nhận hủy.
-6. Hệ thống chuyển bữa DaHuy, nhả giữ dụng cụ, hủy phân công, ghi nghĩa vụ hoàn.
+6. Hệ thống chuyển bữa DaHuy, nhả giữ dụng cụ chưa xuất, hủy phân công, ghi nghĩa vụ hoàn; dụng cụ đã xuất vẫn theo dõi thu hồi/kiểm đếm và khung vệ sinh TS19.
 7. Mọi bữa đều hủy: hợp đồng DaHuy, tiếp tục theo dõi hoàn.
 
 **Luồng thay thế**
@@ -230,28 +230,28 @@ order: 10
 
 ## UC-HD-08
 
-| Trường         | Nội dung                                                          |
-| -------------- | ----------------------------------------------------------------- |
-| Tên            | Quyết toán bữa và hoàn tất hợp đồng                               |
-| Tác nhân       | Kế toán                                                           |
-| Mục tiêu       | Đối trừ tiền đúng một lần, đóng bữa và hợp đồng khi hết nghĩa vụ. |
-| Kích hoạt      | Bữa ChoQuyetToan, hoặc bữa DaHuy còn nghĩa vụ tiền.               |
-| Tiền điều kiện | Đã kiểm đếm dụng cụ (nếu có xuất).                                |
-| Hậu điều kiện  | Số dư bữa = 0, bữa HoanTat; mọi bữa xong thì hợp đồng HoanTat.    |
-| Quan hệ        | Số dư dương: UC-HD-03/UC-HD-04. Âm: UC-HD-07.                     |
-| Quy tắc        | BR01, BR11, BR13                                                  |
+| Trường         | Nội dung                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Tên            | Quyết toán bữa và hoàn tất hợp đồng                                                                                    |
+| Tác nhân       | Kế toán                                                                                                                |
+| Mục tiêu       | Đối trừ tiền đúng một lần, đóng bữa và hợp đồng khi hết nghĩa vụ.                                                      |
+| Kích hoạt      | Bữa ChoQuyetToan, hoặc bữa DaHuy còn nghĩa vụ tiền.                                                                    |
+| Tiền điều kiện | Đã kiểm đếm dụng cụ (nếu có xuất).                                                                                     |
+| Hậu điều kiện  | Số dư bữa = 0, quyết toán DaChot; bữa đã phục vụ chuyển HoanTat, bữa hủy giữ DaHuy; mọi bữa xong thì hợp đồng HoanTat. |
+| Quan hệ        | Số dư dương: UC-HD-03/UC-HD-04. Âm: UC-HD-07.                                                                          |
+| Quy tắc        | BR01, BR11, BR13                                                                                                       |
 
 **Luồng chính**
 
 1. Kế toán chọn bữa cần quyết toán.
 2. Hệ thống tổng hợp: giá trị bữa hiện hành (gồm phụ lục), bồi thường dụng cụ, tiền đã thu và đã hoàn phân bổ cho bữa.
 3. Hệ thống tính số dư = tổng quyết toán − thu + hoàn; lập phiếu quyết toán.
-4. Số dư = 0: kế toán xác nhận, bữa HoanTat.
+4. Số dư = 0: kế toán xác nhận, quyết toán DaChot; bữa đã phục vụ chuyển HoanTat, bữa đã hủy giữ DaHuy.
 5. Hệ thống kiểm tra mọi bữa của hợp đồng đã HoanTat/DaHuy và số dư 0: hợp đồng HoanTat.
 
 **Luồng thay thế**
 
-- 1a. Bữa DaHuy: dùng nghĩa vụ sau hủy thay giá trị bữa.
+- 1a. Bữa DaHuy: dùng nghĩa vụ sau hủy thay giá trị bữa; chốt quyết toán không đổi trạng thái DaHuy và không mở đánh giá.
 - 4a. Số dư dương: thu phần còn lại qua UC-HD-03/UC-HD-04, rồi bước 4.
 - 4b. Số dư âm: ghi hoàn qua UC-HD-07, rồi bước 4.
 - 5a. Còn bữa tương lai: hợp đồng giữ CoHieuLuc.

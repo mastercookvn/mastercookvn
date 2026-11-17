@@ -18,7 +18,6 @@ order: 30
 | UC-DM-03  | [Quản lý nguyên liệu và định lượng món](./tai-khoan-va-danh-muc/use-case.md#uc-dm-03)  | Quản lý cơ sở                         |
 | UC-DM-04  | [Quản lý dịch vụ](./tai-khoan-va-danh-muc/use-case.md#uc-dm-04)                        | Quản lý cơ sở                         |
 | UC-DM-05  | [Quản lý danh mục dụng cụ](./tai-khoan-va-danh-muc/use-case.md#uc-dm-05)               | Quản lý cơ sở, Thủ kho                |
-| UC-DM-06  | [Quản lý loại tiệc](./tai-khoan-va-danh-muc/use-case.md#uc-dm-06)                      | Quản lý cơ sở                         |
 | UC-DM-07  | [Quản lý tham số nghiệp vụ](./tai-khoan-va-danh-muc/use-case.md#uc-dm-07)              | Quản lý cơ sở                         |
 | UC-DT-01  | [Xem danh mục và tạm tính](./dat-tiec/use-case.md#uc-dt-01)                            | Khách hàng                            |
 | UC-DT-02  | [Tạo đơn đặt tiệc](./dat-tiec/use-case.md#uc-dt-02)                                    | Khách hàng, Nhân viên tư vấn          |
@@ -53,5 +52,7 @@ order: 30
 ## Cách duy trì
 
 Khi thêm, bỏ hoặc đổi UC, sửa bảng này và trang đặc tả liên quan trong cùng thay đổi. Khi thêm tài liệu, sửa chỉ mục nhóm nghiệp vụ liên quan. Không chép bảng UC vào spec hoặc chỉ mục con.
+
+Mã UC-DM-06 không còn sử dụng: loại tiệc là chuỗi nhập tự do theo bữa, không có danh mục quản lý riêng. Không đánh lại mã các UC còn lại.
 
 Các file sơ đồ được thể hiện bằng biểu đồ Mermaid (không sinh file SVG). Khi chỉnh sửa sơ đồ, giữ nguyên ngôn ngữ tiếng Việt và tuân thủ các quy định trong `AGENTS.md`.
