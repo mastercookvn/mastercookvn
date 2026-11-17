@@ -1,24 +1,55 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { CrateIcon } from "@/components/icons";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
 import { SelectField } from "@/components/ui/SelectField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
+import { formatNumber } from "@/lib/format";
+import {
+  amountTextSchema,
+  LIVE_VALIDATION_MODE,
+  requiredTextSchema,
+} from "@/lib/validation";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 import {
   EQUIPMENT_BASIS,
   type EquipmentBasis,
   type EquipmentType,
 } from "@/mocks/equipment";
-import { formatNumber } from "@/lib/format";
 
 const MANUAL_BASIS: EquipmentBasis = "Nhập theo bữa";
 
-const parseInteger = (text: string) => Number(text.replace(/\D/g, "")) || 0;
 const parseDecimal = (text: string) => Number(text.replace(",", ".")) || 0;
+
+/** Rate and reserve unregister on the manual basis, so they are optional here. */
+const equipmentSchema = (ownName: string | undefined) =>
+  z.object({
+    name: requiredTextSchema("tên dụng cụ").refine(
+      (name) =>
+        !readDemoState().equipment.some(
+          (other) =>
+            other.name !== ownName &&
+            other.name.toLowerCase() === name.toLowerCase()
+        ),
+      "Đã có dụng cụ cùng tên"
+    ),
+    unit: requiredTextSchema("đơn vị"),
+    rate: z
+      .string()
+      .transform(parseDecimal)
+      .pipe(z.number().positive("Định mức lớn hơn 0"))
+      .optional(),
+    reserve: z.string().transform(parseDecimal).optional(),
+    minimum: amountTextSchema("Nhập tồn tối thiểu"),
+    purchasePrice: amountTextSchema("Nhập giá mua"),
+    compensation: amountTextSchema("Nhập giá bồi thường"),
+  });
 
 export function EquipmentForm({
   formId,
@@ -32,65 +63,43 @@ export function EquipmentForm({
   onSaved: () => void;
 }) {
   const showToast = useToast();
-  const [name, setName] = useState(item?.name ?? "");
-  const [unit, setUnit] = useState(item?.unit ?? "cái");
   const [basis, setBasis] = useState<EquipmentBasis>(
     item?.basis ?? EQUIPMENT_BASIS[0]
   );
-  const [rateText, setRateText] = useState(
-    item?.rate ? String(item.rate).replace(".", ",") : "1"
-  );
-  const [reserveText, setReserveText] = useState(
-    item ? String(Math.round((item.reserve ?? 0) * 100)) : "10"
-  );
-  const [minimumText, setMinimumText] = useState(
-    item ? String(item.minimum) : ""
-  );
-  const [priceText, setPriceText] = useState(
-    item ? formatNumber(item.purchasePrice) : ""
-  );
-  const [compensationText, setCompensationText] = useState(
-    item ? formatNumber(item.compensation) : ""
-  );
   const [image, setImage] = useState<string | null>(item?.image ?? null);
-  const [submitted, setSubmitted] = useState(false);
-
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(equipmentSchema(item?.name)),
+    mode: LIVE_VALIDATION_MODE,
+    shouldUnregister: true,
+    defaultValues: {
+      name: item?.name ?? "",
+      unit: item?.unit ?? "cái",
+      rate: item?.rate ? String(item.rate).replace(".", ",") : "1",
+      reserve: item ? String(Math.round((item.reserve ?? 0) * 100)) : "10",
+      minimum: item ? String(item.minimum) : "",
+      purchasePrice: item ? formatNumber(item.purchasePrice) : "",
+      compensation: item ? formatNumber(item.compensation) : "",
+    },
+  });
+  const name = useWatch({ control, name: "name" });
   const manual = basis === MANUAL_BASIS;
-  const duplicate = readDemoState().equipment.some(
-    (other) =>
-      other.name !== item?.name &&
-      other.name.toLowerCase() === name.trim().toLowerCase()
-  );
-  const errors = {
-    name: !name.trim()
-      ? "Nhập tên dụng cụ"
-      : duplicate
-        ? "Đã có dụng cụ cùng tên"
-        : null,
-    unit: unit.trim() ? null : "Nhập đơn vị",
-    rate: manual || parseDecimal(rateText) > 0 ? null : "Định mức lớn hơn 0",
-    minimum: parseInteger(minimumText) > 0 ? null : "Nhập tồn tối thiểu",
-    price: parseInteger(priceText) > 0 ? null : "Nhập giá mua",
-    compensation:
-      parseInteger(compensationText) > 0 ? null : "Nhập giá bồi thường",
-  };
 
-  const save = () => {
-    setSubmitted(true);
-    if (Object.values(errors).some(Boolean)) return;
+  const save = handleSubmit((values) => {
     const fields = {
-      name: name.trim(),
+      name: values.name,
       image: image ?? undefined,
-      unit: unit.trim(),
+      unit: values.unit,
       basis,
-      rate: manual ? null : parseDecimal(rateText),
-      reserve:
-        manual || parseDecimal(reserveText) === 0
-          ? null
-          : parseDecimal(reserveText) / 100,
-      minimum: parseInteger(minimumText),
-      compensation: parseInteger(compensationText),
-      purchasePrice: parseInteger(priceText),
+      rate: manual ? null : (values.rate ?? null),
+      reserve: manual || !values.reserve ? null : values.reserve / 100,
+      minimum: values.minimum,
+      compensation: values.compensation,
+      purchasePrice: values.purchasePrice,
     };
     const equipment = readDemoState().equipment;
     updateDemoState({
@@ -109,18 +118,10 @@ export function EquipmentForm({
         : `Đã thêm ${fields.name}. Nhập mua để có tồn kho.`
     );
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack" noValidate onSubmit={save}>
       <ImageUploadField
         id="equipment-image"
         label="Ảnh dụng cụ"
@@ -133,16 +134,14 @@ export function EquipmentForm({
         <TextField
           id="equipment-name"
           label="Tên dụng cụ"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          error={submitted ? errors.name : null}
+          {...register("name")}
+          error={errors.name?.message}
         />
         <TextField
           id="equipment-unit"
           label="Đơn vị"
-          value={unit}
-          onChange={(event) => setUnit(event.target.value)}
-          error={submitted ? errors.unit : null}
+          {...register("unit")}
+          error={errors.unit?.message}
         />
         <SelectField
           id="equipment-basis"
@@ -157,16 +156,14 @@ export function EquipmentForm({
               id="equipment-rate"
               label={`Định mức / ${basis.toLowerCase()}`}
               inputMode="decimal"
-              value={rateText}
-              onChange={(event) => setRateText(event.target.value)}
-              error={submitted ? errors.rate : null}
+              {...register("rate")}
+              error={errors.rate?.message}
             />
             <TextField
               id="equipment-reserve"
               label="Dự trù (%)"
               inputMode="numeric"
-              value={reserveText}
-              onChange={(event) => setReserveText(event.target.value)}
+              {...register("reserve")}
             />
           </>
         )}
@@ -174,25 +171,22 @@ export function EquipmentForm({
           id="equipment-minimum"
           label="Tồn tối thiểu"
           inputMode="numeric"
-          value={minimumText}
-          onChange={(event) => setMinimumText(event.target.value)}
-          error={submitted ? errors.minimum : null}
+          {...register("minimum")}
+          error={errors.minimum?.message}
         />
         <TextField
           id="equipment-price"
           label="Giá mua (đ)"
           inputMode="numeric"
-          value={priceText}
-          onChange={(event) => setPriceText(event.target.value)}
-          error={submitted ? errors.price : null}
+          {...register("purchasePrice")}
+          error={errors.purchasePrice?.message}
         />
         <TextField
           id="equipment-compensation"
           label="Giá bồi thường (đ)"
           inputMode="numeric"
-          value={compensationText}
-          onChange={(event) => setCompensationText(event.target.value)}
-          error={submitted ? errors.compensation : null}
+          {...register("compensation")}
+          error={errors.compensation?.message}
           disabled={item !== null && !canEditCompensation}
           hint={
             item !== null && !canEditCompensation

@@ -29,17 +29,18 @@ Nhãn trạng thái chỉ dùng màu nền và màu chữ, không có chấm tr�
 
 ## Hệ thống đã cài
 
-| Thành phần  | Lựa chọn                                         | Ghi chú                                                                                                                    |
-| ----------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| Màu         | Token trong `globals.css`                        | Theo mục 2.3 và 2.8. Đã xoá bảng màu mặc định của Tailwind. Vùng quản lý ghi đè token dưới `[data-surface="workspace"]`.   |
-| Cỡ chữ      | Token `--text-*`, tên theo px (`text-14-5`)      | Khi thêm cỡ mới, cập nhật cả `src/lib/utils.ts`.                                                                           |
-| Font        | Be Vietnam Pro 400, 500, 600, 700                | Chỉ một họ chữ.                                                                                                            |
-| Icon        | 50 icon tự vẽ trong `@/components/icons`         | Mỗi icon một file. ESLint chặn các thư viện icon.                                                                          |
-| Logo        | `Logo`, `LogoMark` trong `components/brand`      | Nhận `tone` light hoặc dark.                                                                                               |
-| Kiểu dáng   | CSS đặt cạnh chức năng và tiện ích Tailwind      | `features/<chức năng>/<chức năng>.css`, `components/ui/ui.css`. `globals.css` import tất cả.                               |
-| Primitive   | Base UI (`@base-ui/react`)                       | Hiện dùng cho `Dialog`.                                                                                                    |
-| Biến thể    | `cva` và `cn()`                                  |                                                                                                                            |
-| Chuyển động | CSS và IntersectionObserver, `components/motion` | M01 đến M14 theo mục 3. Không thêm thư viện. Trạng thái ẩn chỉ bật khi script đã chạy; tôn trọng `prefers-reduced-motion`. |
+| Thành phần  | Lựa chọn                                         | Ghi chú                                                                                                                                      |
+| ----------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Màu         | Token trong `globals.css`                        | Theo mục 2.3 và 2.8. Đã xoá bảng màu mặc định của Tailwind. Vùng quản lý ghi đè token dưới `[data-surface="workspace"]`.                     |
+| Cỡ chữ      | Token `--text-*`, tên theo px (`text-14-5`)      | Khi thêm cỡ mới, cập nhật cả `src/lib/utils.ts`.                                                                                             |
+| Font        | Be Vietnam Pro 400, 500, 600, 700                | Chỉ một họ chữ.                                                                                                                              |
+| Icon        | 50 icon tự vẽ trong `@/components/icons`         | Mỗi icon một file. ESLint chặn các thư viện icon.                                                                                            |
+| Logo        | `Logo`, `LogoMark` trong `components/brand`      | Nhận `tone` light hoặc dark.                                                                                                                 |
+| Kiểu dáng   | CSS đặt cạnh chức năng và tiện ích Tailwind      | `features/<chức năng>/<chức năng>.css`, `components/ui/ui.css`. `globals.css` import tất cả.                                                 |
+| Primitive   | Base UI (`@base-ui/react`)                       | Hiện dùng cho `Dialog`.                                                                                                                      |
+| Biến thể    | `cva` và `cn()`                                  |                                                                                                                                              |
+| Biểu mẫu    | `react-hook-form`, `zodResolver`, `zod`          | Schema dùng chung ở `src/lib/validation.ts` (họ tên, SĐT, địa chỉ, số tiền). `mode: LIVE_VALIDATION_MODE` để báo lỗi ngay khi gõ hoặc rời ô. |
+| Chuyển động | CSS và IntersectionObserver, `components/motion` | M01 đến M14 theo mục 3. Không thêm thư viện. Trạng thái ẩn chỉ bật khi script đã chạy; tôn trọng `prefers-reduced-motion`.                   |
 
 ## Thêm icon
 

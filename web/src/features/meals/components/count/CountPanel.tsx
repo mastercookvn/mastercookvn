@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
@@ -13,6 +16,7 @@ import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { MEAL_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
+import { LIVE_VALIDATION_MODE, personNameSchema } from "@/lib/validation";
 import { CUSTOMER } from "@/mocks/contracts";
 import {
   readDemoState,
@@ -97,6 +101,12 @@ function ConfirmedReport({ report }: { report: CountReport }) {
   );
 }
 
+const countSignersSchema = z.object({
+  counter: personNameSchema,
+  customerName: personNameSchema,
+  note: z.string().trim(),
+});
+
 export function CountPanel({ meal }: { meal: OperationMeal }) {
   const status = useDemoState((state) => state.mealStatuses[meal.id]);
   const saved = useDemoState((state) => state.countReports[meal.id]);
@@ -104,11 +114,20 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
 
   const [rows, setRows] = useState(saved?.rows ?? BLANK_ROWS);
   const [photos, setPhotos] = useState<string[]>(saved?.photos ?? []);
-  const [counter, setCounter] = useState(saved?.counter ?? DEFAULT_COUNTER);
-  const [customerName, setCustomerName] = useState(
-    saved?.customerName ?? CUSTOMER.name
-  );
-  const [note, setNote] = useState(saved?.note ?? "");
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors: fieldErrors },
+  } = useForm({
+    resolver: zodResolver(countSignersSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: {
+      counter: saved?.counter ?? DEFAULT_COUNTER,
+      customerName: saved?.customerName ?? CUSTOMER.name,
+      note: saved?.note ?? "",
+    },
+  });
   const [signature, setSignature] = useState<string | null>(
     saved?.customerSignature ?? null
   );
@@ -134,14 +153,10 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
   const problems = rows.filter((row) => countRowProblem(row) !== null).length;
   const compensation = countReportCompensation(rows);
   const needsSignature = compensation > 0;
-  const errors = {
-    counter: counter.trim() ? null : "Nhập người kiểm đếm",
-    customerName: customerName.trim() ? null : "Nhập tên đại diện khách",
-    signature:
-      needsSignature && !signature
-        ? "Có bồi thường nên cần chữ ký đại diện khách"
-        : null,
-  };
+  const signatureError =
+    needsSignature && !signature
+      ? "Có bồi thường nên cần chữ ký đại diện khách"
+      : null;
 
   const persist = (reportStatus: CountReportStatus) =>
     updateDemoState({
@@ -151,18 +166,17 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
           status: reportStatus,
           rows,
           photos,
-          counter: counter.trim(),
-          note: note.trim(),
-          customerName: customerName.trim(),
+          counter: getValues("counter").trim(),
+          note: getValues("note").trim(),
+          customerName: getValues("customerName").trim(),
           customerSignature: signature,
           savedAt: now(),
         },
       },
     });
 
-  const confirm = () => {
-    setSubmitted(true);
-    if (problems > 0 || Object.values(errors).some(Boolean)) return;
+  const confirm = handleSubmit(() => {
+    if (problems > 0 || signatureError) return;
     persist(COUNT_REPORT_STATUS.Confirmed);
     updateDemoState({
       mealStatuses: {
@@ -173,7 +187,7 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
     showToast(
       "Đã xác nhận biên bản và gửi thông báo cho khách. Bữa chuyển sang Chờ quyết toán."
     );
-  };
+  });
 
   return (
     <>
@@ -221,16 +235,14 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
           <TextField
             id="count-counter"
             label="Người kiểm đếm"
-            value={counter}
-            onChange={(event) => setCounter(event.target.value)}
-            error={submitted ? errors.counter : null}
+            {...register("counter")}
+            error={fieldErrors.counter?.message}
           />
           <TextareaField
             id="count-note"
             label="Ghi chú"
             placeholder="2 bát sứ vỡ khi khách dọn bàn"
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
+            {...register("note")}
           />
           <PhotoGalleryField
             id={`count-photos-${meal.id}`}
@@ -248,9 +260,8 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
           <TextField
             id="count-customer"
             label="Họ tên đại diện khách"
-            value={customerName}
-            onChange={(event) => setCustomerName(event.target.value)}
-            error={submitted ? errors.customerName : null}
+            {...register("customerName")}
+            error={fieldErrors.customerName?.message}
           />
           <SignaturePad
             id={`count-signature-${meal.id}`}
@@ -261,7 +272,7 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
             }
             value={signature}
             onChange={setSignature}
-            error={submitted ? errors.signature : null}
+            error={submitted ? signatureError : null}
             hint="Khách ký trên điện thoại hoặc máy tính bảng của thủ kho."
           />
         </section>
@@ -278,7 +289,13 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
         >
           Lưu nháp
         </Button>
-        <Button variant="primary" onClick={confirm}>
+        <Button
+          variant="primary"
+          onClick={(event) => {
+            setSubmitted(true);
+            void confirm(event);
+          }}
+        >
           Xác nhận biên bản và báo khách
         </Button>
       </div>

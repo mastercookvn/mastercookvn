@@ -37,3 +37,5 @@ export const minimumDeposit = (contract: Contract) =>
   roundTo500(contract.total * BUSINESS_SETTINGS.minimumDepositRate);
 
 export const MINIMUM_DEPOSIT_LABEL = `Cọc tối thiểu ${Math.round(BUSINESS_SETTINGS.minimumDepositRate * 100)}%`;
+
+export const ISSUED_CONTRACT_VERSION = 1;

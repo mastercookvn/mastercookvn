@@ -102,3 +102,205 @@
     transform: translateX(4px);
   }
 }
+
+@layer components {
+  /* The whole set card opens its dish details; the CTA stays clickable above it. */
+  .set-card {
+    position: relative;
+  }
+
+  .set-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .set-card-open {
+    font-weight: 600;
+  }
+
+  .set-card-open::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  .set-card-actions > .btn:not(.set-card-open) {
+    position: relative;
+    z-index: 2;
+  }
+
+  .set-card:has(.set-card-open:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .set-card-open:focus-visible {
+    outline: none;
+  }
+
+  .set-card:hover {
+    border-color: var(--color-line-strong);
+  }
+
+  .dialog.dialog-set {
+    width: min(680px, calc(100% - 32px));
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .dialog-set-head {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .dialog-set-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 18px 24px;
+  }
+
+  .dialog-close {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-control);
+    color: var(--color-ink-muted);
+  }
+
+  .dialog-close:hover {
+    background: var(--color-blue-50);
+    color: var(--color-ink);
+  }
+
+  .dialog-set-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+    padding: 14px 24px;
+    border-top: 1px solid var(--color-line);
+    background: var(--color-surface);
+  }
+
+  /* Dish details of a set, used in the menu dialog and the booking menu step. */
+  .set-dishes {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .set-dishes-course h4 {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-bottom: 8px;
+    font-size: var(--text-14);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .set-dishes-course h4 span {
+    font-size: var(--text-12-5);
+    font-weight: 400;
+    color: var(--color-ink-muted);
+  }
+
+  .set-dishes-course ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .set-dish {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .set-dish-photo {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-control);
+    background: var(--color-ivory-deep);
+    color: var(--color-ink-subtle);
+  }
+
+  .set-dish-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .set-dish-text b {
+    font-size: var(--text-14-5);
+    font-weight: 600;
+  }
+
+  .set-dish-text small {
+    font-size: var(--text-12-5);
+    line-height: 1.45;
+    color: var(--color-ink-muted);
+  }
+
+  .set-dish-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: var(--text-14);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .set-dish-price small {
+    font-size: var(--text-11-5);
+    font-weight: 400;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 480px) {
+    .set-dish {
+      grid-template-columns: 48px minmax(0, 1fr);
+    }
+
+    .set-dish-photo {
+      width: 48px;
+    }
+
+    .set-dish-price {
+      grid-column: 2;
+      flex-direction: row;
+      gap: 4px;
+      align-items: baseline;
+    }
+  }
+}

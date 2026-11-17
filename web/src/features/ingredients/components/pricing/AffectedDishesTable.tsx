@@ -3,7 +3,7 @@ import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { ToastButton } from "@/components/ui/ToastButton";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, formatPercent } from "@/lib/format";
 import { PRICE_PROPOSALS } from "@/mocks/inventory";
 
 const NEW_COST = 1.2 * PRICE_PROPOSALS[3].proposed + 9000;
@@ -19,7 +19,9 @@ export function AffectedDishesTable() {
           "Món",
           num("Giá bán hiện tại"),
           num("Chi phí ước tính mới"),
-          num("Giá gợi ý (food cost 35%)"),
+          num(
+            `Giá gợi ý (food cost mục tiêu ${formatPercent(BUSINESS_SETTINGS.foodCostTarget, 0)})`
+          ),
           "",
         ]}
         rows={[

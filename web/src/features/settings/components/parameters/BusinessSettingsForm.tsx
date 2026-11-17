@@ -16,7 +16,7 @@ export function BusinessSettingsForm() {
             id="setting-food-cost"
             label="Food cost mục tiêu (%)"
             defaultValue={settings.foodCostTarget * 100}
-            hint={`Gợi ý sau chốt 10/2026: ${formatPercent(INVENTORY_PERIOD.foodCost)}`}
+            hint={`Dùng chung để gợi ý giá bán từng món. Food cost thực tế 10/2026: ${formatPercent(INVENTORY_PERIOD.foodCost)}, không tự ghi đè.`}
           />
           <TextField
             id="setting-tax"

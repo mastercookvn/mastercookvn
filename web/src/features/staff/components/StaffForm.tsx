@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { UserIcon } from "@/components/icons";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
@@ -8,14 +11,40 @@ import { SelectField } from "@/components/ui/SelectField";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
+import {
+  LIVE_VALIDATION_MODE,
+  optionalAddressSchema,
+  personNameSchema,
+  phoneSchema,
+  toLocalPhone,
+} from "@/lib/validation";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 import { STAFF_POSITIONS } from "@/mocks/operationMeals";
 import { STAFF_GENDERS, STAFF_TYPES, type StaffMember } from "@/mocks/people";
 
-const PHONE = /^0\d{9}$/;
-const DATE = /^\d{2}\/\d{2}\/\d{4}$/;
+const optionalDate = z
+  .string()
+  .trim()
+  .regex(/^(\d{2}\/\d{2}\/\d{4})?$/, "Dạng dd/mm/yyyy");
 
-const digitsOf = (phone: string) => phone.replace(/\D/g, "");
+/** UC-NS-01 2e: name and phone are required, and the phone belongs to one staff profile. */
+const staffSchema = (ownPhone: string) =>
+  z.object({
+    name: personNameSchema,
+    phone: phoneSchema.refine(
+      (phone) =>
+        phone === ownPhone ||
+        !readDemoState().staff.some(
+          (other) => toLocalPhone(other.phone) === phone
+        ),
+      "Trùng hồ sơ nhân sự khác"
+    ),
+    birthDate: optionalDate,
+    address: optionalAddressSchema,
+    emergencyContact: z.string().trim(),
+    startDate: optionalDate,
+    note: z.string().trim(),
+  });
 
 /** Add with `member` null; edit the whole profile otherwise. */
 export function StaffForm({
@@ -29,15 +58,8 @@ export function StaffForm({
 }) {
   const showToast = useToast();
   const [photo, setPhoto] = useState<string | null>(member?.photo ?? null);
-  const [name, setName] = useState(member?.name ?? "");
-  const [phone, setPhone] = useState(member?.phone ?? "");
   const [gender, setGender] = useState<(typeof STAFF_GENDERS)[number]>(
     member?.gender ?? STAFF_GENDERS[0]
-  );
-  const [birthDate, setBirthDate] = useState(member?.birthDate ?? "");
-  const [address, setAddress] = useState(member?.address ?? "");
-  const [emergencyContact, setEmergencyContact] = useState(
-    member?.emergencyContact ?? ""
   );
   const [type, setType] = useState<(typeof STAFF_TYPES)[number]>(
     member?.type ?? STAFF_TYPES[1]
@@ -45,33 +67,32 @@ export function StaffForm({
   const [position, setPosition] = useState(
     member?.position ?? STAFF_POSITIONS[0]
   );
-  const [startDate, setStartDate] = useState(member?.startDate ?? "");
-  const [note, setNote] = useState(member?.note ?? "");
-  const [submitted, setSubmitted] = useState(false);
+  const ownPhone = toLocalPhone(member?.phone ?? "");
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(staffSchema(ownPhone)),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: {
+      name: member?.name ?? "",
+      phone: member?.phone ?? "",
+      birthDate: member?.birthDate ?? "",
+      address: member?.address ?? "",
+      emergencyContact: member?.emergencyContact ?? "",
+      startDate: member?.startDate ?? "",
+      note: member?.note ?? "",
+    },
+  });
 
-  const digits = digitsOf(phone);
-  const errors = {
-    name: name.trim() ? null : "Nhập họ tên",
-    phone: !PHONE.test(digits)
-      ? "Số điện thoại gồm 10 số, bắt đầu bằng 0"
-      : readDemoState().staff.some(
-            (other) =>
-              digitsOf(other.phone) === digits &&
-              digitsOf(other.phone) !== digitsOf(member?.phone ?? "")
-          )
-        ? "Trùng hồ sơ nhân sự khác"
-        : null,
-    birthDate:
-      birthDate === "" || DATE.test(birthDate) ? null : "Dạng dd/mm/yyyy",
-    startDate:
-      startDate === "" || DATE.test(startDate) ? null : "Dạng dd/mm/yyyy",
-  };
+  const name = useWatch({ control, name: "name" });
 
-  const save = () => {
-    setSubmitted(true);
-    if (Object.values(errors).some(Boolean)) return;
+  const save = handleSubmit((values) => {
+    const digits = values.phone;
     const profile: StaffMember = {
-      name: name.trim(),
+      name: values.name,
       phone: `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`,
       type,
       position,
@@ -79,17 +100,17 @@ export function StaffForm({
       hasAccount: member?.hasAccount ?? false,
       photo: photo ?? undefined,
       gender,
-      birthDate,
-      address: address.trim(),
-      startDate,
-      emergencyContact: emergencyContact.trim(),
-      note: note.trim(),
+      birthDate: values.birthDate,
+      address: values.address.trim(),
+      startDate: values.startDate,
+      emergencyContact: values.emergencyContact,
+      note: values.note,
     };
     const staff = readDemoState().staff;
     updateDemoState({
       staff: member
         ? staff.map((other) =>
-            digitsOf(other.phone) === digitsOf(member.phone) ? profile : other
+            toLocalPhone(other.phone) === ownPhone ? profile : other
           )
         : [profile, ...staff],
     });
@@ -99,18 +120,10 @@ export function StaffForm({
         : `Đã thêm ${profile.name}, trạng thái Đang làm`
     );
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack gap-5"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack gap-5" noValidate onSubmit={save}>
       <fieldset className="form-section">
         <legend>Thông tin cơ bản</legend>
         <ImageUploadField
@@ -125,18 +138,18 @@ export function StaffForm({
           <TextField
             id="staff-name"
             label="Họ tên"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            error={submitted ? errors.name : null}
+            autoComplete="name"
+            {...register("name")}
+            error={errors.name?.message}
           />
           <TextField
             id="staff-phone"
             label="Số điện thoại"
             type="tel"
             inputMode="tel"
-            value={phone}
-            onChange={(event) => setPhone(event.target.value)}
-            error={submitted ? errors.phone : null}
+            autoComplete="tel"
+            {...register("phone")}
+            error={errors.phone?.message}
           />
           <SelectField
             id="staff-gender"
@@ -151,23 +164,22 @@ export function StaffForm({
             id="staff-birth"
             label="Ngày sinh"
             placeholder="dd/mm/yyyy"
-            value={birthDate}
-            onChange={(event) => setBirthDate(event.target.value)}
-            error={submitted ? errors.birthDate : null}
+            {...register("birthDate")}
+            error={errors.birthDate?.message}
           />
         </div>
         <TextField
           id="staff-address"
           label="Địa chỉ"
-          value={address}
-          onChange={(event) => setAddress(event.target.value)}
+          placeholder="Số nhà, đường, phường/quận"
+          {...register("address")}
+          error={errors.address?.message}
         />
         <TextField
           id="staff-emergency"
           label="Liên hệ khẩn cấp"
           placeholder="Vợ: 0912 111 222"
-          value={emergencyContact}
-          onChange={(event) => setEmergencyContact(event.target.value)}
+          {...register("emergencyContact")}
         />
       </fieldset>
 
@@ -194,17 +206,11 @@ export function StaffForm({
             id="staff-start"
             label="Ngày vào làm"
             placeholder="dd/mm/yyyy"
-            value={startDate}
-            onChange={(event) => setStartDate(event.target.value)}
-            error={submitted ? errors.startDate : null}
+            {...register("startDate")}
+            error={errors.startDate?.message}
           />
         </div>
-        <TextareaField
-          id="staff-note"
-          label="Ghi chú"
-          value={note}
-          onChange={(event) => setNote(event.target.value)}
-        />
+        <TextareaField id="staff-note" label="Ghi chú" {...register("note")} />
       </fieldset>
     </form>
   );

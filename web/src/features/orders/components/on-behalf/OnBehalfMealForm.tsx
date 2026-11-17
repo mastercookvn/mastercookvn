@@ -1,5 +1,7 @@
 "use client";
 
+import { useFormContext } from "react-hook-form";
+
 import { DishPicker } from "@/components/ui/DishPicker";
 import { EventDatePicker } from "@/components/ui/EventDatePicker";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
@@ -24,6 +26,8 @@ import {
   withServingFormat,
 } from "@/features/booking/lib/mealForm";
 
+import type { OnBehalfFields } from "./onBehalfSchema";
+
 const FORMAT_OPTIONS = Object.values(SERVING_FORMAT).map((value) => ({
   value,
   label: SERVING_FORMAT_LABEL[value],
@@ -44,6 +48,10 @@ export function OnBehalfMealForm({
   meal: EstimateMeal;
   onChange: (patch: Partial<EstimateMeal>) => void;
 }) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<OnBehalfFields>();
   const allDishes = useDemoState((state) => state.dishes);
   const menuSets = useDemoState((state) => state.menuSets);
   const services = useDemoState((state) => state.services);
@@ -75,7 +83,7 @@ export function OnBehalfMealForm({
           />
           {isTrays ? null : (
             <TextField
-              id="behalf-name"
+              id="behalf-meal-name"
               label="Tên bữa"
               placeholder="Ví dụ: Tiệc cưới nhà gái"
               value={meal.name}
@@ -86,8 +94,11 @@ export function OnBehalfMealForm({
         <TextField
           id="behalf-address"
           label={isTrays ? "Địa chỉ giao" : "Địa chỉ tổ chức"}
-          value={meal.address}
-          onChange={(event) => onChange({ address: event.target.value })}
+          placeholder="Số nhà, đường, phường/quận"
+          {...register("address", {
+            onChange: (event) => onChange({ address: event.target.value }),
+          })}
+          error={errors.address?.message}
         />
       </fieldset>
 

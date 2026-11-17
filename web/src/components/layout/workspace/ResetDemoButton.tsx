@@ -1,5 +1,6 @@
 "use client";
 
+import { RefundIcon } from "@/components/icons";
 import { useToast } from "@/components/ui/Toast";
 import { resetDemoState } from "@/mocks/demoStore";
 
@@ -10,13 +11,14 @@ export function ResetDemoButton() {
   return (
     <button
       type="button"
-      className="workspace-label"
+      title="Đặt lại dữ liệu mẫu"
       onClick={() => {
         resetDemoState();
         showToast("Đã đặt lại toàn bộ dữ liệu mẫu", "info");
       }}
     >
-      Đặt lại dữ liệu mẫu
+      <RefundIcon size={16} />
+      <span className="workspace-label">Đặt lại dữ liệu mẫu</span>
     </button>
   );
 }

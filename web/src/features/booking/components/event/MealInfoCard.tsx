@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Button } from "@/components/ui/Button";
 import { EventDatePicker } from "@/components/ui/EventDatePicker";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
@@ -7,6 +12,7 @@ import { ServingWavesEditor } from "@/components/ui/ServingWavesEditor";
 import { TextField } from "@/components/ui/TextField";
 import { SERVING_FORMAT, SERVING_FORMAT_LABEL } from "@/constants/booking";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
+import { addressSchema, LIVE_VALIDATION_MODE } from "@/lib/validation";
 import type { EstimateMeal } from "@/mocks/demoStore";
 
 import { withServingFormat } from "@/features/booking/lib/mealForm";
@@ -14,6 +20,8 @@ import { withServingFormat } from "@/features/booking/lib/mealForm";
 import { BookingMealCard } from "../flow/BookingMealCard";
 
 import { TrayFields } from "./TrayFields";
+
+const mealPlaceSchema = z.object({ address: addressSchema });
 
 const FORMAT_OPTIONS = Object.values(SERVING_FORMAT).map((value) => ({
   value,
@@ -24,6 +32,7 @@ export function MealInfoCard({
   meal,
   index,
   errors,
+  showErrors,
   removable,
   onChange,
   onRemove,
@@ -31,10 +40,32 @@ export function MealInfoCard({
   meal: EstimateMeal;
   index: number;
   errors: string[];
+  showErrors: boolean;
   removable: boolean;
   onChange: (patch: Partial<EstimateMeal>) => void;
   onRemove: () => void;
 }) {
+  const {
+    register,
+    trigger,
+    formState: { errors: fieldErrors },
+  } = useForm({
+    resolver: zodResolver(mealPlaceSchema),
+    mode: LIVE_VALIDATION_MODE,
+    values: { address: meal.address },
+    resetOptions: { keepErrors: true },
+  });
+  const address = {
+    ...register("address", {
+      onChange: (event) => onChange({ address: event.target.value }),
+    }),
+    error: fieldErrors.address?.message,
+  };
+
+  useEffect(() => {
+    if (showErrors) void trigger();
+  }, [showErrors, trigger]);
+
   return (
     <BookingMealCard
       meal={meal}
@@ -72,9 +103,9 @@ export function MealInfoCard({
             id={`meal-address-${index}`}
             label="Địa chỉ giao"
             hint={`Giao trong bán kính ${BUSINESS_SETTINGS.serviceRadiusKm} km.`}
-            placeholder="Số nhà, đường, quận"
-            value={meal.address}
-            onChange={(event) => onChange({ address: event.target.value })}
+            placeholder="Số nhà, đường, phường/quận"
+            autoComplete="street-address"
+            {...address}
           />
           <EventDatePicker
             id={`meal-date-${index}`}
@@ -98,9 +129,9 @@ export function MealInfoCard({
                 id={`meal-address-${index}`}
                 label="Địa chỉ tổ chức"
                 hint={`Phục vụ trong bán kính ${BUSINESS_SETTINGS.serviceRadiusKm} km.`}
-                placeholder="Số nhà, đường, quận"
-                value={meal.address}
-                onChange={(event) => onChange({ address: event.target.value })}
+                placeholder="Số nhà, đường, phường/quận"
+                autoComplete="street-address"
+                {...address}
               />
             </div>
           </div>

@@ -13,7 +13,7 @@ import { ConfirmContractDialog } from "./ConfirmContractDialog";
 export function ActivationChecklist() {
   const confirmed = useDemoState((state) => state.contractConfirmed);
   const deposited = useDemoState((state) => state.depositPaid);
-  const signature = useDemoState((state) => state.contractSignature);
+  const confirmation = useDemoState((state) => state.contractConfirmation);
   const issued = useDemoState((state) => state.contractIssued);
   const [, setTab] = useQueryParam("tab");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -22,8 +22,8 @@ export function ActivationChecklist() {
   if (!issued) {
     return (
       <Alert tone="wait">
-        Cơ sở chưa phát hành hợp đồng. Bạn ký và thanh toán cọc được sau khi tư
-        vấn chốt giá, hạn cọc và phát hành.
+        Cơ sở chưa phát hành hợp đồng. Bạn xác nhận và thanh toán cọc được sau
+        khi tư vấn chốt giá, hạn cọc và phát hành.
       </Alert>
     );
   }
@@ -34,8 +34,8 @@ export function ActivationChecklist() {
       <div className="l-between">
         {confirmed ? (
           <Badge tone="good">
-            {signature
-              ? `Đã ký online lúc ${signature.signedAt}`
+            {confirmation
+              ? `Đã xác nhận online lúc ${confirmation.confirmedAt}`
               : "Đã xác nhận"}
           </Badge>
         ) : (
@@ -46,7 +46,7 @@ export function ActivationChecklist() {
               size="sm"
               onClick={() => setDialogOpen(true)}
             >
-              Ký xác nhận hợp đồng
+              Xác nhận hợp đồng
             </Button>
           </>
         )}
@@ -67,14 +67,6 @@ export function ActivationChecklist() {
           </>
         )}
       </div>
-      {signature ? (
-        // eslint-disable-next-line @next/next/no-img-element -- data URL from the signature pad
-        <img
-          className="signature-image"
-          src={signature.image}
-          alt={`Chữ ký của ${signature.name}`}
-        />
-      ) : null}
       <p className="text-small text-soft">
         Làm việc nào trước cũng được. Có thể ký giấy tại quầy thay vì xác nhận
         online.

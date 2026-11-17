@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { DishPicker } from "@/components/ui/DishPicker";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatMoney } from "@/lib/format";
+import { LIVE_VALIDATION_MODE, requiredTextSchema } from "@/lib/validation";
 import type { MenuSet } from "@/mocks/catalog";
 import {
   readDemoState,
@@ -15,6 +18,24 @@ import {
 } from "@/mocks/demoStore";
 
 const MINIMUM_DISHES = 3;
+
+const menuSetSchema = (ownId: string | undefined) =>
+  z.object({
+    name: requiredTextSchema("tên set").refine(
+      (name) =>
+        !readDemoState().menuSets.some(
+          (other) =>
+            other.id !== ownId &&
+            other.name.toLowerCase() === name.toLowerCase()
+        ),
+      "Đã có set cùng tên"
+    ),
+    suitableFor: z.string().trim(),
+    description: z.string().trim(),
+    dishIds: z
+      .array(z.string())
+      .min(MINIMUM_DISHES, `Chọn ít nhất ${MINIMUM_DISHES} món`),
+  });
 
 export function MenuSetForm({
   formId,
@@ -28,43 +49,30 @@ export function MenuSetForm({
   const showToast = useToast();
   const allDishes = useDemoState((state) => state.dishes);
   const dishes = allDishes.filter((dish) => dish.active);
-  const [name, setName] = useState(set?.name ?? "");
-  const [suitableFor, setSuitableFor] = useState(set?.suitableFor ?? "");
-  const [description, setDescription] = useState(set?.description ?? "");
-  const [dishIds, setDishIds] = useState<string[]>(set?.dishIds ?? []);
-  const [submitted, setSubmitted] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(menuSetSchema(set?.id)),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: {
+      name: set?.name ?? "",
+      suitableFor: set?.suitableFor ?? "",
+      description: set?.description ?? "",
+      dishIds: set?.dishIds ?? [],
+    },
+  });
+  const dishIds = useWatch({ control, name: "dishIds" });
 
   const price = dishes
     .filter((dish) => dishIds.includes(dish.id))
     .reduce((sum, dish) => sum + dish.price, 0);
-  const duplicate = readDemoState().menuSets.some(
-    (other) =>
-      other.id !== set?.id &&
-      other.name.toLowerCase() === name.trim().toLowerCase()
-  );
-  const errors = {
-    name: !name.trim()
-      ? "Nhập tên set"
-      : duplicate
-        ? "Đã có set cùng tên"
-        : null,
-    dishes:
-      dishIds.length >= MINIMUM_DISHES
-        ? null
-        : `Chọn ít nhất ${MINIMUM_DISHES} món`,
-  };
 
-  const save = () => {
-    setSubmitted(true);
-    if (Object.values(errors).some(Boolean)) return;
+  const save = handleSubmit((values) => {
     const sets = readDemoState().menuSets;
-    const fields = {
-      name: name.trim(),
-      suitableFor: suitableFor.trim(),
-      description: description.trim(),
-      dishIds,
-      imageDishId: dishIds[0],
-    };
+    const fields = { ...values, imageDishId: values.dishIds[0] };
     updateDemoState({
       menuSets: set
         ? sets.map((other) =>
@@ -76,51 +84,46 @@ export function MenuSetForm({
       `${set ? "Đã lưu" : "Đã thêm"} ${fields.name}, ${formatMoney(price)} / bàn chuẩn`
     );
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack" noValidate onSubmit={save}>
       <TextField
         id="set-name"
         label="Tên set"
         placeholder="Set Đoàn Viên"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-        error={submitted ? errors.name : null}
+        {...register("name")}
+        error={errors.name?.message}
       />
       <TextField
         id="set-suitable"
         label="Phù hợp cho"
         placeholder="Họp mặt, sinh nhật"
-        value={suitableFor}
-        onChange={(event) => setSuitableFor(event.target.value)}
+        {...register("suitableFor")}
       />
       <TextareaField
         id="set-description"
         label="Mô tả ngắn"
-        value={description}
-        onChange={(event) => setDescription(event.target.value)}
+        {...register("description")}
       />
       <div className="l-stack gap-2">
         <span className="field-legend">
           Món trong set ({dishIds.length} đã chọn)
         </span>
-        <DishPicker
-          dishes={dishes}
-          selectedIds={dishIds}
-          onChange={setDishIds}
+        <Controller
+          control={control}
+          name="dishIds"
+          render={({ field }) => (
+            <DishPicker
+              dishes={dishes}
+              selectedIds={field.value}
+              onChange={field.onChange}
+            />
+          )}
         />
-        {submitted && errors.dishes ? (
+        {errors.dishIds ? (
           <p className="field-error" role="alert">
-            {errors.dishes}
+            {errors.dishIds.message}
           </p>
         ) : null}
       </div>

@@ -38,6 +38,7 @@ export function EventStep({ showErrors }: { showErrors: boolean }) {
           meal={meal}
           index={index}
           errors={showErrors ? mealInfoErrors(meal) : []}
+          showErrors={showErrors}
           removable={meals.length > 1}
           onChange={(patch) => updateMeal(index, patch)}
           onRemove={() => setMeals(meals.filter((_, i) => i !== index))}

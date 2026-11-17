@@ -17,7 +17,7 @@ export function ActivationConditions({ roles }: { roles: Role[] }) {
   const paperSigned = useDemoState((state) => state.paperSigned);
   const confirmed = useDemoState((state) => state.contractConfirmed);
   const deposited = useDemoState((state) => state.depositPaid);
-  const signature = useDemoState((state) => state.contractSignature);
+  const confirmation = useDemoState((state) => state.contractConfirmation);
 
   return (
     <aside className="card l-stack">
@@ -28,24 +28,17 @@ export function ActivationConditions({ roles }: { roles: Role[] }) {
           paperSigned ? (
             <Badge tone="good">Ký giấy</Badge>
           ) : confirmed ? (
-            <Badge tone="good">Ký online</Badge>
+            <Badge tone="good">Xác nhận online</Badge>
           ) : (
             <Badge tone="wait">Chưa</Badge>
           )
         }
       />
-      {signature ? (
-        <figure className="l-stack gap-1">
-          {/* eslint-disable-next-line @next/next/no-img-element -- data URL from the signature pad */}
-          <img
-            className="signature-image"
-            src={signature.image}
-            alt={`Chữ ký của ${signature.name}`}
-          />
-          <figcaption className="text-small text-soft">
-            {signature.name} ký lúc {signature.signedAt}
-          </figcaption>
-        </figure>
+      {confirmation && !paperSigned ? (
+        <p className="text-small text-soft">
+          Tài khoản {confirmation.accountName} ({confirmation.accountPhone})
+          đồng ý phiên bản {confirmation.version} lúc {confirmation.confirmedAt}
+        </p>
       ) : null}
       <MoneyRow
         label={`${MINIMUM_DEPOSIT_LABEL}: ${formatMoney(minimumDeposit(contract))}`}

@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { CarrotIcon } from "@/components/icons";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
@@ -10,8 +13,28 @@ import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatNumber } from "@/lib/format";
 import { MEDIA_FOLDER, newMediaKey } from "@/lib/media";
+import {
+  amountTextSchema,
+  LIVE_VALIDATION_MODE,
+  parseAmountText,
+  requiredTextSchema,
+} from "@/lib/validation";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 import { INGREDIENT_UNITS, type Ingredient } from "@/mocks/inventory";
+
+const ingredientSchema = (ownName: string | undefined) =>
+  z.object({
+    name: requiredTextSchema("tên nguyên liệu").refine(
+      (name) =>
+        !readDemoState().ingredients.some(
+          (other) =>
+            other.name !== ownName &&
+            other.name.toLowerCase() === name.toLowerCase()
+        ),
+      "Đã có nguyên liệu này"
+    ),
+    price: amountTextSchema("Nhập giá hiện hành"),
+  });
 
 export function IngredientForm({
   formId,
@@ -23,34 +46,27 @@ export function IngredientForm({
   onSaved: () => void;
 }) {
   const showToast = useToast();
-  const [name, setName] = useState(ingredient?.name ?? "");
   const [unit, setUnit] = useState(ingredient?.unit ?? INGREDIENT_UNITS[0]);
-  const [priceText, setPriceText] = useState(
-    ingredient ? formatNumber(ingredient.price) : ""
-  );
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(ingredientSchema(ingredient?.name)),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: {
+      name: ingredient?.name ?? "",
+      price: ingredient ? formatNumber(ingredient.price) : "",
+    },
+  });
+  const name = useWatch({ control, name: "name" });
   const savedImage = useMediaSrc(ingredient?.imageKey);
   /** Undefined keeps the saved photo, null removes it, a data URL replaces it. */
   const [upload, setUpload] = useState<string | null | undefined>(undefined);
   const image = upload === undefined ? savedImage : upload;
-  const [submitted, setSubmitted] = useState(false);
-
-  const price = Number(priceText.replace(/\D/g, ""));
-  const duplicate = readDemoState().ingredients.some(
-    (other) =>
-      other.name !== ingredient?.name &&
-      other.name.toLowerCase() === name.trim().toLowerCase()
-  );
-  const nameError =
-    name.trim() === ""
-      ? "Nhập tên nguyên liệu"
-      : duplicate
-        ? "Đã có nguyên liệu này"
-        : null;
-  const priceError = price <= 0 ? "Nhập giá hiện hành" : null;
-
-  const save = () => {
-    setSubmitted(true);
-    if (nameError || priceError) return;
+  const save = handleSubmit(({ name: savedName, price }) => {
     const current = readDemoState();
     const newKey = upload ? newMediaKey(MEDIA_FOLDER.Ingredients) : undefined;
     const imageKey = upload === undefined ? ingredient?.imageKey : newKey;
@@ -61,12 +77,12 @@ export function IngredientForm({
     if (ingredient) {
       const renamed = (line: { ingredient: string; quantity: number }) =>
         line.ingredient === ingredient.name
-          ? { ...line, ingredient: name.trim() }
+          ? { ...line, ingredient: savedName }
           : line;
       updateDemoState({
         ingredients: current.ingredients.map((other) =>
           other.name === ingredient.name
-            ? { ...other, name: name.trim(), unit, price, imageKey }
+            ? { ...other, name: savedName, unit, price, imageKey }
             : other
         ),
         mediaUploads,
@@ -79,33 +95,25 @@ export function IngredientForm({
       });
       showToast(
         price === ingredient.price
-          ? `Đã lưu ${name.trim()}`
-          : `Đã đổi giá ${name.trim()}. Giá gợi ý của các món dùng nguyên liệu này đã cập nhật.`
+          ? `Đã lưu ${savedName}`
+          : `Đã đổi giá ${savedName}. Giá gợi ý của các món dùng nguyên liệu này đã cập nhật.`
       );
       onSaved();
       return;
     }
     updateDemoState({
       ingredients: [
-        { name: name.trim(), unit, price, usedIn: "Chưa dùng", imageKey },
+        { name: savedName, unit, price, usedIn: "Chưa dùng", imageKey },
         ...current.ingredients,
       ],
       mediaUploads,
     });
-    showToast(`Đã thêm ${name.trim()}. Dùng được ngay trong phiếu nhập.`);
+    showToast(`Đã thêm ${savedName}. Dùng được ngay trong phiếu nhập.`);
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack" noValidate onSubmit={save}>
       <ImageUploadField
         id="ingredient-image"
         label="Ảnh nguyên liệu"
@@ -118,9 +126,8 @@ export function IngredientForm({
         id="ingredient-name"
         label="Tên nguyên liệu"
         placeholder="Mực ống"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-        error={submitted ? nameError : null}
+        {...register("name")}
+        error={errors.name?.message}
       />
       <div className="l-grid l-grid-2">
         <SelectField
@@ -134,13 +141,14 @@ export function IngredientForm({
           id="ingredient-price"
           label="Giá hiện hành (đ / đơn vị)"
           inputMode="numeric"
-          value={priceText}
-          onChange={(event) =>
-            setPriceText(
-              formatNumber(Number(event.target.value.replace(/\D/g, "")))
-            )
-          }
-          error={submitted ? priceError : null}
+          {...register("price", {
+            onChange: (event) =>
+              setValue(
+                "price",
+                formatNumber(parseAmountText(event.target.value))
+              ),
+          })}
+          error={errors.price?.message}
         />
       </div>
     </form>

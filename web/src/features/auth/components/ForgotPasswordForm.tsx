@@ -1,17 +1,20 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useActionState, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { TextField } from "@/components/ui/TextField";
+import { LIVE_VALIDATION_MODE } from "@/lib/validation";
 
 import {
   resetPassword,
   type ResetPasswordState,
 } from "@/features/auth/actions";
-import { PASSWORD_MIN_LENGTH } from "@/features/auth/schemas";
+import { PASSWORD_MIN_LENGTH, resetPhoneSchema } from "@/features/auth/schemas";
 
 import { AuthSteps } from "./AuthSteps";
 import { OtpStep } from "./OtpStep";
@@ -33,13 +36,33 @@ export function ForgotPasswordForm({
   onBack: () => void;
 }) {
   const [state, action] = useActionState(resetPassword, INITIAL);
-  const [phone, setPhone] = useState(initialPhone);
+  const {
+    register,
+    control,
+    trigger,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(resetPhoneSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: { phone: initialPhone },
+  });
+  const phone = useWatch({ control, name: "phone" });
   const [passwords, setPasswords] = useState({ password: "", confirm: "" });
   const [editedFrom, setEditedFrom] = useState<ResetPasswordState | null>(null);
   const showOtp = state.step === "otp" && editedFrom !== state;
 
   return (
-    <form action={action} className="contents" noValidate>
+    <form
+      action={action}
+      className="contents"
+      noValidate
+      onSubmit={(event) => {
+        if (showOtp || resetPhoneSchema.safeParse(getValues()).success) return;
+        event.preventDefault();
+        void trigger();
+      }}
+    >
       <div className="l-stack gap-1">
         <h2 className="auth-title">Đặt lại mật khẩu</h2>
         <p className="text-small text-soft">
@@ -54,15 +77,16 @@ export function ForgotPasswordForm({
       <div hidden={showOtp} className="contents">
         <TextField
           id="reset-phone"
-          name="phone"
           label="Số điện thoại"
           type="tel"
+          inputMode="tel"
           autoComplete="tel"
+          {...register("phone")}
           value={phone}
           error={
-            state.step === "details" ? state.fieldErrors?.phone : undefined
+            errors.phone?.message ??
+            (state.step === "details" ? state.fieldErrors?.phone : undefined)
           }
-          onChange={(event) => setPhone(event.target.value)}
         />
       </div>
       {showOtp ? (

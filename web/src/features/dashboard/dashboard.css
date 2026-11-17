@@ -15,8 +15,17 @@
     color: var(--color-ink);
   }
 
+  /*
+   * Sized to its options, never stretched by a column parent, so the frame hugs the choices.
+   * Equal flex bases make the options the same width; when the space is narrower than that,
+   * fit-content clamps to the available width and the options share the row.
+   */
   .segmented {
-    display: inline-flex;
+    display: flex;
+    align-self: flex-start;
+    width: fit-content;
+    max-width: 100%;
+    gap: 2px;
     padding: 3px;
     border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
@@ -24,20 +33,44 @@
   }
 
   .segmented button {
-    min-height: 36px;
-    padding: 6px 16px;
+    flex: 1 1 0;
+    min-width: 0;
+    min-block-size: 40px;
+    padding: 8px 18px;
     border: 0;
     border-radius: var(--radius-control);
     background: transparent;
     font: inherit;
     font-size: var(--text-14);
     font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
     color: var(--color-ink-muted);
+    transition:
+      background 0.15s var(--ease-in-out-soft),
+      color 0.15s var(--ease-in-out-soft);
+  }
+
+  .segmented button:hover:not([aria-pressed="true"]) {
+    background: var(--color-blue-50);
+    color: var(--color-ink);
+  }
+
+  .segmented button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
   }
 
   .segmented button[aria-pressed="true"] {
     background: var(--color-primary);
     color: var(--color-surface);
+  }
+
+  /* WCAG 2.5.5: 44 px targets on touch screens. */
+  @media (pointer: coarse) {
+    .segmented button {
+      min-block-size: 44px;
+    }
   }
 
   .tone-good {

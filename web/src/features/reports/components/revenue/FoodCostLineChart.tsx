@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/Card";
 import { CardTitle } from "@/components/ui/CardTitle";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { formatPercent } from "@/lib/format";
 import { MONTHLY_REVENUE } from "@/mocks/inventory";
 
@@ -8,7 +9,7 @@ const HEIGHT = 180;
 const x = (index: number) => 36 + (index * (WIDTH - 60)) / 4;
 const y = (value: number) =>
   HEIGHT - 24 - ((value - 0.3) / 0.1) * (HEIGHT - 40);
-const TARGET = 0.35;
+const TARGET = BUSINESS_SETTINGS.foodCostTarget;
 const LINE = "var(--color-wait)";
 const AXIS = "var(--color-ink-subtle)";
 
@@ -19,7 +20,9 @@ export function FoodCostLineChart() {
 
   return (
     <Card>
-      <CardTitle>Food cost theo tháng so với mục tiêu 35%</CardTitle>
+      <CardTitle>
+        Food cost thực tế theo tháng so với mục tiêu {formatPercent(TARGET, 0)}
+      </CardTitle>
       <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         className="block h-auto w-full"

@@ -18,6 +18,8 @@ type DataTableProps = {
   foot?: ReactNode;
   searchPlaceholder?: string;
   searchable?: boolean;
+  /** Names the scrollable region for screen readers. */
+  label?: string;
 };
 
 function isColumn(value: ReactNode | Column): value is Column {
@@ -49,6 +51,7 @@ export function DataTable({
   foot,
   searchPlaceholder = "Tìm trong danh sách",
   searchable = true,
+  label = "Bảng dữ liệu",
 }: DataTableProps) {
   const [query, setQuery] = useState("");
   const normalized = columns.map((column) =>
@@ -85,7 +88,12 @@ export function DataTable({
           ) : null}
         </div>
       ) : null}
-      <div className="table-frame">
+      <div
+        className="table-frame"
+        role="region"
+        aria-label={label}
+        tabIndex={0}
+      >
         <table className="is-stackable table">
           <thead>
             <tr>

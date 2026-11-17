@@ -1,0 +1,357 @@
+/*
+ * Trial theme: the admin workspace in the palette and shapes of the HopOn metro admin portal
+ * (dark navy sidebar, teal primary, orange accent, cool grey canvas, 12 px cards with a soft shadow).
+ * Only `[data-surface="workspace"]` is affected; the storefront keeps the MasterCook prototype.
+ * Remove the import in globals.css to go back to the prototype workspace.
+ */
+
+/* `html` raises specificity over the unlayered workspace tokens in globals.css. */
+html [data-surface="workspace"] {
+  --color-workspace-canvas: oklch(0.978 0.005 240);
+  --color-workspace-line: oklch(0.915 0.012 240);
+  --color-workspace-line-soft: oklch(0.945 0.01 240);
+  --color-workspace-fill: oklch(0.95 0.01 230);
+  --color-workspace-hover: oklch(0.965 0.01 230);
+  --color-workspace-active: oklch(0.94 0.02 220);
+
+  --color-workspace-sidebar: oklch(0.19 0.04 255);
+  --color-workspace-nav: oklch(0.88 0.02 230);
+  --color-workspace-nav-muted: oklch(0.88 0.02 230 / 0.55);
+  --color-workspace-nav-text: oklch(0.98 0 0);
+  --color-workspace-nav-active: oklch(0.28 0.05 250);
+  --color-workspace-nav-line: oklch(0.3 0.04 250);
+  --color-workspace-nav-indicator: oklch(0.72 0.14 200);
+
+  --color-workspace-accent: oklch(0.72 0.17 55);
+  --color-workspace-accent-ink: oklch(0.2 0.04 50);
+  --color-workspace-accent-hover: oklch(0.66 0.17 55);
+
+  --color-line: var(--color-workspace-line);
+  --color-line-strong: oklch(0.89 0.014 240);
+  --color-ink: oklch(0.22 0.04 250);
+  --color-ink-muted: oklch(0.5 0.03 250);
+  --color-ink-subtle: oklch(0.6 0.025 250);
+  --color-navy-900: oklch(0.22 0.04 250);
+  --color-primary: oklch(0.55 0.13 200);
+  --color-primary-hover: oklch(0.49 0.12 200);
+  --color-primary-soft: oklch(0.55 0.13 200 / 0.1);
+  --color-blue-50: oklch(0.55 0.13 200 / 0.06);
+  --color-blue-100: oklch(0.55 0.13 200 / 0.18);
+  --color-gold: var(--color-workspace-accent);
+  --color-gold-light: var(--color-workspace-accent);
+
+  --color-good: oklch(0.6 0.15 150);
+  --color-good-soft: oklch(0.6 0.15 150 / 0.12);
+  --color-good-ink: oklch(0.42 0.11 150);
+  --color-wait: oklch(0.62 0.15 55);
+  --color-wait-soft: oklch(0.72 0.17 55 / 0.15);
+  --color-wait-ink: oklch(0.42 0.1 50);
+  --color-error: oklch(0.577 0.245 27.325);
+  --color-error-soft: oklch(0.577 0.245 27.325 / 0.08);
+  --color-error-ink: oklch(0.45 0.18 27);
+  --color-error-line: oklch(0.577 0.245 27.325 / 0.3);
+  --color-info: oklch(0.55 0.13 200);
+  --color-info-soft: oklch(0.55 0.13 200 / 0.1);
+  --color-info-ink: oklch(0.4 0.1 210);
+
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --shadow-card:
+    0 1px 2px oklch(0.22 0.04 250 / 0.04), 0 1px 3px oklch(0.22 0.04 250 / 0.06);
+  --icon-accent: currentColor;
+}
+
+@layer components {
+  /* Sidebar: dark navy rail with a teal active indicator. */
+  [data-surface="workspace"] .workspace-sidebar {
+    padding-inline: 12px;
+    border-right-color: var(--color-workspace-nav-line);
+  }
+
+  [data-surface="workspace"] .workspace-logo {
+    height: 72px;
+  }
+
+  [data-surface="workspace"] .workspace-nav-group {
+    padding-top: 18px;
+    font-size: var(--text-11);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  [data-surface="workspace"] .workspace-nav-link {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+
+  [data-surface="workspace"] .workspace-nav-link:hover {
+    background: oklch(0.28 0.05 250 / 0.7);
+  }
+
+  [data-surface="workspace"] .workspace-nav-link[aria-current="page"]::before {
+    inset-block: 6px;
+    inset-inline-start: 0;
+    width: 4px;
+    border-radius: 999px;
+    background: var(--color-workspace-nav-indicator);
+  }
+
+  [data-surface="workspace"] .workspace-sidebar-foot {
+    border-top-color: var(--color-workspace-nav-line);
+  }
+
+  [data-surface="workspace"] .workspace-foot-links a:hover,
+  [data-surface="workspace"] .workspace-foot-links button:hover,
+  [data-surface="workspace"] .workspace-icon-button:hover {
+    background: var(--color-workspace-nav-active);
+  }
+
+  [data-surface="workspace"] .workspace-foot-links a,
+  [data-surface="workspace"] .workspace-foot-links button {
+    border-radius: 8px;
+  }
+
+  [data-surface="workspace"] .workspace-user {
+    margin-bottom: 4px;
+    border-radius: 12px;
+  }
+
+  [data-surface="workspace"] .workspace-user .workspace-icon-button:hover {
+    background: var(--color-workspace-sidebar);
+  }
+
+  [data-surface="workspace"] .workspace-avatar {
+    background: var(--color-workspace-nav-indicator);
+    color: oklch(0.15 0.04 250);
+  }
+
+  [data-surface="workspace"] .workspace-sidebar-toggle {
+    width: 28px;
+    height: 28px;
+    left: calc(var(--sidebar-width) - 14px);
+    border-color: var(--color-workspace-line);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-card);
+  }
+
+  [data-surface="workspace"] .workspace-sidebar-toggle:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: var(--color-surface);
+  }
+
+  /* Topbar: frosted canvas so content reads under it while scrolling. */
+  [data-surface="workspace"] .workspace-topbar {
+    height: 60px;
+    background: oklch(0.978 0.005 240 / 0.8);
+    backdrop-filter: blur(8px);
+  }
+
+  [data-surface="workspace"] .workspace-search .input {
+    height: 36px;
+    border-radius: var(--radius-control);
+  }
+
+  [data-surface="workspace"] .workspace-main {
+    max-width: 1600px;
+    gap: 24px;
+    padding: 28px 32px 48px;
+  }
+
+  [data-surface="workspace"] .h1-compact {
+    font-size: var(--text-22);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  [data-surface="workspace"] .page-title-icon {
+    border: 0;
+    border-radius: 12px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+  }
+
+  /* Surfaces */
+  [data-surface="workspace"] .card,
+  [data-surface="workspace"] .stat-tile,
+  [data-surface="workspace"] .kpi-bar > div {
+    border-color: var(--color-workspace-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  [data-surface="workspace"] .stat-tile {
+    padding: 20px;
+    border-top: 1px solid var(--color-workspace-line);
+  }
+
+  [data-surface="workspace"] .stat-tile span {
+    font-size: var(--text-13-5);
+    font-weight: 500;
+  }
+
+  [data-surface="workspace"] .stat-tile b {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  [data-surface="workspace"] .section-count {
+    border-radius: 999px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+  }
+
+  /* Tabs: underline in primary, like the metro page tabs. */
+  [data-surface="workspace"] .tab {
+    padding: 10px 16px;
+    border-radius: 0;
+    color: var(--color-ink-muted);
+    font-weight: 500;
+  }
+
+  [data-surface="workspace"] .tab:hover {
+    background: transparent;
+    color: var(--color-ink);
+  }
+
+  [data-surface="workspace"] .tab::after {
+    left: 0;
+    right: 0;
+    background: var(--color-primary);
+  }
+
+  [data-surface="workspace"] .tab[aria-selected="true"] {
+    font-weight: 600;
+  }
+
+  /* Buttons */
+  [data-surface="workspace"] .btn {
+    border-color: var(--color-line-strong);
+    border-radius: var(--radius-control);
+    font-weight: 500;
+  }
+
+  [data-surface="workspace"] .btn:hover {
+    border-color: var(--color-line-strong);
+    background: var(--color-workspace-fill);
+  }
+
+  [data-surface="workspace"] .btn-primary,
+  [data-surface="workspace"] .btn-primary:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: var(--color-surface);
+  }
+
+  [data-surface="workspace"] .btn-primary:hover {
+    border-color: var(--color-primary-hover);
+    background: var(--color-primary-hover);
+  }
+
+  [data-surface="workspace"] .btn-inverse,
+  [data-surface="workspace"] .btn-inverse:hover {
+    border-color: var(--color-workspace-accent);
+    background: var(--color-workspace-accent);
+    color: var(--color-workspace-accent-ink);
+  }
+
+  [data-surface="workspace"] .btn-inverse:hover {
+    background: var(--color-workspace-accent-hover);
+    color: var(--color-workspace-accent-ink);
+  }
+
+  [data-surface="workspace"] .btn-danger {
+    border-color: var(--color-error-line);
+  }
+
+  [data-surface="workspace"] .btn-text,
+  [data-surface="workspace"] .btn-text:hover {
+    border-color: transparent;
+    background: transparent;
+    color: var(--color-primary);
+  }
+
+  /* Badges: soft tinted pills. */
+  [data-surface="workspace"] .badge {
+    border-radius: 8px;
+    font-weight: 500;
+  }
+
+  /* Inputs */
+  [data-surface="workspace"] .input,
+  [data-surface="workspace"] .input-cell,
+  [data-surface="workspace"] .select-trigger {
+    border-color: var(--color-line-strong);
+    border-radius: var(--radius-control);
+  }
+
+  [data-surface="workspace"] .input:focus,
+  [data-surface="workspace"] .input-cell:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-blue-100);
+  }
+
+  [data-surface="workspace"] .checkbox {
+    border-radius: 4px;
+    accent-color: var(--color-primary);
+  }
+
+  /* Tables: muted header row with small caps labels. */
+  [data-surface="workspace"] .table-frame {
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+  }
+
+  [data-surface="workspace"] .table th {
+    background: oklch(0.95 0.01 230);
+    font-size: var(--text-12);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  [data-surface="workspace"] .table tbody tr:nth-child(even) td {
+    background: transparent;
+  }
+
+  [data-surface="workspace"] .table tbody tr.is-clickable:hover td {
+    background: var(--color-workspace-hover);
+  }
+
+  [data-surface="workspace"] .table tbody tr.is-selected td {
+    background: var(--color-primary-soft);
+  }
+
+  [data-surface="workspace"] .table tbody tr.is-selected td:first-child {
+    box-shadow: inset 3px 0 0 var(--color-primary);
+  }
+
+  [data-surface="workspace"] .table tfoot td {
+    background: oklch(0.95 0.01 230);
+  }
+
+  /* Alerts, dialogs, drawers */
+  [data-surface="workspace"] .alert {
+    border-left-width: 0;
+    border: 1px solid color-mix(in oklch, currentColor 20%, transparent);
+    border-radius: 12px;
+  }
+
+  [data-surface="workspace"] .dialog,
+  [data-surface="workspace"] .drawer {
+    border-radius: 16px;
+    box-shadow:
+      0 10px 30px oklch(0.22 0.04 250 / 0.12),
+      0 2px 6px oklch(0.22 0.04 250 / 0.06);
+  }
+
+  [data-surface="workspace"] .drawer {
+    border-radius: 16px 0 0 16px;
+  }
+
+  @media (max-width: 1024px) {
+    [data-surface="workspace"] .workspace-main {
+      padding: 20px var(--gutter-right) 40px var(--gutter-left);
+    }
+  }
+}

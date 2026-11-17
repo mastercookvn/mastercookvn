@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
 import { useMediaSrc } from "@/components/ui/MediaImage";
@@ -8,12 +11,17 @@ import { SelectField } from "@/components/ui/SelectField";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
-import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { formatMoney, formatNumber, formatPercent } from "@/lib/format";
 import { MEDIA_FOLDER, newMediaKey } from "@/lib/media";
-import { dishFoodCost, recipeCost, suggestedDishPrice } from "@/lib/pricing";
+import { recipeCost, suggestedDishPrice } from "@/lib/pricing";
+import {
+  amountTextSchema,
+  LIVE_VALIDATION_MODE,
+  parseAmountText,
+  requiredTextSchema,
+} from "@/lib/validation";
 import { DISH_CATEGORY_LABEL, type DishCategory } from "@/mocks/catalog";
 import {
   readDemoState,
@@ -28,7 +36,11 @@ export const NEW_DISH_ID = "new";
 
 const newDishId = () => `mon-${Date.now().toString(36)}`;
 
-const parseAmount = (text: string) => Number(text.replace(/\D/g, ""));
+const dishSchema = z.object({
+  name: requiredTextSchema("tên món"),
+  description: z.string().trim(),
+  price: amountTextSchema("Nhập giá bán"),
+});
 
 export function DishForm({
   formId,
@@ -40,14 +52,26 @@ export function DishForm({
   onSaved: () => void;
 }) {
   const showToast = useToast();
-  const [name, setName] = useState(dish?.name ?? "");
   const [category, setCategory] = useState<DishCategory>(
     dish?.category ?? "main"
   );
-  const [description, setDescription] = useState(dish?.description ?? "");
-  const [priceText, setPriceText] = useState(
-    dish ? formatNumber(dish.price) : ""
-  );
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(dishSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: {
+      name: dish?.name ?? "",
+      description: dish?.description ?? "",
+      price: dish ? formatNumber(dish.price) : "",
+    },
+  });
+  const name = useWatch({ control, name: "name" });
+  const price = parseAmountText(useWatch({ control, name: "price" }));
   const savedImage = useMediaSrc(dish?.imageKey);
   /** Undefined keeps the saved photo, null removes it, a data URL replaces it. */
   const [upload, setUpload] = useState<string | null | undefined>(undefined);
@@ -59,28 +83,16 @@ export function DishForm({
       quantity: String(line.quantity).replace(".", ","),
     }))
   );
-  const [submitted, setSubmitted] = useState(false);
-
-  const price = parseAmount(priceText);
   const parsedRecipe = parseRecipe(recipe);
   const cost = recipeCost(parsedRecipe, ingredients);
   const suggested = suggestedDishPrice(cost);
-  const foodCost = dishFoodCost(cost, price);
   const target = BUSINESS_SETTINGS.foodCostTarget;
-  const nameError = name.trim() === "" ? "Nhập tên món" : null;
-  const priceError = price <= 0 ? "Nhập giá bán" : null;
-
-  const save = () => {
-    setSubmitted(true);
-    if (nameError || priceError) return;
-
+  const save = handleSubmit((values) => {
     const { dishes, recipes, mediaUploads } = readDemoState();
     const imageKey = upload ? newMediaKey(MEDIA_FOLDER.Dishes) : undefined;
     const fields = {
-      name: name.trim(),
+      ...values,
       category,
-      description: description.trim(),
-      price,
       imageKey: upload === undefined ? dish?.imageKey : imageKey,
     };
     const uploads =
@@ -109,18 +121,10 @@ export function DishForm({
     });
     showToast(`Đã thêm món ${fields.name}`);
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack" noValidate onSubmit={save}>
       <ImageUploadField
         id="dish-image"
         label="Ảnh món"
@@ -131,9 +135,8 @@ export function DishForm({
       <TextField
         id="dish-name"
         label="Tên món"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-        error={submitted ? nameError : null}
+        {...register("name")}
+        error={errors.name?.message}
       />
       <SelectField
         id="dish-category"
@@ -148,8 +151,7 @@ export function DishForm({
       <TextareaField
         id="dish-description"
         label="Mô tả"
-        value={description}
-        onChange={(event) => setDescription(event.target.value)}
+        {...register("description")}
       />
       <fieldset className="form-section">
         <legend>Định lượng cho 1 bàn chuẩn 10 người</legend>
@@ -160,11 +162,11 @@ export function DishForm({
         />
         <dl className="price-breakdown">
           <div>
-            <dt>Chi phí nguyên liệu</dt>
+            <dt>Chi phí nguyên liệu ước tính (giá hiện hành)</dt>
             <dd>{formatMoney(cost)}</dd>
           </div>
           <div>
-            <dt>Food cost mục tiêu</dt>
+            <dt>Food cost mục tiêu chung</dt>
             <dd>{formatPercent(target, 0)}</dd>
           </div>
           <div className="is-strong">
@@ -177,11 +179,14 @@ export function DishForm({
         id="dish-price"
         label="Giá bán (đ / bàn chuẩn)"
         inputMode="numeric"
-        value={priceText}
-        onChange={(event) =>
-          setPriceText(formatNumber(parseAmount(event.target.value)))
-        }
-        error={submitted ? priceError : null}
+        {...register("price", {
+          onChange: (event) =>
+            setValue(
+              "price",
+              formatNumber(parseAmountText(event.target.value))
+            ),
+        })}
+        error={errors.price?.message}
         hint="Quản lý chấp nhận giá gợi ý hoặc nhập giá khác. Hợp đồng đã chốt giữ giá cũ."
       />
       {cost > 0 ? (
@@ -189,22 +194,15 @@ export function DishForm({
           <Button
             size="sm"
             disabled={price === suggested}
-            onClick={() => setPriceText(formatNumber(suggested))}
+            onClick={() =>
+              setValue("price", formatNumber(suggested), {
+                shouldValidate: true,
+              })
+            }
           >
             Dùng giá gợi ý {formatMoney(suggested)}
           </Button>
-          {foodCost !== null ? (
-            <span className="text-small text-soft">
-              Food cost với giá này: {formatPercent(foodCost)}
-            </span>
-          ) : null}
         </div>
-      ) : null}
-      {foodCost !== null && foodCost > target ? (
-        <Alert tone="wait">
-          Giá bán đang cho food cost {formatPercent(foodCost)}, cao hơn mục tiêu{" "}
-          {formatPercent(target, 0)}.
-        </Alert>
       ) : null}
     </form>
   );

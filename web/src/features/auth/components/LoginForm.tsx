@@ -1,14 +1,18 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import { useActionState, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { TextField } from "@/components/ui/TextField";
+import { LIVE_VALIDATION_MODE } from "@/lib/validation";
 
 import { login } from "@/features/auth/actions";
+import { loginSchema } from "@/features/auth/schemas";
 
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 import { SubmitButton } from "./SubmitButton";
@@ -25,19 +29,39 @@ export function LoginForm() {
   const next = params.get("next");
   const [state, action] = useActionState(login, {});
   const [mode, setMode] = useState<LoginMode>(LOGIN_MODE.SignIn);
-  const [phone, setPhone] = useState(params.get("phone") ?? "");
+  const {
+    register,
+    control,
+    trigger,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: { phone: params.get("phone") ?? "", password: "" },
+  });
+  const values = useWatch({ control });
 
   if (mode === LOGIN_MODE.ForgotPassword) {
     return (
       <ForgotPasswordForm
-        initialPhone={phone}
+        initialPhone={values.phone ?? ""}
         onBack={() => setMode(LOGIN_MODE.SignIn)}
       />
     );
   }
 
   return (
-    <form action={action} className="contents" noValidate>
+    <form
+      action={action}
+      className="contents"
+      noValidate
+      onSubmit={(event) => {
+        if (loginSchema.safeParse(getValues()).success) return;
+        event.preventDefault();
+        void trigger();
+      }}
+    >
       {next ? <input type="hidden" name="next" value={next} /> : null}
       {next ? (
         <Alert tone="info">
@@ -46,22 +70,23 @@ export function LoginForm() {
       ) : null}
       <TextField
         id="login-phone"
-        name="phone"
         label="Số điện thoại"
         type="tel"
+        inputMode="tel"
         autoComplete="tel"
         placeholder="0903 123 456"
-        value={phone}
-        error={state.fieldErrors?.phone}
+        {...register("phone")}
+        value={values.phone}
+        error={errors.phone?.message ?? state.fieldErrors?.phone}
         hint="Khách dùng số đã xác thực. Nhân viên dùng số do quản lý cấp."
-        onChange={(event) => setPhone(event.target.value)}
       />
       <PasswordField
         id="login-password"
-        name="password"
         label="Mật khẩu"
         autoComplete="current-password"
-        error={state.fieldErrors?.password}
+        {...register("password")}
+        value={values.password}
+        error={errors.password?.message ?? state.fieldErrors?.password}
       />
       <div className="l-between">
         <span />

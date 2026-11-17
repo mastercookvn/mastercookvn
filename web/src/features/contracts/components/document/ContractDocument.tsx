@@ -27,7 +27,7 @@ const percent = (rate: number) => formatPercent(rate, 0);
  * articles, then both signatures. The browser's "Save as PDF" is the export.
  */
 export function ContractDocument({ contract }: { contract: Contract }) {
-  const signature = useDemoState((state) => state.contractSignature);
+  const confirmation = useDemoState((state) => state.contractConfirmation);
   const legal = siteConfig.legal;
   const deposit = contract.total * BUSINESS_SETTINGS.minimumDepositRate;
 
@@ -400,19 +400,16 @@ export function ContractDocument({ contract }: { contract: Contract }) {
           <div>
             <b>ĐẠI DIỆN BÊN A</b>
             <small>(Ký, ghi rõ họ tên)</small>
-            {signature ? (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element -- a data URL from the signature pad */}
-                <img
-                  src={signature.image}
-                  alt={`Chữ ký của ${signature.name}`}
-                />
-                <small>Đã ký trực tuyến lúc {signature.signedAt}</small>
-              </>
+            {confirmation ? (
+              <small className="contract-doc-online-confirmation">
+                Đã xác nhận trực tuyến bằng tài khoản{" "}
+                {confirmation.accountPhone} lúc {confirmation.confirmedAt},
+                phiên bản {confirmation.version}
+              </small>
             ) : (
               <span className="contract-doc-sign-space" />
             )}
-            <b>{signature?.name ?? CUSTOMER.name}</b>
+            <b>{confirmation?.accountName ?? CUSTOMER.name}</b>
           </div>
           <div>
             <b>ĐẠI DIỆN BÊN B</b>

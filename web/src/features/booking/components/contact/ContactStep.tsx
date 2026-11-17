@@ -1,14 +1,19 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+
 import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
+import { LIVE_VALIDATION_MODE } from "@/lib/validation";
 import {
   updateDemoState,
   useDemoState,
   type BookingContact,
 } from "@/mocks/demoStore";
 
-import { contactErrors } from "@/features/booking/lib/estimate";
+import { bookingContactSchema } from "@/features/booking/lib/estimate";
 
 export function ContactStep({
   contact,
@@ -20,9 +25,22 @@ export function ContactStep({
   showErrors: boolean;
 }) {
   const saved = useDemoState((state) => state.bookingContact);
-  const errors = showErrors ? contactErrors(contact) : null;
+  const {
+    register,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(bookingContactSchema),
+    mode: LIVE_VALIDATION_MODE,
+    values: contact,
+    resetOptions: { keepErrors: true },
+  });
   const update = (patch: Partial<BookingContact>) =>
     updateDemoState({ bookingContact: { ...saved, ...patch } });
+
+  useEffect(() => {
+    if (showErrors) void trigger();
+  }, [showErrors, trigger]);
 
   return (
     <section className="card l-stack">
@@ -37,10 +55,12 @@ export function ContactStep({
           id="contact-name"
           label="Họ tên"
           autoComplete="name"
+          placeholder="Nguyễn Thị Mai"
           readOnly={signedIn}
-          value={contact.name}
-          error={errors?.name}
-          onChange={(event) => update({ name: event.target.value })}
+          {...register("name", {
+            onChange: (event) => update({ name: event.target.value }),
+          })}
+          error={errors.name?.message}
         />
         <TextField
           id="contact-phone"
@@ -48,18 +68,21 @@ export function ContactStep({
           type="tel"
           inputMode="tel"
           autoComplete="tel"
+          placeholder="0903 123 456"
           readOnly={signedIn}
-          value={contact.phone}
-          error={errors?.phone}
-          onChange={(event) => update({ phone: event.target.value })}
+          {...register("phone", {
+            onChange: (event) => update({ phone: event.target.value }),
+          })}
+          error={errors.phone?.message}
         />
       </div>
       <TextareaField
         id="contact-note"
         label="Ghi chú cho tư vấn"
         placeholder="Ví dụ: gọi sau 18 giờ, nhà trong hẻm xe tải nhỏ vào được"
-        value={contact.note}
-        onChange={(event) => update({ note: event.target.value })}
+        {...register("note", {
+          onChange: (event) => update({ note: event.target.value }),
+        })}
       />
     </section>
   );

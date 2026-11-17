@@ -1,9 +1,17 @@
+import { z } from "zod";
+
 import { MENU_MODE, SERVING_FORMAT } from "@/constants/booking";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { parseDayMonthYear } from "@/lib/format";
 import { solarToLunar } from "@/lib/lunar";
 import { calculateMealPrice, type MealPrice } from "@/lib/pricing";
 import { waveErrors, waveTotals } from "@/lib/servingWaves";
+import {
+  addressSchema,
+  firstError,
+  personNameSchema,
+  phoneSchema,
+} from "@/lib/validation";
 import {
   DISHES,
   MENU_SETS,
@@ -26,7 +34,6 @@ const LUNAR_HOLIDAYS: [number, number][] = [
 const HOLIDAY_SURCHARGE_RATE = 0.05;
 const MIN_GUESTS_PER_TABLE = 10;
 const MIN_CUSTOM_DISHES = 6;
-const PHONE_PATTERN = /^0\d{9}$/;
 
 /** What the customer can pick right now, as managed in the admin catalog. */
 export type BookingCatalog = {
@@ -67,7 +74,8 @@ export function mealInfoErrors(meal: EstimateMeal): string[] {
       : waveProblems;
   if (!parseDayMonthYear(meal.date))
     errors.push("Chọn ngày tổ chức trên lịch.");
-  if (meal.address.trim() === "") errors.push("Nhập địa chỉ tổ chức.");
+  const addressError = firstError(addressSchema, meal.address);
+  if (addressError) errors.push(addressError);
   if (meal.guestsPerTable < MIN_GUESTS_PER_TABLE)
     errors.push(`Mỗi bàn cần ít nhất ${MIN_GUESTS_PER_TABLE} người.`);
   return errors;
@@ -104,12 +112,16 @@ export function mealMenuErrors(
   return errors;
 }
 
+export const bookingContactSchema = z.object({
+  name: personNameSchema,
+  phone: phoneSchema,
+  note: z.string(),
+});
+
 export function contactErrors(contact: BookingContact) {
   return {
-    name: contact.name.trim() === "" ? "Nhập họ tên người đặt" : null,
-    phone: PHONE_PATTERN.test(contact.phone.replace(/\s/g, ""))
-      ? null
-      : "Số điện thoại gồm 10 số, bắt đầu bằng 0",
+    name: firstError(personNameSchema, contact.name),
+    phone: firstError(phoneSchema, contact.phone),
   };
 }
 

@@ -1,6 +1,8 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { CloseIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +11,7 @@ import { Select } from "@/components/ui/Select";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatMoney, formatNumber } from "@/lib/format";
+import { LIVE_VALIDATION_MODE, purchaseHeaderSchema } from "@/lib/validation";
 import {
   readDemoState,
   updateDemoState,
@@ -17,8 +20,6 @@ import {
 import { equipmentPurchaseTotal, type EquipmentType } from "@/mocks/equipment";
 
 type DraftLine = { equipment: string; quantity: string; price: string };
-
-const DATE = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
 const parseInteger = (text: string) => Number(text.replace(/\D/g, "")) || 0;
 
@@ -48,9 +49,15 @@ export function EquipmentPurchaseForm({
       (item) => !used.some((line) => line.equipment === item.name)
     ) ?? equipment[0];
 
-  const [date, setDate] = useState("05/11/2026");
-  const [supplier, setSupplier] = useState("");
-  const [phone, setPhone] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors: headerErrors },
+  } = useForm({
+    resolver: zodResolver(purchaseHeaderSchema),
+    mode: LIVE_VALIDATION_MODE,
+    defaultValues: { date: "05/11/2026", supplier: "", phone: "" },
+  });
   const [lines, setLines] = useState<DraftLine[]>(() => {
     const short = equipment.filter((item) => shortfall(item) > 0);
     return fillShortfall && short.length > 0
@@ -71,10 +78,8 @@ export function EquipmentPurchaseForm({
       lines.map((line, i) => (i === index ? { ...line, ...patch } : line))
     );
 
-  const save = () => {
+  const save = handleSubmit(({ date, supplier, phone }) => {
     const problems = [
-      ...(DATE.test(date.trim()) ? [] : ["Ngày nhập theo dạng dd/mm/yyyy."]),
-      ...(supplier.trim() ? [] : ["Nhập tên nhà cung cấp."]),
       ...(lines.length === 0 ? ["Thêm ít nhất một dòng dụng cụ."] : []),
       ...(parsed.some((line) => line.quantity <= 0 || line.price <= 0)
         ? ["Mỗi dòng cần số lượng và đơn giá lớn hơn 0."]
@@ -92,9 +97,9 @@ export function EquipmentPurchaseForm({
       equipmentPurchases: [
         {
           code,
-          date: date.trim(),
-          supplier: supplier.trim(),
-          phone: phone.trim(),
+          date,
+          supplier,
+          phone,
           lines: parsed,
           photos,
         },
@@ -116,40 +121,35 @@ export function EquipmentPurchaseForm({
       `Đã lưu ${code}: ${parsed.length} loại, tăng sở hữu và sẵn sàng tương ứng`
     );
     onSaved();
-  };
+  });
 
   return (
-    <form
-      id={formId}
-      className="l-stack"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        save();
-      }}
-    >
+    <form id={formId} className="l-stack" noValidate onSubmit={save}>
       <section className="card l-stack">
         <h3 className="card-title card-title-flush">Thông tin phiếu</h3>
         <div className="l-grid l-grid-3">
           <TextField
             id="equipment-purchase-date"
             label="Ngày nhập"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
+            placeholder="dd/mm/yyyy"
+            {...register("date")}
+            error={headerErrors.date?.message}
           />
           <TextField
             id="equipment-purchase-supplier"
             label="Nhà cung cấp"
             placeholder="Inox Thành Tâm"
-            value={supplier}
-            onChange={(event) => setSupplier(event.target.value)}
+            {...register("supplier")}
+            error={headerErrors.supplier?.message}
+            hint="Mua ở chợ có thể bỏ trống SĐT."
           />
           <TextField
             id="equipment-purchase-phone"
             label="SĐT nhà cung cấp"
+            type="tel"
             inputMode="tel"
-            value={phone}
-            onChange={(event) => setPhone(event.target.value)}
+            {...register("phone")}
+            error={headerErrors.phone?.message}
           />
         </div>
       </section>

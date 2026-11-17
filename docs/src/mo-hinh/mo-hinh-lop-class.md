@@ -17,159 +17,722 @@ order: 10
 
 ## Sơ đồ lớp tổng quan
 
-Sơ đồ tổng quan thể hiện kiến trúc miền (domain model) và mối liên kết cốt lõi giữa các phân hệ:
+Sơ đồ thể hiện toàn bộ kiến trúc miền (domain model), đầy đủ các thực thể, thuộc tính, phương thức và mối liên kết giữa các phân hệ:
 
 ```mermaid
 classDiagram
     direction TB
 
+    %% ==========================================
+    %% 1. TÀI KHOẢN VÀ KHÁCH HÀNG
+    %% ==========================================
     class KhachHang {
         +UUID id
         +string hoTen
         +string soDienThoai
+        +string? diaChiLienHe
+        +text? ghiChu
+        +capNhat()
+        +timTheoSoDienThoai()
     }
 
     class TaiKhoan {
         +UUID id
         +string soDienThoai
+        +string matKhauBam
+        +string tenHienThi
         +string trangThai
+        +UUID? khachHangId
+        +UUID? nhanVienId
+        +dangKy()
+        +dangNhap()
+        +khoa()
+        +lienKetKhachHang()
     }
 
     class VaiTro {
         +UUID id
         +string ma
+        +string ten
+        +quyenTheoChucNang()
+    }
+
+    class GanVaiTro {
+        +UUID taiKhoanId
+        +UUID vaiTroId
+        +gan()
+        +go()
     }
 
     class NhanVien {
         +UUID id
         +string hoTen
+        +string soDienThoai
         +string loai
         +string viTri
+        +string trangThai
+        +capNhat()
+        +coThePhanCong(khoangGio, viTri)
     }
 
+    %% ==========================================
+    %% 2. ĐƠN ĐẶT TIỆC, BỮA TIỆC VÀ KHẢO SÁT
+    %% ==========================================
     class DonDatTiec {
         +UUID id
         +string ma
+        +UUID khachHangId
+        +UUID nguoiTaoId
         +string kenh
         +string trangThai
+        +datetime ngayTao
+        +text? lyDoTuChoi
+        +themBua()
+        +gui()
+        +xacNhanNhan()
+        +tuChoi()
+        +huy()
     }
 
     class BuaTiec {
         +UUID id
+        +UUID donId
+        +UUID loaiTiecId
         +datetime batDau
         +datetime ketThuc
+        +datetime dungCuTu
+        +datetime dungCuDen
+        +int soBanAnBanDau
         +int soBanAn
         +int soBanBoTri
+        +int soGheBoTri
+        +map nhanSuDuKienTheoViTri
+        +string? nguoiLienHe
+        +string? soDienThoaiLienHe
         +string trangThai
+        +text? ghiChu
+        +tinhTienMon()
+        +nhuCauDungCu()
+        +goiYNhanSu()
+        +kiemTraSua()
+        +huy()
+        +hoanTat()
     }
 
+    class LoaiTiec {
+        +UUID id
+        +string ten
+        +text? moTa
+        +bool dangSuDung
+        +capNhat()
+        +ngung()
+    }
+
+    class KhaoSatDiaDiem {
+        +UUID id
+        +UUID buaId
+        +text diaChi
+        +decimal khoangCachKm
+        +text? ghiChu
+        +UUID nguoiGhiId
+        +datetime ngayGhi
+        +capNhat()
+        +kiemTraPhamVi()
+    }
+
+    class TraLoiKhaoSat {
+        +UUID id
+        +UUID khaoSatId
+        +int thuTu
+        +string cauHoi
+        +text traLoi
+        +capNhat()
+    }
+
+    class MonTrongBua {
+        +UUID id
+        +UUID buaId
+        +UUID monId
+        +string tenMonChot
+        +money donGiaChuanChot
+        +text? ghiChu
+        +thanhTien(soBanAn)
+    }
+
+    class DichVuTrongBua {
+        +UUID id
+        +UUID buaId
+        +UUID dichVuId
+        +string tenChot
+        +string donViChot
+        +decimal soLuong
+        +money donGiaChot
+        +thanhTien()
+    }
+
+    class KhoanGiaBua {
+        +UUID id
+        +UUID buaId
+        +money tienMon
+        +money tienDichVu
+        +money phuThu
+        +text? lyDoPhuThu
+        +decimal thueSuat
+        +money tienThue
+        +money chenhLechLamTron
+        +money tong
+        +tinhTong()
+    }
+
+    %% ==========================================
+    %% 3. HỢP ĐỒNG, ĐIỀU CHỈNH VÀ TIỀN
+    %% ==========================================
     class HopDong {
         +UUID id
         +string so
+        +UUID donId
+        +document noiDungChot
         +money tongGiaTri
+        +datetime phatHanhLuc
+        +datetime hanCoc
         +string trangThai
+        +phatHanh()
+        +kiemTraHieuLuc()
+        +soDu()
+        +kiemTraDong()
+    }
+
+    class XacNhanVanBan {
+        +UUID id
+        +UUID? hopDongId
+        +UUID? phuLucId
+        +string phuongThuc
+        +UUID? nguoiXacNhanId
+        +string tenNguoiKy
+        +datetime thoiDiemKy
+        +UUID nguoiGhiId
+        +UUID? tepKyId
+        +ghiOnline()
+        +ghiKyGiay()
     }
 
     class PhuLucHopDong {
         +UUID id
+        +UUID hopDongId
+        +UUID buaId
         +string so
         +string loai
+        +document noiDungTruoc
+        +document noiDungSau
         +money chenhLech
+        +money cocBoSung
         +string trangThai
-    }
-
-    class GiaoDichThanhToan {
-        +UUID id
-        +string loai
-        +string phuongThuc
-        +money soTien
-        +string trangThai
-    }
-
-    class PhanBoThanhToan {
-        +UUID id
-        +money soTien
-    }
-
-    class QuyetToanBua {
-        +UUID id
-        +money tongPhaiTra
-        +string trangThai
+        +UUID nguoiLapId
+        +datetime ngayLap
+        +tinhChenhLech()
+        +xacNhan()
+        +apDung()
+        +huy()
     }
 
     class HuyBuaTiec {
         +UUID id
+        +UUID buaId
+        +UUID nguoiGhiId
+        +datetime yeuCauLuc
+        +text lyDo
+        +decimal soGioConLai
+        +money cocLamCanCuHoan
+        +money traTruocVuot
+        +decimal tyLeHoan
+        +money phiXuLy
         +money tienHoan
         +money tienGiuLai
+        +money thuThemThoaThuan
+        +text? ghiChuThoaThuan
+        +tinhHoan()
+        +xacNhanHuy()
+    }
+
+    class GiaoDichThanhToan {
+        +UUID id
+        +UUID hopDongId
+        +string loai
+        +string phuongThuc
+        +money soTien
+        +string trangThai
+        +string? maThamChieu
+        +datetime thoiDiem
+        +UUID? nguoiGhiId
+        +UUID? tepBangChungId
+        +xacNhanOnline()
+        +ghiThuCong()
+        +phanBo()
+    }
+
+    class PhanBoThanhToan {
+        +UUID id
+        +UUID giaoDichId
+        +UUID buaId
+        +money soTien
+        +money phanCocBatBuoc
+        +money phanTraTruoc
+        +kiemTraTongPhanBo()
+    }
+
+    class QuyetToanBua {
+        +UUID id
+        +UUID buaId
+        +money giaTriHienHanh
+        +money denBu
+        +money? nghiaVuSauHuy
+        +money tongPhaiTra
+        +string trangThai
+        +datetime? ngayChot
+        +UUID? nguoiChotId
+        +tongThu()
+        +tongHoan()
+        +soDu()
+        +chot()
+    }
+
+    class TepDinhKem {
+        +UUID id
+        +string khoaLuuTru
+        +string tenGoc
+        +string loaiNoiDung
+        +int kichThuoc
+        +UUID nguoiTaiId
+        +datetime taiLuc
+        +layTheoQuyen()
+    }
+
+    %% ==========================================
+    %% 4. DANH MỤC MÓN VÀ NGUYÊN LIỆU
+    %% ==========================================
+    class LoaiMon {
+        +UUID id
+        +string ten
+        +int thuTu
+        +bool dangSuDung
+        +capNhat()
+        +ngung()
     }
 
     class MonAn {
         +UUID id
+        +UUID loaiMonId
         +string ten
+        +text? moTa
+        +UUID? anhId
         +money giaBanChuan
+        +bool dangPhucVu
+        +chiPhiUocTinh()
+        +giaGoiY(foodCostMucTieu)
+        +capNhatGia()
+        +ngung()
+    }
+
+    class SetThucDon {
+        +UUID id
+        +string ten
+        +text? moTa
+        +bool dangPhucVu
+        +tinhGia()
+        +capNhatMon()
+        +ngung()
+    }
+
+    class MonTrongSet {
+        +UUID setId
+        +UUID monId
+        +int thuTu
+        +sapXep()
     }
 
     class NguyenLieu {
         +UUID id
         +string ten
+        +string donViChuan
         +decimal_money giaHienHanh
+        +bool dangSuDung
+        +capNhatGia()
+        +monBiAnhHuong()
     }
 
+    class DinhLuongMon {
+        +UUID monId
+        +UUID nguyenLieuId
+        +decimal soLuongChuan
+        +tinhChiPhi()
+    }
+
+    class DichVu {
+        +UUID id
+        +string ten
+        +text? moTa
+        +string donVi
+        +money donGia
+        +bool dangSuDung
+        +capNhat()
+        +ngung()
+    }
+
+    class CauHinhNghiepVu {
+        +UUID id
+        +decimal foodCostMucTieu
+        +decimal thueSuat
+        +datetime mocHieuLuc
+        +UUID nguoiCapNhatId
+        +apDungChoDuLieuMoi()
+    }
+
+    %% ==========================================
+    %% 5. NHẬP, KIỂM KÊ VÀ FOOD COST
+    %% ==========================================
+    class PhieuNhapNguyenLieu {
+        +UUID id
+        +string ma
+        +datetime ngayNhap
+        +string tenNhaCungCap
+        +string? soDienThoaiNhaCungCap
+        +UUID nguoiNhapId
+        +text? ghiChu
+        +tongTien()
+        +ghiNhan()
+    }
+
+    class DongNhapNguyenLieu {
+        +UUID id
+        +UUID phieuId
+        +UUID nguyenLieuId
+        +string donViChot
+        +decimal soLuong
+        +decimal_money donGia
+        +thanhTien()
+    }
+
+    class KyNguyenLieu {
+        +UUID id
+        +YearMonth thang
+        +string trangThai
+        +money doanhThuMon
+        +money chiPhiTieuThu
+        +decimal? foodCostThucTe
+        +money laiTheoNguyenLieu
+        +UUID? nguoiChotId
+        +datetime? chotLuc
+        +tongHop()
+        +tinhFoodCost()
+        +chot()
+        +moLai()
+    }
+
+    class DongKiemKeNguyenLieu {
+        +UUID id
+        +UUID kyId
+        +UUID nguyenLieuId
+        +decimal luongDau
+        +money giaTriDau
+        +decimal luongNhap
+        +money giaTriNhap
+        +decimal luongCuoiThucTe
+        +decimal_money donGiaBinhQuan
+        +money giaTriCuoi
+        +money chiPhiTieuThu
+        +text? ghiChu
+        +tinhGiaTon()
+        +tinhTieuThu()
+    }
+
+    class DotDeXuatGia {
+        +UUID id
+        +YearMonth thang
+        +datetime mocTinh
+        +datetime tuNgay
+        +datetime denNgay
+        +datetime taoLuc
+        +string nguonKhoiTao
+        +string trangThai
+        +taoNeuChuaCo()
+        +tongHopTrangThai()
+    }
+
+    class DongDeXuatGia {
+        +UUID id
+        +UUID dotId
+        +UUID nguyenLieuId
+        +decimal_money giaCu
+        +decimal_money giaDeXuat
+        +decimal_money? giaDuocChon
+        +string trangThai
+        +UUID? nguoiXuLyId
+        +datetime? xuLyLuc
+        +tinhGiaTrongSo()
+        +chapNhan()
+        +dieuChinh()
+        +boQua()
+    }
+
+    %% ==========================================
+    %% 6. DỤNG CỤ VÀ TÀI NGUYÊN
+    %% ==========================================
     class DungCu {
         +UUID id
         +string ten
+        +string donVi
+        +string coSoDinhMuc
+        +decimal dinhMuc
+        +decimal? duTru
+        +int soLuongToiThieu
+        +money giaBoiThuong
         +int soLuongSoHuu
         +int soLuongSanSang
+        +int soLuongDangSuDung
+        +int soLuongHu
+        +tinhNhuCau()
+        +canhBaoThieu()
+        +phucHoi()
+        +loaiBo()
     }
 
     class GiuDungCu {
         +UUID id
+        +UUID buaId
+        +UUID dungCuId
         +int soLuong
+        +datetime tuLuc
+        +datetime denLuc
         +string trangThai
+        +datetime? hetHanTam
+        +bool daXuat
+        +kiemTraKhaDung()
+        +chuyenChinhThuc()
+        +nha()
+    }
+
+    class GiaBoiThuongBua {
+        +UUID buaId
+        +UUID dungCuId
+        +string tenChot
+        +money donGiaChot
+        +layGiaChot()
+    }
+
+    class PhieuNhapDungCu {
+        +UUID id
+        +string ma
+        +datetime ngayNhap
+        +string tenNhaCungCap
+        +string? soDienThoaiNhaCungCap
+        +UUID nguoiNhapId
+        +tongTien()
+        +ghiNhan()
+    }
+
+    class DongNhapDungCu {
+        +UUID id
+        +UUID phieuId
+        +UUID dungCuId
+        +int soLuong
+        +money donGia
+        +thanhTien()
     }
 
     class PhieuXuatDungCu {
         +UUID id
         +string ma
+        +UUID buaId
+        +UUID nguoiXuatId
+        +datetime? xuatLuc
         +string trangThai
+        +kiemTraTon()
+        +xuat()
+        +hoanTatKiemDem()
+    }
+
+    class DongXuatDungCu {
+        +UUID id
+        +UUID phieuId
+        +UUID dungCuId
+        +int soLuong
+        +kiemTraSoLuong()
     }
 
     class BienBanKiemDem {
         +UUID id
+        +UUID phieuXuatId
+        +UUID nguoiKiemId
+        +datetime kiemLuc
         +string trangThai
+        +text? ghiChu
+        +kiemTraCanBang()
+        +tinhDenBu()
+        +xacNhan()
     }
 
+    class DongKiemDem {
+        +UUID id
+        +UUID bienBanId
+        +UUID dongXuatId
+        +int thuHoiTot
+        +int hu
+        +int mat
+        +int soKhachChiu
+        +money donGiaBoiThuongChot
+        +text? lyDo
+        +tinhDenBu()
+    }
+
+    class XuLyDungCuHu {
+        +UUID id
+        +UUID dungCuId
+        +int soLuong
+        +string loai
+        +text lyDo
+        +UUID nguoiGhiId
+        +datetime thoiDiem
+        +apDung()
+    }
+
+    %% ==========================================
+    %% 7. PHÂN CÔNG VÀ ĐÁNH GIÁ
+    %% ==========================================
     class PhanCongNhanSu {
         +UUID id
+        +UUID buaId
+        +UUID nhanVienId
         +string viTri
+        +text? nhiemVu
+        +datetime batDau
+        +datetime ketThuc
         +string trangThai
+        +UUID nguoiPhanCongId
+        +kiemTraTrungLich()
+        +doiNguoi()
+        +huy()
     }
 
     class DanhGia {
         +UUID id
+        +UUID buaId
+        +UUID khachHangId
         +int diem
+        +text? nhanXet
+        +UUID nguoiNhapId
+        +datetime ngayNhap
+        +ghiNhan()
     }
 
-    %% Quan he lien ket giua cac phan he
-    KhachHang "1" --> "0..1" TaiKhoan : lienKet
-    NhanVien "1" --> "0..1" TaiKhoan : lienKet
-    TaiKhoan "1" --> "0..*" VaiTro : coVaiTro
+    %% ==========================================
+    %% 8. DỊCH VỤ MIỀN (DOMAIN SERVICES)
+    %% ==========================================
+    class KiemTraTaiNguyen {
+        <<service>>
+        +kiemTra(bua, khoangGio)
+        +giuTam(don)
+        +chuyenChinhThuc(hopDong)
+        +nha(bua)
+    }
+
+    class TinhGia {
+        <<service>>
+        +tinhBua()
+        +tinhGiaMonGoiY()
+        +tinhChenhLechPhuLuc()
+        +lamTron500()
+    }
+
+    class ThanhToan {
+        <<service>>
+        +taoYeuCau()
+        +ghiThuCong()
+        +nhanKetQua()
+        +phanBo()
+        +ghiHoan()
+    }
+
+    class ChotNguyenLieuThang {
+        <<service>>
+        +tongHopNhap()
+        +layTonDau()
+        +dinhGiaTonCuoi()
+        +tinhFoodCost()
+        +chotKy()
+    }
+
+    class DeXuatGiaThang {
+        <<service>>
+        +taoNeuChuaCo(thang)
+        +tinhTrongSo()
+        +xuLyDong()
+        +layMonAnhHuong()
+    }
+
+    class BaoCao {
+        <<service>>
+        +doanhThuTheoBua()
+        +foodCostTheoKy()
+        +laiTheoNguyenLieu()
+        +thuHoan()
+        +haoHut()
+        +dashboard()
+    }
+
+    %% ==========================================
+    %% QUAN HỆ LIÊN KẾT GIỮA CÁC LỚP
+    %% ==========================================
+    KhachHang "1" --> "0..1" TaiKhoan : lienKetTaiKhoan
+    NhanVien "1" --> "0..1" TaiKhoan : lienKetTaiKhoan
+    TaiKhoan "1" --> "0..*" GanVaiTro : co
+    VaiTro "1" --> "0..*" GanVaiTro : duocGan
     KhachHang "1" --> "0..*" DonDatTiec : datTiec
-    DonDatTiec "1" *-- "1..*" BuaTiec : gom
+    DonDatTiec "1" *-- "1..*" BuaTiec : chua
+    LoaiTiec "1" --> "0..*" BuaTiec : phanLoai
+    BuaTiec "1" *-- "1" KhaoSatDiaDiem : co
+    KhaoSatDiaDiem "1" *-- "0..*" TraLoiKhaoSat : gom
+    BuaTiec "1" *-- "1..*" MonTrongBua : gom
+    BuaTiec "1" *-- "0..*" DichVuTrongBua : gom
+    BuaTiec "1" *-- "1" KhoanGiaBua : tinhGia
     DonDatTiec "1" --> "0..1" HopDong : phatHanh
-    HopDong "1" --> "0..*" PhuLucHopDong : dieuChinh
+    HopDong "1" --> "0..*" PhuLucHopDong : co
     PhuLucHopDong "0..*" --> "1" BuaTiec : apDung
+    HopDong "1" --> "0..1" XacNhanVanBan : xacNhan
+    PhuLucHopDong "1" --> "0..1" XacNhanVanBan : xacNhan
     HopDong "1" --> "0..*" GiaoDichThanhToan : phatSinh
     GiaoDichThanhToan "1" *-- "1..*" PhanBoThanhToan : phanBo
     PhanBoThanhToan "0..*" --> "1" BuaTiec : choBua
+    XacNhanVanBan "0..*" --> "0..1" TepDinhKem : banKyGiay
+    GiaoDichThanhToan "0..*" --> "0..1" TepDinhKem : chungTu
     BuaTiec "1" --> "0..1" QuyetToanBua : quyetToan
     BuaTiec "1" --> "0..1" HuyBuaTiec : huy
-    BuaTiec "0..*" --> "1..*" MonAn : chonMon
-    MonAn "0..*" --> "1..*" NguyenLieu : dinhLuong
+    LoaiMon "1" --> "0..*" MonAn : phanLoai
+    MonAn "0..*" --> "0..1" TepDinhKem : anh
+    SetThucDon "1" *-- "0..*" MonTrongSet : gom
+    MonAn "1" <-- "0..*" MonTrongSet : chua
+    MonAn "1" *-- "0..*" DinhLuongMon : dinhLuong
+    NguyenLieu "1" <-- "0..*" DinhLuongMon : thanhPhan
+    MonTrongBua "0..*" --> "1" MonAn : chonMon
+    DichVuTrongBua "0..*" --> "1" DichVu : chonDichVu
+    PhieuNhapNguyenLieu "1" *-- "1..*" DongNhapNguyenLieu : gom
+    DongNhapNguyenLieu "0..*" --> "1" NguyenLieu : nhap
+    KyNguyenLieu "1" *-- "1..*" DongKiemKeNguyenLieu : gom
+    DongKiemKeNguyenLieu "0..*" --> "1" NguyenLieu : kiemKe
+    DotDeXuatGia "1" *-- "0..*" DongDeXuatGia : gom
+    DongDeXuatGia "0..*" --> "1" NguyenLieu : deXuat
     BuaTiec "1" --> "0..*" GiuDungCu : giu
     GiuDungCu "0..*" --> "1" DungCu : loai
+    BuaTiec "1" --> "0..*" GiaBoiThuongBua : chotGiaBoiThuong
+    GiaBoiThuongBua "0..*" --> "1" DungCu : apDung
+    PhieuNhapDungCu "1" *-- "1..*" DongNhapDungCu : gom
+    DongNhapDungCu "0..*" --> "1" DungCu : nhap
     BuaTiec "1" --> "0..1" PhieuXuatDungCu : xuat
-    PhieuXuatDungCu "1" --> "0..1" BienBanKiemDem : kiemDem
+    PhieuXuatDungCu "1" *-- "1..*" DongXuatDungCu : gom
+    DongXuatDungCu "0..*" --> "1" DungCu : xuat
+    PhieuXuatDungCu "1" --> "0..1" BienBanKiemDem : lapBienBan
+    BienBanKiemDem "1" *-- "1..*" DongKiemDem : gom
+    DongXuatDungCu "1" <-- "1" DongKiemDem : kiemTheoDongXuat
+    XuLyDungCuHu "0..*" --> "1" DungCu : xuLy
     BuaTiec "1" --> "0..*" PhanCongNhanSu : phanCong
     PhanCongNhanSu "0..*" --> "1" NhanVien : giaoCho
     BuaTiec "1" --> "0..1" DanhGia : nhanDanhGia
@@ -300,66 +863,6 @@ bua1 --> danhGia : nhanDanhGia
 
 ## Account và Customer
 
-```mermaid
-classDiagram
-    direction TB
-    class TaiKhoan {
-        +UUID id
-        +string soDienThoai
-        +string matKhauBam
-        +string tenHienThi
-        +string trangThai
-        +UUID? khachHangId
-        +UUID? nhanVienId
-        +dangKy()
-        +dangNhap()
-        +khoa()
-        +lienKetKhachHang()
-    }
-
-    class VaiTro {
-        +UUID id
-        +string ma
-        +string ten
-        +quyenTheoChucNang()
-    }
-
-    class GanVaiTro {
-        +UUID taiKhoanId
-        +UUID vaiTroId
-        +gan()
-        +go()
-    }
-
-    class KhachHang {
-        +UUID id
-        +string hoTen
-        +string soDienThoai
-        +string? diaChiLienHe
-        +text? ghiChu
-        +capNhat()
-        +timTheoSoDienThoai()
-    }
-
-    class NhanVien {
-        +UUID id
-        +string hoTen
-        +string soDienThoai
-        +string loai
-        +string viTri
-        +string trangThai
-        +capNhat()
-        +coThePhanCong(khoangGio, viTri)
-    }
-
-    TaiKhoan "1" --> "0..*" GanVaiTro : co
-    VaiTro "1" --> "0..*" GanVaiTro : duocGan
-    KhachHang "1" --> "0..1" TaiKhoan : lienKetTaiKhoan
-    NhanVien "1" --> "0..1" TaiKhoan : lienKetTaiKhoan
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-tai-khoan-khach-hang" -->
-
 ### Ràng buộc nghiệp vụ
 
 - **TaiKhoan**: Không bắt buộc phải có Account để lưu Customer Profile hoặc Staff Profile.
@@ -444,126 +947,6 @@ keToan --> gan3 : duocGan
 <!-- diagram id="vitepress-plugin-digrams-object-tai-khoan-khach-hang" -->
 
 ## Order, Meal và khảo sát
-
-```mermaid
-classDiagram
-    direction TB
-    class DonDatTiec {
-        +UUID id
-        +string ma
-        +UUID khachHangId
-        +UUID nguoiTaoId
-        +string kenh
-        +string trangThai
-        +datetime ngayTao
-        +text? lyDoTuChoi
-        +themBua()
-        +gui()
-        +xacNhanNhan()
-        +tuChoi()
-        +huy()
-    }
-
-    class BuaTiec {
-        +UUID id
-        +UUID donId
-        +UUID loaiTiecId
-        +datetime batDau
-        +datetime ketThuc
-        +datetime dungCuTu
-        +datetime dungCuDen
-        +int soBanAnBanDau
-        +int soBanAn
-        +int soBanBoTri
-        +int soGheBoTri
-        +map nhanSuDuKienTheoViTri
-        +string? nguoiLienHe
-        +string? soDienThoaiLienHe
-        +string trangThai
-        +text? ghiChu
-        +tinhTienMon()
-        +nhuCauDungCu()
-        +goiYNhanSu()
-        +kiemTraSua()
-        +huy()
-        +hoanTat()
-    }
-
-    class LoaiTiec {
-        +UUID id
-        +string ten
-        +text? moTa
-        +bool dangSuDung
-        +capNhat()
-        +ngung()
-    }
-
-    class KhaoSatDiaDiem {
-        +UUID id
-        +UUID buaId
-        +text diaChi
-        +decimal khoangCachKm
-        +text? ghiChu
-        +UUID nguoiGhiId
-        +datetime ngayGhi
-        +capNhat()
-        +kiemTraPhamVi()
-    }
-
-    class TraLoiKhaoSat {
-        +UUID id
-        +UUID khaoSatId
-        +int thuTu
-        +string cauHoi
-        +text traLoi
-        +capNhat()
-    }
-
-    class MonTrongBua {
-        +UUID id
-        +UUID buaId
-        +UUID monId
-        +string tenMonChot
-        +money donGiaChuanChot
-        +text? ghiChu
-        +thanhTien(soBanAn)
-    }
-
-    class DichVuTrongBua {
-        +UUID id
-        +UUID buaId
-        +UUID dichVuId
-        +string tenChot
-        +string donViChot
-        +decimal soLuong
-        +money donGiaChot
-        +thanhTien()
-    }
-
-    class KhoanGiaBua {
-        +UUID id
-        +UUID buaId
-        +money tienMon
-        +money tienDichVu
-        +money phuThu
-        +text? lyDoPhuThu
-        +decimal thueSuat
-        +money tienThue
-        +money chenhLechLamTron
-        +money tong
-        +tinhTong()
-    }
-
-    DonDatTiec "1" *-- "1..*" BuaTiec : chua
-    LoaiTiec "1" --> "0..*" BuaTiec : phanLoai
-    BuaTiec "1" *-- "1" KhaoSatDiaDiem : co
-    KhaoSatDiaDiem "1" *-- "0..*" TraLoiKhaoSat : gom
-    BuaTiec "1" *-- "1..*" MonTrongBua : gom
-    BuaTiec "1" *-- "0..*" DichVuTrongBua : gom
-    BuaTiec "1" *-- "1" KhoanGiaBua : tinhGia
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-don-bua-khao-sat" -->
 
 ### Ràng buộc nghiệp vụ
 
@@ -714,140 +1097,6 @@ bua2 *-- gia2 : tinhGia
 <!-- diagram id="vitepress-plugin-digrams-object-don-bua-khao-sat" -->
 
 ## Contract, điều chỉnh và tiền
-
-```mermaid
-classDiagram
-    direction TB
-    class HopDong {
-        +UUID id
-        +string so
-        +UUID donId
-        +document noiDungChot
-        +money tongGiaTri
-        +datetime phatHanhLuc
-        +datetime hanCoc
-        +string trangThai
-        +phatHanh()
-        +kiemTraHieuLuc()
-        +soDu()
-        +kiemTraDong()
-    }
-
-    class XacNhanVanBan {
-        +UUID id
-        +UUID? hopDongId
-        +UUID? phuLucId
-        +string phuongThuc
-        +UUID? nguoiXacNhanId
-        +string tenNguoiKy
-        +datetime thoiDiemKy
-        +UUID nguoiGhiId
-        +UUID? tepKyId
-        +ghiOnline()
-        +ghiKyGiay()
-    }
-
-    class PhuLucHopDong {
-        +UUID id
-        +UUID hopDongId
-        +UUID buaId
-        +string so
-        +string loai
-        +document noiDungTruoc
-        +document noiDungSau
-        +money chenhLech
-        +money cocBoSung
-        +string trangThai
-        +UUID nguoiLapId
-        +datetime ngayLap
-        +tinhChenhLech()
-        +xacNhan()
-        +apDung()
-        +huy()
-    }
-
-    class HuyBuaTiec {
-        +UUID id
-        +UUID buaId
-        +UUID nguoiGhiId
-        +datetime yeuCauLuc
-        +text lyDo
-        +decimal soGioConLai
-        +money cocLamCanCuHoan
-        +money traTruocVuot
-        +decimal tyLeHoan
-        +money phiXuLy
-        +money tienHoan
-        +money tienGiuLai
-        +money thuThemThoaThuan
-        +text? ghiChuThoaThuan
-        +tinhHoan()
-        +xacNhanHuy()
-    }
-
-    class GiaoDichThanhToan {
-        +UUID id
-        +UUID hopDongId
-        +string loai
-        +string phuongThuc
-        +money soTien
-        +string trangThai
-        +string? maThamChieu
-        +datetime thoiDiem
-        +UUID? nguoiGhiId
-        +UUID? tepBangChungId
-        +xacNhanOnline()
-        +ghiThuCong()
-        +phanBo()
-    }
-
-    class PhanBoThanhToan {
-        +UUID id
-        +UUID giaoDichId
-        +UUID buaId
-        +money soTien
-        +money phanCocBatBuoc
-        +money phanTraTruoc
-        +kiemTraTongPhanBo()
-    }
-
-    class QuyetToanBua {
-        +UUID id
-        +UUID buaId
-        +money giaTriHienHanh
-        +money denBu
-        +money? nghiaVuSauHuy
-        +money tongPhaiTra
-        +string trangThai
-        +datetime? ngayChot
-        +UUID? nguoiChotId
-        +tongThu()
-        +tongHoan()
-        +soDu()
-        +chot()
-    }
-
-    class TepDinhKem {
-        +UUID id
-        +string khoaLuuTru
-        +string tenGoc
-        +string loaiNoiDung
-        +int kichThuoc
-        +UUID nguoiTaiId
-        +datetime taiLuc
-        +layTheoQuyen()
-    }
-
-    HopDong "1" --> "0..*" PhuLucHopDong : co
-    HopDong "1" --> "0..1" XacNhanVanBan : xacNhan
-    PhuLucHopDong "1" --> "0..1" XacNhanVanBan : xacNhan
-    HopDong "1" --> "0..*" GiaoDichThanhToan : phatSinh
-    GiaoDichThanhToan "1" *-- "1..*" PhanBoThanhToan : phanBo
-    XacNhanVanBan "0..*" --> "0..1" TepDinhKem : banKyGiay
-    GiaoDichThanhToan "0..*" --> "0..1" TepDinhKem : chungTu
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-hop-dong-dieu-chinh-tien" -->
 
 ### Ràng buộc nghiệp vụ
 
@@ -1006,101 +1255,6 @@ hoan *-- pb4 : phanBo
 
 ## Catalog Dish và Ingredient
 
-```mermaid
-classDiagram
-    direction TB
-    class LoaiMon {
-        +UUID id
-        +string ten
-        +int thuTu
-        +bool dangSuDung
-        +capNhat()
-        +ngung()
-    }
-
-    class MonAn {
-        +UUID id
-        +UUID loaiMonId
-        +string ten
-        +text? moTa
-        +UUID? anhId
-        +money giaBanChuan
-        +bool dangPhucVu
-        +chiPhiUocTinh()
-        +giaGoiY(foodCostMucTieu)
-        +capNhatGia()
-        +ngung()
-    }
-
-    class SetThucDon {
-        +UUID id
-        +string ten
-        +text? moTa
-        +bool dangPhucVu
-        +tinhGia()
-        +capNhatMon()
-        +ngung()
-    }
-
-    class MonTrongSet {
-        +UUID setId
-        +UUID monId
-        +int thuTu
-        +sapXep()
-    }
-
-    class NguyenLieu {
-        +UUID id
-        +string ten
-        +string donViChuan
-        +decimal_money giaHienHanh
-        +bool dangSuDung
-        +capNhatGia()
-        +monBiAnhHuong()
-    }
-
-    class DinhLuongMon {
-        +UUID monId
-        +UUID nguyenLieuId
-        +decimal soLuongChuan
-        +tinhChiPhi()
-    }
-
-    class DichVu {
-        +UUID id
-        +string ten
-        +text? moTa
-        +string donVi
-        +money donGia
-        +bool dangSuDung
-        +capNhat()
-        +ngung()
-    }
-
-    class CauHinhNghiepVu {
-        +UUID id
-        +decimal foodCostMucTieu
-        +decimal thueSuat
-        +datetime mocHieuLuc
-        +UUID nguoiCapNhatId
-        +apDungChoDuLieuMoi()
-    }
-
-    class TepDinhKem {
-        +UUID id
-        +string khoaLuuTru
-    }
-
-    LoaiMon "1" --> "0..*" MonAn : phanLoai
-    MonAn "0..*" --> "0..1" TepDinhKem : anh
-    SetThucDon "1" *-- "0..*" MonTrongSet : gom
-    MonAn "1" <-- "0..*" MonTrongSet : chua
-    MonAn "1" *-- "0..*" DinhLuongMon : dinhLuong
-    NguyenLieu "1" <-- "0..*" DinhLuongMon : thanhPhan
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-danh-muc-mon-nguyen-lieu" -->
-
 ### Ràng buộc nghiệp vụ
 
 - **LoaiMon & MonAn**: Phân nhóm để lọc Catalog; Menu tự chọn không được rỗng, dưới ngưỡng khuyến nghị thì cảnh báo nhưng không chặn. Đơn giá chuẩn áp dụng cho Serving Table chuẩn 10 suất. Ảnh Dish tùy chọn, tham chiếu `TepDinhKem` qua `anhId`; không lưu URL ảnh trực tiếp.
@@ -1221,100 +1375,6 @@ dl --> nl : thanhPhan
 
 ## Nhập, Inventory Count và food cost
 
-```mermaid
-classDiagram
-    direction TB
-    class PhieuNhapNguyenLieu {
-        +UUID id
-        +string ma
-        +datetime ngayNhap
-        +string tenNhaCungCap
-        +string? soDienThoaiNhaCungCap
-        +UUID nguoiNhapId
-        +text? ghiChu
-        +tongTien()
-        +ghiNhan()
-    }
-
-    class DongNhapNguyenLieu {
-        +UUID id
-        +UUID phieuId
-        +UUID nguyenLieuId
-        +string donViChot
-        +decimal soLuong
-        +decimal_money donGia
-        +thanhTien()
-    }
-
-    class KyNguyenLieu {
-        +UUID id
-        +YearMonth thang
-        +string trangThai
-        +money doanhThuMon
-        +money chiPhiTieuThu
-        +decimal? foodCostThucTe
-        +money laiTheoNguyenLieu
-        +UUID? nguoiChotId
-        +datetime? chotLuc
-        +tongHop()
-        +tinhFoodCost()
-        +chot()
-        +moLai()
-    }
-
-    class DongKiemKeNguyenLieu {
-        +UUID id
-        +UUID kyId
-        +UUID nguyenLieuId
-        +decimal luongDau
-        +money giaTriDau
-        +decimal luongNhap
-        +money giaTriNhap
-        +decimal luongCuoiThucTe
-        +decimal_money donGiaBinhQuan
-        +money giaTriCuoi
-        +money chiPhiTieuThu
-        +text? ghiChu
-        +tinhGiaTon()
-        +tinhTieuThu()
-    }
-
-    class DotDeXuatGia {
-        +UUID id
-        +YearMonth thang
-        +datetime mocTinh
-        +datetime tuNgay
-        +datetime denNgay
-        +datetime taoLuc
-        +string nguonKhoiTao
-        +string trangThai
-        +taoNeuChuaCo()
-        +tongHopTrangThai()
-    }
-
-    class DongDeXuatGia {
-        +UUID id
-        +UUID dotId
-        +UUID nguyenLieuId
-        +decimal_money giaCu
-        +decimal_money giaDeXuat
-        +decimal_money? giaDuocChon
-        +string trangThai
-        +UUID? nguoiXuLyId
-        +datetime? xuLyLuc
-        +tinhGiaTrongSo()
-        +chapNhan()
-        +dieuChinh()
-        +boQua()
-    }
-
-    PhieuNhapNguyenLieu "1" *-- "1..*" DongNhapNguyenLieu : gom
-    KyNguyenLieu "1" *-- "1..*" DongKiemKeNguyenLieu : gom
-    DotDeXuatGia "1" *-- "0..*" DongDeXuatGia : gom
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-nhap-kiem-ke-food-cost" -->
-
 ### Ràng buộc nghiệp vụ
 
 - **PhieuNhapNguyenLieu & DongNhapNguyenLieu**: Ghi nhận lượng và đơn giá thực mua; không bắt buộc gắn trực tiếp với Meal. Lượng $>0$, đơn giá $\ge 0$.
@@ -1416,136 +1476,6 @@ dot *-- dx : gom
 <!-- diagram id="vitepress-plugin-digrams-object-nhap-kiem-ke-food-cost" -->
 
 ## Equipment và tài nguyên
-
-```mermaid
-classDiagram
-    direction TB
-    class DungCu {
-        +UUID id
-        +string ten
-        +string donVi
-        +string coSoDinhMuc
-        +decimal dinhMuc
-        +decimal? duTru
-        +int soLuongToiThieu
-        +money giaBoiThuong
-        +int soLuongSoHuu
-        +int soLuongSanSang
-        +int soLuongDangSuDung
-        +int soLuongHu
-        +tinhNhuCau()
-        +canhBaoThieu()
-        +phucHoi()
-        +loaiBo()
-    }
-
-    class GiuDungCu {
-        +UUID id
-        +UUID buaId
-        +UUID dungCuId
-        +int soLuong
-        +datetime tuLuc
-        +datetime denLuc
-        +string trangThai
-        +datetime? hetHanTam
-        +bool daXuat
-        +kiemTraKhaDung()
-        +chuyenChinhThuc()
-        +nha()
-    }
-
-    class GiaBoiThuongBua {
-        +UUID buaId
-        +UUID dungCuId
-        +string tenChot
-        +money donGiaChot
-        +layGiaChot()
-    }
-
-    class PhieuNhapDungCu {
-        +UUID id
-        +string ma
-        +datetime ngayNhap
-        +string tenNhaCungCap
-        +string? soDienThoaiNhaCungCap
-        +UUID nguoiNhapId
-        +tongTien()
-        +ghiNhan()
-    }
-
-    class DongNhapDungCu {
-        +UUID id
-        +UUID phieuId
-        +UUID dungCuId
-        +int soLuong
-        +money donGia
-        +thanhTien()
-    }
-
-    class PhieuXuatDungCu {
-        +UUID id
-        +string ma
-        +UUID buaId
-        +UUID nguoiXuatId
-        +datetime? xuatLuc
-        +string trangThai
-        +kiemTraTon()
-        +xuat()
-        +hoanTatKiemDem()
-    }
-
-    class DongXuatDungCu {
-        +UUID id
-        +UUID phieuId
-        +UUID dungCuId
-        +int soLuong
-        +kiemTraSoLuong()
-    }
-
-    class BienBanKiemDem {
-        +UUID id
-        +UUID phieuXuatId
-        +UUID nguoiKiemId
-        +datetime kiemLuc
-        +string trangThai
-        +text? ghiChu
-        +kiemTraCanBang()
-        +tinhDenBu()
-        +xacNhan()
-    }
-
-    class DongKiemDem {
-        +UUID id
-        +UUID bienBanId
-        +UUID dongXuatId
-        +int thuHoiTot
-        +int hu
-        +int mat
-        +int soKhachChiu
-        +money donGiaBoiThuongChot
-        +text? lyDo
-        +tinhDenBu()
-    }
-
-    class XuLyDungCuHu {
-        +UUID id
-        +UUID dungCuId
-        +int soLuong
-        +string loai
-        +text lyDo
-        +UUID nguoiGhiId
-        +datetime thoiDiem
-        +apDung()
-    }
-
-    PhieuNhapDungCu "1" *-- "1..*" DongNhapDungCu : gom
-    PhieuXuatDungCu "1" *-- "1..*" DongXuatDungCu : gom
-    PhieuXuatDungCu "1" --> "0..1" BienBanKiemDem : lapBienBan
-    BienBanKiemDem "1" *-- "1..*" DongKiemDem : gom
-    DongXuatDungCu "1" <-- "1" DongKiemDem : kiemTheoDongXuat
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-dung-cu-tai-nguyen" -->
 
 ### Ràng buộc nghiệp vụ
 
@@ -1649,38 +1579,6 @@ kd --> dx : kiemTheoDongXuat
 
 ## Staff Assignment và đánh giá
 
-```mermaid
-classDiagram
-    direction TB
-    class PhanCongNhanSu {
-        +UUID id
-        +UUID buaId
-        +UUID nhanVienId
-        +string viTri
-        +text? nhiemVu
-        +datetime batDau
-        +datetime ketThuc
-        +string trangThai
-        +UUID nguoiPhanCongId
-        +kiemTraTrungLich()
-        +doiNguoi()
-        +huy()
-    }
-
-    class DanhGia {
-        +UUID id
-        +UUID buaId
-        +UUID khachHangId
-        +int diem
-        +text? nhanXet
-        +UUID nguoiNhapId
-        +datetime ngayNhap
-        +ghiNhan()
-    }
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-phan-cong-danh-gia" -->
-
 ### Ràng buộc nghiệp vụ
 
 - **PhanCongNhanSu**: Khung giờ làm việc có thể bao phủ hoặc lệch so với giờ phục vụ của Meal. Kiểm tra chặn trùng lịch khi tạo Staff Assignment cho Staff Member cụ thể. Năng lực nhân sự chung được dự trù theo vị trí của các Meal đang giữ trước khi gán người đích danh.
@@ -1718,64 +1616,6 @@ object "danhGiaB01 : DanhGia" as dg {
 <!-- diagram id="vitepress-plugin-digrams-object-phan-cong-danh-gia" -->
 
 ## Dịch vụ miền (Domain Services)
-
-```mermaid
-classDiagram
-    direction TB
-    class KiemTraTaiNguyen {
-        <<service>>
-        +kiemTra(bua, khoangGio)
-        +giuTam(don)
-        +chuyenChinhThuc(hopDong)
-        +nha(bua)
-    }
-
-    class TinhGia {
-        <<service>>
-        +tinhBua()
-        +tinhGiaMonGoiY()
-        +tinhChenhLechPhuLuc()
-        +lamTron500()
-    }
-
-    class ThanhToan {
-        <<service>>
-        +taoYeuCau()
-        +ghiThuCong()
-        +nhanKetQua()
-        +phanBo()
-        +ghiHoan()
-    }
-
-    class ChotNguyenLieuThang {
-        <<service>>
-        +tongHopNhap()
-        +layTonDau()
-        +dinhGiaTonCuoi()
-        +tinhFoodCost()
-        +chotKy()
-    }
-
-    class DeXuatGiaThang {
-        <<service>>
-        +taoNeuChuaCo(thang)
-        +tinhTrongSo()
-        +xuLyDong()
-        +layMonAnhHuong()
-    }
-
-    class BaoCao {
-        <<service>>
-        +doanhThuTheoBua()
-        +foodCostTheoKy()
-        +laiTheoNguyenLieu()
-        +thuHoan()
-        +haoHut()
-        +dashboard()
-    }
-```
-
-<!-- diagram id="vitepress-plugin-digrams-class-dich-vu-mien" -->
 
 ### Ví dụ sơ đồ đối tượng
 
