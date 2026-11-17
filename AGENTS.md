@@ -16,10 +16,11 @@ tsconfig.base.json
 
 ## Docs
 
-- Should read and use this as source of specification, always reflect the current state of the system
-- Do not introduce new concepts, business rules that are out of scope, not in docs with no asking and confirmation
-- Docs is the contract, the specification, always
-- Ensure do not commit any generated svg diagrams
+- Docs are the contract. Read the relevant `docs/src/business/` topic before changing business logic
+- `docs/src/specification.md` defines scope and business rules; `docs/src/business/system-parameters.md` defines parameter values and limits
+- Use `docs/src/models/domain-model.md` for domain terminology and relationships. Keep implementation and docs aligned
+- Mocks and historical UI notes do not override the specification. Flag conflicts; ask before introducing new concepts or out-of-scope rules.
+- Do not commit generated SVG diagrams
 
 ## Technologies
 
