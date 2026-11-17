@@ -52,6 +52,7 @@ catalog:
   "@types/react-dom": ^19.3.0
 
   modern-web-guidance: ^1.0.0
+  '@colbymchenry/codegraph': ^1.6.2
 
 allowBuilds:
   esbuild: true

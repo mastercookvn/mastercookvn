@@ -1,0 +1,3 @@
+{
+  "deprioritize": [".claude/hooks/", ".codex/hooks/"]
+}

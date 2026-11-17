@@ -1,4 +1,17 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "formatter": true,
+  "mcp": {
+    "servers": {
+      "codegraph": {
+        "type": "local",
+        "command": ["pnpm", "exec", "codegraph", "serve", "--mcp"],
+        "disabled": false,
+        "codemode": false,
+        "environment": {
+          "CODEGRAPH_TELEMETRY": "0",
+        },
+      },
+    },
+  },
 }

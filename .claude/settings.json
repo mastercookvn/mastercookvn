@@ -14,6 +14,16 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm exec codegraph prompt-hook"
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {
@@ -28,5 +38,8 @@
         "repo": "GoogleChrome/modern-web-guidance"
       }
     }
+  },
+  "permissions": {
+    "allow": ["mcp__codegraph__*"]
   }
 }
