@@ -4,7 +4,7 @@ Read the root `AGENTS.md` and `backend/README.md` as well as these instructions.
 
 ## Specification and scope
 
-- Start with `docs/src/specification.md`, then the relevant use cases and workflows under `docs/src/nghiep-vu/` and the class model under `docs/src/mo-hinh/`. Cite the BR/UC identifiers that govern a change.
+- Start with `docs/src/specification.md`, then the relevant use cases and workflows under `docs/src/business/` and the class model under `docs/src/models/`. Cite the BR/UC identifiers that govern a change.
 - Use an agreed API contract when one exists. The frontend's mocks, local storage and pricing tests are examples, not the backend specification. Resolve contradictions with the specification before implementation; phone/password authentication does not imply OTP.
 - Keep documentation aligned with implemented behavior. Observe `docs/AGENTS.md` when changing docs, and never commit generated SVG diagrams.
 - Implement one complete use case at a time. The class diagram describes the domain; it is not a request to generate every entity, repository or CRUD endpoint.

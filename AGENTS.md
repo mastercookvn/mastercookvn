@@ -46,7 +46,7 @@ tsconfig.base.json
 ## Rules
 
 - Use convetional commits, scope allowed (docs, web, backend, repo), others are not
-- Might use variable and function name in vietnamese, not english
+- Use English domain names, identifiers and enum values consistently with the docs; keep user-facing content in Vietnamese
 - Use pnpm workspace, packages catalog, in `pnpm-workspace.yaml`, `pnpm dlx` over npx
 - Do not wrap small/obvious logic (error handling, simple mapping) into a function, inline it for readability
 - **No writing unnecessary comments** in the code

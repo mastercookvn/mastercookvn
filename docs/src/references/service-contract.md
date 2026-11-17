@@ -2,13 +2,13 @@
 order: 10
 ---
 
-# Nội dung hợp đồng dịch vụ tiệc lưu động
+# Catering Service Contract Contents
 
 Tài liệu này mô tả nội dung hợp đồng dùng trong đề tài. Dữ liệu từng hợp đồng lấy từ hồ sơ đặt tiệc; không nhập lại qua một biểu mẫu riêng.
 
-Quy tắc nghiệp vụ làm gốc nằm trong [đặc tả phần mềm](../specification.md). Hợp đồng đã xác nhận phải giữ nội dung và giá đã chốt; thay đổi danh mục về sau không sửa hợp đồng cũ.
+Quy tắc nghiệp vụ làm gốc nằm trong [MasterCookVN Software Specification](../specification.md). Hợp đồng đã xác nhận phải giữ nội dung và giá đã chốt; thay đổi danh mục về sau không sửa hợp đồng cũ.
 
-## 1. Các bên và phạm vi dịch vụ
+## 1. Parties and Service Scope
 
 Bên cung cấp là cơ sở MasterCookVN. Bên đặt tiệc là khách hàng được ghi nhận bằng họ tên, số điện thoại và thông tin liên hệ trong hồ sơ hợp đồng.
 
@@ -25,7 +25,7 @@ Số bàn ăn là căn cứ tính thực đơn và định lượng theo bàn ch
 
 Cơ sở cung cấp món ăn và các dịch vụ đã ghi trong hợp đồng tại địa điểm của khách; không cung cấp mặt bằng tổ chức.
 
-## 2. Giá trị và đơn giá
+## 2. Value and Unit Prices
 
 Giá trị mỗi bữa gồm tiền thực đơn theo số bàn ăn, tiền dịch vụ, phí vận chuyển theo khoảng cách khảo sát và phụ thu đã thống nhất. Hợp đồng thể hiện cách tính từng khoản và tổng giá trị các bữa.
 
@@ -35,7 +35,7 @@ Khảo sát địa điểm có thể làm phát sinh khoản phụ thu; khoản 
 
 Quy tắc tính giá và làm tròn tham chiếu BR04 trong đặc tả phần mềm.
 
-## 3. Xác nhận hợp đồng và đặt cọc
+## 3. Contract Confirmation and Deposit
 
 Khách có tài khoản xem hợp đồng và xác nhận đồng ý trên hệ thống. Khách không có tài khoản ký bản giấy tại quầy; nhân viên chụp hoặc quét bản đã ký và upload vào hồ sơ hợp đồng.
 
@@ -49,7 +49,7 @@ Sau khi đơn được xác nhận, hệ thống giữ chỗ chờ cọc trong 2
 
 Cọc bắt buộc ban đầu được phân bổ cho từng bữa bằng 50% giá trị bữa đó. Phần khách trả vượt được ghi nhận là tiền trả trước. Sau điều chỉnh, cọc bổ sung áp dụng theo BR09; không tự yêu cầu bổ sung cho mọi thay đổi nhỏ. Khi hủy, căn cứ áp tỷ lệ hoàn là mức nhỏ hơn giữa 50% giá trị bữa hiện hành và tiền đã thu còn phân bổ cho bữa; phần vượt căn cứ này hoàn đủ.
 
-## 4. Điều chỉnh nội dung trước tiệc
+## 4. Changes Before the Meal
 
 Mỗi yêu cầu điều chỉnh phải xác định rõ bữa bị thay đổi và nội dung trước, sau. Các bữa còn lại tiếp tục thực hiện theo hợp đồng đã chốt.
 
@@ -63,7 +63,7 @@ Khoản cọc đã thu được giữ để đối trừ khi quyết toán; trư
 
 Không dời ngày tiệc. Không xử lý yêu cầu thêm món, thêm bàn ăn hoặc thêm dịch vụ trong khi bữa tiệc đang diễn ra.
 
-## 5. Hủy bữa tiệc và xử lý tiền đã trả
+## 5. Meal Cancellation and Paid Amounts
 
 Khách có thể hủy từng bữa hoặc toàn bộ hợp đồng. Thời hạn hủy của từng bữa tính từ thời điểm yêu cầu hủy được ghi nhận đến giờ bắt đầu bữa đó, theo BR10.
 
@@ -81,7 +81,7 @@ Với trường hợp sau giờ bắt đầu hoặc khách không có mặt, chi
 
 Nhân viên thực hiện hoàn tiền ngoài hệ thống, sau đó ghi nhận giao dịch hoàn và upload bằng chứng. Hồ sơ thể hiện số tiền phải hoàn và số tiền đã hoàn; không cần tạo mẫu phiếu hoàn riêng trong phần mềm.
 
-## 6. Dụng cụ và bồi thường
+## 6. Equipment and Compensation
 
 Danh sách dụng cụ cùng đơn giá bồi thường là một phần nội dung được khách biết khi xác nhận hợp đồng.
 
@@ -91,7 +91,7 @@ Theo từng loại dụng cụ, tổng hư + mất không vượt TS25 (mặc đ
 
 Hư hỏng do nhân viên không tính cho khách và không xử lý khấu trừ lương trên hệ thống.
 
-## 7. Quyết toán và hoàn tất
+## 7. Settlement and Completion
 
 Mỗi bữa có số liệu phục vụ, thu hồi dụng cụ và khoản bồi thường riêng. Quyết toán hợp đồng tổng hợp các bữa còn hiệu lực, điều chỉnh đã xác nhận và các khoản phải trả hoặc phải hoàn của bữa bị hủy.
 
@@ -101,7 +101,7 @@ Khách thanh toán đủ số còn phải trả bằng tiền mặt hoặc onlin
 
 Hợp đồng hoàn tất khi các bữa đã thực hiện hoặc hủy, dụng cụ đã được đối chiếu và các khoản thu, hoàn đã xử lý xong. Bữa hủy vẫn giữ trạng thái đã hủy sau khi quyết toán xong, không trở thành bữa đã phục vụ. Không đóng hợp đồng khi còn khoản phải thu hoặc phải hoàn; không có nghiệp vụ cho khách mua chịu.
 
-## 8. Nội dung đính kèm
+## 8. Attachments
 
 Hồ sơ hợp đồng lưu nội dung từng bữa, danh sách món và dịch vụ, khảo sát, đơn giá bồi thường, các điều chỉnh đã xác nhận và bằng chứng ký hoặc hoàn tiền nếu có.
 

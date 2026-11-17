@@ -7,9 +7,9 @@ hero:
   text: Nấu cả Việt Nam, ngon vô đây
   actions:
     - theme: brand
-      text: Đặc tả phần mềm
+      text: MasterCookVN Software Specification
       link: /specification
     - theme: alt
-      text: Nghiệp vụ và Use Case
-      link: /nghiep-vu/
+      text: Business
+      link: /business/
 ---
