@@ -20,6 +20,18 @@ import {
 } from "@/constants/statuses";
 import type { MediaKey } from "@/lib/media";
 import type { ServingWave } from "@/lib/servingWaves";
+import {
+  PRICE_PROPOSAL_DECISION_LABEL,
+  type PriceProposalDecision,
+} from "@/constants/priceProposal";
+import {
+  STAFF_POSITION_LABEL,
+  STAFF_TYPE_LABEL,
+  STAFF_GENDER_LABEL,
+  type StaffPosition,
+  type StaffType,
+  type StaffGender,
+} from "@/constants/staffing";
 
 import {
   DISHES,
@@ -32,17 +44,14 @@ import {
 } from "./catalog";
 import {
   EQUIPMENT,
+  EQUIPMENT_BASIS_LABEL,
+  type EquipmentBasis,
   type CountReport,
   type EquipmentPurchase,
 } from "./equipment";
 import { DISH_RECIPES, INGREDIENTS, type Purchase } from "./inventory";
 import { MEAL_ASSIGNMENTS } from "./operationMeals";
-import {
-  STAFF,
-  STAFF_ACCOUNTS,
-  type StaffAccount,
-  type StaffMember,
-} from "./people";
+import { STAFF, STAFF_ACCOUNTS, type StaffAccount, type Staff } from "./people";
 
 export type EstimateMeal = {
   format: ServingFormat;
@@ -128,7 +137,7 @@ const INITIAL_STATE = {
   contractIssued: false,
   paperSigned: false,
   periodClosed: false,
-  priceDecisions: {} as Record<number, string>,
+  priceDecisions: {} as Record<number, PriceProposalDecision>,
   mealStatuses: {
     "0120": MEAL_STATUS.AwaitingCount,
     "0115": MEAL_STATUS.Confirmed,
@@ -140,7 +149,7 @@ const INITIAL_STATE = {
   menuSets: MENU_SETS as MenuSet[],
   services: SERVICES as Service[],
   eventTypes: EVENT_TYPES as string[],
-  staff: STAFF as StaffMember[],
+  staff: STAFF as Staff[],
   staffAccounts: STAFF_ACCOUNTS as StaffAccount[],
   ingredients: INGREDIENTS,
   recipes: DISH_RECIPES,
@@ -173,10 +182,73 @@ const listeners = new Set<() => void>();
 
 const notify = () => listeners.forEach((listener) => listener());
 
+export function normalizeSavedState(
+  saved: Partial<DemoState>
+): Partial<DemoState> {
+  const normalize = <T extends string>(
+    value: T,
+    labels: Record<T, string>
+  ): T =>
+    (Object.entries(labels).find(([, label]) => label === value)?.[0] as
+      T | undefined) ?? value;
+  return {
+    ...saved,
+    ...(saved.priceDecisions && {
+      priceDecisions: Object.fromEntries(
+        Object.entries(saved.priceDecisions).map(([key, value]) => [
+          key,
+          normalize(value, PRICE_PROPOSAL_DECISION_LABEL),
+        ])
+      ),
+    }),
+    ...(saved.staff && {
+      staff: saved.staff.map((member) => ({
+        ...member,
+        position: normalize(
+          member.position,
+          STAFF_POSITION_LABEL as Record<StaffPosition, string>
+        ),
+        type: normalize(
+          member.type,
+          STAFF_TYPE_LABEL as Record<StaffType, string>
+        ),
+        ...(member.gender && {
+          gender: normalize(
+            member.gender,
+            STAFF_GENDER_LABEL as Record<StaffGender, string>
+          ),
+        }),
+      })),
+    }),
+    ...(saved.assignments && {
+      assignments: Object.fromEntries(
+        Object.entries(saved.assignments).map(([meal, rows]) => [
+          meal,
+          rows.map((row) => ({
+            ...row,
+            position: normalize(row.position, STAFF_POSITION_LABEL),
+          })),
+        ])
+      ),
+    }),
+    ...(saved.equipment && {
+      equipment: saved.equipment.map((item) => ({
+        ...item,
+        basis: normalize(
+          item.basis,
+          EQUIPMENT_BASIS_LABEL as Record<EquipmentBasis, string>
+        ),
+      })),
+    }),
+  };
+}
+
 function readSavedState(): Partial<DemoState> {
   try {
     const saved = window.localStorage.getItem(STATE_KEY);
-    return saved ? (JSON.parse(saved) as Partial<DemoState>) : {};
+    return saved
+      ? normalizeSavedState(JSON.parse(saved) as Partial<DemoState>)
+      : {};
   } catch (error) {
     console.warn("Ignoring unreadable demo state", error);
     return {};

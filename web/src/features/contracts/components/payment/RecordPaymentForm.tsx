@@ -9,6 +9,12 @@ import { SelectField } from "@/components/ui/SelectField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { SETTLEMENT_STATUS } from "@/constants/statuses";
+import {
+  PAYMENT_METHOD,
+  PAYMENT_METHOD_LABEL,
+  PAYMENT_METHOD_OPTIONS,
+  type PaymentMethod,
+} from "@/constants/payment";
 import { formatMoney, formatNumber } from "@/lib/format";
 import {
   CONTRACT_COMPANY,
@@ -28,8 +34,6 @@ import {
 
 import { AllocationPreview } from "./AllocationPreview";
 import { AmountDueCard } from "./AmountDueCard";
-
-const PAYMENT_METHODS = ["Tiền mặt", "Chuyển khoản"];
 
 const parseAmount = (text: string) => Number(text.replace(/\D/g, ""));
 
@@ -62,7 +66,7 @@ export function RecordPaymentForm({
     : Math.max(minimumDeposit(CONTRACT_WEDDING) - paid, 0);
 
   const [amountText, setAmountText] = useState(() => formatNumber(due));
-  const [method, setMethod] = useState(PAYMENT_METHODS[0]);
+  const [method, setMethod] = useState<PaymentMethod>(PAYMENT_METHOD.Cash);
   const [receivedOn, setReceivedOn] = useState("05/11/2026");
   const [voucher, setVoucher] = useState("");
   const [voucherPhotos, setVoucherPhotos] = useState<string[]>([]);
@@ -124,7 +128,7 @@ export function RecordPaymentForm({
     setVoucherPhotos([]);
     setSubmitted(false);
     showToast(
-      `Đã ghi ${formatMoney(amount)} (${method}) cho ${contract.number}, chứng từ ${voucher.trim()}`
+      `Đã ghi ${formatMoney(amount)} (${PAYMENT_METHOD_LABEL[method]}) cho ${contract.number}, chứng từ ${voucher.trim()}`
     );
   };
 
@@ -169,9 +173,9 @@ export function RecordPaymentForm({
             <SelectField
               id="payment-method"
               label="Phương thức"
-              options={PAYMENT_METHODS}
+              options={PAYMENT_METHOD_OPTIONS}
               value={method}
-              onValueChange={(value) => setMethod(value)}
+              onValueChange={(value) => setMethod(value as PaymentMethod)}
             />
             <TextField
               id="payment-date"

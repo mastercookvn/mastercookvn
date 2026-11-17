@@ -3,7 +3,7 @@ import { num } from "@/components/ui/tableColumns";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ROUTES } from "@/constants/routes";
 import { formatMoney } from "@/lib/format";
-import type { OrderRow } from "@/mocks/orders";
+import { ORDER_CHANNEL_LABEL, type OrderRow } from "@/mocks/orders";
 
 export function OrderTable({ orders }: { orders: OrderRow[] }) {
   return (
@@ -29,7 +29,7 @@ export function OrderTable({ orders }: { orders: OrderRow[] }) {
         order.meals,
         order.firstDate,
         <span key="channel" className="text-soft">
-          {order.channel}
+          {ORDER_CHANNEL_LABEL[order.channel]}
         </span>,
         formatMoney(order.total),
         <StatusBadge key="status" domain="order" status={order.status} />,

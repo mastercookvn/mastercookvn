@@ -16,14 +16,14 @@ export type StaffingDemand = Record<StaffPosition, number>;
 
 export type PlannedShift = {
   staff: string;
-  position: string;
+  position: StaffPosition;
   task: string;
   hours: string;
 };
 
 export type StaffCandidate = {
   name: string;
-  position: string;
+  position: StaffPosition;
   permanent: boolean;
   active: boolean;
 };

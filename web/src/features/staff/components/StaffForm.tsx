@@ -19,8 +19,19 @@ import {
   toLocalPhone,
 } from "@/lib/validation";
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
-import { STAFF_POSITIONS } from "@/mocks/operationMeals";
-import { STAFF_GENDERS, STAFF_TYPES, type StaffMember } from "@/mocks/people";
+import {
+  STAFF_GENDER,
+  STAFF_GENDERS,
+  STAFF_GENDER_LABEL,
+  STAFF_POSITION,
+  STAFF_POSITIONS,
+  STAFF_POSITION_LABEL,
+  STAFF_TYPE,
+  STAFF_TYPES,
+  STAFF_TYPE_LABEL,
+  type StaffPosition,
+} from "@/constants/staffing";
+import type { Staff } from "@/mocks/people";
 
 const optionalDate = z
   .string()
@@ -53,19 +64,19 @@ export function StaffForm({
   onSaved,
 }: {
   formId: string;
-  member: StaffMember | null;
+  member: Staff | null;
   onSaved: () => void;
 }) {
   const showToast = useToast();
   const [photo, setPhoto] = useState<string | null>(member?.photo ?? null);
   const [gender, setGender] = useState<(typeof STAFF_GENDERS)[number]>(
-    member?.gender ?? STAFF_GENDERS[0]
+    member?.gender ?? STAFF_GENDER.Male
   );
   const [type, setType] = useState<(typeof STAFF_TYPES)[number]>(
-    member?.type ?? STAFF_TYPES[1]
+    member?.type ?? STAFF_TYPE.Temporary
   );
   const [position, setPosition] = useState(
-    member?.position ?? STAFF_POSITIONS[0]
+    member?.position ?? STAFF_POSITION.Server
   );
   const ownPhone = toLocalPhone(member?.phone ?? "");
   const {
@@ -91,7 +102,7 @@ export function StaffForm({
 
   const save = handleSubmit((values) => {
     const digits = values.phone;
-    const profile: StaffMember = {
+    const profile: Staff = {
       name: values.name,
       phone: `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`,
       type,
@@ -154,7 +165,10 @@ export function StaffForm({
           <SelectField
             id="staff-gender"
             label="Giới tính"
-            options={STAFF_GENDERS}
+            options={STAFF_GENDERS.map((value) => ({
+              value,
+              label: STAFF_GENDER_LABEL[value],
+            }))}
             value={gender}
             onValueChange={(value) =>
               setGender(value as (typeof STAFF_GENDERS)[number])
@@ -189,14 +203,20 @@ export function StaffForm({
           <SelectField
             id="staff-position"
             label="Vị trí"
-            options={STAFF_POSITIONS}
+            options={STAFF_POSITIONS.map((value) => ({
+              value,
+              label: STAFF_POSITION_LABEL[value],
+            }))}
             value={position}
-            onValueChange={setPosition}
+            onValueChange={(value) => setPosition(value as StaffPosition)}
           />
           <SelectField
             id="staff-type"
             label="Loại hợp đồng"
-            options={STAFF_TYPES}
+            options={STAFF_TYPES.map((value) => ({
+              value,
+              label: STAFF_TYPE_LABEL[value],
+            }))}
             value={type}
             onValueChange={(value) =>
               setType(value as (typeof STAFF_TYPES)[number])

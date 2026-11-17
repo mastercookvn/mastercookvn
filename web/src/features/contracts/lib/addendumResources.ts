@@ -1,4 +1,4 @@
-import { STAFF_POSITIONS } from "@/constants/staffing";
+import { STAFF_POSITIONS, STAFF_POSITION_LABEL } from "@/constants/staffing";
 import type { ServingWave } from "@/lib/servingWaves";
 import { waveTotals } from "@/lib/servingWaves";
 import { staffingDemand } from "@/lib/staffingPlan";
@@ -50,7 +50,9 @@ export function addedTablesShortages({
         !busyStaff.includes(member.name)
     ).length;
     const missing = demand[position] - available;
-    return missing > 0 ? [`Thiếu ${missing} ${position.toLowerCase()}`] : [];
+    return missing > 0
+      ? [`Thiếu ${missing} ${STAFF_POSITION_LABEL[position].toLowerCase()}`]
+      : [];
   });
 
   const equipmentShort = equipment.flatMap((item) => {

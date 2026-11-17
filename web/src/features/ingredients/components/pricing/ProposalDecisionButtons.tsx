@@ -2,9 +2,12 @@
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import {
+  PRICE_PROPOSAL_DECISION,
+  PRICE_PROPOSAL_DECISION_LABEL,
+  type PriceProposalDecision,
+} from "@/constants/priceProposal";
 import { updateDemoState, useDemoState } from "@/mocks/demoStore";
-
-const SKIPPED = "Bỏ qua";
 
 export function ProposalDecisionButtons({ index }: { index: number }) {
   const decisions = useDemoState((state) => state.priceDecisions);
@@ -12,11 +15,15 @@ export function ProposalDecisionButtons({ index }: { index: number }) {
 
   if (decision) {
     return (
-      <Badge tone={decision === SKIPPED ? "neutral" : "good"}>{decision}</Badge>
+      <Badge
+        tone={decision === PRICE_PROPOSAL_DECISION.Skipped ? "neutral" : "good"}
+      >
+        {PRICE_PROPOSAL_DECISION_LABEL[decision]}
+      </Badge>
     );
   }
 
-  const decide = (value: string) =>
+  const decide = (value: PriceProposalDecision) =>
     updateDemoState({ priceDecisions: { ...decisions, [index]: value } });
 
   return (
@@ -24,14 +31,17 @@ export function ProposalDecisionButtons({ index }: { index: number }) {
       <Button
         size="sm"
         variant="primary"
-        onClick={() => decide("Đã chấp nhận")}
+        onClick={() => decide(PRICE_PROPOSAL_DECISION.Accepted)}
       >
         Chấp nhận
       </Button>
-      <Button size="sm" onClick={() => decide("Đã chỉnh giá")}>
+      <Button
+        size="sm"
+        onClick={() => decide(PRICE_PROPOSAL_DECISION.Adjusted)}
+      >
         Chỉnh
       </Button>
-      <Button size="sm" onClick={() => decide(SKIPPED)}>
+      <Button size="sm" onClick={() => decide(PRICE_PROPOSAL_DECISION.Skipped)}>
         Bỏ qua
       </Button>
     </div>

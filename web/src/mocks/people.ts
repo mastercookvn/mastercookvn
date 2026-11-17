@@ -1,4 +1,12 @@
 import { ROLE, type Role } from "@/constants/roles";
+import {
+  STAFF_GENDER,
+  STAFF_POSITION,
+  STAFF_TYPE,
+  type StaffGender,
+  type StaffPosition,
+  type StaffType,
+} from "@/constants/staffing";
 
 export type StaffAccount = {
   name: string;
@@ -46,20 +54,16 @@ export const STAFF_ACCOUNTS: StaffAccount[] = [
   },
 ];
 
-export const STAFF_TYPES = ["Cố định", "Thời vụ"] as const;
-
-export const STAFF_GENDERS = ["Nam", "Nữ", "Khác"] as const;
-
-export type StaffMember = {
+export type Staff = {
   name: string;
   phone: string;
-  type: (typeof STAFF_TYPES)[number];
-  position: string;
+  type: StaffType;
+  position: StaffPosition;
   active: boolean;
   hasAccount: boolean;
   /** Data URL of the portrait. */
   photo?: string;
-  gender?: (typeof STAFF_GENDERS)[number];
+  gender?: StaffGender;
   birthDate?: string;
   address?: string;
   startDate?: string;
@@ -67,15 +71,15 @@ export type StaffMember = {
   note?: string;
 };
 
-export const STAFF: StaffMember[] = [
+export const STAFF: Staff[] = [
   {
     name: "Nguyễn Văn Hùng",
     phone: "0912 000 111",
-    type: "Cố định",
-    position: "Bếp",
+    type: STAFF_TYPE.Permanent,
+    position: STAFF_POSITION.Cook,
     active: true,
     hasAccount: false,
-    gender: "Nam",
+    gender: STAFF_GENDER.Male,
     birthDate: "12/03/1985",
     address: "Q. Gò Vấp, TP.HCM",
     startDate: "01/06/2019",
@@ -84,27 +88,27 @@ export const STAFF: StaffMember[] = [
   {
     name: "Lê Thị Hoa",
     phone: "0912 000 222",
-    type: "Cố định",
-    position: "Bếp",
+    type: STAFF_TYPE.Permanent,
+    position: STAFF_POSITION.Cook,
     active: true,
     hasAccount: false,
   },
   {
     name: "Phạm Quốc Bảo",
     phone: "0912 000 333",
-    type: "Cố định",
-    position: "Vận chuyển",
+    type: STAFF_TYPE.Permanent,
+    position: STAFF_POSITION.Driver,
     active: true,
     hasAccount: false,
   },
   {
     name: "Đỗ Minh Tâm",
     phone: "0912 000 444",
-    type: "Thời vụ",
-    position: "Phục vụ",
+    type: STAFF_TYPE.Temporary,
+    position: STAFF_POSITION.Server,
     active: true,
     hasAccount: false,
-    gender: "Nam",
+    gender: STAFF_GENDER.Male,
     birthDate: "08/09/2002",
     address: "Q. Bình Thạnh, TP.HCM",
     startDate: "15/03/2025",
@@ -113,32 +117,32 @@ export const STAFF: StaffMember[] = [
   {
     name: "Vũ Thu Trang",
     phone: "0912 000 555",
-    type: "Thời vụ",
-    position: "Phục vụ",
+    type: STAFF_TYPE.Temporary,
+    position: STAFF_POSITION.Server,
     active: true,
     hasAccount: false,
   },
   {
     name: "Trịnh Quốc Bảo",
     phone: "0912 000 888",
-    type: "Thời vụ",
-    position: "Phục vụ",
+    type: STAFF_TYPE.Temporary,
+    position: STAFF_POSITION.Server,
     active: true,
     hasAccount: false,
   },
   {
     name: "Hoàng Anh Khoa",
     phone: "0912 000 666",
-    type: "Cố định",
-    position: "Kiểm đếm",
+    type: STAFF_TYPE.Permanent,
+    position: STAFF_POSITION.Counter,
     active: true,
     hasAccount: true,
   },
   {
     name: "Bùi Ngọc Lan",
     phone: "0912 000 777",
-    type: "Thời vụ",
-    position: "Phục vụ",
+    type: STAFF_TYPE.Temporary,
+    position: STAFF_POSITION.Server,
     active: false,
     hasAccount: false,
   },

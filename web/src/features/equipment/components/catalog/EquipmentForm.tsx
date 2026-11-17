@@ -19,11 +19,11 @@ import {
 import { readDemoState, updateDemoState } from "@/mocks/demoStore";
 import {
   EQUIPMENT_BASIS,
+  EQUIPMENT_BASES,
+  EQUIPMENT_BASIS_LABEL,
   type EquipmentBasis,
   type EquipmentType,
 } from "@/mocks/equipment";
-
-const MANUAL_BASIS: EquipmentBasis = "Nhập theo bữa";
 
 const parseDecimal = (text: string) => Number(text.replace(",", ".")) || 0;
 
@@ -64,7 +64,7 @@ export function EquipmentForm({
 }) {
   const showToast = useToast();
   const [basis, setBasis] = useState<EquipmentBasis>(
-    item?.basis ?? EQUIPMENT_BASIS[0]
+    item?.basis ?? EQUIPMENT_BASIS.Person
   );
   const [image, setImage] = useState<string | null>(item?.image ?? null);
   const {
@@ -87,7 +87,7 @@ export function EquipmentForm({
     },
   });
   const name = useWatch({ control, name: "name" });
-  const manual = basis === MANUAL_BASIS;
+  const manual = basis === EQUIPMENT_BASIS.Manual;
 
   const save = handleSubmit((values) => {
     const fields = {
@@ -146,7 +146,10 @@ export function EquipmentForm({
         <SelectField
           id="equipment-basis"
           label="Cơ sở định mức"
-          options={[...EQUIPMENT_BASIS]}
+          options={EQUIPMENT_BASES.map((value) => ({
+            value,
+            label: EQUIPMENT_BASIS_LABEL[value],
+          }))}
           value={basis}
           onValueChange={(value) => setBasis(value as EquipmentBasis)}
         />
@@ -154,7 +157,7 @@ export function EquipmentForm({
           <>
             <TextField
               id="equipment-rate"
-              label={`Định mức / ${basis.toLowerCase()}`}
+              label={`Định mức / ${EQUIPMENT_BASIS_LABEL[basis].toLowerCase()}`}
               inputMode="decimal"
               {...register("rate")}
               error={errors.rate?.message}

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { MEAL_STATUS_META } from "@/constants/labels";
+import { STAFF_POSITION } from "@/constants/staffing";
 import { MEAL_PROGRESS, MEAL_STATUS } from "@/constants/statuses";
 import { servingStaffNeeded } from "@/lib/pricing";
 import { useDemoState } from "@/mocks/demoStore";
@@ -22,7 +23,7 @@ export function ProgressStepper({ meal }: { meal: OperationMeal }) {
   const servers = useDemoState(
     (state) =>
       (state.assignments[meal.id] ?? []).filter(
-        (row) => row.position === "Phục vụ"
+        (row) => row.position === STAFF_POSITION.Server
       ).length
   );
   const showToast = useToast();

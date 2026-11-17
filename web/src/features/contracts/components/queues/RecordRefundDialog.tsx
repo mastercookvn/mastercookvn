@@ -7,6 +7,7 @@ import { Dialog } from "@/components/ui/Dialog";
 import { SelectField } from "@/components/ui/SelectField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
+import { PAYMENT_METHOD, PAYMENT_METHOD_OPTIONS } from "@/constants/payment";
 import { formatMoney, formatNumber } from "@/lib/format";
 
 export function RecordRefundDialog({ remaining }: { remaining: number }) {
@@ -34,8 +35,8 @@ export function RecordRefundDialog({ remaining }: { remaining: number }) {
         <SelectField
           id="refund-method"
           label="Phương thức"
-          options={["Chuyển khoản", "Tiền mặt"]}
-          defaultValue="Chuyển khoản"
+          options={[...PAYMENT_METHOD_OPTIONS].reverse()}
+          defaultValue={PAYMENT_METHOD.BankTransfer}
         />
         <TextField
           id="refund-date"

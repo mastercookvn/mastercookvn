@@ -18,7 +18,7 @@ const ROLLING = [
 
 const person = (
   name: string,
-  position: string,
+  position: StaffCandidate["position"],
   permanent = true,
   active = true
 ): StaffCandidate => ({ name, position, permanent, active });
@@ -95,10 +95,30 @@ describe("staffingErrors", () => {
     expect(
       staffingErrors(
         [
-          { staff: "", position: "Bếp", task: "", hours: "10:00–12:00" },
-          { staff: "Tâm", position: "Phục vụ", task: "", hours: "10:00–12:00" },
-          { staff: "Tâm", position: "Phục vụ", task: "", hours: "11:00–13:00" },
-          { staff: "Hùng", position: "Bếp", task: "", hours: "10:00–12:00" },
+          {
+            staff: "",
+            position: STAFF_POSITION.Cook,
+            task: "",
+            hours: "10:00–12:00",
+          },
+          {
+            staff: "Tâm",
+            position: STAFF_POSITION.Server,
+            task: "",
+            hours: "10:00–12:00",
+          },
+          {
+            staff: "Tâm",
+            position: STAFF_POSITION.Server,
+            task: "",
+            hours: "11:00–13:00",
+          },
+          {
+            staff: "Hùng",
+            position: STAFF_POSITION.Cook,
+            task: "",
+            hours: "10:00–12:00",
+          },
         ],
         [{ staff: "Hùng", hours: "11:30–14:00" }]
       )

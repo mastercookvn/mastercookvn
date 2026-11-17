@@ -1,13 +1,21 @@
 import { CONTRACT_WEDDING } from "./contracts";
 import { equipmentNeeded } from "@/lib/pricing";
 
-export const EQUIPMENT_BASIS = [
-  "Người",
-  "Bàn bố trí",
-  "Bữa",
-  "Nhập theo bữa",
-] as const;
-export type EquipmentBasis = (typeof EQUIPMENT_BASIS)[number];
+export const EQUIPMENT_BASIS = {
+  Person: "PERSON",
+  SetupTable: "SETUP_TABLE",
+  Meal: "MEAL",
+  Manual: "MANUAL",
+} as const;
+export type EquipmentBasis =
+  (typeof EQUIPMENT_BASIS)[keyof typeof EQUIPMENT_BASIS];
+export const EQUIPMENT_BASES = Object.values(EQUIPMENT_BASIS);
+export const EQUIPMENT_BASIS_LABEL: Record<EquipmentBasis, string> = {
+  [EQUIPMENT_BASIS.Person]: "Người",
+  [EQUIPMENT_BASIS.SetupTable]: "Bàn bố trí",
+  [EQUIPMENT_BASIS.Meal]: "Bữa",
+  [EQUIPMENT_BASIS.Manual]: "Nhập theo bữa",
+};
 
 export type EquipmentType = {
   name: string;
@@ -31,7 +39,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Bát ăn sứ",
     unit: "cái",
-    basis: "Người",
+    basis: EQUIPMENT_BASIS.Person,
     rate: 1,
     reserve: 0.1,
     minimum: 400,
@@ -45,7 +53,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Đũa tre",
     unit: "đôi",
-    basis: "Người",
+    basis: EQUIPMENT_BASIS.Person,
     rate: 1,
     reserve: 0.1,
     minimum: 400,
@@ -59,7 +67,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Ly thủy tinh",
     unit: "cái",
-    basis: "Người",
+    basis: EQUIPMENT_BASIS.Person,
     rate: 1,
     reserve: 0.15,
     minimum: 300,
@@ -73,7 +81,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Bàn tròn",
     unit: "cái",
-    basis: "Bàn bố trí",
+    basis: EQUIPMENT_BASIS.SetupTable,
     rate: 1,
     reserve: null,
     minimum: 30,
@@ -87,7 +95,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Ghế nhựa",
     unit: "cái",
-    basis: "Bàn bố trí",
+    basis: EQUIPMENT_BASIS.SetupTable,
     rate: 10,
     reserve: 0.05,
     minimum: 300,
@@ -101,7 +109,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Nồi lẩu",
     unit: "cái",
-    basis: "Bàn bố trí",
+    basis: EQUIPMENT_BASIS.SetupTable,
     rate: 1,
     reserve: 0.1,
     minimum: 30,
@@ -115,7 +123,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Khay inox",
     unit: "cái",
-    basis: "Bữa",
+    basis: EQUIPMENT_BASIS.Meal,
     rate: 12,
     reserve: null,
     minimum: 30,
@@ -129,7 +137,7 @@ export const EQUIPMENT: EquipmentType[] = [
   {
     name: "Rạp che",
     unit: "bộ",
-    basis: "Nhập theo bữa",
+    basis: EQUIPMENT_BASIS.Manual,
     rate: null,
     reserve: null,
     minimum: 2,
@@ -169,9 +177,9 @@ export function equipmentDemand(
 ) {
   if (item.rate === null) return manual;
   const basis =
-    item.basis === "Người"
+    item.basis === EQUIPMENT_BASIS.Person
       ? guests
-      : item.basis === "Bàn bố trí"
+      : item.basis === EQUIPMENT_BASIS.SetupTable
         ? setupTables
         : 1;
   return equipmentNeeded(item.rate, basis, item.reserve ?? 0);
@@ -180,7 +188,7 @@ export function equipmentDemand(
 export const equipmentFormula = (item: EquipmentType) =>
   item.rate === null
     ? "Nhập theo bữa"
-    : `${item.rate} × ${item.basis.toLowerCase()}${item.reserve ? ` + ${Math.round(item.reserve * 100)}% dự trù` : ""}`;
+    : `${item.rate} × ${EQUIPMENT_BASIS_LABEL[item.basis].toLowerCase()}${item.reserve ? ` + ${Math.round(item.reserve * 100)}% dự trù` : ""}`;
 
 const HELD_OVERLAPPING: Record<string, number> = {
   "Bát ăn sứ": 200,

@@ -60,13 +60,23 @@ function sampleMeal(input: {
   };
 }
 
+export const ORDER_CHANNEL = {
+  Online: "ONLINE",
+  OnBehalf: "ON_BEHALF",
+} as const;
+export type OrderChannel = (typeof ORDER_CHANNEL)[keyof typeof ORDER_CHANNEL];
+export const ORDER_CHANNEL_LABEL: Record<OrderChannel, string> = {
+  [ORDER_CHANNEL.Online]: "Online",
+  [ORDER_CHANNEL.OnBehalf]: "Đặt hộ",
+};
+
 export type OrderRow = {
   code: string;
   customer: string;
   phone: string;
   meals: number;
   firstDate: string;
-  channel: string;
+  channel: OrderChannel;
   total: number;
   status: OrderStatus;
 };
@@ -78,7 +88,7 @@ export const ORDERS: OrderRow[] = [
     phone: CUSTOMER.phone,
     meals: 2,
     firstDate: "14/12/2026",
-    channel: "Online",
+    channel: ORDER_CHANNEL.Online,
     total: CONTRACT_WEDDING.total,
     status: ORDER_STATUS.Pending,
   },
@@ -88,7 +98,7 @@ export const ORDERS: OrderRow[] = [
     phone: "0978 222 333",
     meals: 1,
     firstDate: "28/11/2026",
-    channel: "Đặt hộ",
+    channel: ORDER_CHANNEL.OnBehalf,
     total: onBehalfPrice.total,
     status: ORDER_STATUS.Pending,
   },
@@ -98,7 +108,7 @@ export const ORDERS: OrderRow[] = [
     phone: "0935 444 555",
     meals: 1,
     firstDate: "22/11/2026",
-    channel: "Online",
+    channel: ORDER_CHANNEL.Online,
     total: CONTRACT_HOUSEWARMING.total,
     status: ORDER_STATUS.Accepted,
   },
@@ -108,7 +118,7 @@ export const ORDERS: OrderRow[] = [
     phone: "0283 666 777",
     meals: 1,
     firstDate: "25/10/2026",
-    channel: "Đặt hộ",
+    channel: ORDER_CHANNEL.OnBehalf,
     total: MEAL_COMPANY.price.total,
     status: ORDER_STATUS.Accepted,
   },
@@ -118,7 +128,7 @@ export const ORDERS: OrderRow[] = [
     phone: "0909 888 999",
     meals: 1,
     firstDate: "10/10/2026",
-    channel: "Online",
+    channel: ORDER_CHANNEL.Online,
     total: 15400000,
     status: ORDER_STATUS.Rejected,
   },

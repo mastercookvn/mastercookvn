@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
+import { STAFF_POSITION_LABEL } from "@/constants/staffing";
 import { useDemoState } from "@/mocks/demoStore";
 import type { OrderMeal } from "@/mocks/orders";
 
@@ -22,7 +23,7 @@ export function StaffCapacityTable({ meal }: { meal: OrderMeal }) {
         "Kết quả",
       ]}
       rows={staffCapacityRows(meal, staff, assignments).map((row) => [
-        row.position,
+        STAFF_POSITION_LABEL[row.position],
         row.needed,
         row.overlapping,
         row.active,

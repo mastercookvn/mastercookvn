@@ -9,6 +9,7 @@ import { PanelHeader } from "@/components/ui/PanelHeader";
 import { ORDER_STATUS_META } from "@/constants/labels";
 import { ORDER_STATUS } from "@/constants/statuses";
 import { useWorkspaceOrders } from "@/features/orders/lib/useOrders";
+import { ORDER_CHANNEL_LABEL } from "@/mocks/orders";
 
 import { OnBehalfOrderForm } from "../on-behalf/OnBehalfOrderForm";
 
@@ -64,7 +65,7 @@ export function OrderListPanel({ canCreate }: { canCreate: boolean }) {
                 order.phone,
                 order.meals,
                 order.firstDate,
-                order.channel,
+                ORDER_CHANNEL_LABEL[order.channel],
                 order.total,
                 ORDER_STATUS_META[order.status].label,
               ])}

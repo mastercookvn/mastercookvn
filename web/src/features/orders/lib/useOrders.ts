@@ -11,6 +11,7 @@ import {
 } from "@/mocks/demoStore";
 import {
   ORDER_MEALS,
+  ORDER_CHANNEL,
   ORDERS,
   type OrderMeal,
   type OrderRow,
@@ -65,7 +66,7 @@ function selectOrders(state: DemoState): WorkspaceOrder[] {
     phone: order.contact?.phone ?? "",
     meals: order.meals.length,
     firstDate: order.meals[0]?.date ?? "",
-    channel: "Online",
+    channel: ORDER_CHANNEL.Online,
     total: order.total,
     status: state.orderStatuses[order.code] ?? ORDER_STATUS.Pending,
     createdAt: order.submittedAt,

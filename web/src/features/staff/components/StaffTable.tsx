@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/ConfirmDelete";
 import { RowMenu } from "@/components/ui/RowMenu";
 import { useToast } from "@/components/ui/Toast";
-import { STAFF, type StaffMember } from "@/mocks/people";
+import { STAFF, type Staff } from "@/mocks/people";
+import { STAFF_POSITION_LABEL, STAFF_TYPE_LABEL } from "@/constants/staffing";
 import { DataTable } from "@/components/ui/DataTable";
 import { Drawer, DRAWER_SIZE } from "@/components/ui/Drawer";
 import { PanelHeader } from "@/components/ui/PanelHeader";
@@ -34,7 +35,7 @@ const initials = (name: string) =>
     .join("");
 
 /** Sample staff have past assignments, so they are deactivated instead. */
-const hasHistory = (member: StaffMember) =>
+const hasHistory = (member: Staff) =>
   STAFF.some((sample) => sample.phone === member.phone);
 
 export function StaffTable() {
@@ -42,7 +43,7 @@ export function StaffTable() {
   const [deleting, setDeleting] = useState<DeleteTarget>(null);
   const staff = useDemoState((state) => state.staff);
 
-  const setActive = (member: StaffMember, active: boolean) => {
+  const setActive = (member: Staff, active: boolean) => {
     updateDemoState({
       staff: readDemoState().staff.map((other) =>
         other.phone === member.phone ? { ...other, active } : other
@@ -102,8 +103,8 @@ export function StaffTable() {
               <small className="text-soft">{member.phone}</small>
             </span>
           </span>,
-          member.position,
-          member.type,
+          STAFF_POSITION_LABEL[member.position],
+          STAFF_TYPE_LABEL[member.type],
           member.startDate || "Chưa ghi",
           member.active ? (
             <Badge key="status" tone="good">
@@ -160,7 +161,7 @@ export function StaffTable() {
         title={editing ? `Hồ sơ: ${editing.name}` : "Thêm nhân viên"}
         description={
           editing
-            ? `${editing.position} · ${editing.type}${editing.hasAccount ? " · Có tài khoản đăng nhập" : ""}`
+            ? `${STAFF_POSITION_LABEL[editing.position]} · ${STAFF_TYPE_LABEL[editing.type]}${editing.hasAccount ? " · Có tài khoản đăng nhập" : ""}`
             : undefined
         }
         size={DRAWER_SIZE.Large}

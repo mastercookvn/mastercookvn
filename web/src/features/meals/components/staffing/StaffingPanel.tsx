@@ -13,6 +13,8 @@ import { useToast } from "@/components/ui/Toast";
 import {
   STAFF_POSITIONS,
   STAFF_POSITION,
+  STAFF_POSITION_LABEL,
+  STAFF_TYPE,
   STAFFING_RULES,
   type StaffPosition,
 } from "@/constants/staffing";
@@ -34,7 +36,6 @@ import {
   type Assignment,
   type OperationMeal,
 } from "@/mocks/operationMeals";
-import { STAFF_TYPES } from "@/mocks/people";
 
 import { MealStageNotice } from "../MealStageNotice";
 
@@ -45,8 +46,6 @@ const CLOSED_STAGES: string[] = [
   MEAL_STATUS.AwaitingSettlement,
   MEAL_STATUS.Completed,
 ];
-
-const PERMANENT = STAFF_TYPES[0];
 
 function demandReason(position: StaffPosition, meal: OperationMeal) {
   const { setupTables } = waveTotals(meal.waves);
@@ -100,7 +99,7 @@ function StaffingEditor({
       guestsPerTable: meal.guestsPerTable,
       staff: staff.map((member) => ({
         ...member,
-        permanent: member.type === PERMANENT,
+        permanent: member.type === STAFF_TYPE.Permanent,
       })),
       busy,
     });
@@ -119,7 +118,7 @@ function StaffingEditor({
     .filter((member) => member.active)
     .map((member) => ({
       value: member.name,
-      label: `${member.name} · ${member.position}`,
+      label: `${member.name} · ${STAFF_POSITION_LABEL[member.position]}`,
     }));
 
   const update = (index: number, patch: Partial<PlannedShift>) =>
@@ -170,7 +169,7 @@ function StaffingEditor({
             const needed = demand[position];
             return (
               <li key={position}>
-                <span>{position}</span>
+                <span>{STAFF_POSITION_LABEL[position]}</span>
                 <b>
                   {filled}
                   <small> / {needed}</small>
@@ -211,9 +210,14 @@ function StaffingEditor({
               <li key={index} className="staffing-plan-row">
                 <Select
                   aria-label={`Dòng ${index + 1} vị trí`}
-                  options={STAFF_POSITIONS}
+                  options={STAFF_POSITIONS.map((value) => ({
+                    value,
+                    label: STAFF_POSITION_LABEL[value],
+                  }))}
                   value={row.position}
-                  onValueChange={(position) => update(index, { position })}
+                  onValueChange={(position) =>
+                    update(index, { position: position as StaffPosition })
+                  }
                 />
                 <div className="l-stack min-w-0 gap-0.5">
                   <Select
@@ -225,7 +229,7 @@ function StaffingEditor({
                   />
                   {profile && profile.position !== row.position ? (
                     <small className="text-soft">
-                      Hồ sơ ghi vị trí {profile.position}
+                      Hồ sơ ghi vị trí {STAFF_POSITION_LABEL[profile.position]}
                     </small>
                   ) : null}
                 </div>

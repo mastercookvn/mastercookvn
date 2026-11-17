@@ -1,4 +1,5 @@
 import { MEAL_STATUS, type MealStatus } from "@/constants/statuses";
+import { STAFF_POSITION, type StaffPosition } from "@/constants/staffing";
 import { waveSpan, waveTotals, type ServingWave } from "@/lib/servingWaves";
 
 export type OperationMeal = {
@@ -76,7 +77,7 @@ export const operationMealById = (id: string) =>
 
 export type Assignment = {
   staff: string;
-  position: string;
+  position: StaffPosition;
   task: string;
   hours: string;
 };
@@ -86,13 +87,13 @@ export { STAFF_POSITIONS } from "@/constants/staffing";
 const DEFAULT_ASSIGNMENTS: Assignment[] = [
   {
     staff: "Đỗ Minh Tâm",
-    position: "Phục vụ",
+    position: STAFF_POSITION.Server,
     task: "Khu A",
     hours: "09:00–14:00",
   },
   {
     staff: "Vũ Thu Trang",
-    position: "Phục vụ",
+    position: STAFF_POSITION.Server,
     task: "Khu B",
     hours: "09:00–14:00",
   },
@@ -103,25 +104,25 @@ export const MEAL_ASSIGNMENTS: Record<string, Assignment[]> = {
   "0115": [
     {
       staff: "Đỗ Minh Tâm",
-      position: "Phục vụ",
+      position: STAFF_POSITION.Server,
       task: "Khu A",
       hours: "16:00–21:30",
     },
     {
       staff: "Nguyễn Văn Hùng",
-      position: "Bếp",
+      position: STAFF_POSITION.Cook,
       task: "Bếp chính",
       hours: "13:00–20:00",
     },
     {
       staff: "Lê Thị Hoa",
-      position: "Bếp",
+      position: STAFF_POSITION.Cook,
       task: "Sơ chế",
       hours: "13:00–20:00",
     },
     {
       staff: "Phạm Quốc Bảo",
-      position: "Vận chuyển",
+      position: STAFF_POSITION.Driver,
       task: "Chở dụng cụ",
       hours: "12:00–22:30",
     },

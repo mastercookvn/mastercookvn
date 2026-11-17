@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatNumber } from "@/lib/format";
 import { useDemoState } from "@/mocks/demoStore";
+import { EQUIPMENT_BASIS_LABEL } from "@/mocks/equipment";
 import type { OrderMeal } from "@/mocks/orders";
 
 import { equipmentCapacityRows } from "@/features/orders/lib/capacity";
@@ -26,7 +27,7 @@ export function EquipmentCapacityTable({ meal }: { meal: OrderMeal }) {
       rows={equipmentCapacityRows(meal, shortage).map((row) => [
         row.name,
         <span key="basis" className="text-soft">
-          {row.basis}
+          {EQUIPMENT_BASIS_LABEL[row.basis]}
         </span>,
         formatNumber(row.needed),
         formatNumber(row.usable),

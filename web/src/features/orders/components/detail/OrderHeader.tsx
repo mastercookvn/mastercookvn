@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/layout/workspace/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 
 import { useDemoLoaded } from "@/mocks/demoStore";
+import { ORDER_CHANNEL_LABEL } from "@/mocks/orders";
 
 import { useWorkspaceOrder } from "@/features/orders/lib/useOrders";
 
@@ -31,7 +32,7 @@ export function OrderHeader({ code }: { code: string }) {
             {[
               order.customer,
               order.phone,
-              `Kênh ${order.channel.toLowerCase()}`,
+              `Kênh ${ORDER_CHANNEL_LABEL[order.channel].toLowerCase()}`,
               order.createdAt ? `Tạo ${order.createdAt}` : null,
             ]
               .filter(Boolean)

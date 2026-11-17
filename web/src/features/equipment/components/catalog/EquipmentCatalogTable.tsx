@@ -22,7 +22,11 @@ import {
   updateDemoState,
   useDemoState,
 } from "@/mocks/demoStore";
-import { EQUIPMENT, type EquipmentType } from "@/mocks/equipment";
+import {
+  EQUIPMENT,
+  EQUIPMENT_BASIS_LABEL,
+  type EquipmentType,
+} from "@/mocks/equipment";
 
 import { EquipmentForm } from "./EquipmentForm";
 
@@ -87,7 +91,7 @@ export function EquipmentCatalogTable({ roles }: { roles: Role[] }) {
             {item.name}
           </span>,
           item.unit,
-          item.basis,
+          EQUIPMENT_BASIS_LABEL[item.basis],
           item.rate ?? "Nhập tay",
           item.reserve ? `${Math.round(item.reserve * 100)}%` : "Trống",
           formatNumber(item.minimum),
