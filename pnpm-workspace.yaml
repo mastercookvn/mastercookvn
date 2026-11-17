@@ -7,8 +7,10 @@ autoInstallPeers: true
 catalog:
   # docs
   "@catppuccin/vitepress": 0.1.4
+  "@mermaid-js/layout-elk": 1.0.2
   "get-port": 7.2.0
   "markdown-it-mathjax3": ^4
+  "mermaid": ^12.0.0
   "pagefind": 1.6.0
   "vitepress": 2.0.0-alpha.20
   "vitepress-mermaid-renderer": 1.2.2

@@ -9,6 +9,8 @@
   },
   "devDependencies": {
     "@catppuccin/vitepress": "catalog:",
+    "@mermaid-js/layout-elk": "catalog:",
+    "mermaid": "catalog:",
     "pagefind": "catalog:",
     "vitepress-mermaid-renderer": "catalog:",
     "vitepress-plugin-pagefind": "catalog:",
