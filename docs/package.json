@@ -5,7 +5,9 @@
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "diagram:clean": "vitepress-plugin-diagrams clean --delete"
+    "diagram:clean": "vitepress-plugin-diagrams clean --delete",
+    "format": "prettier --ignore-path ../.prettierignore --write .",
+    "format:check": "prettier --ignore-path ../.prettierignore --check ."
   },
   "devDependencies": {
     "@catppuccin/vitepress": "catalog:",

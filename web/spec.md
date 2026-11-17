@@ -94,7 +94,6 @@ Khi kéo xuống web ở khách hàng, thì các thẻ a vẫn giữ nguyên, th
 
 Đặt lại icon thu phóng ở giữa và đổi icon khác hiện đại hơn
 
-
 -- Sctipt 7:
 
 Thực hiện hiện thực lịch ta bằng thư viện lichta đã cài đặt
@@ -103,6 +102,6 @@ Sửa lỗi ở đặt đơn hộ khách màn hình lượt đãi, chỗ lượt
 
 Thực hiện loại bỏ hoàn toàn tính năng CV của nhân viên, đó là out of scope
 
-Sau đó bạn thực hiện sửa lại UI theo các hướng dẫn của modern-web-guidance 
+Sau đó bạn thực hiện sửa lại UI theo các hướng dẫn của modern-web-guidance
 
 Bỏ các thư mục của modern-web-guidance vào gitignore và không push lên

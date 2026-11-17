@@ -55,24 +55,24 @@ jobs:
           node-version-file: mise.toml
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm -F @mastercookvn/web -F @mastercookvn/mastercookvn install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm format:check
+        run: pnpm -F @mastercookvn/web format:check
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm -F @mastercookvn/web lint
 
       - name: Typecheck
-        run: pnpm typecheck
+        run: pnpm -F @mastercookvn/web typecheck
 
       - name: Test
-        run: pnpm test:run
+        run: pnpm -F @mastercookvn/web test:run
 
       - name: Build
         env:
           BUILD_STANDALONE: "true"
-        run: pnpm --filter @mastercookvn/web build
+        run: pnpm -F @mastercookvn/web build
 
       - name: Docker build
         run: docker build -f web.Dockerfile -t mastercookvn-web:${{ github.sha }} .

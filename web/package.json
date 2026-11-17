@@ -12,7 +12,9 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --ignore-path ../.prettierignore --write .",
+    "format:check": "prettier --ignore-path ../.prettierignore --check ."
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

@@ -54,10 +54,13 @@ jobs:
             docs-diagrams-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm -F @mastercookvn/docs -F @mastercookvn/mastercookvn install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm -F @mastercookvn/docs format:check
 
       - name: Build docs
-        run: pnpm --filter @mastercookvn/docs build
+        run: pnpm -F @mastercookvn/docs build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

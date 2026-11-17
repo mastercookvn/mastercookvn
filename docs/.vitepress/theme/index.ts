@@ -10,6 +10,7 @@ import { h, nextTick, watch } from "vue";
 
 // sort-imports-ignore
 import "@catppuccin/vitepress/theme/mocha/lavender.css";
+import "./mermaid.css";
 
 mermaid.registerLayoutLoaders(elkLayouts);
 
@@ -28,6 +29,13 @@ export default {
       });
       mermaidRenderer.setToolbar({
         showLanguageLabel: false,
+        downloadFormat: "svg",
+        desktop: {
+          download: "enabled",
+        },
+        mobile: {
+          download: "enabled",
+        },
       });
     };
     nextTick(initMermaid);

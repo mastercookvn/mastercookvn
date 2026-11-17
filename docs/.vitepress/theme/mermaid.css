@@ -1,0 +1,15 @@
+.vp-doc div.language-mermaid {
+  background-color: var(--ctp-latte-mantle);
+}
+
+.classDiagram .node.default .outer-path > path:first-child {
+  fill: var(--ctp-latte-base) !important;
+}
+
+.dark .vp-doc div.language-mermaid {
+  background-color: var(--ctp-mocha-mantle);
+}
+
+.dark .classDiagram .node.default .outer-path > path:first-child {
+  fill: var(--ctp-mocha-base) !important;
+}
