@@ -26,6 +26,7 @@ tsconfig.base.json
 - Both frontend and backend are developed with local running process, not docker
 - Prefer test driven development, but skip if not worth to test, or too obvious to test
 - Each sub projects have their own `AGENTS.md`, should be maintained and synchronized, briefly, cohesive, comprehensive
+- Writing code should use English terminologies, docs might preserve Vietnamese for user-facing content
 
 ### Tool chains
 

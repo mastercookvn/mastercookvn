@@ -220,6 +220,7 @@ const vitePressOptions = {
         link: "https://github.com/mastercookvn/mastercookvn",
       },
     ],
+    outline: [2, 3],
   },
   vite: {
     plugins: [
