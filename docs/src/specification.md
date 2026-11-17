@@ -4,7 +4,7 @@ order: 1
 
 # MasterCookVN Software Specification
 
-## 1. Objectives and Scope
+## Objectives and Scope
 
 Website phục vụ một cơ sở nấu tiệc lưu động, từ đặt tiệc đến quyết toán. Cơ sở không cung cấp mặt bằng. Trao đổi với khách, nhân viên, nhà cung cấp qua điện thoại/Zalo diễn ra ngoài hệ thống.
 
@@ -12,7 +12,7 @@ Trong phạm vi: khách tự đặt hoặc nhân viên đặt hộ; hợp đồn
 
 Ngoài phạm vi: phục vụ tại quán, cung cấp mặt bằng, đối tác thuê ngoài, xe/chuyến vận chuyển, dịch vụ/cho thuê dụng cụ độc lập, đám tang, tiệc không xác định quy mô, thử món, khuyến mãi, phân hạng khách, hoa hồng, khiếu nại chuyên biệt, hóa đơn điện tử, công nợ trả chậm, CCCD, email, gửi Zalo tự động, nhắc lịch, thời tiết, offline, chấm công, nghỉ phép, đánh giá nhân viên, tính/trả lương, serial, kiểm soát chất lượng nguyên liệu, lô/hạn dùng, hao hụt sơ chế. Không trừ nguyên liệu theo từng tiệc; không phát sinh món/bàn ăn/dịch vụ trong tiệc; không dời ngày hoặc hoãn tiệc.
 
-## 2. Terminology
+## Terminology
 
 | Thuật ngữ                | Ý nghĩa                                                                   |
 | ------------------------ | ------------------------------------------------------------------------- |
@@ -26,7 +26,7 @@ Ngoài phạm vi: phục vụ tại quán, cung cấp mặt bằng, đối tác 
 | Target food cost         | Tỷ lệ dùng đề xuất giá bán, khởi tạo 35%                                  |
 | Ingredient margin        | Doanh thu món ăn trừ nguyên liệu tiêu thụ; chưa trừ lương và chi phí khác |
 
-## 3. Actors and Permissions
+## Actors and Permissions
 
 Một tài khoản nội bộ có thể kiêm nhiều vai trò; hồ sơ nhân sự độc lập tài khoản.
 
@@ -42,7 +42,7 @@ Một tài khoản nội bộ có thể kiêm nhiều vai trò; hồ sơ nhân s
 
 Bếp, phục vụ, vận chuyển là vị trí để phân công, không bắt buộc tài khoản. Nhà cung cấp không truy cập hệ thống; tên và SĐT lưu trên phiếu nhập.
 
-## 4. Overall Workflow
+## Overall Workflow
 
 1. Khách xem danh mục, tạm tính; khách hoặc tư vấn tạo đơn gồm một/nhiều bữa.
 2. Tư vấn ghi khảo sát Q&A, nhập khoảng cách; hệ thống kiểm tra tài nguyên theo từng khung giờ. Tư vấn xác nhận nhận/từ chối, không có cấp quản lý duyệt tiếp.
@@ -54,7 +54,7 @@ Bếp, phục vụ, vận chuyển là vị trí để phân công, không bắt
 
 Danh mục UC chỉ duy trì tại [Use Case Catalog](./business/use-case-catalog.md), không lập lại ở đây. [System Parameters and Limits](./business/system-parameters.md) là nguồn chuẩn cho giá trị và giới hạn. Các con số trong BR bên dưới là mặc định; khi tham số thay đổi, dùng giá trị hiện hành cho dữ liệu mới và giữ nguyên cam kết đã chốt.
 
-## 5. Business Rules
+## Business Rules
 
 ### BR01 — Multi-meal contracts
 
@@ -148,11 +148,11 @@ Giữ trước không trừ kho vật lý; xuất chuyển sẵn sàng sang đan
 
 Mỗi bữa hoàn tất tối đa một đánh giá, không bắt buộc; người đặt hoặc nhân viên ghi hộ. Lưu điểm 1–5, nhận xét, người thực sự nhập. Dùng nội bộ, chưa kiểm duyệt/hiển thị công khai.
 
-## 6. Model and Related Documentation
+## Model and Related Documentation
 
 [Detailed Domain Model](./models/domain-model.md) là nguồn thuộc tính, quan hệ và ràng buộc dữ liệu. [Order, Contract and Meal States](./business/order-contract-meal-states.md) tách tiến độ khỏi thanh toán; [Equipment Reservation, Issue and Recovery States](./business/ingredients-and-equipment/equipment-states.md) tách giữ trước khỏi xuất thực tế. [Catering Service Contract Contents](./references/service-contract.md) phục vụ lập hợp đồng, không thay đặc tả.
 
-## 7. Nonfunctional Requirements
+## Nonfunctional Requirements
 
 - Tiếng Việt, dùng được trên điện thoại; dd/MM/yyyy, VNĐ, giờ Việt Nam. Cho chọn ngày âm/dương, lưu ngày dương và giờ cụ thể.
 - Server kiểm tra quyền/sở hữu hồ sơ, tự tính tiền/kiểm tra tài nguyên; mật khẩu băm.
@@ -162,6 +162,6 @@ Mỗi bữa hoàn tất tối đa một đánh giá, không bắt buộc; ngư�
 - Sao lưu, phục hồi dữ liệu và tệp lưu trữ.
 - SĐT là căn cứ liên kết theo phạm vi đã chốt, không xác minh OTP.
 
-## 8. Implementation Assumptions
+## Implementation Assumptions
 
 Các chi tiết chưa có con số/cách tính chốt trong cuộc trao đổi dùng mặc định sau: bàn ăn chuẩn 10 người; set bằng tổng giá món; làm tròn tổng bữa theo 500 đồng; định giá tồn bình quân gia quyền tháng; phí xử lý hủy 0; đánh giá nội bộ. Đây là lựa chọn để đặc tả nhất quán, không phải kết quả khảo sát bổ sung. Thuế và mức phụ thu lễ là tham số, không khẳng định mức pháp định trong tài liệu này.
