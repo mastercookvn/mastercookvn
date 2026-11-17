@@ -1,0 +1,39 @@
+.vp-doc {
+  counter-reset: h2;
+}
+
+.vp-doc h2 {
+  counter-reset: h3;
+}
+
+.vp-doc h3 {
+  counter-reset: h4;
+}
+
+.vp-doc h4 {
+  counter-reset: h5;
+}
+
+.vp-doc h5 {
+  counter-reset: h6;
+}
+
+.vp-doc h2::before {
+  counter-increment: h2;
+  content: counter(h2) ". ";
+}
+
+.vp-doc h3::before {
+  counter-increment: h3;
+  content: counter(h2) "." counter(h3) ". ";
+}
+
+.vp-doc h4::before {
+  counter-increment: h4;
+  content: counter(h2) "." counter(h3) "." counter(h4) ". ";
+}
+
+.vp-doc h5::before {
+  counter-increment: h5;
+  content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". ";
+}
