@@ -5,7 +5,7 @@ import { TextField } from "@/components/ui/TextField";
 import { TimeSelect } from "@/components/ui/TimeSelect";
 import { TRAY_WINDOW_MINUTES } from "@/constants/booking";
 import { fromMinutes, toMinutes } from "@/lib/servingWaves";
-import type { EstimateMeal } from "@/mocks/demoStore";
+import { type EstimateMeal } from "@/lib/demoStore";
 
 export function TrayFields({
   meal,

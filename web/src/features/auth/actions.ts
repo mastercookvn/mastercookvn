@@ -7,9 +7,8 @@ import { ROUTES } from "@/constants/routes";
 import { env } from "@/lib/env";
 import { encodeFlash, FLASH_COOKIE, type FlashKey } from "@/lib/flash";
 import { encodeSession, SESSION_COOKIE, type Session } from "@/lib/session";
-import { CUSTOMER } from "@/mocks/contracts";
-import { STAFF_ACCOUNTS } from "@/mocks/people";
 
+import { DEV_ADMIN_ACCOUNT } from "./devAccount";
 import { createOtpStore, type OtpStore, type VerifyResult } from "./otp";
 import {
   firstFieldErrors,
@@ -22,8 +21,6 @@ import {
 } from "./schemas";
 
 export type AuthFormState = { error?: string; fieldErrors?: FieldErrors };
-
-const INVALID_CREDENTIALS = "Số điện thoại hoặc mật khẩu không đúng.";
 
 const normalizePhone = (phone: string) => phone.replaceAll(" ", "");
 
@@ -62,18 +59,25 @@ function landingPage(session: Session, next: string | null) {
   return next && !nextIsWorkspace ? next : ROUTES.account;
 }
 
-function sessionForPhone(phone: string): Session | null {
-  const normalized = normalizePhone(phone);
-  const staff = STAFF_ACCOUNTS.find(
-    (account) => normalizePhone(account.phone) === normalized
-  );
-  if (staff && !staff.active) return null;
-  return staff
-    ? { kind: "staff", name: staff.name, roles: staff.roles }
-    : { kind: "customer", name: CUSTOMER.name, phone };
+const DEMO_MODE = env.NEXT_PUBLIC_SHOW_SAMPLE_ACCOUNTS === "true";
+
+const CUSTOMER_PLACEHOLDER_NAME = "Khách hàng";
+
+function sessionForPhone(phone: string): Session {
+  const isDevAdmin =
+    DEMO_MODE &&
+    normalizePhone(phone) === normalizePhone(DEV_ADMIN_ACCOUNT.phone);
+  return isDevAdmin
+    ? {
+        kind: "staff",
+        name: DEV_ADMIN_ACCOUNT.name,
+        phone: DEV_ADMIN_ACCOUNT.phone,
+        roles: DEV_ADMIN_ACCOUNT.roles,
+      }
+    : { kind: "customer", name: CUSTOMER_PLACEHOLDER_NAME, phone };
 }
 
-// Placeholder for POST /auth/login: any password passes, the phone picks the account.
+// Placeholder for POST /auth/login: any password passes; the dev admin phone opens the workspace.
 export async function login(
   _previous: AuthFormState,
   formData: FormData
@@ -87,16 +91,15 @@ export async function login(
   }
 
   const session = sessionForPhone(parsed.data.phone);
-  if (!session) return { error: INVALID_CREDENTIALS };
 
   await writeSession(session);
   await writeFlash("login", session.name);
   redirect(landingPage(session, safeNext(formData.get("next"))));
 }
 
-export async function signInWithSampleAccount(formData: FormData) {
-  const session = sessionForPhone(String(formData.get("phone")));
-  if (!session) return;
+export async function signInAsDevAdmin(formData: FormData) {
+  if (!DEMO_MODE) return;
+  const session = sessionForPhone(DEV_ADMIN_ACCOUNT.phone);
 
   await writeSession(session);
   await writeFlash("login", session.name);
@@ -131,8 +134,6 @@ type OtpPurpose = (typeof OTP_PURPOSE)[keyof typeof OTP_PURPOSE];
 // reloads do not drop codes; a single server process only.
 const globalOtp = globalThis as { __registerOtp?: OtpStore };
 const otpStore = (globalOtp.__registerOtp ??= createOtpStore());
-
-const DEMO_MODE = env.NEXT_PUBLIC_SHOW_SAMPLE_ACCOUNTS === "true";
 
 // Placeholder for the SMS gateway call made by POST /auth/otp.
 async function sendOtpSms(phone: string, code: string) {

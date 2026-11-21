@@ -2,8 +2,8 @@
 
 import { SelectField } from "@/components/ui/SelectField";
 import { formatMoney } from "@/lib/format";
-import { menuSetPriceFrom } from "@/mocks/catalog";
-import { useDemoState } from "@/mocks/demoStore";
+import { menuSetPriceFrom } from "@/models/catalog";
+import { useDemoState } from "@/lib/demoStore";
 
 export function MenuSetSelect({
   id,

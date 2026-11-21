@@ -14,10 +14,10 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { useToast } from "@/components/ui/Toast";
 import { MEAL_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import { calculateCancellation } from "@/lib/pricing";
-import { daysUntil, type Contract, type Meal } from "@/mocks/contracts";
-import { updateDemoState, useDemoState } from "@/mocks/demoStore";
+import { daysUntil, type Contract, type Meal } from "@/models/contracts";
+import { updateDemoState, useDemoState } from "@/lib/demoStore";
 
+import { cancellationFor, paidForMeal } from "../../lib/contractState";
 import { RefundPreview } from "./RefundPreview";
 
 const REQUESTED_AT = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/;
@@ -40,24 +40,16 @@ export function CancelRequestForm({
 }) {
   const showToast = useToast();
   const cancelled = useDemoState((state) => state.mealCancelled);
-  const [requestedText, setRequestedText] = useState("05/11/2026 09:00");
+  const [requestedText, setRequestedText] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   // BR10: the tier follows when the customer asked, not when staff process it.
   const requestedAt = parseRequestedAt(requestedText);
   const daysLeft = requestedAt ? daysUntil(meal.startsAt, requestedAt) : null;
-  // BR01: money collected on the contract is allocated to meals by value.
-  const paidForMeal = Math.round(
-    (contract.paid * meal.price.total) / contract.total
-  );
-  const result =
-    daysLeft === null
-      ? null
-      : calculateCancellation({
-          mealValue: meal.price.total,
-          paid: paidForMeal,
-          daysLeft,
-        });
+  const mealPaid = paidForMeal(contract, meal);
+  const result = requestedAt
+    ? cancellationFor(contract, meal, requestedAt)
+    : null;
 
   return (
     <>
@@ -70,13 +62,16 @@ export function CancelRequestForm({
             hint="dd/MM/yyyy HH:mm. Mức hoàn tính theo thời điểm này."
             value={requestedText}
             disabled={cancelled}
-            error={requestedAt ? null : "Nhập theo dạng 05/11/2026 09:00"}
+            error={
+              requestedAt || !requestedText
+                ? null
+                : "Nhập theo dạng dd/MM/yyyy HH:mm"
+            }
             onChange={(event) => setRequestedText(event.target.value)}
           />
           <TextareaField
             id="cancel-workspace-reason"
             label="Lý do"
-            defaultValue="Khách đổi kế hoạch, báo qua Zalo."
             disabled={cancelled}
           />
           <DataTable
@@ -105,7 +100,7 @@ export function CancelRequestForm({
         <section className="card l-stack">
           <h3 className="card-title card-title-flush">Kết quả tính</h3>
           {result ? (
-            <RefundPreview compact result={result} paid={paidForMeal} />
+            <RefundPreview compact result={result} paid={mealPaid} />
           ) : null}
           {cancelled ? (
             <Alert tone="good">

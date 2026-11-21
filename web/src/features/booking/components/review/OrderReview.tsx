@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import { MealPriceBreakdown } from "@/components/ui/MealPriceBreakdown";
 import { BOOKING_STEP, type BookingStep } from "@/constants/booking";
-import type { BookingContact, EstimateMeal } from "@/mocks/demoStore";
+import { type BookingContact, type EstimateMeal } from "@/lib/demoStore";
 
 import type { MealEstimate } from "@/features/booking/lib/estimate";
 

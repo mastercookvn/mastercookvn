@@ -7,7 +7,7 @@ import {
   NEW_ESTIMATE_MEAL,
   updateDemoState,
   useDemoState,
-} from "@/mocks/demoStore";
+} from "@/lib/demoStore";
 
 import { mealInfoErrors } from "@/features/booking/lib/estimate";
 import { useBookingMeals } from "@/features/booking/lib/useBookingMeals";

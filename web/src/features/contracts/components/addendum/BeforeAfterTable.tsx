@@ -1,11 +1,14 @@
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatMoney } from "@/lib/format";
-import { ADDENDUM_HOUSEWARMING as addendum } from "@/mocks/contracts";
+
+import type { PendingAddendum } from "../../lib/contractRepository";
 
 export function BeforeAfterTable({
+  addendum,
   firstColumn = "",
 }: {
+  addendum: PendingAddendum;
   firstColumn?: string;
 }) {
   return (

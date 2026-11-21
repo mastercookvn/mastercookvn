@@ -16,7 +16,7 @@ import {
   updateDemoState,
   useDemoState,
   type PaymentIntent,
-} from "@/mocks/demoStore";
+} from "@/lib/demoStore";
 
 export type PaymentOption = {
   value: string;

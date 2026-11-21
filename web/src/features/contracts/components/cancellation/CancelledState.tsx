@@ -1,12 +1,16 @@
 import { RefundIcon } from "@/components/icons";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatMoney } from "@/lib/format";
-import {
-  CANCELLATION_HOUSEWARMING as result,
-  MEAL_HOUSEWARMING as meal,
-} from "@/mocks/contracts";
+import type { CancellationResult } from "@/lib/pricing";
+import type { Meal } from "@/models/contracts";
 
-export function CancelledState() {
+export function CancelledState({
+  meal,
+  result,
+}: {
+  meal: Meal;
+  result: CancellationResult;
+}) {
   return (
     <EmptyState>
       <RefundIcon size={44} />

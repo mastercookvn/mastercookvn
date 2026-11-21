@@ -22,13 +22,9 @@ import {
   parseAmountText,
   requiredTextSchema,
 } from "@/lib/validation";
-import { DISH_CATEGORY_LABEL, type DishCategory } from "@/mocks/catalog";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-  type CatalogDish,
-} from "@/mocks/demoStore";
+import { DISH_CATEGORY_LABEL, type DishCategory } from "@/constants/catalog";
+import { type CatalogDish } from "@/models/catalog";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import { parseRecipe, RecipeTable, type DraftRecipeLine } from "./RecipeTable";
 

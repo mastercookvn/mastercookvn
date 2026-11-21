@@ -3,16 +3,12 @@
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatMoney } from "@/lib/format";
-import { CONTRACT_WEDDING, type Contract } from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
+import { type Contract } from "@/models/contracts";
+import { useDemoState } from "@/lib/demoStore";
 
 import { upcomingMeal } from "@/features/contracts/lib/contractState";
 
-export function ContractMealTable({
-  contract = CONTRACT_WEDDING,
-}: {
-  contract?: Contract;
-}) {
+export function ContractMealTable({ contract }: { contract: Contract }) {
   const applied = useDemoState(
     (state) => state.appliedAddenda[contract.number]
   );

@@ -7,22 +7,16 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { PAYMENT_PURPOSE, SETTLEMENT_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import {
-  CUSTOMER,
-  MEAL_COMPANY as meal,
-  SETTLEMENT_COMPANY as settlement,
-} from "@/mocks/contracts";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
+import type { Contract } from "@/models/contracts";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
+import { buildSettlement } from "../../lib/settlement";
 import { PaymentCheckout } from "../payment/PaymentCheckout";
 
 import { SettlementLines } from "./SettlementLines";
 
-export function FinalInvoicePanel() {
+export function FinalInvoicePanel({ contract }: { contract: Contract }) {
+  const settlement = buildSettlement(contract);
   const status = useDemoState((state) => state.settlementStatus);
   const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
   const balance = settlement.balance - settlementPaid;
@@ -44,16 +38,18 @@ export function FinalInvoicePanel() {
       <section className="card l-stack">
         <div className="l-between">
           <div className="l-stack gap-0.5">
-            <h3 className="card-title card-title-flush">
-              Hóa đơn {settlement.invoiceNumber}
-            </h3>
+            <h3 className="card-title card-title-flush">Hóa đơn quyết toán</h3>
             <span className="text-small text-soft">
-              {CUSTOMER.name} · {meal.name} · {meal.date}
+              {contract.customerName} · {settlement.mealName} ·{" "}
+              {settlement.mealDate}
             </span>
           </div>
           <StatusBadge domain="settlement" status={status} />
         </div>
-        <SettlementLines settlementPaid={settlementPaid} />
+        <SettlementLines
+          settlement={settlement}
+          settlementPaid={settlementPaid}
+        />
         <div className="l-row no-print justify-end">
           <Button onClick={() => window.print()}>
             <PrintIcon size={18} />

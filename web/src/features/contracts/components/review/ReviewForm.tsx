@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Field } from "@/components/ui/Field";
 import { PhotoGalleryField } from "@/components/ui/PhotoGalleryField";
 import { useToast } from "@/components/ui/Toast";
-import { updateDemoState, useDemoState } from "@/mocks/demoStore";
+import { updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import { StarRating } from "./StarRating";
 

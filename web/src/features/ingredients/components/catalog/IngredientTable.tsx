@@ -16,12 +16,8 @@ import { useToast } from "@/components/ui/Toast";
 import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { formatMoney } from "@/lib/format";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import { INGREDIENTS, type Ingredient } from "@/mocks/inventory";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { type Ingredient } from "@/models/inventory";
 
 import { IngredientForm } from "./IngredientForm";
 
@@ -38,19 +34,17 @@ export function IngredientTable() {
   const editing =
     ingredients.find((ingredient) => ingredient.name === editingName) ?? null;
 
-  /** Kept when it is sample data, in a recipe, or on a purchase receipt. */
+  /** Kept when it is in a recipe or on a purchase receipt. */
   const blockReason = (ingredient: Ingredient) =>
-    INGREDIENTS.some((sample) => sample.name === ingredient.name)
-      ? "đã có lịch sử"
-      : Object.values(recipes).some((lines) =>
-            lines.some((line) => line.ingredient === ingredient.name)
+    Object.values(recipes).some((lines) =>
+      lines.some((line) => line.ingredient === ingredient.name)
+    )
+      ? "đang dùng trong định lượng"
+      : purchases.some((purchase) =>
+            purchase.lines.some((line) => line.ingredient === ingredient.name)
           )
-        ? "đang dùng trong định lượng"
-        : purchases.some((purchase) =>
-              purchase.lines.some((line) => line.ingredient === ingredient.name)
-            )
-          ? "đã có phiếu nhập"
-          : null;
+        ? "đã có phiếu nhập"
+        : null;
 
   return (
     <>

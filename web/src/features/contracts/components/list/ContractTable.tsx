@@ -7,20 +7,12 @@ import { PanelHeader } from "@/components/ui/PanelHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { CONTRACT_STATUS_META } from "@/constants/labels";
 import { ROUTES } from "@/constants/routes";
-import {
-  CONTRACT_STATUS,
-  SETTLEMENT_STATUS,
-  type ContractStatus,
-} from "@/constants/statuses";
+import { CONTRACT_STATUS, type ContractStatus } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import {
-  CONTRACT_COMPANY,
-  CONTRACT_HOUSEWARMING,
-  CONTRACT_WEDDING,
-  CUSTOMER,
-  SETTLEMENT_COMPANY,
-} from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
+
+import { listContracts } from "../../lib/contractRepository";
+import { isAwaitingSettlement } from "../../lib/contractState";
+import { buildSettlement } from "../../lib/settlement";
 
 type ContractRow = {
   number: string;
@@ -33,58 +25,20 @@ type ContractRow = {
 };
 
 export function ContractTable() {
-  const weddingActive = useDemoState(
-    (state) => state.depositPaid && state.contractConfirmed
-  );
-  const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
-  const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
-  const settlementClosed = useDemoState(
-    (state) => state.settlementStatus === SETTLEMENT_STATUS.Closed
-  );
-
-  const contracts: ContractRow[] = [
-    {
-      number: CONTRACT_WEDDING.number,
-      customer: CUSTOMER.name,
-      total: CONTRACT_WEDDING.total,
-      paid: depositPaidAmount,
-      deadline: weddingActive
-        ? "Đã đủ"
-        : (CONTRACT_WEDDING.depositDeadline ?? ""),
-      status: weddingActive
-        ? CONTRACT_STATUS.Active
-        : CONTRACT_STATUS.AwaitingConfirmationAndDeposit,
-      href: ROUTES.workspaceContract(CONTRACT_WEDDING.number),
-    },
-    {
-      number: CONTRACT_HOUSEWARMING.number,
-      customer: "Lý Hoàng Nam",
-      total: CONTRACT_HOUSEWARMING.total,
-      paid: CONTRACT_HOUSEWARMING.paid,
-      deadline: "Đã đủ",
-      status: CONTRACT_STATUS.Active,
-      href: `${ROUTES.workspaceContract(CONTRACT_HOUSEWARMING.number)}?tab=addendum`,
-    },
-    {
-      number: CONTRACT_COMPANY.number,
-      customer: CUSTOMER.name,
-      total: SETTLEMENT_COMPANY.settlementTotal,
-      paid: CONTRACT_COMPANY.paid + settlementPaid,
-      deadline: "Đã đủ",
-      status: settlementClosed
-        ? CONTRACT_STATUS.Completed
-        : CONTRACT_STATUS.Active,
-      href: `${ROUTES.workspaceContract(CONTRACT_COMPANY.number)}?tab=settlement`,
-    },
-    {
-      number: "HD-2026-0088",
-      customer: "Đặng Quốc Việt",
-      total: 32400000,
-      paid: 16200000,
-      deadline: "Quá hạn",
-      status: CONTRACT_STATUS.Expired,
-    },
-  ];
+  const contracts: ContractRow[] = listContracts().map((contract) => ({
+    number: contract.number,
+    customer: contract.customerName,
+    total: isAwaitingSettlement(contract)
+      ? buildSettlement(contract).settlementTotal
+      : contract.total,
+    paid: contract.paid,
+    deadline: contract.depositDeadline ?? "Đã đủ",
+    status: contract.status,
+    href:
+      contract.status === CONTRACT_STATUS.Expired
+        ? undefined
+        : ROUTES.workspaceContract(contract.number),
+  }));
 
   return (
     <>

@@ -5,7 +5,7 @@ import { MealPriceBreakdown } from "@/components/ui/MealPriceBreakdown";
 import { ServingWavesList } from "@/components/ui/ServingWavesList";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { MealStatus } from "@/constants/statuses";
-import type { Meal } from "@/mocks/contracts";
+import type { Meal } from "@/models/contracts";
 
 export function MealSummaryCard({
   meal,

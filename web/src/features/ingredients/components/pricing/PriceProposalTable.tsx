@@ -1,11 +1,16 @@
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatMoney, formatPercent } from "@/lib/format";
-import { PRICE_PROPOSALS } from "@/mocks/inventory";
+
+import type { PriceProposal } from "../../lib/inventoryPeriod";
 
 import { ProposalDecisionButtons } from "./ProposalDecisionButtons";
 
-export function PriceProposalTable() {
+export function PriceProposalTable({
+  proposals,
+}: {
+  proposals: PriceProposal[];
+}) {
   return (
     <DataTable
       columns={[
@@ -16,7 +21,7 @@ export function PriceProposalTable() {
         "Món bị ảnh hưởng",
         "Quyết định",
       ]}
-      rows={PRICE_PROPOSALS.map((row, index) => {
+      rows={proposals.map((row, index) => {
         const change = row.proposed / row.current - 1;
         return [
           <>

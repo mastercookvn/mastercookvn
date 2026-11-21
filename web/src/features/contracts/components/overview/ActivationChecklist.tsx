@@ -6,11 +6,12 @@ import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { useQueryParam } from "@/hooks/useQueryParam";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
+import type { Contract } from "@/models/contracts";
 
 import { ConfirmContractDialog } from "./ConfirmContractDialog";
 
-export function ActivationChecklist() {
+export function ActivationChecklist({ contract }: { contract: Contract }) {
   const confirmed = useDemoState((state) => state.contractConfirmed);
   const deposited = useDemoState((state) => state.depositPaid);
   const confirmation = useDemoState((state) => state.contractConfirmation);
@@ -71,7 +72,11 @@ export function ActivationChecklist() {
         Làm việc nào trước cũng được. Có thể ký giấy tại quầy thay vì xác nhận
         online.
       </p>
-      <ConfirmContractDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <ConfirmContractDialog
+        contract={contract}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { DISH_CATEGORY_LABEL, type DishCategory } from "@/mocks/catalog";
+import { DISH_CATEGORY_LABEL, type DishCategory } from "@/constants/catalog";
 
 const CATEGORIES = Object.keys(DISH_CATEGORY_LABEL) as DishCategory[];
 

@@ -5,14 +5,14 @@ export function OrderDateFilter() {
         id="orders-from"
         type="text"
         className="input"
-        defaultValue="01/10/2026"
+        placeholder="dd/MM/yyyy"
         aria-label="Ngày tiệc từ"
       />
       <input
         id="orders-to"
         type="text"
         className="input"
-        defaultValue="31/12/2026"
+        placeholder="dd/MM/yyyy"
         aria-label="Ngày tiệc đến"
       />
     </div>

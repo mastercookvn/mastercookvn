@@ -3,15 +3,17 @@
 import { Dialog } from "@/components/ui/Dialog";
 import { useToast } from "@/components/ui/Toast";
 import { formatMoney } from "@/lib/format";
-import { CONTRACT_WEDDING as contract } from "@/mocks/contracts";
-import { updateDemoState } from "@/mocks/demoStore";
+import type { Contract } from "@/models/contracts";
+import { updateDemoState } from "@/lib/demoStore";
 
 import { minimumDeposit } from "@/features/contracts/lib/contractState";
 
 export function PublishContractDialog({
+  contract,
   open,
   onOpenChange,
 }: {
+  contract: Contract;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {

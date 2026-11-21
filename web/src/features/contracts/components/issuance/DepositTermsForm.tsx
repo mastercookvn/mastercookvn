@@ -1,14 +1,14 @@
 import { Alert } from "@/components/ui/Alert";
 import { MoneyRow } from "@/components/ui/MoneyRow";
 import { formatMoney } from "@/lib/format";
-import { CONTRACT_WEDDING as contract } from "@/mocks/contracts";
+import type { Contract } from "@/models/contracts";
 
 import {
   MINIMUM_DEPOSIT_LABEL,
   minimumDeposit,
 } from "@/features/contracts/lib/contractState";
 
-export function DepositTermsForm() {
+export function DepositTermsForm({ contract }: { contract: Contract }) {
   return (
     <section className="card l-stack">
       <h3 className="card-title card-title-flush">Mức cọc</h3>

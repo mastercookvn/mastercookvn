@@ -6,18 +6,31 @@ import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { formatMoney } from "@/lib/format";
-import { daysUntil, MEAL_HOUSEWARMING as meal } from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { daysUntil, type Contract } from "@/models/contracts";
+import { useDemoState } from "@/lib/demoStore";
 
+import {
+  cancellationFor,
+  paidForMeal,
+  upcomingMeal,
+} from "../../lib/contractState";
 import { CancelledState } from "./CancelledState";
 import { ConfirmCancelDialog } from "./ConfirmCancelDialog";
 import { RefundPreview } from "./RefundPreview";
 
-export function CancelMealPanel() {
+export function CancelMealPanel({ contract }: { contract: Contract }) {
   const cancelled = useDemoState((state) => state.mealCancelled);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const meal = upcomingMeal(contract);
 
-  if (cancelled) return <CancelledState />;
+  if (!meal) {
+    return <EmptyState>Không còn bữa nào có thể hủy.</EmptyState>;
+  }
+
+  const result = cancellationFor(contract, meal);
+
+  if (cancelled) return <CancelledState meal={meal} result={result} />;
 
   return (
     <div className="l-grid l-grid-2">
@@ -39,15 +52,11 @@ export function CancelMealPanel() {
             </span>
           </span>
         </label>
-        <TextareaField
-          id="cancel-reason"
-          label="Lý do hủy"
-          defaultValue="Gia đình đổi kế hoạch."
-        />
+        <TextareaField id="cancel-reason" label="Lý do hủy" />
       </section>
       <section className="card l-stack">
         <h3 className="card-title card-title-flush">Kết quả nếu hủy lúc này</h3>
-        <RefundPreview />
+        <RefundPreview result={result} paid={paidForMeal(contract, meal)} />
         <Alert tone="wait">
           Hủy xong không khôi phục được. Việc hoàn tiền do kế toán thực hiện
           sau.
@@ -56,7 +65,12 @@ export function CancelMealPanel() {
           Xác nhận hủy bữa này
         </Button>
       </section>
-      <ConfirmCancelDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <ConfirmCancelDialog
+        meal={meal}
+        result={result}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   );
 }

@@ -17,29 +17,18 @@ import { useToast } from "@/components/ui/Toast";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { ROLE, type Role } from "@/constants/roles";
 import { formatMoney, formatNumber } from "@/lib/format";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import {
-  EQUIPMENT,
-  EQUIPMENT_BASIS_LABEL,
-  type EquipmentType,
-} from "@/mocks/equipment";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { EQUIPMENT_BASIS_LABEL } from "@/constants/equipment";
+import { type EquipmentType } from "@/models/equipment";
 
 import { EquipmentForm } from "./EquipmentForm";
 
 const FORM_ID = "equipment-form";
 const NEW_EQUIPMENT = "new";
 
-/** Stock or sample history keeps the item; only an unused new item can go. */
+/** Stock keeps the item; only an unused new item can go. */
 const blockReason = (item: EquipmentType) =>
-  EQUIPMENT.some((sample) => sample.name === item.name)
-    ? "đã có lịch sử"
-    : item.owned > 0
-      ? "còn tồn kho"
-      : null;
+  item.owned > 0 ? "còn tồn kho" : null;
 
 export function EquipmentCatalogTable({ roles }: { roles: Role[] }) {
   const equipment = useDemoState((state) => state.equipment);

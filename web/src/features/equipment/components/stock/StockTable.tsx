@@ -5,7 +5,7 @@ import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { formatNumber } from "@/lib/format";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 export function StockTable() {
   const equipment = useDemoState((state) => state.equipment);

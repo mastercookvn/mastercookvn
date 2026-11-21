@@ -14,12 +14,8 @@ import { PanelHeader } from "@/components/ui/PanelHeader";
 import { RowMenu } from "@/components/ui/RowMenu";
 import { useToast } from "@/components/ui/Toast";
 import { ROLE, ROLE_LABEL } from "@/constants/roles";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import { STAFF_ACCOUNTS, type StaffAccount } from "@/mocks/people";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { type StaffAccount } from "@/models/people";
 
 import { AccountEditForm } from "./AccountEditForm";
 import { AccountForm } from "./AccountForm";
@@ -42,9 +38,6 @@ export function AccountTable() {
     accounts.filter(
       (other) => other.active && other.roles.includes(ROLE.BranchManager)
     ).length === 1;
-
-  const isSample = (account: StaffAccount) =>
-    STAFF_ACCOUNTS.some((sample) => sample.phone === account.phone);
 
   const setActive = (account: StaffAccount, active: boolean) => {
     updateDemoState({
@@ -121,11 +114,9 @@ export function AccountTable() {
                 onSelect: () => setActive(account, !account.active),
               },
               {
-                label: isSample(account)
-                  ? "Xóa (đã có lịch sử, hãy khóa)"
-                  : "Xóa tài khoản",
+                label: "Xóa tài khoản",
                 danger: true,
-                disabled: isSample(account) || isLastManager(account),
+                disabled: isLastManager(account),
                 onSelect: () =>
                   setDeleting({
                     name: account.name,

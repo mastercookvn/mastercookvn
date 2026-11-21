@@ -1,11 +1,24 @@
 import { describe, expect, it } from "vitest";
 
 import { STAFF_POSITION } from "@/constants/staffing";
-import { ORDER_MEALS } from "@/mocks/orders";
+import { MEAL_STATUS } from "@/constants/statuses";
+import type { OrderMeal } from "@/models/orders";
 
 import { staffCapacityRows } from "./capacity";
 
-const meal = ORDER_MEALS["DH-0151"][0];
+const meal: OrderMeal = {
+  name: "Tiệc giỗ",
+  date: "28/11/2026",
+  time: "11:00–13:30",
+  address: "15 Nguyễn Trãi, Quận 5",
+  setName: "Set",
+  waves: [{ from: "11:00", to: "13:30", tables: 8 }],
+  guestsPerTable: 10,
+  servingTables: 8,
+  setupTables: 8,
+  status: MEAL_STATUS.Planned,
+  price: null,
+};
 const server = (name: string) => ({
   name,
   position: STAFF_POSITION.Server,

@@ -5,7 +5,7 @@ import { num } from "@/components/ui/tableColumns";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { PAYMENT_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 export function TransactionTable() {
   const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
@@ -23,8 +23,8 @@ export function TransactionTable() {
         depositPaidAmount > 0
           ? [
               [
-                <span key="code" className="text-code">
-                  GD-0142-01
+                <span key="code" className="text-soft">
+                  —
                 </span>,
                 "Cọc",
                 "QR hoặc kế toán ghi",

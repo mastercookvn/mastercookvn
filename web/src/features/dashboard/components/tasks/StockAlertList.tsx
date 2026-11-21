@@ -1,15 +1,18 @@
+"use client";
+
 import Link from "next/link";
 
 import { WarningIcon } from "@/components/icons";
 import { ROUTES } from "@/constants/routes";
-
-const LOW_STOCK = [
-  { name: "Khay inox", ready: 18, minimum: 30 },
-  { name: "Ly thủy tinh", ready: 268, minimum: 300 },
-];
+import { useDemoState } from "@/lib/demoStore";
 
 /** One line on the home page; details live on the equipment screen. */
 export function StockAlertList() {
+  const equipment = useDemoState((state) => state.equipment);
+  const lowStock = equipment.filter((item) => item.ready < item.minimum);
+
+  if (!lowStock.length) return null;
+
   return (
     <Link
       href={`${ROUTES.workspaceEquipment}?tab=purchase`}
@@ -17,8 +20,8 @@ export function StockAlertList() {
     >
       <WarningIcon size={18} />
       <span>
-        <b>{LOW_STOCK.length} dụng cụ dưới tồn tối thiểu</b>
-        <small>{LOW_STOCK.map((item) => item.name).join(", ")}</small>
+        <b>{lowStock.length} dụng cụ dưới tồn tối thiểu</b>
+        <small>{lowStock.map((item) => item.name).join(", ")}</small>
       </span>
     </Link>
   );

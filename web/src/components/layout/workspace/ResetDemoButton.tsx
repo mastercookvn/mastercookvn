@@ -2,23 +2,23 @@
 
 import { RefundIcon } from "@/components/icons";
 import { useToast } from "@/components/ui/Toast";
-import { resetDemoState } from "@/mocks/demoStore";
+import { resetDemoState } from "@/lib/demoStore";
 
-/** Sample data now survives reloads, so testers need a way back to the start. */
+/** Local records survive reloads until the backend exists, so testers need a way to clear them. */
 export function ResetDemoButton() {
   const showToast = useToast();
 
   return (
     <button
       type="button"
-      title="Đặt lại dữ liệu mẫu"
+      title="Xóa dữ liệu cục bộ"
       onClick={() => {
         resetDemoState();
-        showToast("Đã đặt lại toàn bộ dữ liệu mẫu", "info");
+        showToast("Đã xóa toàn bộ dữ liệu cục bộ", "info");
       }}
     >
       <RefundIcon size={16} />
-      <span className="workspace-label">Đặt lại dữ liệu mẫu</span>
+      <span className="workspace-label">Xóa dữ liệu cục bộ</span>
     </button>
   );
 }

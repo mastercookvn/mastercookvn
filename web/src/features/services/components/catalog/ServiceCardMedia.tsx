@@ -9,7 +9,7 @@ import {
   type IconProps,
 } from "@/components/icons";
 import { MediaImage } from "@/components/ui/MediaImage";
-import type { Service } from "@/mocks/catalog";
+import type { Service } from "@/models/catalog";
 
 const SERVICE_ICONS: Record<string, ComponentType<IconProps>> = {
   don: BroomIcon,

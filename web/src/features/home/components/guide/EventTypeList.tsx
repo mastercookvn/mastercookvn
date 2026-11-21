@@ -1,3 +1,5 @@
+"use client";
+
 import type { ComponentType } from "react";
 
 import {
@@ -10,7 +12,7 @@ import {
   type IconProps,
 } from "@/components/icons";
 import { Reveal } from "@/components/motion/Reveal";
-import { EVENT_TYPES } from "@/mocks/catalog";
+import { useDemoState } from "@/lib/demoStore";
 
 import { SectionHeading } from "@/features/home/components/SectionHeading";
 
@@ -24,13 +26,17 @@ const EVENT_ICONS: Record<string, ComponentType<IconProps>> = {
 };
 
 export function EventTypeList() {
+  const eventTypes = useDemoState((state) => state.eventTypes);
+
+  if (!eventTypes.length) return null;
+
   return (
     <section className="band">
       <div className="block-inner">
         <SectionHeading eyebrow="Loại tiệc" title="Dịp nào cũng lo được" />
         <div className="event-types">
-          {EVENT_TYPES.map((name, index) => {
-            const Icon = EVENT_ICONS[name];
+          {eventTypes.map((name, index) => {
+            const Icon = EVENT_ICONS[name] ?? FlowerIcon;
             return (
               <Reveal
                 key={name}

@@ -6,7 +6,7 @@ import { formatMoney } from "@/lib/format";
 import {
   countReportCompensation,
   type CountReportRow,
-} from "@/mocks/equipment";
+} from "@/models/equipment";
 
 import { countRowProblem } from "../../lib/countRowProblem";
 

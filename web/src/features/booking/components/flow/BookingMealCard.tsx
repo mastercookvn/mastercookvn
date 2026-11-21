@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { WarningIcon } from "@/components/icons";
 import { Alert } from "@/components/ui/Alert";
-import type { EstimateMeal } from "@/mocks/demoStore";
+import { type EstimateMeal } from "@/lib/demoStore";
 
 import { mealTitle, mealWhen } from "@/features/booking/lib/mealTitle";
 

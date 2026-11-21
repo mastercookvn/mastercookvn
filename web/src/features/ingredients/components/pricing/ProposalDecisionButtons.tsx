@@ -7,7 +7,7 @@ import {
   PRICE_PROPOSAL_DECISION_LABEL,
   type PriceProposalDecision,
 } from "@/constants/priceProposal";
-import { updateDemoState, useDemoState } from "@/mocks/demoStore";
+import { updateDemoState, useDemoState } from "@/lib/demoStore";
 
 export function ProposalDecisionButtons({ index }: { index: number }) {
   const decisions = useDemoState((state) => state.priceDecisions);

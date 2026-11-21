@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { MENU_MODE, SERVING_FORMAT } from "@/constants/booking";
-import { DEFAULT_DISH_IDS, type EstimateMeal } from "@/mocks/demoStore";
+import type { EstimateMeal } from "@/lib/demoStore";
 
-import { withMenuMode, withServingFormat } from "./mealForm";
+import { withServingFormat } from "./mealForm";
 
 const MEAL: EstimateMeal = {
   format: SERVING_FORMAT.Waves,
@@ -33,18 +33,5 @@ describe("withServingFormat", () => {
     expect(withServingFormat(MEAL, SERVING_FORMAT.Waves).waves).toEqual([
       MEAL.waves[0],
     ]);
-  });
-});
-
-describe("withMenuMode", () => {
-  it("seeds an empty custom menu with the sample dishes", () => {
-    expect(withMenuMode(MEAL, MENU_MODE.Custom).dishIds).toEqual(
-      DEFAULT_DISH_IDS
-    );
-  });
-
-  it("keeps dishes already picked", () => {
-    const meal = { ...MEAL, dishIds: ["goi"] };
-    expect(withMenuMode(meal, MENU_MODE.Custom).dishIds).toEqual(["goi"]);
   });
 });

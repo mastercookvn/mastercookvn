@@ -1,62 +1,55 @@
-"use client";
-
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { ROUTES } from "@/constants/routes";
-import { SETTLEMENT_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import {
-  CONTRACT_WEDDING,
-  CUSTOMER,
-  SETTLEMENT_COMPANY,
-} from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
 
+import { listContracts } from "@/features/contracts/lib/contractRepository";
 import {
+  isAwaitingContract,
+  isAwaitingSettlement,
   MINIMUM_DEPOSIT_LABEL,
   minimumDeposit,
 } from "@/features/contracts/lib/contractState";
+import { buildSettlement } from "@/features/contracts/lib/settlement";
 
 const COLUMNS = ["Hợp đồng", "Khách", "Khoản", "Cần thu (đ)", "Hạn"];
 
 export function ReceivableQueueTable() {
-  const depositPaid = useDemoState((state) => state.depositPaid);
-  const settlementStatus = useDemoState((state) => state.settlementStatus);
-  const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
-  const settlementBalance = SETTLEMENT_COMPANY.balance - settlementPaid;
-
-  const rows = [
-    ...(depositPaid
-      ? []
-      : [
-          {
-            number: CONTRACT_WEDDING.number,
-            customer: CUSTOMER.name,
-            kind: `${MINIMUM_DEPOSIT_LABEL}, khách được trả nhiều hơn`,
-            amount: minimumDeposit(CONTRACT_WEDDING),
-            due: CONTRACT_WEDDING.depositDeadline ?? "",
-            href: `${ROUTES.workspaceContract(CONTRACT_WEDDING.number)}?tab=payment`,
-          },
-        ]),
-    ...(settlementBalance > 0
+  const rows = listContracts().flatMap((contract) => {
+    if (isAwaitingContract(contract)) {
+      const amount = Math.max(minimumDeposit(contract) - contract.paid, 0);
+      return amount > 0
+        ? [
+            {
+              number: contract.number,
+              customer: contract.customerName,
+              kind: `${MINIMUM_DEPOSIT_LABEL}, khách được trả nhiều hơn`,
+              amount,
+              due: contract.depositDeadline ?? "",
+              href: `${ROUTES.workspaceContract(contract.number)}?tab=payment`,
+            },
+          ]
+        : [];
+    }
+    const balance = isAwaitingSettlement(contract)
+      ? buildSettlement(contract).balance
+      : 0;
+    return balance > 0
       ? [
           {
-            number: SETTLEMENT_COMPANY.contractNumber,
-            customer: CUSTOMER.name,
-            kind:
-              settlementStatus === SETTLEMENT_STATUS.Invoiced
-                ? `Hóa đơn ${SETTLEMENT_COMPANY.invoiceNumber}, đã gửi khách`
-                : "Số dư quyết toán, chưa phát hành hóa đơn",
-            amount: settlementBalance,
+            number: contract.number,
+            customer: contract.customerName,
+            kind: "Số dư quyết toán",
+            amount: balance,
             due: "Trước khi đóng bữa",
-            href: `${ROUTES.workspaceContract(SETTLEMENT_COMPANY.contractNumber)}?tab=settlement`,
+            href: `${ROUTES.workspaceContract(contract.number)}?tab=settlement`,
           },
         ]
-      : []),
-  ];
+      : [];
+  });
 
   return (
     <>

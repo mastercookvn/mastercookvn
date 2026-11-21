@@ -3,20 +3,15 @@
 import { MENU_MODE, SERVING_FORMAT } from "@/constants/booking";
 import { MEAL_STATUS, ORDER_STATUS } from "@/constants/statuses";
 import { waveSpan, waveTotals } from "@/lib/servingWaves";
-import { CONTRACTS } from "@/mocks/contracts";
 import {
   useDemoState,
   type DemoState,
   type EstimateMeal,
-} from "@/mocks/demoStore";
-import {
-  ORDER_MEALS,
-  ORDER_CHANNEL,
-  ORDERS,
-  type OrderMeal,
-  type OrderRow,
-} from "@/mocks/orders";
+} from "@/lib/demoStore";
+import { ORDER_CHANNEL } from "@/constants/orders";
+import { type OrderMeal, type OrderRow } from "@/models/orders";
 
+import { listContracts } from "@/features/contracts/lib/contractRepository";
 import { estimateMeal } from "@/features/booking/lib/estimate";
 import { mealTitle } from "@/features/booking/lib/mealTitle";
 
@@ -58,7 +53,7 @@ function toOrderMeal(
   };
 }
 
-/** Orders customers sent from the booking page come first, then the samples (UC-DT-02 step 6). */
+/** Orders customers sent from the booking page (UC-DT-02 step 6). */
 function selectOrders(state: DemoState): WorkspaceOrder[] {
   const submitted: WorkspaceOrder[] = state.submittedOrders.map((order) => ({
     code: order.code,
@@ -73,16 +68,11 @@ function selectOrders(state: DemoState): WorkspaceOrder[] {
     mealDetails: order.meals.map((meal, index) =>
       toOrderMeal(meal, index, state)
     ),
-  }));
-  const samples: WorkspaceOrder[] = ORDERS.map((order) => ({
-    ...order,
-    status: state.orderStatuses[order.code] ?? order.status,
-    mealDetails: ORDER_MEALS[order.code] ?? [],
-    contractNumber: CONTRACTS.find(
+    contractNumber: listContracts().find(
       (contract) => contract.orderCode === order.code
     )?.number,
   }));
-  return [...submitted, ...samples];
+  return submitted;
 }
 
 export function useWorkspaceOrders() {

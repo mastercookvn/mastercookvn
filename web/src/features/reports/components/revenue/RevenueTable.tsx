@@ -1,9 +1,9 @@
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatMoney, formatPercent } from "@/lib/format";
-import { MONTHLY_REVENUE } from "@/mocks/inventory";
+import type { MonthlyRevenue } from "../../lib/revenueReport";
 
-export function RevenueTable() {
+export function RevenueTable({ months }: { months: MonthlyRevenue[] }) {
   return (
     <DataTable
       columns={[
@@ -13,8 +13,8 @@ export function RevenueTable() {
         num("Chi phí tiêu thụ"),
         num("Lãi theo nguyên liệu"),
       ]}
-      rows={MONTHLY_REVENUE.map((row) => [
-        `${row.month}/2026`,
+      rows={months.map((row) => [
+        row.month,
         formatMoney(row.dishRevenue),
         formatPercent(row.foodCost),
         formatMoney(row.dishRevenue * row.foodCost),

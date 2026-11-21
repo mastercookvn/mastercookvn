@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { CheckboxLabel } from "@/components/ui/CheckboxLabel";
 import { MoneyRow } from "@/components/ui/MoneyRow";
 import { useToast } from "@/components/ui/Toast";
-import { CUSTOMER } from "@/mocks/contracts";
-import { updateDemoState } from "@/mocks/demoStore";
+import type { Contract } from "@/models/contracts";
+import { updateDemoState } from "@/lib/demoStore";
 
 import { ISSUED_CONTRACT_VERSION } from "@/features/contracts/lib/contractState";
 
@@ -23,9 +23,11 @@ const now = () =>
 
 /** BR08, UC-HD-02: the signed-in account agrees to the issued version. No OTP, no drawn or digital signature. */
 export function ConfirmContractDialog({
+  contract,
   open,
   onOpenChange,
 }: {
+  contract: Contract;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -44,8 +46,8 @@ export function ConfirmContractDialog({
     updateDemoState({
       contractConfirmed: true,
       contractConfirmation: {
-        accountName: CUSTOMER.name,
-        accountPhone: CUSTOMER.phone,
+        accountName: contract.customerName,
+        accountPhone: contract.customerPhone,
         version: ISSUED_CONTRACT_VERSION,
         confirmedAt: now(),
       },
@@ -67,8 +69,8 @@ export function ConfirmContractDialog({
             thời điểm và phiên bản hợp đồng bạn đồng ý.
           </BaseDialog.Description>
           <div className="l-stack gap-1">
-            <MoneyRow label="Tài khoản" value={CUSTOMER.name} />
-            <MoneyRow label="Số điện thoại" value={CUSTOMER.phone} />
+            <MoneyRow label="Tài khoản" value={contract.customerName} />
+            <MoneyRow label="Số điện thoại" value={contract.customerPhone} />
             <MoneyRow
               label="Phiên bản hợp đồng"
               value={ISSUED_CONTRACT_VERSION}

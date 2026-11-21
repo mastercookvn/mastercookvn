@@ -7,16 +7,14 @@ import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { BOOKING_STEP, type BookingStep } from "@/constants/booking";
 import { ROUTES } from "@/constants/routes";
-import { DEMO_TODAY } from "@/constants/settings";
 import { useQueryParam } from "@/hooks/useQueryParam";
 import { formatDayMonthYear } from "@/lib/format";
-import { CUSTOMER } from "@/mocks/contracts";
 import {
   readDemoState,
   updateDemoState,
   useDemoState,
   type EstimateMeal,
-} from "@/mocks/demoStore";
+} from "@/lib/demoStore";
 
 import { ContactStep } from "@/features/booking/components/contact/ContactStep";
 import { EventStep } from "@/features/booking/components/event/EventStep";
@@ -44,7 +42,10 @@ const STEPS: { step: BookingStep; label: string; next: string }[] = [
 
 const FIRST_ONLINE_ORDER = 143;
 
-function BookingSteps({ signedIn }: { signedIn: boolean }) {
+type SignedInCustomer = { name: string; phone: string } | null;
+
+function BookingSteps({ customer }: { customer: SignedInCustomer }) {
+  const signedIn = customer !== null;
   const [param, setParam] = useQueryParam("step");
   const router = useRouter();
   const showToast = useToast();
@@ -56,9 +57,7 @@ function BookingSteps({ signedIn }: { signedIn: boolean }) {
   const menuSets = useDemoState((state) => state.menuSets);
   const catalog = { dishes, services, menuSets };
   const savedContact = useDemoState((state) => state.bookingContact);
-  const contact = signedIn
-    ? { ...savedContact, name: CUSTOMER.name, phone: CUSTOMER.phone }
-    : savedContact;
+  const contact = customer ? { ...savedContact, ...customer } : savedContact;
   const estimates = meals.map((meal) => estimateMeal(meal, catalog));
 
   if (param === BOOKING_STEP.Sent) return <OrderSentState />;
@@ -108,7 +107,7 @@ function BookingSteps({ signedIn }: { signedIn: boolean }) {
       submittedOrders: [
         {
           code,
-          submittedAt: formatDayMonthYear(DEMO_TODAY),
+          submittedAt: formatDayMonthYear(new Date()),
           eventType: bookingEventType,
           contact,
           meals,
@@ -186,10 +185,10 @@ function BookingSteps({ signedIn }: { signedIn: boolean }) {
   );
 }
 
-export function BookingFlow({ signedIn }: { signedIn: boolean }) {
+export function BookingFlow({ customer }: { customer: SignedInCustomer }) {
   return (
     <Suspense fallback={null}>
-      <BookingSteps signedIn={signedIn} />
+      <BookingSteps customer={customer} />
     </Suspense>
   );
 }

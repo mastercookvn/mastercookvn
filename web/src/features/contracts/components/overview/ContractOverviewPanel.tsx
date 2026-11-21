@@ -7,11 +7,12 @@ import {
   SETTLEMENT_STATUS,
   type MealStatus,
 } from "@/constants/statuses";
-import { useDemoState } from "@/mocks/demoStore";
-import { SETTLEMENT_COMPANY, type Contract } from "@/mocks/contracts";
+import { useDemoState } from "@/lib/demoStore";
+import { type Contract } from "@/models/contracts";
 
 import {
   isAwaitingContract,
+  isAwaitingSettlement,
   MINIMUM_DEPOSIT_LABEL,
   minimumDeposit,
 } from "@/features/contracts/lib/contractState";
@@ -32,8 +33,7 @@ export function ContractOverviewPanel({ contract }: { contract: Contract }) {
 
   const awaiting = isAwaitingContract(contract);
   const active = awaiting && confirmed && deposited;
-  const isSettlementContract =
-    contract.number === SETTLEMENT_COMPANY.contractNumber;
+  const isSettlementContract = isAwaitingSettlement(contract);
   const paid = awaiting
     ? depositPaidAmount
     : isSettlementContract
@@ -74,7 +74,7 @@ export function ContractOverviewPanel({ contract }: { contract: Contract }) {
         />
         {awaiting && !active ? (
           <Suspense fallback={null}>
-            <ActivationChecklist />
+            <ActivationChecklist contract={contract} />
           </Suspense>
         ) : null}
       </aside>

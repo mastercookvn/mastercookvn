@@ -1,8 +1,8 @@
 "use client";
 
 import { BowlIcon } from "@/components/icons";
-import { DISH_CATEGORY_LABEL } from "@/mocks/catalog";
-import type { CatalogDish } from "@/mocks/demoStore";
+import { DISH_CATEGORY_LABEL } from "@/constants/catalog";
+import type { CatalogDish } from "@/models/catalog";
 
 import { SearchPicker } from "./SearchPicker";
 

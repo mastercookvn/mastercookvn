@@ -6,9 +6,9 @@ import { useState } from "react";
 import { ChevronIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { DEMO_TODAY } from "@/constants/settings";
+import { useToday } from "@/hooks/useToday";
 import { formatLunarLong, formatLunarShort, solarToLunar } from "@/lib/lunar";
-import { CALENDAR_EVENTS, type CalendarEvent } from "@/mocks/calendar";
+import { type CalendarEvent } from "@/models/calendar";
 
 import { CalendarEventChip } from "./CalendarEventChip";
 import { LunarDateFinder } from "./LunarDateFinder";
@@ -32,9 +32,6 @@ const WEEKDAY_NAMES = [
 const DAYS_PER_WEEK = 7;
 const MONTH_CELLS = 42;
 
-const startOfDay = (date: Date) =>
-  new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
 const addDays = (date: Date, days: number) =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 
@@ -47,6 +44,9 @@ const isoDate = (date: Date) =>
 
 const shortDate = (date: Date) =>
   `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}`;
+
+// Placeholder until the meal calendar API exists.
+const CALENDAR_EVENTS: CalendarEvent[] = [];
 
 const eventsOn = (date: Date): CalendarEvent[] =>
   CALENDAR_EVENTS.filter((event) => event.date === isoDate(date)).sort(
@@ -65,7 +65,11 @@ const isLunarMark = (date: Date) => {
 };
 
 export function MealCalendar() {
-  const today = startOfDay(DEMO_TODAY);
+  const today = useToday();
+  return today ? <CalendarMonths today={today} /> : null;
+}
+
+function CalendarMonths({ today }: { today: Date }) {
   const [view, setView] = useState<CalendarView>(CALENDAR_VIEW.Week);
   const [anchor, setAnchor] = useState(today);
   const [showFinder, setShowFinder] = useState(false);

@@ -13,7 +13,7 @@ import { TextField } from "@/components/ui/TextField";
 import { SERVING_FORMAT, SERVING_FORMAT_LABEL } from "@/constants/booking";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { addressSchema, LIVE_VALIDATION_MODE } from "@/lib/validation";
-import type { EstimateMeal } from "@/mocks/demoStore";
+import { type EstimateMeal } from "@/lib/demoStore";
 
 import { withServingFormat } from "@/features/booking/lib/mealForm";
 

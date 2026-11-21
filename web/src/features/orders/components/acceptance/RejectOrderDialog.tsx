@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Dialog } from "@/components/ui/Dialog";
 import { TextareaField } from "@/components/ui/TextareaField";
 import { ORDER_STATUS } from "@/constants/statuses";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
 
 import type { WorkspaceOrder } from "@/features/orders/lib/useOrders";
 

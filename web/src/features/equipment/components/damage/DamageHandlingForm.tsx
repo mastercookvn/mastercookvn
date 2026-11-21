@@ -6,8 +6,8 @@ import { PhotoGalleryField } from "@/components/ui/PhotoGalleryField";
 import { SelectField } from "@/components/ui/SelectField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
-import type { EquipmentType } from "@/mocks/equipment";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
+import type { EquipmentType } from "@/models/equipment";
 
 const DAMAGE_ACTION = {
   Restore: "restore",

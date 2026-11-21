@@ -2,8 +2,6 @@ import { TextField } from "@/components/ui/TextField";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { ToastButton } from "@/components/ui/ToastButton";
 import { BUSINESS_SETTINGS as settings } from "@/constants/settings";
-import { formatPercent } from "@/lib/format";
-import { INVENTORY_PERIOD } from "@/mocks/inventory";
 
 export function BusinessSettingsForm() {
   return (
@@ -16,7 +14,7 @@ export function BusinessSettingsForm() {
             id="setting-food-cost"
             label="Food cost mục tiêu (%)"
             defaultValue={settings.foodCostTarget * 100}
-            hint={`Dùng chung để gợi ý giá bán từng món. Food cost thực tế 10/2026: ${formatPercent(INVENTORY_PERIOD.foodCost)}, không tự ghi đè.`}
+            hint="Dùng chung để gợi ý giá bán từng món. Food cost thực tế sau chốt kỳ không tự ghi đè."
           />
           <TextField
             id="setting-tax"

@@ -1,8 +1,9 @@
 import { STAFF_POSITIONS, type StaffPosition } from "@/constants/staffing";
 import { staffingDemand, type PlannedShift } from "@/lib/staffingPlan";
-import { capacityRows } from "@/mocks/equipment";
-import { OPERATION_MEALS } from "@/mocks/operationMeals";
-import type { OrderMeal } from "@/mocks/orders";
+import { equipmentDemand, type EquipmentType } from "@/models/equipment";
+import type { OrderMeal } from "@/models/orders";
+
+import { listOperationMeals } from "@/features/meals/lib/operationMeals";
 
 export type StaffCapacityRow = {
   position: StaffPosition;
@@ -23,7 +24,8 @@ export function staffCapacityRows(
 ): StaffCapacityRow[] {
   const demand = staffingDemand(meal.waves, meal.guestsPerTable);
   const busy = new Set(
-    OPERATION_MEALS.filter((other) => other.date === meal.date.slice(0, 5))
+    listOperationMeals()
+      .filter((other) => other.date === meal.date)
       .flatMap((other) => assignments[other.id] ?? [])
       .map((shift) => shift.staff)
   );
@@ -44,8 +46,37 @@ export function staffCapacityRows(
   });
 }
 
-/** BR07: shortages block accepting; below-minimum stock only warns. */
-export const equipmentCapacityRows = (
-  meal: OrderMeal,
-  simulateShortage: boolean
-) => capacityRows(simulateShortage, meal);
+/** Manual-basis items count this many per meal until the consultant enters a figure. */
+const DEFAULT_MANUAL_QUANTITY = 2;
+
+/**
+ * BR07, BR13: shortages block accepting; below-minimum stock only warns.
+ * Quantities held by overlapping meals come from the backend; none are known locally yet.
+ */
+export function equipmentCapacityRows(
+  meal: Pick<OrderMeal, "servingTables" | "guestsPerTable" | "setupTables">,
+  equipment: readonly EquipmentType[]
+) {
+  const guests = meal.servingTables * meal.guestsPerTable;
+  return equipment.map((item) => {
+    const needed = equipmentDemand(
+      item,
+      guests,
+      meal.setupTables,
+      DEFAULT_MANUAL_QUANTITY
+    );
+    const held = 0;
+    const usable = item.owned - item.damaged;
+    const available = usable - held;
+    return {
+      name: item.name,
+      basis: item.basis,
+      needed,
+      usable,
+      held,
+      available,
+      short: needed > available,
+      belowMinimum: item.ready < item.minimum,
+    };
+  });
+}

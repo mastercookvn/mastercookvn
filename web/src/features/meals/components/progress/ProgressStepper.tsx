@@ -7,8 +7,8 @@ import { MEAL_STATUS_META } from "@/constants/labels";
 import { STAFF_POSITION } from "@/constants/staffing";
 import { MEAL_PROGRESS, MEAL_STATUS } from "@/constants/statuses";
 import { servingStaffNeeded } from "@/lib/pricing";
-import { useDemoState } from "@/mocks/demoStore";
-import type { OperationMeal } from "@/mocks/operationMeals";
+import { useDemoState } from "@/lib/demoStore";
+import type { OperationMeal } from "@/models/operations";
 
 import { advanceMeal } from "../../lib/mealActions";
 import { advanceLabel } from "../../lib/nextStep";

@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/Button";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { TextField } from "@/components/ui/TextField";
 import { ROUTES } from "@/constants/routes";
-import { CUSTOMER } from "@/mocks/contracts";
 import {
   LIVE_VALIDATION_MODE,
   phoneSchema,
@@ -52,13 +51,11 @@ export function OrderLookupForm() {
   // Placeholder for GET /orders/lookup. The backend should answer only after an
   // SMS code for this phone, so a leaked order code alone shows nothing.
   const lookUp = handleSubmit(({ phone: localPhone, code: wanted }) => {
-    const order =
-      localPhone === phoneSchema.parse(CUSTOMER.phone)
-        ? orders.find(
-            (item) =>
-              item.orderCode === wanted || item.contractNumber === wanted
-          )
-        : undefined;
+    const order = orders.find(
+      (item) =>
+        (item.orderCode === wanted || item.contractNumber === wanted) &&
+        phoneSchema.safeParse(item.phone).data === localPhone
+    );
     setResult(
       order ? { kind: "found", order, phone: localPhone } : { kind: "missing" }
     );
@@ -79,7 +76,7 @@ export function OrderLookupForm() {
           label="Số điện thoại đặt tiệc"
           type="tel"
           autoComplete="tel"
-          placeholder="0903 123 456"
+          placeholder="09xx xxx xxx"
           inputMode="tel"
           {...register("phone")}
           error={errors.phone?.message}
@@ -87,7 +84,7 @@ export function OrderLookupForm() {
         <TextField
           id="lookup-code"
           label="Mã đơn hoặc số hợp đồng"
-          placeholder="DH-0142 hoặc HD-2026-0142"
+          placeholder="DH-... hoặc HD-..."
           hint="Mã có trong tin nhắn Zalo hoặc SMS tư vấn gửi bạn."
           {...register("code")}
           error={errors.code?.message}

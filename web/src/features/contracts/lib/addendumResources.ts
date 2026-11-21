@@ -2,11 +2,7 @@ import { STAFF_POSITIONS, STAFF_POSITION_LABEL } from "@/constants/staffing";
 import type { ServingWave } from "@/lib/servingWaves";
 import { waveTotals } from "@/lib/servingWaves";
 import { staffingDemand } from "@/lib/staffingPlan";
-import {
-  equipmentDemand,
-  heldByOverlappingMeals,
-  type EquipmentType,
-} from "@/mocks/equipment";
+import { equipmentDemand, type EquipmentType } from "@/models/equipment";
 
 /** Added tables are spread over the waves one by one, from the first wave. */
 export function wavesWithAddedTables(
@@ -63,8 +59,8 @@ export function addedTablesShortages({
       setupTables,
       0
     );
-    const available =
-      item.owned - item.damaged - heldByOverlappingMeals(item.name);
+    // Quantities held by overlapping meals come from the backend; none are known locally yet.
+    const available = item.owned - item.damaged;
     const missing = needed - available;
     return missing > 0
       ? [`Thiếu ${missing} ${item.unit} ${item.name.toLowerCase()}`]

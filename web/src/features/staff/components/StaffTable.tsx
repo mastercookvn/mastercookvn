@@ -11,16 +11,12 @@ import {
 } from "@/components/ui/ConfirmDelete";
 import { RowMenu } from "@/components/ui/RowMenu";
 import { useToast } from "@/components/ui/Toast";
-import { STAFF, type Staff } from "@/mocks/people";
+import { type Staff } from "@/models/people";
 import { STAFF_POSITION_LABEL, STAFF_TYPE_LABEL } from "@/constants/staffing";
 import { DataTable } from "@/components/ui/DataTable";
 import { Drawer, DRAWER_SIZE } from "@/components/ui/Drawer";
 import { PanelHeader } from "@/components/ui/PanelHeader";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import { StaffForm } from "./StaffForm";
 
@@ -34,14 +30,16 @@ const initials = (name: string) =>
     .map((word) => word[0])
     .join("");
 
-/** Sample staff have past assignments, so they are deactivated instead. */
-const hasHistory = (member: Staff) =>
-  STAFF.some((sample) => sample.phone === member.phone);
-
 export function StaffTable() {
   const showToast = useToast();
   const [deleting, setDeleting] = useState<DeleteTarget>(null);
   const staff = useDemoState((state) => state.staff);
+  const assignments = useDemoState((state) => state.assignments);
+  /** Staff with past assignments are deactivated instead. */
+  const hasHistory = (member: Staff) =>
+    Object.values(assignments).some((rows) =>
+      rows.some((row) => row.staff === member.name)
+    );
 
   const setActive = (member: Staff, active: boolean) => {
     updateDemoState({

@@ -7,8 +7,8 @@ import { MEAL_STATUS_META } from "@/constants/labels";
 import { hasAnyRole, ROLE, type Role } from "@/constants/roles";
 import { ROUTES } from "@/constants/routes";
 import { MEAL_STATUS, type MealStatus } from "@/constants/statuses";
-import { useDemoState } from "@/mocks/demoStore";
-import { OPERATION_MEALS } from "@/mocks/operationMeals";
+import { useDemoState } from "@/lib/demoStore";
+import { listOperationMeals } from "@/features/meals/lib/operationMeals";
 
 /** Opens the tab matching the meal stage and the viewer's role. */
 function tabForMeal(status: MealStatus, roles: Role[]) {
@@ -41,7 +41,7 @@ export function MealSwitcher({
       aria-label="Chọn bữa"
       className="meal-switcher"
       value={currentId}
-      options={OPERATION_MEALS.map((meal) => ({
+      options={listOperationMeals().map((meal) => ({
         value: meal.id,
         label: `${meal.date} · ${meal.name} · ${MEAL_STATUS_META[statuses[meal.id]].label}`,
       }))}

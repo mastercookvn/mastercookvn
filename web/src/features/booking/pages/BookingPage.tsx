@@ -11,7 +11,13 @@ export async function BookingPage() {
       <Reveal as="h1" variant="up" immediate className="h1-page">
         Tính giá và đặt tiệc
       </Reveal>
-      <BookingFlow signedIn={session?.kind === "customer"} />
+      <BookingFlow
+        customer={
+          session?.kind === "customer"
+            ? { name: session.name, phone: session.phone }
+            : null
+        }
+      />
     </div>
   );
 }

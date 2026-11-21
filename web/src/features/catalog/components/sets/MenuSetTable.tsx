@@ -15,26 +15,24 @@ import { RowMenu } from "@/components/ui/RowMenu";
 import { num } from "@/components/ui/tableColumns";
 import { useToast } from "@/components/ui/Toast";
 import { formatMoney } from "@/lib/format";
-import { MENU_SETS, type MenuSet } from "@/mocks/catalog";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
+import { type MenuSet } from "@/models/catalog";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import { MenuSetForm } from "./MenuSetForm";
 
 const FORM_ID = "menu-set-form";
 const NEW_SET = "new";
 
-/** Sample sets are already on contracts, so they can only be deactivated. */
-const hasHistory = (set: MenuSet) =>
-  MENU_SETS.some((sample) => sample.id === set.id);
-
 export function MenuSetTable() {
   const showToast = useToast();
   const menuSets = useDemoState((state) => state.menuSets);
   const dishes = useDemoState((state) => state.dishes);
+  const submittedOrders = useDemoState((state) => state.submittedOrders);
+  /** A set already on an order can only be deactivated. */
+  const hasHistory = (set: MenuSet) =>
+    submittedOrders.some((order) =>
+      order.meals.some((meal) => meal.setId === set.id)
+    );
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<DeleteTarget>(null);
   const editing = menuSets.find((set) => set.id === editingId) ?? null;

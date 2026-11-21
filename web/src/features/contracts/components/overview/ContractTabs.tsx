@@ -1,11 +1,12 @@
 import { Tabs, type TabItem } from "@/components/ui/Tabs";
 import { CONTRACT_STATUS } from "@/constants/statuses";
-import type { Contract } from "@/mocks/contracts";
+import type { Contract } from "@/models/contracts";
 
 import {
   isAwaitingContract,
   isAwaitingSettlement,
 } from "../../lib/contractState";
+import { findPendingAddendum } from "../../lib/contractRepository";
 import { AddendumConfirmationPanel } from "../addendum/AddendumConfirmationPanel";
 import { CancelMealPanel } from "../cancellation/CancelMealPanel";
 import { PaymentPanel } from "../payment/PaymentPanel";
@@ -37,10 +38,14 @@ export function ContractTabs({ contract }: { contract: Contract }) {
   const panels = {
     overview: <ContractOverviewPanel contract={contract} />,
     payment: <PaymentPanel contract={contract} />,
-    addendum: <AddendumConfirmationPanel />,
-    cancel: <CancelMealPanel />,
+    addendum: (
+      <AddendumConfirmationPanel
+        addendum={findPendingAddendum(contract.number)}
+      />
+    ),
+    cancel: <CancelMealPanel contract={contract} />,
     review: <ReviewForm />,
-    invoice: <FinalInvoicePanel />,
+    invoice: <FinalInvoicePanel contract={contract} />,
   };
 
   return (

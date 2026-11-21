@@ -1,11 +1,14 @@
 import { MoneyRow } from "@/components/ui/MoneyRow";
 import { formatMoney, formatNumber } from "@/lib/format";
-import { SETTLEMENT_COMPANY as settlement } from "@/mocks/contracts";
+
+import type { Settlement } from "../../lib/settlement";
 
 /** BR11. Shared by the accountant sheet and the customer's invoice. */
 export function SettlementLines({
+  settlement,
   settlementPaid,
 }: {
+  settlement: Settlement;
   settlementPaid: number;
 }) {
   return (

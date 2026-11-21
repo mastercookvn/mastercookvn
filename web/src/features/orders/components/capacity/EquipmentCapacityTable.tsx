@@ -4,14 +4,14 @@ import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatNumber } from "@/lib/format";
-import { useDemoState } from "@/mocks/demoStore";
-import { EQUIPMENT_BASIS_LABEL } from "@/mocks/equipment";
-import type { OrderMeal } from "@/mocks/orders";
+import { useDemoState } from "@/lib/demoStore";
+import { EQUIPMENT_BASIS_LABEL } from "@/constants/equipment";
+import type { OrderMeal } from "@/models/orders";
 
 import { equipmentCapacityRows } from "@/features/orders/lib/capacity";
 
 export function EquipmentCapacityTable({ meal }: { meal: OrderMeal }) {
-  const shortage = useDemoState((state) => state.simulateShortage);
+  const equipment = useDemoState((state) => state.equipment);
 
   return (
     <DataTable
@@ -24,7 +24,7 @@ export function EquipmentCapacityTable({ meal }: { meal: OrderMeal }) {
         num("Khả dụng"),
         "Kết quả",
       ]}
-      rows={equipmentCapacityRows(meal, shortage).map((row) => [
+      rows={equipmentCapacityRows(meal, equipment).map((row) => [
         row.name,
         <span key="basis" className="text-soft">
           {EQUIPMENT_BASIS_LABEL[row.basis]}

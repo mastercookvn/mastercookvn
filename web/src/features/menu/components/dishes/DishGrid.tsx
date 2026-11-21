@@ -1,8 +1,9 @@
 "use client";
 
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useQueryParam } from "@/hooks/useQueryParam";
-import { DISH_CATEGORY_LABEL, type DishCategory } from "@/mocks/catalog";
-import { useDemoState } from "@/mocks/demoStore";
+import { DISH_CATEGORY_LABEL, type DishCategory } from "@/constants/catalog";
+import { useDemoState } from "@/lib/demoStore";
 
 import { DishCard } from "./DishCard";
 import { DishCategoryFilter } from "./DishCategoryFilter";
@@ -22,11 +23,15 @@ export function DishGrid() {
   return (
     <>
       <DishCategoryFilter active={category} onChange={setValue} />
-      <div className="l-grid l-grid-4">
-        {dishes.map((dish, index) => (
-          <DishCard key={dish.id} dish={dish} index={index % 4} />
-        ))}
-      </div>
+      {dishes.length ? (
+        <div className="l-grid l-grid-4">
+          {dishes.map((dish, index) => (
+            <DishCard key={dish.id} dish={dish} index={index % 4} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState>Chưa có món nào.</EmptyState>
+      )}
     </>
   );
 }

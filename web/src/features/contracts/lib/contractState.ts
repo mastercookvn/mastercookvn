@@ -1,7 +1,7 @@
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { CONTRACT_STATUS, MEAL_STATUS } from "@/constants/statuses";
-import { roundTo500 } from "@/lib/pricing";
-import type { Contract } from "@/mocks/contracts";
+import { calculateCancellation, roundTo500 } from "@/lib/pricing";
+import { daysUntil, type Contract, type Meal } from "@/models/contracts";
 
 export const isAwaitingContract = (contract: Contract) =>
   contract.status === CONTRACT_STATUS.AwaitingConfirmationAndDeposit;
@@ -31,6 +31,24 @@ export function contractStageTabs(contract: Contract): string[] {
     ...(isAwaitingSettlement(contract) ? ["payment", "settlement"] : []),
   ];
 }
+
+/** BR01: money collected on the contract is allocated to meals by value. */
+export const paidForMeal = (contract: Contract, meal: Meal) =>
+  contract.total
+    ? Math.round((contract.paid * meal.price.total) / contract.total)
+    : 0;
+
+/** BR10: the refund tier follows when the customer asks. */
+export const cancellationFor = (
+  contract: Contract,
+  meal: Meal,
+  requestedAt: Date = new Date()
+) =>
+  calculateCancellation({
+    mealValue: meal.price.total,
+    paid: paidForMeal(contract, meal),
+    daysLeft: daysUntil(meal.startsAt, requestedAt),
+  });
 
 /** BR08: the floor the customer must pay. Any amount up to the total is accepted. */
 export const minimumDeposit = (contract: Contract) =>

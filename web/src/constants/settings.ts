@@ -1,4 +1,4 @@
-/** Sample values (section 1). */
+/** Parameter defaults (docs system-parameters); the backend will supply current values. */
 export const BUSINESS_SETTINGS = {
   foodCostTarget: 0.35,
   taxRate: 0.08,
@@ -11,6 +11,3 @@ export const BUSINESS_SETTINGS = {
   extraDepositTableThreshold: 3,
   tablesPerServer: 3,
 } as const;
-
-/** Fixed date for the sample data. */
-export const DEMO_TODAY = new Date("2026-11-05T09:00:00+07:00");

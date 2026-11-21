@@ -19,8 +19,8 @@ import {
   parseAmountText,
   requiredTextSchema,
 } from "@/lib/validation";
-import type { Service } from "@/mocks/catalog";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
+import type { Service } from "@/models/catalog";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
 
 const newServiceId = () => `dv-${Date.now().toString(36)}`;
 

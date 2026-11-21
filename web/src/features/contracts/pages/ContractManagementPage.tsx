@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 
 import { WorkspaceTabs } from "@/components/layout/workspace/WorkspaceTabs";
 import { getStaffRoles } from "@/lib/auth";
-import { contractByNumber } from "@/mocks/contracts";
 
+import { findContract } from "../lib/contractRepository";
 import { AddendumDraftPanel } from "../components/addendum/AddendumDraftPanel";
 import { CancelRequestForm } from "../components/cancellation/CancelRequestForm";
 import { ContractIssuePanel } from "../components/issuance/ContractIssuePanel";
@@ -13,7 +13,7 @@ import { SettlementPanel } from "../components/settlement/SettlementPanel";
 import { contractStageTabs, upcomingMeal } from "../lib/contractState";
 
 export async function ContractManagementPage({ number }: { number: string }) {
-  const contract = contractByNumber(number);
+  const contract = findContract(number);
   if (!contract) notFound();
 
   const roles = await getStaffRoles();
@@ -27,14 +27,14 @@ export async function ContractManagementPage({ number }: { number: string }) {
       only={contractStageTabs(contract)}
       panels={{
         overview: <ContractIssuePanel roles={roles} contract={contract} />,
-        payment: <RecordPaymentForm contractNumber={contract.number} />,
+        payment: <RecordPaymentForm contract={contract} />,
         addendum: meal ? (
           <AddendumDraftPanel contract={contract} meal={meal} />
         ) : null,
         cancel: meal ? (
           <CancelRequestForm contract={contract} meal={meal} />
         ) : null,
-        settlement: <SettlementPanel />,
+        settlement: <SettlementPanel contract={contract} />,
       }}
     />
   );

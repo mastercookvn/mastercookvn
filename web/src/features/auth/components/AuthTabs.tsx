@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
-import { SampleAccountList } from "./SampleAccountList";
+import { DevAdminSignIn } from "./DevAdminSignIn";
 
 const ITEMS = [
   { value: "login", label: "Đăng nhập" },
@@ -25,7 +25,7 @@ export function AuthTabs() {
             </Suspense>
             {env.NEXT_PUBLIC_SHOW_SAMPLE_ACCOUNTS === "true" ? (
               <Suspense fallback={null}>
-                <SampleAccountList />
+                <DevAdminSignIn />
               </Suspense>
             ) : null}
           </>

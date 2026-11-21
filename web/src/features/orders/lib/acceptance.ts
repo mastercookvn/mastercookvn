@@ -1,7 +1,7 @@
 "use client";
 
-import { useDemoState } from "@/mocks/demoStore";
-import { SERVICE_RADIUS_KM } from "@/mocks/orders";
+import { useDemoState } from "@/lib/demoStore";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
 
 import { equipmentCapacityRows, staffCapacityRows } from "./capacity";
 import { surveyKey, type WorkspaceOrder } from "./useOrders";
@@ -9,7 +9,7 @@ import { surveyKey, type WorkspaceOrder } from "./useOrders";
 /** BR07, BR12, UC-DT-03: every meal surveyed, within range, with enough resources. */
 export function useAcceptanceChecks(order: WorkspaceOrder) {
   const distances = useDemoState((state) => state.surveyDistances);
-  const shortage = useDemoState((state) => state.simulateShortage);
+  const equipment = useDemoState((state) => state.equipment);
   const staff = useDemoState((state) => state.staff);
   const assignments = useDemoState((state) => state.assignments);
 
@@ -24,9 +24,9 @@ export function useAcceptanceChecks(order: WorkspaceOrder) {
     mealCount: order.mealDetails.length,
     surveyed,
     farthest,
-    outOfRange: farthest > SERVICE_RADIUS_KM,
+    outOfRange: farthest > BUSINESS_SETTINGS.serviceRadiusKm,
     equipmentShort: order.mealDetails.some((meal) =>
-      equipmentCapacityRows(meal, shortage).some((row) => row.short)
+      equipmentCapacityRows(meal, equipment).some((row) => row.short)
     ),
     staffShort: order.mealDetails.some((meal) =>
       staffCapacityRows(meal, staff, assignments).some((row) => row.short)

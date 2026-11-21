@@ -18,21 +18,17 @@ import { RowMenu } from "@/components/ui/RowMenu";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { LIVE_VALIDATION_MODE, requiredTextSchema } from "@/lib/validation";
-import { EVENT_TYPES } from "@/mocks/catalog";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 const FORM_ID = "event-type-form";
-
-/** Sample types are on past orders and reports, so they stay. */
-const hasHistory = (eventType: string) => EVENT_TYPES.includes(eventType);
 
 export function EventTypeTable() {
   const showToast = useToast();
   const eventTypes = useDemoState((state) => state.eventTypes);
+  const submittedOrders = useDemoState((state) => state.submittedOrders);
+  /** Types on past orders and reports stay. */
+  const hasHistory = (eventType: string) =>
+    submittedOrders.some((order) => order.eventType === eventType);
   const [open, setOpen] = useState(false);
   const [original, setOriginal] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<DeleteTarget>(null);

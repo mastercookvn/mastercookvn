@@ -3,7 +3,8 @@ import { num } from "@/components/ui/tableColumns";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ROUTES } from "@/constants/routes";
 import { formatMoney } from "@/lib/format";
-import { ORDER_CHANNEL_LABEL, type OrderRow } from "@/mocks/orders";
+import { ORDER_CHANNEL_LABEL } from "@/constants/orders";
+import { type OrderRow } from "@/models/orders";
 
 export function OrderTable({ orders }: { orders: OrderRow[] }) {
   return (
@@ -34,11 +35,9 @@ export function OrderTable({ orders }: { orders: OrderRow[] }) {
         formatMoney(order.total),
         <StatusBadge key="status" domain="order" status={order.status} />,
       ])}
-      rowActions={orders.map((order) =>
-        order.code === "DH-0142"
-          ? { href: ROUTES.workspaceOrder(order.code) }
-          : { toast: "Bản mẫu chỉ mở chi tiết đơn DH-0142" }
-      )}
+      rowActions={orders.map((order) => ({
+        href: ROUTES.workspaceOrder(order.code),
+      }))}
     />
   );
 }

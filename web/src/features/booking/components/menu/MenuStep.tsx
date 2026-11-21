@@ -3,11 +3,10 @@
 import { DishPicker } from "@/components/ui/DishPicker";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { MENU_MODE, MENU_MODE_LABEL } from "@/constants/booking";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 import { BookingMealCard } from "@/features/booking/components/flow/BookingMealCard";
 import { mealMenuErrors } from "@/features/booking/lib/estimate";
-import { withMenuMode } from "@/features/booking/lib/mealForm";
 import { useBookingMeals } from "@/features/booking/lib/useBookingMeals";
 import { MenuSetDishList } from "@/features/menu/components/sets/MenuSetDishList";
 
@@ -38,7 +37,7 @@ export function MenuStep({ showErrors }: { showErrors: boolean }) {
           label="Cách chọn thực đơn"
           options={MODE_OPTIONS}
           value={meal.mode}
-          onChange={(mode) => updateMeal(index, withMenuMode(meal, mode))}
+          onChange={(mode) => updateMeal(index, { mode })}
         />
         {meal.mode === MENU_MODE.Set ? (
           <>

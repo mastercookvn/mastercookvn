@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Drawer, DRAWER_SIZE } from "@/components/ui/Drawer";
 import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 import { EquipmentPurchaseForm, shortfall } from "./EquipmentPurchaseForm";
 import { SavedEquipmentPurchases } from "./SavedEquipmentPurchases";

@@ -1,9 +1,10 @@
 import { StatTile } from "@/components/ui/StatTile";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { formatMoney, formatPercent } from "@/lib/format";
-import { INVENTORY_PERIOD as period } from "@/mocks/inventory";
 
-export function PeriodKpis() {
+import type { InventoryPeriod } from "../../lib/inventoryPeriod";
+
+export function PeriodKpis({ period }: { period: InventoryPeriod }) {
   return (
     <div className="l-grid l-grid-4">
       <StatTile value={formatMoney(period.cost)} label="Chi phí tiêu thụ" />

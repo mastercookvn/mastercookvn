@@ -2,7 +2,7 @@ import { BowlIcon } from "@/components/icons";
 import { MaskImage } from "@/components/motion/MaskImage";
 import { Reveal } from "@/components/motion/Reveal";
 import { formatMoney } from "@/lib/format";
-import type { Dish } from "@/mocks/catalog";
+import type { Dish } from "@/models/catalog";
 
 const SIZES = "(max-width: 760px) 50vw, (max-width: 1080px) 50vw, 25vw";
 

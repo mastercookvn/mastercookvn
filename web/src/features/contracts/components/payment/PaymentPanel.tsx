@@ -3,12 +3,12 @@
 import { Alert } from "@/components/ui/Alert";
 import { PAYMENT_PURPOSE } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import type { Contract } from "@/mocks/contracts";
+import type { Contract } from "@/models/contracts";
 import {
   paymentIntentKey,
   updateDemoState,
   useDemoState,
-} from "@/mocks/demoStore";
+} from "@/lib/demoStore";
 
 import {
   MINIMUM_DEPOSIT_LABEL,

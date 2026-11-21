@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, type ReactNode } from "react";
 
 import { mediaUrl, type MediaKey } from "@/lib/media";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 /** Resolves a stored media key; a photo just uploaded in this browser wins over the bucket copy. */
 export function useMediaSrc(imageKey: MediaKey | undefined) {

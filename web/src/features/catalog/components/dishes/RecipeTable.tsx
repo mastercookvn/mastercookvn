@@ -4,7 +4,7 @@ import { CloseIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { formatMoney } from "@/lib/format";
-import type { Ingredient } from "@/mocks/inventory";
+import type { Ingredient } from "@/models/inventory";
 
 export type DraftRecipeLine = { ingredient: string; quantity: string };
 

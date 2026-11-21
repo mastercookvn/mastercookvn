@@ -2,7 +2,7 @@
 
 import { FlowerIcon } from "@/components/icons";
 import { SearchPicker } from "@/components/ui/SearchPicker";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 export function ServicePicker({
   selected,

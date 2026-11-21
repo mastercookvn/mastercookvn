@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatMoney } from "@/lib/format";
-import type { Contract } from "@/mocks/contracts";
+import type { Contract } from "@/models/contracts";
 
 export function AllocationPreview({
   contract,

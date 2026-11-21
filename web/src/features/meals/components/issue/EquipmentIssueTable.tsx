@@ -10,17 +10,9 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { useToast } from "@/components/ui/Toast";
 import { EQUIPMENT_ISSUE_STATUS, MEAL_STATUS } from "@/constants/statuses";
 import { formatNumber } from "@/lib/format";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import {
-  EQUIPMENT,
-  equipmentDemand,
-  equipmentFormula,
-} from "@/mocks/equipment";
-import { type OperationMeal } from "@/mocks/operationMeals";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { equipmentDemand, equipmentFormula } from "@/models/equipment";
+import { type OperationMeal } from "@/models/operations";
 
 import { MealStageNotice } from "@/features/meals/components/MealStageNotice";
 
@@ -29,8 +21,9 @@ export function EquipmentIssueTable({ meal }: { meal: OperationMeal }) {
   const issued = useDemoState(
     (state) => state.equipmentIssued[meal.id] ?? false
   );
+  const equipment = useDemoState((state) => state.equipment);
   const showToast = useToast();
-  const needed = EQUIPMENT.map((item) =>
+  const needed = equipment.map((item) =>
     equipmentDemand(item, meal.guests, meal.setupTables, 1)
   );
   const [quantities, setQuantities] = useState(needed);
@@ -41,7 +34,7 @@ export function EquipmentIssueTable({ meal }: { meal: OperationMeal }) {
     );
   }
 
-  const overReady = EQUIPMENT.map(
+  const overReady = equipment.map(
     (item, index) => quantities[index] > item.ready
   );
   const hasProblem = overReady.some(Boolean);
@@ -57,7 +50,7 @@ export function EquipmentIssueTable({ meal }: { meal: OperationMeal }) {
           <ExportButton
             fileName={`phieu-xuat-${meal.orderCode}`}
             columns={["Dụng cụ", "Cần", "Sẵn sàng", "Thực xuất"]}
-            rows={EQUIPMENT.map((item, index) => [
+            rows={equipment.map((item, index) => [
               item.name,
               needed[index],
               item.ready,
@@ -102,7 +95,7 @@ export function EquipmentIssueTable({ meal }: { meal: OperationMeal }) {
           num("Sẵn sàng"),
           num("Thực xuất"),
         ]}
-        rows={EQUIPMENT.map((item, index) => [
+        rows={equipment.map((item, index) => [
           item.name,
           <span key="formula" className="text-small text-soft">
             {equipmentFormula(item)}

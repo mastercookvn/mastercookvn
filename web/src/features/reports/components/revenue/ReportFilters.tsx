@@ -1,8 +1,12 @@
+"use client";
+
 import { SelectField } from "@/components/ui/SelectField";
 import { TextField } from "@/components/ui/TextField";
-import { EVENT_TYPES } from "@/mocks/catalog";
+import { useDemoState } from "@/lib/demoStore";
 
 export function ReportFilters() {
+  const eventTypes = useDemoState((state) => state.eventTypes);
+
   return (
     <section className="card l-grid l-grid-4 p-3">
       <SelectField
@@ -11,12 +15,12 @@ export function ReportFilters() {
         options={["Tháng", "Quý", "Năm", "Từ ngày đến ngày"]}
         defaultValue="Tháng"
       />
-      <TextField id="report-from" label="Từ" defaultValue="06/2026" />
-      <TextField id="report-to" label="Đến" defaultValue="10/2026" />
+      <TextField id="report-from" label="Từ" placeholder="MM/yyyy" />
+      <TextField id="report-to" label="Đến" placeholder="MM/yyyy" />
       <SelectField
         id="report-event"
         label="Loại tiệc"
-        options={["Tất cả", ...EVENT_TYPES]}
+        options={["Tất cả", ...eventTypes]}
         defaultValue="Tất cả"
       />
     </section>

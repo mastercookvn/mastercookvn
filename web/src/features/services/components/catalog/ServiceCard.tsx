@@ -1,7 +1,7 @@
 import { Reveal } from "@/components/motion/Reveal";
 import { CardTitle } from "@/components/ui/CardTitle";
 import { formatMoney } from "@/lib/format";
-import type { Service } from "@/mocks/catalog";
+import type { Service } from "@/models/catalog";
 
 import { ServiceCardMedia } from "./ServiceCardMedia";
 

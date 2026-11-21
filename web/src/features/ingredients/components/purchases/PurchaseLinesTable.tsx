@@ -4,11 +4,8 @@ import { CloseIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { formatMoney } from "@/lib/format";
-import {
-  INGREDIENT_UNITS,
-  purchaseTotal,
-  type Ingredient,
-} from "@/mocks/inventory";
+import { INGREDIENT_UNITS } from "@/constants/inventory";
+import { purchaseTotal, type Ingredient } from "@/models/inventory";
 
 import { PriceDeviationFlag } from "./PriceDeviationFlag";
 

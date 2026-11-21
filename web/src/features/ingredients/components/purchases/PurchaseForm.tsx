@@ -10,12 +10,10 @@ import { PhotoGalleryField } from "@/components/ui/PhotoGalleryField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { LIVE_VALIDATION_MODE, purchaseHeaderSchema } from "@/lib/validation";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import { INGREDIENT_UNITS, INVENTORY_PERIOD } from "@/mocks/inventory";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { INGREDIENT_UNITS } from "@/constants/inventory";
+
+import { currentInventoryPeriod } from "@/features/ingredients/lib/inventoryPeriod";
 
 import {
   parseLines,
@@ -49,7 +47,7 @@ export function PurchaseForm({
   } = useForm({
     resolver: zodResolver(purchaseHeaderSchema),
     mode: LIVE_VALIDATION_MODE,
-    defaultValues: { date: "05/11/2026", supplier: "", phone: "" },
+    defaultValues: { date: "", supplier: "", phone: "" },
   });
   const [lines, setLines] = useState<DraftLine[]>(() => [blankLine()]);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -57,11 +55,10 @@ export function PurchaseForm({
 
   const save = handleSubmit(({ date, supplier, phone }) => {
     const parsed = parseLines(lines);
+    const period = currentInventoryPeriod();
     const problems = [
-      ...(periodClosed && date.slice(3) === INVENTORY_PERIOD.month
-        ? [
-            `Tháng ${INVENTORY_PERIOD.month} đã chốt, không ghi phiếu nhập được.`,
-          ]
+      ...(periodClosed && date.slice(3) === period?.month
+        ? [`Tháng ${period.month} đã chốt, không ghi phiếu nhập được.`]
         : []),
       ...(parsed.some((line) => line.ingredient === "")
         ? ["Nhập tên nguyên liệu cho mọi dòng."]

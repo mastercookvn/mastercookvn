@@ -41,13 +41,9 @@ export function RecordRefundDialog({ remaining }: { remaining: number }) {
         <TextField
           id="refund-date"
           label="Ngày hoàn"
-          defaultValue="05/11/2026"
+          placeholder="dd/MM/yyyy"
         />
-        <TextField
-          id="refund-proof"
-          label="Biên nhận (bắt buộc)"
-          defaultValue="bien-nhan.jpg"
-        />
+        <TextField id="refund-proof" label="Biên nhận (bắt buộc)" />
       </Dialog>
     </>
   );

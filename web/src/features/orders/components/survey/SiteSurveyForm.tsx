@@ -9,12 +9,9 @@ import { TextareaField } from "@/components/ui/TextareaField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { servingStaffNeeded } from "@/lib/pricing";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import { SERVICE_RADIUS_KM, SURVEY_QUESTIONS } from "@/mocks/orders";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { SURVEY_QUESTIONS } from "@/constants/orders";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
 
 import {
   surveyKey,
@@ -30,7 +27,7 @@ function SurveyForMeal({ order }: { order: WorkspaceOrder }) {
   const saved = useDemoState((state) => state.surveyDistances[key]);
   const km = saved ?? meal.distanceKm;
   const showToast = useToast();
-  const outOfRange = km !== undefined && km > SERVICE_RADIUS_KM;
+  const outOfRange = km !== undefined && km > BUSINESS_SETTINGS.serviceRadiusKm;
   const nextIndex = (mealIndex + 1) % order.mealDetails.length;
   const day = meal.date.slice(0, 5);
 
@@ -70,13 +67,8 @@ function SurveyForMeal({ order }: { order: WorkspaceOrder }) {
         ) : null}
       </div>
       <div key={key} className="l-grid l-grid-3">
-        {SURVEY_QUESTIONS.map(([question, answer], index) => (
-          <TextField
-            key={question}
-            id={`survey-${index}`}
-            label={question}
-            defaultValue={answer}
-          />
+        {SURVEY_QUESTIONS.map((question, index) => (
+          <TextField key={question} id={`survey-${index}`} label={question} />
         ))}
       </div>
       <div key={`${key}-plan`} className="l-grid l-grid-4 is-loose">
@@ -84,9 +76,11 @@ function SurveyForMeal({ order }: { order: WorkspaceOrder }) {
           id="survey-km"
           label="Khoảng cách (km)"
           error={
-            outOfRange ? `Ngoài phạm vi ${SERVICE_RADIUS_KM} km` : undefined
+            outOfRange
+              ? `Ngoài phạm vi ${BUSINESS_SETTINGS.serviceRadiusKm} km`
+              : undefined
           }
-          hint={`Tối đa ${SERVICE_RADIUS_KM} km, tra thủ công`}
+          hint={`Tối đa ${BUSINESS_SETTINGS.serviceRadiusKm} km, tra thủ công`}
         >
           <input
             id="survey-km"
@@ -127,14 +121,13 @@ function SurveyForMeal({ order }: { order: WorkspaceOrder }) {
         <TextField
           id="survey-kitchen"
           label="Bếp, vận chuyển"
-          defaultValue="3, 2"
+          placeholder="Số bếp, số vận chuyển"
         />
       </div>
       <TextareaField
         key={`${key}-note`}
         id="survey-note"
         label="Ghi chú hiện trạng"
-        defaultValue="Trời mưa cần che rạp sân sau."
       />
       <div className="l-row justify-end">
         <Button

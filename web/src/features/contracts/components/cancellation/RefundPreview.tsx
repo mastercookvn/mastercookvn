@@ -1,20 +1,16 @@
 import { MoneyRow } from "@/components/ui/MoneyRow";
 import { formatMoney } from "@/lib/format";
 import type { CancellationResult } from "@/lib/pricing";
-import {
-  CANCELLATION_HOUSEWARMING,
-  CONTRACT_HOUSEWARMING,
-} from "@/mocks/contracts";
 
 export function RefundPreview({
   compact = false,
-  result = CANCELLATION_HOUSEWARMING,
-  paid = CONTRACT_HOUSEWARMING.paid,
+  result,
+  paid,
 }: {
   compact?: boolean;
-  result?: CancellationResult;
+  result: CancellationResult;
   /** Collected and allocated to this meal. */
-  paid?: number;
+  paid: number;
 }) {
   return (
     <>

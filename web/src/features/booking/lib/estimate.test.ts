@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest";
 import { MENU_MODE, SERVING_FORMAT } from "@/constants/booking";
 import { formatDayMonthYear } from "@/lib/format";
 import { lunarToSolar } from "@/lib/lunar";
-import { DISHES, MENU_SETS, SERVICES } from "@/mocks/catalog";
-import { NEW_ESTIMATE_MEAL, type EstimateMeal } from "@/mocks/demoStore";
+import { NEW_ESTIMATE_MEAL, type EstimateMeal } from "@/lib/demoStore";
+import type { Dish, MenuSet } from "@/models/catalog";
 
 import {
   contactErrors,
@@ -14,11 +14,41 @@ import {
   mealMenuErrors,
 } from "./estimate";
 
-const catalog = { dishes: DISHES, menuSets: MENU_SETS, services: SERVICES };
+const dish = (id: string, price: number): Dish => ({
+  id,
+  name: id,
+  category: "main",
+  price,
+  description: "",
+});
+
+const DISHES = [
+  dish("goi", 320000),
+  dish("chagio", 280000),
+  dish("ga", 420000),
+  dish("bo", 520000),
+  dish("lauthai", 520000),
+  dish("traicay", 150000),
+];
+
+const MENU_SETS: MenuSet[] = [
+  {
+    id: "sumvay",
+    name: "Set Sum Vầy",
+    suitableFor: "Họp mặt",
+    description: "",
+    dishIds: ["goi", "chagio", "ga", "traicay"],
+    imageDishId: "ga",
+  },
+];
+
+const catalog = { dishes: DISHES, menuSets: MENU_SETS, services: [] };
 
 const meal = (patch: Partial<EstimateMeal>): EstimateMeal => ({
   ...NEW_ESTIMATE_MEAL,
+  date: "20/12/2026",
   address: "12 Lê Lợi, Quận 1",
+  setId: "sumvay",
   ...patch,
 });
 
@@ -30,7 +60,7 @@ describe("booking estimate", () => {
     });
 
     expect(mealInfoErrors(tray)).toEqual([]);
-    expect(estimateMeal(tray).price?.total).toBeGreaterThan(0);
+    expect(estimateMeal(tray, catalog).price?.total).toBeGreaterThan(0);
   });
 
   it("asks for at least one tray", () => {
@@ -48,8 +78,8 @@ describe("booking estimate", () => {
     const custom = meal({ mode: MENU_MODE.Custom, dishIds: ["goi"] });
 
     expect(mealInfoErrors(custom)).toEqual([]);
-    expect(mealMenuErrors(custom)).toHaveLength(1);
-    expect(estimateMeal(custom).errors).toHaveLength(1);
+    expect(mealMenuErrors(custom, catalog)).toHaveLength(1);
+    expect(estimateMeal(custom, catalog).errors).toHaveLength(1);
   });
 
   it("requires an address", () => {

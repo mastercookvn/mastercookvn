@@ -5,15 +5,21 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { MoneyRow } from "@/components/ui/MoneyRow";
 import { hasAnyRole, ROLE, type Role } from "@/constants/roles";
 import { formatMoney } from "@/lib/format";
-import { CONTRACT_WEDDING as contract } from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
+import type { Contract } from "@/models/contracts";
+import { useDemoState } from "@/lib/demoStore";
 
 import {
   MINIMUM_DEPOSIT_LABEL,
   minimumDeposit,
 } from "@/features/contracts/lib/contractState";
 
-export function ActivationConditions({ roles }: { roles: Role[] }) {
+export function ActivationConditions({
+  roles,
+  contract,
+}: {
+  roles: Role[];
+  contract: Contract;
+}) {
   const paperSigned = useDemoState((state) => state.paperSigned);
   const confirmed = useDemoState((state) => state.contractConfirmed);
   const deposited = useDemoState((state) => state.depositPaid);

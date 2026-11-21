@@ -4,7 +4,7 @@ export const SESSION_COOKIE = "session";
 
 export type Session =
   | { kind: "customer"; name: string; phone: string }
-  | { kind: "staff"; name: string; roles: Role[] };
+  | { kind: "staff"; name: string; phone: string; roles: Role[] };
 
 export function encodeSession(session: Session) {
   return encodeURIComponent(JSON.stringify(session));

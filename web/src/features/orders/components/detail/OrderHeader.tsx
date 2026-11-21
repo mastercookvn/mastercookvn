@@ -3,8 +3,8 @@
 import { PageHeader } from "@/components/layout/workspace/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 
-import { useDemoLoaded } from "@/mocks/demoStore";
-import { ORDER_CHANNEL_LABEL } from "@/mocks/orders";
+import { useDemoLoaded } from "@/lib/demoStore";
+import { ORDER_CHANNEL_LABEL } from "@/constants/orders";
 
 import { useWorkspaceOrder } from "@/features/orders/lib/useOrders";
 

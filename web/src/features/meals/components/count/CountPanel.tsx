@@ -17,36 +17,45 @@ import { useToast } from "@/components/ui/Toast";
 import { MEAL_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
 import { LIVE_VALIDATION_MODE, personNameSchema } from "@/lib/validation";
-import { CUSTOMER } from "@/mocks/contracts";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import {
-  COUNT_REPORT_ROWS,
   COUNT_REPORT_STATUS,
-  countReportCompensation,
-  type CountReport,
   type CountReportStatus,
-} from "@/mocks/equipment";
-import type { OperationMeal } from "@/mocks/operationMeals";
+} from "@/constants/equipment";
+import {
+  countReportCompensation,
+  equipmentDemand,
+  type CountReport,
+  type CountReportRow,
+  type EquipmentType,
+} from "@/models/equipment";
+import type { OperationMeal } from "@/models/operations";
 
 import { countRowProblem } from "../../lib/countRowProblem";
 import { MealStageNotice } from "../MealStageNotice";
 
 import { CountReportTable } from "./CountReportTable";
 
-/** Counting starts from "everything came back good"; staff only types the exceptions. */
-const BLANK_ROWS = COUNT_REPORT_ROWS.map((row) => ({
-  ...row,
-  good: row.issued,
-  damaged: 0,
-  lost: 0,
-  charged: 0,
-}));
-
-const DEFAULT_COUNTER = "Hoàng Anh Khoa";
+/**
+ * Counting starts from "everything came back good"; staff only types the exceptions.
+ * Issued quantities follow the formula until the issue slip records actual quantities.
+ */
+const blankRows = (
+  equipment: readonly EquipmentType[],
+  meal: OperationMeal
+): CountReportRow[] =>
+  equipment.map((item) => {
+    const issued = equipmentDemand(item, meal.guests, meal.setupTables, 1);
+    return {
+      name: item.name,
+      issued,
+      good: issued,
+      damaged: 0,
+      lost: 0,
+      charged: 0,
+      price: item.compensation,
+    };
+  });
 
 const now = () =>
   new Date().toLocaleString("vi-VN", {
@@ -110,9 +119,12 @@ const countSignersSchema = z.object({
 export function CountPanel({ meal }: { meal: OperationMeal }) {
   const status = useDemoState((state) => state.mealStatuses[meal.id]);
   const saved = useDemoState((state) => state.countReports[meal.id]);
+  const equipment = useDemoState((state) => state.equipment);
   const showToast = useToast();
 
-  const [rows, setRows] = useState(saved?.rows ?? BLANK_ROWS);
+  const [rows, setRows] = useState(
+    () => saved?.rows ?? blankRows(equipment, meal)
+  );
   const [photos, setPhotos] = useState<string[]>(saved?.photos ?? []);
   const {
     register,
@@ -123,8 +135,8 @@ export function CountPanel({ meal }: { meal: OperationMeal }) {
     resolver: zodResolver(countSignersSchema),
     mode: LIVE_VALIDATION_MODE,
     defaultValues: {
-      counter: saved?.counter ?? DEFAULT_COUNTER,
-      customerName: saved?.customerName ?? CUSTOMER.name,
+      counter: saved?.counter ?? "",
+      customerName: saved?.customerName ?? "",
       note: saved?.note ?? "",
     },
   });

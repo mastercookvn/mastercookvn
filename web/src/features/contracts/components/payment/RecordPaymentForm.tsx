@@ -16,58 +16,42 @@ import {
   type PaymentMethod,
 } from "@/constants/payment";
 import { formatMoney, formatNumber } from "@/lib/format";
-import {
-  CONTRACT_COMPANY,
-  CONTRACT_WEDDING,
-  SETTLEMENT_COMPANY,
-} from "@/mocks/contracts";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
+import type { Contract } from "@/models/contracts";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import {
+  isAwaitingSettlement,
   MINIMUM_DEPOSIT_LABEL,
   minimumDeposit,
 } from "@/features/contracts/lib/contractState";
+import { buildSettlement } from "@/features/contracts/lib/settlement";
 
 import { AllocationPreview } from "./AllocationPreview";
 import { AmountDueCard } from "./AmountDueCard";
 
 const parseAmount = (text: string) => Number(text.replace(/\D/g, ""));
 
-/** On a contract page the contract is fixed by the URL. */
-export function RecordPaymentForm({
-  contractNumber: fixedContract,
-}: {
-  contractNumber?: string;
-}) {
+export function RecordPaymentForm({ contract }: { contract: Contract }) {
   const depositPaidAmount = useDemoState((state) => state.depositPaidAmount);
   const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
   const usedVouchers = useDemoState((state) => state.paymentVouchers);
   const issued = useDemoState((state) => state.contractIssued);
   const showToast = useToast();
 
-  const [contractNumber, setContractNumber] = useState(
-    fixedContract ?? CONTRACT_WEDDING.number
-  );
-  const isSettlement = contractNumber === CONTRACT_COMPANY.number;
-  const contract = isSettlement ? CONTRACT_COMPANY : CONTRACT_WEDDING;
+  const isSettlement = isAwaitingSettlement(contract);
+  const settlement = buildSettlement(contract);
 
-  const total = isSettlement
-    ? SETTLEMENT_COMPANY.settlementTotal
-    : CONTRACT_WEDDING.total;
+  const total = isSettlement ? settlement.settlementTotal : contract.total;
   const paid = isSettlement
-    ? SETTLEMENT_COMPANY.paid + settlementPaid
+    ? settlement.paid + settlementPaid
     : depositPaidAmount;
   const due = isSettlement
-    ? SETTLEMENT_COMPANY.balance - settlementPaid
-    : Math.max(minimumDeposit(CONTRACT_WEDDING) - paid, 0);
+    ? settlement.balance - settlementPaid
+    : Math.max(minimumDeposit(contract) - paid, 0);
 
   const [amountText, setAmountText] = useState(() => formatNumber(due));
   const [method, setMethod] = useState<PaymentMethod>(PAYMENT_METHOD.Cash);
-  const [receivedOn, setReceivedOn] = useState("05/11/2026");
+  const [receivedOn, setReceivedOn] = useState("");
   const [voucher, setVoucher] = useState("");
   const [voucherPhotos, setVoucherPhotos] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
@@ -88,19 +72,6 @@ export function RecordPaymentForm({
         ? "Mã chứng từ đã được ghi"
         : null;
 
-  const changeContract = (next: string) => {
-    setContractNumber(next);
-    setSubmitted(false);
-    const nextIsSettlement = next === CONTRACT_COMPANY.number;
-    setAmountText(
-      formatNumber(
-        nextIsSettlement
-          ? SETTLEMENT_COMPANY.balance - settlementPaid
-          : Math.max(minimumDeposit(CONTRACT_WEDDING) - depositPaidAmount, 0)
-      )
-    );
-  };
-
   const record = () => {
     setSubmitted(true);
     if (amountError || voucherError) return;
@@ -110,7 +81,7 @@ export function RecordPaymentForm({
       updateDemoState({
         settlementPaidAmount: nextPaid,
         settlementStatus:
-          nextPaid >= SETTLEMENT_COMPANY.balance
+          nextPaid >= settlement.balance
             ? SETTLEMENT_STATUS.Paid
             : readDemoState().settlementStatus,
       });
@@ -118,7 +89,7 @@ export function RecordPaymentForm({
       const nextPaid = readDemoState().depositPaidAmount + amount;
       updateDemoState({
         depositPaidAmount: nextPaid,
-        depositPaid: nextPaid >= minimumDeposit(CONTRACT_WEDDING),
+        depositPaid: nextPaid >= minimumDeposit(contract),
       });
     }
     updateDemoState({
@@ -138,22 +109,11 @@ export function RecordPaymentForm({
       <div className="l-grid l-grid-main">
         <section className="card l-stack">
           <div className="l-grid l-grid-2">
-            <SelectField
-              disabled={fixedContract !== undefined}
+            <TextField
               id="payment-contract"
               label="Hợp đồng"
-              options={[
-                {
-                  value: CONTRACT_WEDDING.number,
-                  label: `${CONTRACT_WEDDING.number} · Cọc`,
-                },
-                {
-                  value: CONTRACT_COMPANY.number,
-                  label: `${CONTRACT_COMPANY.number} · Quyết toán`,
-                },
-              ]}
-              value={contractNumber}
-              onValueChange={(value) => changeContract(value)}
+              value={`${contract.number} · ${isSettlement ? "Quyết toán" : "Cọc"}`}
+              readOnly
             />
             <TextField
               id="payment-amount"
@@ -180,13 +140,14 @@ export function RecordPaymentForm({
             <TextField
               id="payment-date"
               label="Ngày nhận"
+              placeholder="dd/MM/yyyy"
               value={receivedOn}
               onChange={(event) => setReceivedOn(event.target.value)}
             />
             <TextField
               id="payment-voucher"
               label="Mã chứng từ"
-              placeholder="CT-1105-03"
+              placeholder="CT-..."
               value={voucher}
               onChange={(event) => setVoucher(event.target.value)}
               error={submitted ? voucherError : null}

@@ -1,7 +1,7 @@
 "use client";
 
 import { MealPriceBreakdown } from "@/components/ui/MealPriceBreakdown";
-import { useDemoState, type EstimateMeal } from "@/mocks/demoStore";
+import { useDemoState, type EstimateMeal } from "@/lib/demoStore";
 
 import { estimateMeal } from "@/features/booking/lib/estimate";
 

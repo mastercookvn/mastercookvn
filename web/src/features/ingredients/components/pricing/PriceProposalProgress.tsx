@@ -1,17 +1,16 @@
 "use client";
 
 import { Badge } from "@/components/ui/Badge";
-import { useDemoState } from "@/mocks/demoStore";
-import { PRICE_PROPOSALS } from "@/mocks/inventory";
+import { useDemoState } from "@/lib/demoStore";
 
-export function PriceProposalProgress() {
+export function PriceProposalProgress({ total }: { total: number }) {
   const done = useDemoState(
     (state) => Object.keys(state.priceDecisions).length
   );
 
   return (
-    <Badge tone={done === PRICE_PROPOSALS.length ? "good" : "wait"}>
-      {done}/{PRICE_PROPOSALS.length} dòng đã xử lý
+    <Badge tone={done === total ? "good" : "wait"}>
+      {done}/{total} dòng đã xử lý
     </Badge>
   );
 }

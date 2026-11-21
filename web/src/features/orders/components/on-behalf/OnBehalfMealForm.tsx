@@ -15,16 +15,12 @@ import {
   SERVING_FORMAT,
   SERVING_FORMAT_LABEL,
 } from "@/constants/booking";
-import { EVENT_TYPES } from "@/mocks/catalog";
-import { useDemoState, type EstimateMeal } from "@/mocks/demoStore";
+import { useDemoState, type EstimateMeal } from "@/lib/demoStore";
 
 import { TrayFields } from "@/features/booking/components/event/TrayFields";
 import { MenuSetSelect } from "@/features/booking/components/menu/MenuSetSelect";
 import { mealMenuErrors } from "@/features/booking/lib/estimate";
-import {
-  withMenuMode,
-  withServingFormat,
-} from "@/features/booking/lib/mealForm";
+import { withServingFormat } from "@/features/booking/lib/mealForm";
 
 import type { OnBehalfFields } from "./onBehalfSchema";
 
@@ -54,6 +50,7 @@ export function OnBehalfMealForm({
   } = useFormContext<OnBehalfFields>();
   const allDishes = useDemoState((state) => state.dishes);
   const menuSets = useDemoState((state) => state.menuSets);
+  const eventTypes = useDemoState((state) => state.eventTypes);
   const services = useDemoState((state) => state.services);
   const menuErrors = mealMenuErrors(meal, {
     dishes: allDishes,
@@ -78,8 +75,7 @@ export function OnBehalfMealForm({
           <SelectField
             id="behalf-event"
             label="Loại tiệc"
-            options={EVENT_TYPES}
-            defaultValue="Sinh nhật"
+            options={eventTypes}
           />
           {isTrays ? null : (
             <TextField
@@ -145,7 +141,7 @@ export function OnBehalfMealForm({
           label="Cách chọn thực đơn"
           options={MENU_MODE_OPTIONS}
           value={meal.mode}
-          onChange={(mode) => onChange(withMenuMode(meal, mode))}
+          onChange={(mode) => onChange({ mode })}
         />
         {meal.mode === MENU_MODE.Set ? (
           <MenuSetSelect

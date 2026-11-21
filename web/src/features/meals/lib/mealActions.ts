@@ -1,7 +1,7 @@
 "use client";
 
 import { MEAL_PROGRESS } from "@/constants/statuses";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
 
 /** Stages only move forward one at a time. */
 export function advanceMeal(mealId: string) {

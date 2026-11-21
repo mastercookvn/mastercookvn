@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { ROUTES } from "@/constants/routes";
-import { selectEstimateSet } from "@/mocks/demoStore";
+import { selectEstimateSet } from "@/lib/demoStore";
 
 export function ChooseSetButton({ setId }: { setId: string }) {
   const router = useRouter();

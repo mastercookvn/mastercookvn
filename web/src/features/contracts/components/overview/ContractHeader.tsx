@@ -6,8 +6,8 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ROUTES } from "@/constants/routes";
 import { CONTRACT_STATUS } from "@/constants/statuses";
-import { useDemoState } from "@/mocks/demoStore";
-import type { Contract } from "@/mocks/contracts";
+import { useDemoState } from "@/lib/demoStore";
+import type { Contract } from "@/models/contracts";
 
 import { isAwaitingContract } from "@/features/contracts/lib/contractState";
 

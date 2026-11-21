@@ -9,7 +9,7 @@ import { PanelHeader } from "@/components/ui/PanelHeader";
 import { ORDER_STATUS_META } from "@/constants/labels";
 import { ORDER_STATUS } from "@/constants/statuses";
 import { useWorkspaceOrders } from "@/features/orders/lib/useOrders";
-import { ORDER_CHANNEL_LABEL } from "@/mocks/orders";
+import { ORDER_CHANNEL_LABEL } from "@/constants/orders";
 
 import { OnBehalfOrderForm } from "../on-behalf/OnBehalfOrderForm";
 

@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { STAFF_POSITION_LABEL } from "@/constants/staffing";
-import { useDemoState } from "@/mocks/demoStore";
-import type { OrderMeal } from "@/mocks/orders";
+import { useDemoState } from "@/lib/demoStore";
+import type { OrderMeal } from "@/models/orders";
 
 import { staffCapacityRows } from "@/features/orders/lib/capacity";
 

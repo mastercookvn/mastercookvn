@@ -5,27 +5,13 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { useToast } from "@/components/ui/Toast";
-import { MENU_MODE, SERVING_FORMAT } from "@/constants/booking";
 import { LIVE_VALIDATION_MODE } from "@/lib/validation";
-import { DEFAULT_DISH_IDS, type EstimateMeal } from "@/mocks/demoStore";
+import { NEW_ESTIMATE_MEAL } from "@/lib/demoStore";
 
 import { CustomerLookupForm } from "./CustomerLookupForm";
 import { OnBehalfMealForm } from "./OnBehalfMealForm";
 import { onBehalfSchema } from "./onBehalfSchema";
 import { OrderSummary } from "./OrderSummary";
-
-const SAMPLE_MEAL: EstimateMeal = {
-  format: SERVING_FORMAT.Waves,
-  name: "",
-  date: "28/11/2026",
-  address: "9 Hoa Sứ, Phú Nhuận, TP.HCM",
-  guestsPerTable: 10,
-  waves: [{ from: "18:00", to: "21:00", tables: 8 }],
-  mode: MENU_MODE.Set,
-  setId: "sumvay",
-  dishIds: DEFAULT_DISH_IDS,
-  serviceIds: ["don"],
-};
 
 export function OnBehalfOrderForm({
   formId,
@@ -35,14 +21,14 @@ export function OnBehalfOrderForm({
   onSaved: () => void;
 }) {
   const showToast = useToast();
-  const [meal, setMeal] = useState(SAMPLE_MEAL);
+  const [meal, setMeal] = useState(NEW_ESTIMATE_MEAL);
   const form = useForm({
     resolver: zodResolver(onBehalfSchema),
     mode: LIVE_VALIDATION_MODE,
     defaultValues: {
-      customerPhone: "0978 222 333",
-      customerName: "Nguyễn Minh Đức",
-      address: SAMPLE_MEAL.address,
+      customerPhone: "",
+      customerName: "",
+      address: "",
     },
   });
 
@@ -53,7 +39,7 @@ export function OnBehalfOrderForm({
         className="l-grid l-grid-main"
         noValidate
         onSubmit={form.handleSubmit(() => {
-          showToast("Đã tạo đơn DH-0151, trạng thái Chờ xác nhận");
+          showToast("Đã tạo đơn, trạng thái Chờ xác nhận");
           onSaved();
         })}
       >

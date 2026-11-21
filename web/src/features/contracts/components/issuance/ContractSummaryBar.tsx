@@ -11,14 +11,15 @@ import { ROUTES } from "@/constants/routes";
 import { CONTRACT_STATUS } from "@/constants/statuses";
 import { useQueryParam } from "@/hooks/useQueryParam";
 import { formatMoney } from "@/lib/format";
-import { SETTLEMENT_COMPANY, type Contract } from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
+import { type Contract } from "@/models/contracts";
+import { useDemoState } from "@/lib/demoStore";
 
 import {
   isAwaitingContract,
   isAwaitingSettlement,
   upcomingMeal,
 } from "@/features/contracts/lib/contractState";
+import { buildSettlement } from "@/features/contracts/lib/settlement";
 
 /** One compact line instead of a grid of tiles: who, when, how much is paid. */
 function Summary({ contract }: { contract: Contract }) {
@@ -36,18 +37,19 @@ function Summary({ contract }: { contract: Contract }) {
 
   const awaiting = isAwaitingContract(contract);
   const settling = isAwaitingSettlement(contract);
+  const settlement = buildSettlement(contract);
   const row = {
     number: contract.number,
     customer: contract.customerName,
     value: settling
-      ? SETTLEMENT_COMPANY.settlementTotal
+      ? settlement.settlementTotal
       : edited && applied
         ? contract.total - edited.price.total + applied.total
         : contract.total,
     paid: awaiting
       ? depositPaidAmount
       : settling
-        ? SETTLEMENT_COMPANY.paid + settlementPaid
+        ? settlement.paid + settlementPaid
         : contract.paid,
     firstDate: contract.meals[0]?.date ?? "",
     editable: upcomingMeal(contract) !== undefined,

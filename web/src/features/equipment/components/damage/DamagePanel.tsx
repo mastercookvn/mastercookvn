@@ -9,7 +9,7 @@ import { Drawer } from "@/components/ui/Drawer";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { formatNumber } from "@/lib/format";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 import { DamageHandlingForm } from "./DamageHandlingForm";
 

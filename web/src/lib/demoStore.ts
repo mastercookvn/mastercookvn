@@ -1,7 +1,7 @@
 "use client";
 
 // In-memory placeholder for backend state, kept in localStorage so a reload or a
-// second tab (staff and customer side by side) sees the same sample data.
+// second tab (staff and customer side by side) sees the same records.
 import { useSyncExternalStore } from "react";
 
 import {
@@ -11,47 +11,26 @@ import {
   type ServingFormat,
 } from "@/constants/booking";
 import {
-  MEAL_STATUS,
   SETTLEMENT_STATUS,
   type MealStatus,
   type OrderStatus,
   type PaymentPurpose,
   type SettlementStatus,
 } from "@/constants/statuses";
+import type { PriceProposalDecision } from "@/constants/priceProposal";
+import type { RecipeLine } from "@/lib/pricing";
 import type { MediaKey } from "@/lib/media";
 import type { ServingWave } from "@/lib/servingWaves";
-import {
-  PRICE_PROPOSAL_DECISION_LABEL,
-  type PriceProposalDecision,
-} from "@/constants/priceProposal";
-import {
-  STAFF_POSITION_LABEL,
-  STAFF_TYPE_LABEL,
-  STAFF_GENDER_LABEL,
-  type StaffPosition,
-  type StaffType,
-  type StaffGender,
-} from "@/constants/staffing";
 
-import {
-  DISHES,
-  EVENT_TYPES,
-  MENU_SETS,
-  SERVICES,
-  type Dish,
-  type MenuSet,
-  type Service,
-} from "./catalog";
-import {
-  EQUIPMENT,
-  EQUIPMENT_BASIS_LABEL,
-  type EquipmentBasis,
-  type CountReport,
-  type EquipmentPurchase,
-} from "./equipment";
-import { DISH_RECIPES, INGREDIENTS, type Purchase } from "./inventory";
-import { MEAL_ASSIGNMENTS } from "./operationMeals";
-import { STAFF, STAFF_ACCOUNTS, type StaffAccount, type Staff } from "./people";
+import type { CatalogDish, MenuSet, Service } from "@/models/catalog";
+import type {
+  CountReport,
+  EquipmentPurchase,
+  EquipmentType,
+} from "@/models/equipment";
+import type { Ingredient, Purchase } from "@/models/inventory";
+import type { Assignment } from "@/models/operations";
+import type { Staff, StaffAccount } from "@/models/people";
 
 export type EstimateMeal = {
   format: ServingFormat;
@@ -66,10 +45,6 @@ export type EstimateMeal = {
   setId: string;
   dishIds: string[];
   serviceIds: string[];
-};
-
-export type CatalogDish = Dish & {
-  active: boolean;
 };
 
 export type BookingContact = {
@@ -96,34 +71,28 @@ export type SubmittedOrder = {
   total: number;
 };
 
-const DEFAULT_DISH_IDS = ["goi", "chagio", "ga", "bo", "lauthai", "traicay"];
+const NEW_ESTIMATE_MEAL: EstimateMeal = {
+  format: SERVING_FORMAT.Waves,
+  name: "",
+  date: "",
+  address: "",
+  guestsPerTable: 10,
+  waves: [{ from: "17:30", to: "20:30", tables: 10 }],
+  mode: MENU_MODE.Set,
+  setId: "",
+  dishIds: [],
+  serviceIds: [],
+};
 
 const INITIAL_STATE = {
-  estimate: [
-    {
-      format: SERVING_FORMAT.Waves,
-      name: "Tiệc cưới nhà gái",
-      date: "14/12/2026",
-      address: "24 Nguyễn Gia Trí, Bình Thạnh, TP.HCM",
-      guestsPerTable: 10,
-      waves: [
-        { from: "11:00", to: "12:00", tables: 10 },
-        { from: "12:00", to: "13:00", tables: 10 },
-        { from: "13:00", to: "14:00", tables: 10 },
-      ],
-      mode: MENU_MODE.Set,
-      setId: "hysu",
-      dishIds: DEFAULT_DISH_IDS,
-      serviceIds: ["don", "cong"],
-    },
-  ] as EstimateMeal[],
+  estimate: [NEW_ESTIMATE_MEAL],
   contractConfirmed: false,
   depositPaid: false,
   depositPaidAmount: 0,
   paymentIntents: {} as Record<string, PaymentIntent>,
   settlementStatus: SETTLEMENT_STATUS.Draft as SettlementStatus,
   settlementPaidAmount: 0,
-  paymentVouchers: ["CT-1104-01", "CT-1104-02"],
+  paymentVouchers: [] as string[],
   addendumConfirmed: false,
   /** Meal size and value after an applied addendum, by contract number (BR09). */
   appliedAddenda: {} as Record<string, { tables: number; total: number }>,
@@ -133,28 +102,23 @@ const INITIAL_STATE = {
   orderStatuses: {} as Record<string, OrderStatus>,
   /** Surveyed distance by `${orderCode}:${mealIndex}` (BR01, BR07). */
   surveyDistances: {} as Record<string, number>,
-  simulateShortage: false,
   contractIssued: false,
   paperSigned: false,
   periodClosed: false,
   priceDecisions: {} as Record<number, PriceProposalDecision>,
-  mealStatuses: {
-    "0120": MEAL_STATUS.AwaitingCount,
-    "0115": MEAL_STATUS.Confirmed,
-    "0128": MEAL_STATUS.Preparing,
-  } as Record<string, MealStatus>,
+  mealStatuses: {} as Record<string, MealStatus>,
   equipmentIssued: {} as Record<string, boolean>,
-  assignments: MEAL_ASSIGNMENTS,
-  dishes: DISHES.map((dish) => ({ ...dish, active: true })) as CatalogDish[],
-  menuSets: MENU_SETS as MenuSet[],
-  services: SERVICES as Service[],
-  eventTypes: EVENT_TYPES as string[],
-  staff: STAFF as Staff[],
-  staffAccounts: STAFF_ACCOUNTS as StaffAccount[],
-  ingredients: INGREDIENTS,
-  recipes: DISH_RECIPES,
+  assignments: {} as Record<string, Assignment[]>,
+  dishes: [] as CatalogDish[],
+  menuSets: [] as MenuSet[],
+  services: [] as Service[],
+  eventTypes: [] as string[],
+  staff: [] as Staff[],
+  staffAccounts: [] as StaffAccount[],
+  ingredients: [] as Ingredient[],
+  recipes: {} as Record<string, RecipeLine[]>,
   purchases: [] as Purchase[],
-  equipment: EQUIPMENT,
+  equipment: [] as EquipmentType[],
   equipmentPurchases: [] as EquipmentPurchase[],
   countReports: {} as Record<string, CountReport>,
   /** BR08: online confirmation is the signed-in account agreeing to one contract version. */
@@ -166,15 +130,15 @@ const INITIAL_STATE = {
   },
   /** Photos uploaded in this browser, by media key, until the presigned upload API exists. */
   mediaUploads: {} as Record<MediaKey, string>,
-  bookingEventType: "Cưới hỏi",
+  bookingEventType: "",
   bookingContact: { name: "", phone: "", note: "" } as BookingContact,
   submittedOrders: [] as SubmittedOrder[],
 };
 
 export type DemoState = typeof INITIAL_STATE;
 
-const DRAFT_KEY = "mastercook.estimate-draft.v3";
-const STATE_KEY = "mastercook.demo-state.v3";
+const DRAFT_KEY = "mastercook.estimate-draft.v4";
+const STATE_KEY = "mastercook.demo-state.v4";
 
 let state = INITIAL_STATE;
 let loaded = false;
@@ -182,73 +146,10 @@ const listeners = new Set<() => void>();
 
 const notify = () => listeners.forEach((listener) => listener());
 
-export function normalizeSavedState(
-  saved: Partial<DemoState>
-): Partial<DemoState> {
-  const normalize = <T extends string>(
-    value: T,
-    labels: Record<T, string>
-  ): T =>
-    (Object.entries(labels).find(([, label]) => label === value)?.[0] as
-      T | undefined) ?? value;
-  return {
-    ...saved,
-    ...(saved.priceDecisions && {
-      priceDecisions: Object.fromEntries(
-        Object.entries(saved.priceDecisions).map(([key, value]) => [
-          key,
-          normalize(value, PRICE_PROPOSAL_DECISION_LABEL),
-        ])
-      ),
-    }),
-    ...(saved.staff && {
-      staff: saved.staff.map((member) => ({
-        ...member,
-        position: normalize(
-          member.position,
-          STAFF_POSITION_LABEL as Record<StaffPosition, string>
-        ),
-        type: normalize(
-          member.type,
-          STAFF_TYPE_LABEL as Record<StaffType, string>
-        ),
-        ...(member.gender && {
-          gender: normalize(
-            member.gender,
-            STAFF_GENDER_LABEL as Record<StaffGender, string>
-          ),
-        }),
-      })),
-    }),
-    ...(saved.assignments && {
-      assignments: Object.fromEntries(
-        Object.entries(saved.assignments).map(([meal, rows]) => [
-          meal,
-          rows.map((row) => ({
-            ...row,
-            position: normalize(row.position, STAFF_POSITION_LABEL),
-          })),
-        ])
-      ),
-    }),
-    ...(saved.equipment && {
-      equipment: saved.equipment.map((item) => ({
-        ...item,
-        basis: normalize(
-          item.basis,
-          EQUIPMENT_BASIS_LABEL as Record<EquipmentBasis, string>
-        ),
-      })),
-    }),
-  };
-}
-
 function readSavedState(): Partial<DemoState> {
   try {
     const saved = window.localStorage.getItem(STATE_KEY);
-    return saved
-      ? normalizeSavedState(JSON.parse(saved) as Partial<DemoState>)
-      : {};
+    return saved ? (JSON.parse(saved) as Partial<DemoState>) : {};
   } catch (error) {
     console.warn("Ignoring unreadable demo state", error);
     return {};
@@ -339,17 +240,4 @@ export const paymentIntentKey = (
   purpose: PaymentPurpose
 ) => `${contractNumber}:${purpose}`;
 
-export const NEW_ESTIMATE_MEAL: EstimateMeal = {
-  format: SERVING_FORMAT.Waves,
-  name: "",
-  date: "20/12/2026",
-  address: "",
-  guestsPerTable: 10,
-  waves: [{ from: "17:30", to: "20:30", tables: 10 }],
-  mode: MENU_MODE.Set,
-  setId: "sumvay",
-  dishIds: [],
-  serviceIds: ["don"],
-};
-
-export { DEFAULT_DISH_IDS };
+export { NEW_ESTIMATE_MEAL };

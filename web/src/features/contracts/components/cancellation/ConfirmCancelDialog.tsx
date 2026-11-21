@@ -2,13 +2,18 @@
 
 import { Dialog } from "@/components/ui/Dialog";
 import { formatMoney } from "@/lib/format";
-import { CANCELLATION_HOUSEWARMING as result } from "@/mocks/contracts";
-import { updateDemoState } from "@/mocks/demoStore";
+import type { CancellationResult } from "@/lib/pricing";
+import type { Meal } from "@/models/contracts";
+import { updateDemoState } from "@/lib/demoStore";
 
 export function ConfirmCancelDialog({
+  meal,
+  result,
   open,
   onOpenChange,
 }: {
+  meal: Meal;
+  result: CancellationResult;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -16,7 +21,7 @@ export function ConfirmCancelDialog({
     <Dialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Xác nhận hủy bữa 22/11/2026"
+      title={`Xác nhận hủy bữa ${meal.date}`}
       confirmLabel="Hủy bữa"
       confirmVariant="danger"
       onConfirm={() => updateDemoState({ mealCancelled: true })}

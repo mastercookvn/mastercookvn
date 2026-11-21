@@ -2,8 +2,8 @@
 
 import { ClockIcon } from "@/components/icons";
 import { Alert } from "@/components/ui/Alert";
-import { useDemoState } from "@/mocks/demoStore";
-import type { Contract } from "@/mocks/contracts";
+import { useDemoState } from "@/lib/demoStore";
+import type { Contract } from "@/models/contracts";
 
 import { isAwaitingContract } from "@/features/contracts/lib/contractState";
 

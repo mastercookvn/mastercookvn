@@ -2,14 +2,17 @@
 
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
+import type { Contract } from "@/models/contracts";
 
+import { buildSettlement } from "../../lib/settlement";
 import { CompensationList } from "./CompensationList";
 import { MealTransactions } from "./MealTransactions";
 import { SettlementSheet } from "./SettlementSheet";
 
-export function SettlementPanel() {
+export function SettlementPanel({ contract }: { contract: Contract }) {
   const status = useDemoState((state) => state.settlementStatus);
+  const settlement = buildSettlement(contract);
 
   return (
     <>
@@ -18,11 +21,11 @@ export function SettlementPanel() {
         actions={<StatusBadge domain="settlement" status={status} />}
       />
       <div className="l-grid l-grid-main">
-        <SettlementSheet />
+        <SettlementSheet settlement={settlement} />
         <aside className="card l-stack">
           <h3 className="card-title card-title-flush">Giao dịch của bữa</h3>
-          <MealTransactions />
-          <CompensationList />
+          <MealTransactions depositPaid={settlement.paid} />
+          <CompensationList lines={settlement.compensationLines} />
         </aside>
       </div>
     </>

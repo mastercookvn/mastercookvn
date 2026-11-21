@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ROLE } from "@/constants/roles";
 import { ROUTES } from "@/constants/routes";
 import { ORDER_STATUS } from "@/constants/statuses";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 import type { WorkTask } from "@/features/dashboard/lib/workTasks";
 

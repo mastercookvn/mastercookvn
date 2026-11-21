@@ -10,29 +10,27 @@ import {
 } from "@/components/ui/ConfirmDelete";
 import { RowMenu } from "@/components/ui/RowMenu";
 import { useToast } from "@/components/ui/Toast";
-import { SERVICES, type Service } from "@/mocks/catalog";
+import { type Service } from "@/models/catalog";
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { Drawer } from "@/components/ui/Drawer";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import { formatMoney } from "@/lib/format";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import { ServiceForm } from "./ServiceForm";
 
 const FORM_ID = "service-form";
 const NEW_SERVICE_ID = "new";
 
-/** Sample services are already on contracts, so they can only be deactivated. */
-const hasHistory = (service: Service) =>
-  SERVICES.some((sample) => sample.id === service.id);
-
 export function ServiceTable() {
   const services = useDemoState((state) => state.services);
+  const submittedOrders = useDemoState((state) => state.submittedOrders);
+  /** A service already on an order can only be deactivated. */
+  const hasHistory = (service: Service) =>
+    submittedOrders.some((order) =>
+      order.meals.some((meal) => meal.serviceIds.includes(service.id))
+    );
   const [editingId, setEditingId] = useState<string | null>(null);
   const editing = services.find((service) => service.id === editingId) ?? null;
   const [deleting, setDeleting] = useState<DeleteTarget>(null);

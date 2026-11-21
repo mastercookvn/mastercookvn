@@ -11,7 +11,7 @@ import {
   updateDemoState,
   useDemoState,
   type BookingContact,
-} from "@/mocks/demoStore";
+} from "@/lib/demoStore";
 
 import { bookingContactSchema } from "@/features/booking/lib/estimate";
 

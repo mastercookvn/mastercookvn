@@ -18,7 +18,7 @@ import {
   phoneSchema,
   toLocalPhone,
 } from "@/lib/validation";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
 import {
   STAFF_GENDER,
   STAFF_GENDERS,
@@ -31,7 +31,7 @@ import {
   STAFF_TYPE_LABEL,
   type StaffPosition,
 } from "@/constants/staffing";
-import type { Staff } from "@/mocks/people";
+import type { Staff } from "@/models/people";
 
 const optionalDate = z
   .string()

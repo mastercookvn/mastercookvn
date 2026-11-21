@@ -13,13 +13,9 @@ import {
   type DeleteTarget,
 } from "@/components/ui/ConfirmDelete";
 import { RowMenu } from "@/components/ui/RowMenu";
-import { DISH_CATEGORY_LABEL, DISHES } from "@/mocks/catalog";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-  type CatalogDish,
-} from "@/mocks/demoStore";
+import { DISH_CATEGORY_LABEL } from "@/constants/catalog";
+import { type CatalogDish } from "@/models/catalog";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import { DishForm, NEW_DISH_ID } from "./DishForm";
 import { DishTable } from "./DishTable";
@@ -34,6 +30,7 @@ export function DishesPanel() {
 
   const [deleting, setDeleting] = useState<DeleteTarget>(null);
   const menuSets = useDemoState((state) => state.menuSets);
+  const submittedOrders = useDemoState((state) => state.submittedOrders);
 
   const toggleActive = (dish: CatalogDish) => {
     updateDemoState({
@@ -50,10 +47,12 @@ export function DishesPanel() {
     );
   };
 
-  /** Spec: a dish with history (sample data, or used in a set) is only deactivated. */
+  /** Spec: a dish with history (on an order, or used in a set) is only deactivated. */
   const hasHistory = (dish: CatalogDish) =>
-    DISHES.some((sample) => sample.id === dish.id) ||
-    menuSets.some((set) => set.dishIds.includes(dish.id));
+    menuSets.some((set) => set.dishIds.includes(dish.id)) ||
+    submittedOrders.some((order) =>
+      order.meals.some((meal) => meal.dishIds.includes(dish.id))
+    );
 
   const remove = (dish: CatalogDish) => {
     const current = readDemoState();

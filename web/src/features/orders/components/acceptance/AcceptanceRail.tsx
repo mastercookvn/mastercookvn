@@ -8,7 +8,7 @@ import { MoneyRow } from "@/components/ui/MoneyRow";
 import { ROUTES } from "@/constants/routes";
 import { ORDER_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import { SERVICE_RADIUS_KM } from "@/mocks/orders";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
 
 import { useAcceptanceChecks } from "@/features/orders/lib/acceptance";
 import {
@@ -40,7 +40,7 @@ function Rail({ order }: { order: WorkspaceOrder }) {
         note={`${checks.surveyed}/${checks.mealCount} bữa`}
       />
       <AcceptanceCondition
-        label={`Phạm vi ${SERVICE_RADIUS_KM} km`}
+        label={`Phạm vi ${BUSINESS_SETTINGS.serviceRadiusKm} km`}
         ok={allSurveyed && !checks.outOfRange}
         note={
           checks.outOfRange
@@ -88,8 +88,8 @@ function Rail({ order }: { order: WorkspaceOrder }) {
           </ButtonLink>
         ) : (
           <p className="text-small text-soft">
-            Đã nhận, giữ chỗ 24 giờ. Dữ liệu mẫu chưa có hợp đồng lập từ đơn
-            này.
+            Đã nhận, giữ chỗ {BUSINESS_SETTINGS.holdHours} giờ. Chưa có hợp đồng
+            lập từ đơn này.
           </p>
         )
       ) : null}

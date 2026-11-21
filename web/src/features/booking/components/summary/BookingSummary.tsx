@@ -6,7 +6,7 @@ import { NumberTicker } from "@/components/motion/NumberTicker";
 import { Alert } from "@/components/ui/Alert";
 import { MoneyRow } from "@/components/ui/MoneyRow";
 import { formatMoney } from "@/lib/format";
-import type { EstimateMeal } from "@/mocks/demoStore";
+import { type EstimateMeal } from "@/lib/demoStore";
 
 import { mealTitle } from "@/features/booking/lib/mealTitle";
 

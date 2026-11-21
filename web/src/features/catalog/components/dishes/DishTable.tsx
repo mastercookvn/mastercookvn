@@ -7,8 +7,9 @@ import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatMoney } from "@/lib/format";
 import { recipeCost, suggestedDishPrice } from "@/lib/pricing";
-import { DISH_CATEGORY_LABEL } from "@/mocks/catalog";
-import { useDemoState, type CatalogDish } from "@/mocks/demoStore";
+import { DISH_CATEGORY_LABEL } from "@/constants/catalog";
+import { type CatalogDish } from "@/models/catalog";
+import { useDemoState } from "@/lib/demoStore";
 
 export function DishTable({
   dishes,

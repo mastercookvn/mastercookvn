@@ -1,13 +1,14 @@
 "use client";
 
 import { Dialog } from "@/components/ui/Dialog";
-import { updateDemoState } from "@/mocks/demoStore";
-import { INVENTORY_PERIOD as period } from "@/mocks/inventory";
+import { updateDemoState } from "@/lib/demoStore";
 
 export function ClosePeriodDialog({
+  month,
   open,
   onOpenChange,
 }: {
+  month: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -15,7 +16,7 @@ export function ClosePeriodDialog({
     <Dialog
       open={open}
       onOpenChange={onOpenChange}
-      title={`Chốt kỳ ${period.month}`}
+      title={`Chốt kỳ ${month}`}
       confirmLabel="Chốt kỳ"
       onConfirm={() => updateDemoState({ periodClosed: true })}
     >

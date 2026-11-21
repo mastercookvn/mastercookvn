@@ -3,7 +3,8 @@
 import { PrintIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { siteConfig } from "@/config/site";
-import { BUSINESS_SETTINGS, DEMO_TODAY } from "@/constants/settings";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
+import { useToday } from "@/hooks/useToday";
 import {
   formatMoney,
   formatPercent,
@@ -12,8 +13,8 @@ import {
 } from "@/lib/format";
 import { formatLunarLong, solarToLunar } from "@/lib/lunar";
 import { moneyInWords } from "@/lib/moneyWords";
-import { CUSTOMER, type Contract } from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
+import { type Contract } from "@/models/contracts";
+import { useDemoState } from "@/lib/demoStore";
 
 const BLANK = "……………………………………";
 
@@ -28,6 +29,7 @@ const percent = (rate: number) => formatPercent(rate, 0);
  */
 export function ContractDocument({ contract }: { contract: Contract }) {
   const confirmation = useDemoState((state) => state.contractConfirmation);
+  const today = useToday();
   const legal = siteConfig.legal;
   const deposit = contract.total * BUSINESS_SETTINGS.minimumDepositRate;
 
@@ -72,8 +74,9 @@ export function ContractDocument({ contract }: { contract: Contract }) {
         </ul>
 
         <p>
-          Hôm nay, ngày {DEMO_TODAY.getDate()} tháng {DEMO_TODAY.getMonth() + 1}{" "}
-          năm {DEMO_TODAY.getFullYear()}, tại {legal.signingPlace}, chúng tôi
+          Hôm nay, ngày {today?.getDate() ?? BLANK} tháng{" "}
+          {today ? today.getMonth() + 1 : BLANK} năm{" "}
+          {today?.getFullYear() ?? BLANK}, tại {legal.signingPlace}, chúng tôi
           gồm:
         </p>
 
@@ -81,13 +84,13 @@ export function ContractDocument({ contract }: { contract: Contract }) {
           <h2>BÊN A (BÊN SỬ DỤNG DỊCH VỤ)</h2>
           <dl>
             <dt>Họ và tên</dt>
-            <dd>{CUSTOMER.name}</dd>
+            <dd>{contract.customerName}</dd>
             <dt>Số CCCD</dt>
             <dd>{BLANK}</dd>
             <dt>Địa chỉ</dt>
             <dd>{BLANK}</dd>
             <dt>Điện thoại</dt>
-            <dd>{CUSTOMER.phone}</dd>
+            <dd>{contract.customerPhone}</dd>
           </dl>
         </section>
 
@@ -409,7 +412,7 @@ export function ContractDocument({ contract }: { contract: Contract }) {
             ) : (
               <span className="contract-doc-sign-space" />
             )}
-            <b>{confirmation?.accountName ?? CUSTOMER.name}</b>
+            <b>{confirmation?.accountName ?? contract.customerName}</b>
           </div>
           <div>
             <b>ĐẠI DIỆN BÊN B</b>

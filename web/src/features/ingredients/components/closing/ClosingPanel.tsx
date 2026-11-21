@@ -12,8 +12,10 @@ import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { INVENTORY_PERIOD_STATUS } from "@/constants/statuses";
 import { useQueryParam } from "@/hooks/useQueryParam";
 import { formatPercent } from "@/lib/format";
-import { useDemoState } from "@/mocks/demoStore";
-import { INVENTORY_PERIOD as period } from "@/mocks/inventory";
+import { useDemoState } from "@/lib/demoStore";
+import { EmptyState } from "@/components/ui/EmptyState";
+
+import { currentInventoryPeriod } from "../../lib/inventoryPeriod";
 
 import { ClosePeriodDialog } from "./ClosePeriodDialog";
 import { PeriodKpis } from "./PeriodKpis";
@@ -27,6 +29,16 @@ function ReturnToStocktakeButton() {
 export function ClosingPanel() {
   const closed = useDemoState((state) => state.periodClosed);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const period = currentInventoryPeriod();
+
+  if (!period) {
+    return (
+      <>
+        <PanelHeader title="Chốt kỳ food cost" />
+        <EmptyState>Chưa có kỳ nguyên liệu cần chốt.</EmptyState>
+      </>
+    );
+  }
 
   return (
     <>
@@ -66,7 +78,7 @@ export function ClosingPanel() {
               }
             />
             {closed ? (
-              <ToastButton message="Bản mẫu: mở lại kỳ, phải chốt lại cả các kỳ sau">
+              <ToastButton message="Mở lại kỳ, phải chốt lại cả các kỳ sau">
                 Mở lại kỳ
               </ToastButton>
             ) : (
@@ -82,8 +94,8 @@ export function ClosingPanel() {
           </>
         }
       />
-      <PeriodKpis />
-      <PeriodValuationTable />
+      <PeriodKpis period={period} />
+      <PeriodValuationTable period={period} />
       {closed ? (
         <Alert tone="info">
           Đã chốt. Quản lý cơ sở có thể dùng {formatPercent(period.foodCost)}{" "}
@@ -92,7 +104,11 @@ export function ClosingPanel() {
           khác trong Tham số nghiệp vụ. Hệ thống không tự ghi đè mục tiêu.
         </Alert>
       ) : null}
-      <ClosePeriodDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <ClosePeriodDialog
+        month={period.month}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </>
   );
 }

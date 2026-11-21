@@ -4,8 +4,13 @@
     {
       "name": "web",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-F", "@mastercookvn/web", "dev"],
-      "port": 3000
+      "runtimeArgs": [
+        "-F",
+        "@mastercookvn/web",
+        "dev"
+      ],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }

@@ -16,14 +16,14 @@ import {
   LIVE_VALIDATION_MODE,
   requiredTextSchema,
 } from "@/lib/validation";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
 import {
   EQUIPMENT_BASIS,
   EQUIPMENT_BASES,
   EQUIPMENT_BASIS_LABEL,
   type EquipmentBasis,
-  type EquipmentType,
-} from "@/mocks/equipment";
+} from "@/constants/equipment";
+import { type EquipmentType } from "@/models/equipment";
 
 const parseDecimal = (text: string) => Number(text.replace(",", ".")) || 0;
 

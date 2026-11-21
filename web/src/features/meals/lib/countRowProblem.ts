@@ -1,4 +1,4 @@
-import type { CountReportRow } from "@/mocks/equipment";
+import type { CountReportRow } from "@/models/equipment";
 
 export function countRowProblem(row: CountReportRow) {
   if (row.good + row.damaged + row.lost !== row.issued) return "Tổng chưa khớp";

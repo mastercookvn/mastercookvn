@@ -10,8 +10,7 @@ import { PhotoGalleryField } from "@/components/ui/PhotoGalleryField";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { LIVE_VALIDATION_MODE, personNameSchema } from "@/lib/validation";
-import { CUSTOMER } from "@/mocks/contracts";
-import { updateDemoState } from "@/mocks/demoStore";
+import { updateDemoState } from "@/lib/demoStore";
 
 /** UC-HD-02 1a: signer and time typed by the consultant, scan pages required (1f). */
 const paperSignatureSchema = z.object({
@@ -25,7 +24,7 @@ const paperSignatureSchema = z.object({
     ),
 });
 
-export function PaperSignatureForm() {
+export function PaperSignatureForm({ signer }: { signer: string }) {
   const showToast = useToast();
   const [pages, setPages] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
@@ -36,7 +35,7 @@ export function PaperSignatureForm() {
   } = useForm({
     resolver: zodResolver(paperSignatureSchema),
     mode: LIVE_VALIDATION_MODE,
-    defaultValues: { signer: CUSTOMER.name, signedAt: "05/11/2026 15:00" },
+    defaultValues: { signer, signedAt: "" },
   });
   const save = handleSubmit(() => {
     if (pages.length === 0) return;

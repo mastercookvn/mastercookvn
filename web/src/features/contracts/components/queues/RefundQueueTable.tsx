@@ -5,20 +5,15 @@ import { formatMoney } from "@/lib/format";
 
 import { RecordRefundDialog } from "./RecordRefundDialog";
 
-const ROWS = [
-  {
-    number: "HD-2026-0105",
-    source: "Hủy bữa 09/11/2026",
-    due: 6500000,
-    refunded: 0,
-  },
-  {
-    number: "HD-2026-0088",
-    source: "Tiền về sau khi hết hạn",
-    due: 16200000,
-    refunded: 11200000,
-  },
-];
+type RefundRow = {
+  number: string;
+  source: string;
+  due: number;
+  refunded: number;
+};
+
+// Placeholder until the refunds API exists.
+const ROWS: RefundRow[] = [];
 
 export function RefundQueueTable() {
   return (

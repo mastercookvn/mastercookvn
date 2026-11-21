@@ -3,8 +3,8 @@
 import { PageHeader } from "@/components/layout/workspace/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { Role } from "@/constants/roles";
-import { useDemoState } from "@/mocks/demoStore";
-import type { OperationMeal } from "@/mocks/operationMeals";
+import { useDemoState } from "@/lib/demoStore";
+import type { OperationMeal } from "@/models/operations";
 
 import { MealSwitcher } from "./queue/MealSwitcher";
 
@@ -24,7 +24,7 @@ export function MealHeader({
         <>
           <StatusBadge domain="meal" status={status} />
           <span>
-            {meal.name} · {meal.date}/2026 · {meal.time} · {meal.guests} khách
+            {meal.name} · {meal.date} · {meal.time} · {meal.guests} khách
           </span>
           <span>{meal.address}</span>
         </>

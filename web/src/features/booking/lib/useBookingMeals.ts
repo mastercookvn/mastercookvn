@@ -4,7 +4,7 @@ import {
   updateDemoState,
   useDemoState,
   type EstimateMeal,
-} from "@/mocks/demoStore";
+} from "@/lib/demoStore";
 
 export function useBookingMeals() {
   const meals = useDemoState((state) => state.estimate);

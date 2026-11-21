@@ -6,15 +6,12 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { useToast } from "@/components/ui/Toast";
 import { SETTLEMENT_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import {
-  MEAL_COMPANY as meal,
-  SETTLEMENT_COMPANY as settlement,
-} from "@/mocks/contracts";
-import { updateDemoState, useDemoState } from "@/mocks/demoStore";
+import { updateDemoState, useDemoState } from "@/lib/demoStore";
 
+import type { Settlement } from "../../lib/settlement";
 import { SettlementLines } from "./SettlementLines";
 
-export function SettlementSheet() {
+export function SettlementSheet({ settlement }: { settlement: Settlement }) {
   const status = useDemoState((state) => state.settlementStatus);
   const settlementPaid = useDemoState((state) => state.settlementPaidAmount);
   const showToast = useToast();
@@ -23,9 +20,12 @@ export function SettlementSheet() {
   return (
     <section className="card l-stack">
       <h3 className="card-title card-title-flush">
-        {settlement.orderCode} · {meal.name} · {meal.date}
+        {settlement.orderCode} · {settlement.mealName} · {settlement.mealDate}
       </h3>
-      <SettlementLines settlementPaid={settlementPaid} />
+      <SettlementLines
+        settlement={settlement}
+        settlementPaid={settlementPaid}
+      />
 
       {status === SETTLEMENT_STATUS.Draft ? (
         <>
@@ -41,7 +41,7 @@ export function SettlementSheet() {
                   settlementStatus: SETTLEMENT_STATUS.Invoiced,
                 });
                 showToast(
-                  `Đã phát hành hóa đơn ${settlement.invoiceNumber}. Khách nhận thông báo cần thanh toán ${formatMoney(balance)}.`
+                  `Đã phát hành hóa đơn quyết toán. Khách nhận thông báo cần thanh toán ${formatMoney(balance)}.`
                 );
               }}
             >
@@ -54,7 +54,7 @@ export function SettlementSheet() {
       {status === SETTLEMENT_STATUS.Invoiced ? (
         <>
           <Alert tone="wait">
-            Đã gửi hóa đơn {settlement.invoiceNumber}. Chờ khách thanh toán{" "}
+            Đã gửi hóa đơn quyết toán. Chờ khách thanh toán{" "}
             {formatMoney(balance)}. Khách trả tiền mặt thì ghi ở tab Thu tiền.
           </Alert>
           <div className="l-row justify-end">

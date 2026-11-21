@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 
 import { WorkspaceTabs } from "@/components/layout/workspace/WorkspaceTabs";
 import { getStaffRoles } from "@/lib/auth";
-import { operationMealById } from "@/mocks/operationMeals";
 
+import { findOperationMeal } from "../lib/operationMeals";
 import { CountPanel } from "../components/count/CountPanel";
 import { EquipmentIssueTable } from "../components/issue/EquipmentIssueTable";
 import { MealHeader } from "../components/MealHeader";
@@ -11,7 +11,7 @@ import { ProgressStepper } from "../components/progress/ProgressStepper";
 import { StaffingPanel } from "../components/staffing/StaffingPanel";
 
 export async function MealPage({ id }: { id: string }) {
-  const meal = operationMealById(id);
+  const meal = findOperationMeal(id);
   if (!meal) notFound();
   const roles = await getStaffRoles();
 

@@ -26,17 +26,10 @@ import {
   staffingErrors,
   type PlannedShift,
 } from "@/lib/staffingPlan";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import {
-  OPERATION_MEALS,
-  type Assignment,
-  type OperationMeal,
-} from "@/mocks/operationMeals";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { type Assignment, type OperationMeal } from "@/models/operations";
 
+import { listOperationMeals } from "../../lib/operationMeals";
 import { MealStageNotice } from "../MealStageNotice";
 
 const NO_ASSIGNMENTS: Assignment[] = [];
@@ -89,9 +82,9 @@ function StaffingEditor({
   const allAssignments = useDemoState((state) => state.assignments);
   const staff = useDemoState((state) => state.staff);
 
-  const busy = OPERATION_MEALS.filter(
-    (other) => other.id !== meal.id && other.date === meal.date
-  ).flatMap((other) => allAssignments[other.id] ?? []);
+  const busy = listOperationMeals()
+    .filter((other) => other.id !== meal.id && other.date === meal.date)
+    .flatMap((other) => allAssignments[other.id] ?? []);
 
   const propose = () =>
     proposeStaffing({

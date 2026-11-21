@@ -19,8 +19,9 @@ import {
   parseAmountText,
   requiredTextSchema,
 } from "@/lib/validation";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
-import { INGREDIENT_UNITS, type Ingredient } from "@/mocks/inventory";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
+import { INGREDIENT_UNITS } from "@/constants/inventory";
+import { type Ingredient } from "@/models/inventory";
 
 const ingredientSchema = (ownName: string | undefined) =>
   z.object({

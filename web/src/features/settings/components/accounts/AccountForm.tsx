@@ -15,7 +15,7 @@ import {
   phoneSchema,
   toLocalPhone,
 } from "@/lib/validation";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
 
 const MINIMUM_PASSWORD_LENGTH = 8;
 

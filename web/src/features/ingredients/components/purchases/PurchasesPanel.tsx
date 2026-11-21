@@ -6,7 +6,7 @@ import { AddButton } from "@/components/ui/AddButton";
 import { Drawer, DRAWER_SIZE } from "@/components/ui/Drawer";
 import { ExportButton } from "@/components/ui/ExportButton";
 import { PanelHeader } from "@/components/ui/PanelHeader";
-import { useDemoState } from "@/mocks/demoStore";
+import { useDemoState } from "@/lib/demoStore";
 
 import { PurchaseForm } from "./PurchaseForm";
 import { SavedPurchasesTable } from "./SavedPurchasesTable";

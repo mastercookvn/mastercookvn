@@ -13,15 +13,12 @@ import {
   phoneSchema,
 } from "@/lib/validation";
 import {
-  DISHES,
-  MENU_SETS,
-  SERVICES,
   menuSetPriceFrom,
   type Dish,
   type MenuSet,
   type Service,
-} from "@/mocks/catalog";
-import type { BookingContact, EstimateMeal } from "@/mocks/demoStore";
+} from "@/models/catalog";
+import { type BookingContact, type EstimateMeal } from "@/lib/demoStore";
 
 /** BR04: fixed holiday lists, solar as dd/MM and lunar as [day, month]. Sample rate (V6). */
 const SOLAR_HOLIDAYS = ["01/01", "30/04", "01/05", "02/09"];
@@ -40,12 +37,6 @@ export type BookingCatalog = {
   dishes: readonly (Dish & { active?: boolean })[];
   menuSets: readonly MenuSet[];
   services: readonly Service[];
-};
-
-const SAMPLE_CATALOG: BookingCatalog = {
-  dishes: DISHES,
-  menuSets: MENU_SETS,
-  services: SERVICES,
 };
 
 export function isHoliday(date: string) {
@@ -84,7 +75,7 @@ export function mealInfoErrors(meal: EstimateMeal): string[] {
 /** UC-DT-01 3e: under 6 dishes, or a dish or set that is no longer served. */
 export function mealMenuErrors(
   meal: EstimateMeal,
-  catalog: BookingCatalog = SAMPLE_CATALOG
+  catalog: BookingCatalog
 ): string[] {
   if (meal.mode === MENU_MODE.Set) {
     const set = catalog.menuSets.find((item) => item.id === meal.setId);
@@ -128,7 +119,7 @@ export function contactErrors(contact: BookingContact) {
 /** Preview only. POST /estimates is authoritative once available. */
 export function estimateMeal(
   meal: EstimateMeal,
-  catalog: BookingCatalog = SAMPLE_CATALOG
+  catalog: BookingCatalog
 ): MealEstimate {
   const errors = [...mealInfoErrors(meal), ...mealMenuErrors(meal, catalog)];
   if (errors.length) return { errors };

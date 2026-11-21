@@ -3,7 +3,7 @@
 import { Dialog } from "@/components/ui/Dialog";
 import { useToast } from "@/components/ui/Toast";
 import { ORDER_STATUS } from "@/constants/statuses";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
 
 import type { WorkspaceOrder } from "@/features/orders/lib/useOrders";
 

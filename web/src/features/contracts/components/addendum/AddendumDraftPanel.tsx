@@ -20,16 +20,12 @@ import {
 } from "@/lib/addendum";
 import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { DISHES, dishById, menuSetById, menuSetPrice } from "@/mocks/catalog";
-import { daysUntil, type Contract, type Meal } from "@/mocks/contracts";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import { OPERATION_MEALS } from "@/mocks/operationMeals";
+import { menuSetPriceFrom } from "@/models/catalog";
+import { daysUntil, type Contract, type Meal } from "@/models/contracts";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 import { addedTablesShortages } from "@/features/contracts/lib/addendumResources";
+import { listOperationMeals } from "@/features/meals/lib/operationMeals";
 
 const NO_CHANGE = "none";
 
@@ -69,7 +65,12 @@ export function AddendumDraftPanel({
   meal: Meal;
 }) {
   const showToast = useToast();
-  const SET = menuSetById(meal.setId);
+  const dishes = useDemoState((state) => state.dishes);
+  const menuSets = useDemoState((state) => state.menuSets);
+  const setDishIds =
+    menuSets.find((set) => set.id === meal.setId)?.dishIds ?? [];
+  const dishById = (id: string) => dishes.find((dish) => dish.id === id);
+  const dishName = (id: string) => dishById(id)?.name ?? id;
   const daysLeft = daysUntil(meal.startsAt);
   const staff = useDemoState((state) => state.staff);
   const equipment = useDemoState((state) => state.equipment);
@@ -79,18 +80,19 @@ export function AddendumDraftPanel({
   );
   const customerConfirmed = useDemoState((state) => state.addendumConfirmed);
   const [tablesAfter, setTablesAfter] = useState(
-    applied?.tables ?? meal.servingTables + 5
+    applied?.tables ?? meal.servingTables
   );
   const [dishOut, setDishOut] = useState(NO_CHANGE);
   const [dishIn, setDishIn] = useState(NO_CHANGE);
   const [localStep, setStep] = useState<AddendumStep>(ADDENDUM_STEP.Draft);
 
   // Other meals the same day hold their staff; this meal's own crew stays available.
-  const busyStaff = OPERATION_MEALS.filter(
-    (other) =>
-      other.date === meal.date.slice(0, 5) &&
-      other.orderCode !== contract.orderCode
-  ).flatMap((other) => (assignments[other.id] ?? []).map((row) => row.staff));
+  const busyStaff = listOperationMeals()
+    .filter(
+      (other) =>
+        other.date === meal.date && other.orderCode !== contract.orderCode
+    )
+    .flatMap((other) => (assignments[other.id] ?? []).map((row) => row.staff));
   const resourceShortages = addedTablesShortages({
     waves: meal.waves,
     guestsPerTable: meal.guestsPerTable,
@@ -103,13 +105,13 @@ export function AddendumDraftPanel({
   const swapping = dishOut !== NO_CHANGE && dishIn !== NO_CHANGE;
   const evaluation = evaluateAddendum({
     daysLeft,
-    dishesTotal: menuSetPrice(SET),
+    dishesTotal: menuSetPriceFrom({ dishIds: setDishIds }, dishes),
     guestsPerTable: meal.guestsPerTable,
     services: meal.services,
     tablesBefore: meal.servingTables,
     tablesAfter,
     dishSwapDelta: swapping
-      ? dishById(dishIn).price - dishById(dishOut).price
+      ? (dishById(dishIn)?.price ?? 0) - (dishById(dishOut)?.price ?? 0)
       : null,
     hasOtherPendingAddendum: false,
     surcharge: meal.price.surcharge,
@@ -222,9 +224,9 @@ export function AddendumDraftPanel({
               disabled={locked}
               options={[
                 { value: NO_CHANGE, label: "Không đổi" },
-                ...SET.dishIds.map((id) => ({
+                ...setDishIds.map((id) => ({
                   value: id,
-                  label: dishById(id).name,
+                  label: dishName(id),
                 })),
               ]}
               value={dishOut}
@@ -236,12 +238,12 @@ export function AddendumDraftPanel({
               disabled={locked || dishOut === NO_CHANGE}
               options={[
                 { value: NO_CHANGE, label: "Chọn món" },
-                ...DISHES.filter((dish) => !SET.dishIds.includes(dish.id)).map(
-                  (dish) => ({
+                ...dishes
+                  .filter((dish) => !setDishIds.includes(dish.id))
+                  .map((dish) => ({
                     value: dish.id,
                     label: `${dish.name} · ${formatMoney(dish.price)}`,
-                  })
-                ),
+                  })),
               ]}
               value={dishIn}
               onValueChange={setDishIn}
@@ -290,9 +292,9 @@ export function AddendumDraftPanel({
               </tr>
               <tr>
                 <th>Món</th>
-                <td>{swapping ? dishById(dishOut).name : "Giữ nguyên"}</td>
+                <td>{swapping ? dishName(dishOut) : "Giữ nguyên"}</td>
                 <td className={cn(swapping && "is-changed")}>
-                  {swapping ? dishById(dishIn).name : "Giữ nguyên"}
+                  {swapping ? dishName(dishIn) : "Giữ nguyên"}
                 </td>
               </tr>
               <tr>

@@ -5,7 +5,7 @@ import { useRef, useState, type KeyboardEvent } from "react";
 import { ChevronIcon } from "@/components/icons";
 import { CheckboxLabel } from "@/components/ui/CheckboxLabel";
 import { Select } from "@/components/ui/Select";
-import { DEMO_TODAY } from "@/constants/settings";
+import { useToday } from "@/hooks/useToday";
 import {
   formatDayMonthYear,
   formatWeekdayDate,
@@ -50,17 +50,24 @@ const sameDay = (a: Date | null, b: Date) =>
  * Event date with the month laid out. Families often give a lunar date (đám
  * giỗ, ngày lành), so it can be entered in lunar; the stored value is solar.
  */
-export function EventDatePicker({
-  id,
-  value,
-  onChange,
-}: {
+type EventDatePickerProps = {
   id: string;
   value: string;
   onChange: (value: string) => void;
-}) {
+};
+
+export function EventDatePicker(props: EventDatePickerProps) {
+  const today = useToday();
+  return today ? <DatePicker {...props} today={today} /> : null;
+}
+
+function DatePicker({
+  id,
+  value,
+  onChange,
+  today,
+}: EventDatePickerProps & { today: Date }) {
   const selected = parseDayMonthYear(value);
-  const today = DEMO_TODAY;
   const anchor = selected ?? today;
   const gridRef = useRef<HTMLDivElement>(null);
 

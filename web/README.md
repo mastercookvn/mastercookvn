@@ -1,6 +1,6 @@
 # MasterCook VN
 
-Website tiệc nấu sẵn, giao và phục vụ tận nơi, dựng theo Prototype 5.11. Backend chưa có API nên dữ liệu đang là mẫu trong `src/mocks`.
+Website tiệc nấu sẵn, giao và phục vụ tận nơi, dựng theo Prototype 5.11. Backend chưa có API nên dữ liệu chỉ lưu tạm trong trình duyệt.
 
 ## Bắt đầu
 
@@ -15,18 +15,11 @@ pnpm --filter @mastercookvn/web dev
 
 Mở <http://localhost:3000>.
 
-## Tài khoản mẫu
+## Tài khoản phát triển
 
-Vào `/login` hoặc bấm "Đăng nhập trang quản lý" ở chân trang, rồi chọn một nút trong "Vào nhanh bằng tài khoản mẫu". Có thể nhập tay số điện thoại, mật khẩu nhập gì cũng được. Tắt các nút này bằng `NEXT_PUBLIC_SHOW_SAMPLE_ACCOUNTS=false`.
+Chưa có dữ liệu mẫu: danh mục, đơn, hợp đồng, nhân sự, kho đều bắt đầu trống. Dữ liệu nhập trên giao diện được giữ trong `localStorage` của trình duyệt (`src/lib/demoStore.ts`) cho đến khi có API; nút "Xóa dữ liệu cục bộ" ở sidebar xóa toàn bộ.
 
-| Số điện thoại  | Vai trò                  | Vào trang |
-| -------------- | ------------------------ | --------- |
-| `0903 123 456` | Khách (số khác cũng vậy) | Hồ sơ     |
-| `0901 000 001` | Quản lý cơ sở            | Quản lý   |
-| `0901 000 002` | Tư vấn                   | Quản lý   |
-| `0901 000 003` | Kế toán                  | Quản lý   |
-| `0912 000 666` | Thủ kho                  | Quản lý   |
-| `0901 000 005` | Quản lý nhân sự, Tư vấn  | Quản lý   |
+Vào `/login`, bấm "Vào trang quản lý" để đăng nhập tài khoản quản trị phát triển (đủ mọi vai trò), hoặc nhập số `0900000000` với mật khẩu bất kỳ. Số khác đăng nhập thành khách. Tắt tài khoản này bằng `NEXT_PUBLIC_SHOW_SAMPLE_ACCOUNTS=false`.
 
 ## Lệnh
 
@@ -69,8 +62,8 @@ src/
     motion/                Reveal, MaskImage, ScrollParallax...
   constants/               Trạng thái, vai trò, quyền, route, nhãn, tham số
   hooks/                   Hook dùng chung
-  lib/                     session, auth, format, pricing, env
-  mocks/                   Dữ liệu mẫu, thay bằng API khi backend sẵn sàng
+  models/                  Kiểu dữ liệu nghiệp vụ và hàm tính thuần
+  lib/                     session, auth, format, pricing, env, demoStore
   proxy.ts                 Chuyển hướng theo phiên đăng nhập
 ```
 

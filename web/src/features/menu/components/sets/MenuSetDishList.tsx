@@ -3,11 +3,8 @@
 import { BowlIcon } from "@/components/icons";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { formatMoney } from "@/lib/format";
-import {
-  DISH_CATEGORY_LABEL,
-  type Dish,
-  type DishCategory,
-} from "@/mocks/catalog";
+import { DISH_CATEGORY_LABEL, type DishCategory } from "@/constants/catalog";
+import { type Dish } from "@/models/catalog";
 
 const CATEGORY_ORDER = Object.keys(DISH_CATEGORY_LABEL) as DishCategory[];
 

@@ -2,21 +2,24 @@ import { Card } from "@/components/ui/Card";
 import { CardTitle } from "@/components/ui/CardTitle";
 import { BUSINESS_SETTINGS } from "@/constants/settings";
 import { formatPercent } from "@/lib/format";
-import { MONTHLY_REVENUE } from "@/mocks/inventory";
+import type { MonthlyRevenue } from "../../lib/revenueReport";
 
 const WIDTH = 460;
 const HEIGHT = 180;
-const x = (index: number) => 36 + (index * (WIDTH - 60)) / 4;
+const x = (index: number, count: number) =>
+  36 + (index * (WIDTH - 60)) / Math.max(count - 1, 1);
 const y = (value: number) =>
   HEIGHT - 24 - ((value - 0.3) / 0.1) * (HEIGHT - 40);
 const TARGET = BUSINESS_SETTINGS.foodCostTarget;
 const LINE = "var(--color-wait)";
 const AXIS = "var(--color-ink-subtle)";
 
-export function FoodCostLineChart() {
-  const points = MONTHLY_REVENUE.map(
-    (row, index) => `${x(index)},${y(row.foodCost).toFixed(1)}`
-  ).join(" ");
+export function FoodCostLineChart({ months }: { months: MonthlyRevenue[] }) {
+  const points = months
+    .map(
+      (row, index) => `${x(index, months.length)},${y(row.foodCost).toFixed(1)}`
+    )
+    .join(" ");
 
   return (
     <Card>
@@ -38,14 +41,14 @@ export function FoodCostLineChart() {
           strokeDasharray="4 4"
         />
         <text x="36" y={y(TARGET) + 15} fontSize="11" fill={AXIS}>
-          Mục tiêu 35%
+          Mục tiêu {formatPercent(TARGET, 0)}
         </text>
         <polyline points={points} fill="none" stroke={LINE} strokeWidth="2" />
-        {MONTHLY_REVENUE.map((row, index) => (
+        {months.map((row, index) => (
           <g key={row.month}>
             <title>{`${row.month}: ${formatPercent(row.foodCost)}`}</title>
             <circle
-              cx={x(index)}
+              cx={x(index, months.length)}
               cy={y(row.foodCost).toFixed(1)}
               r="4.5"
               fill={LINE}
@@ -53,7 +56,7 @@ export function FoodCostLineChart() {
               strokeWidth="2"
             />
             <text
-              x={x(index)}
+              x={x(index, months.length)}
               y={(y(row.foodCost) - 10).toFixed(1)}
               textAnchor="middle"
               fontSize="11"
@@ -62,7 +65,7 @@ export function FoodCostLineChart() {
               {formatPercent(row.foodCost)}
             </text>
             <text
-              x={x(index)}
+              x={x(index, months.length)}
               y={HEIGHT - 6}
               textAnchor="middle"
               fontSize="11"

@@ -9,8 +9,8 @@ import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { ALL_ROLES, ROLE, ROLE_LABEL } from "@/constants/roles";
 import { LIVE_VALIDATION_MODE, personNameSchema } from "@/lib/validation";
-import { readDemoState, updateDemoState } from "@/mocks/demoStore";
-import type { StaffAccount } from "@/mocks/people";
+import { readDemoState, updateDemoState } from "@/lib/demoStore";
+import type { StaffAccount } from "@/models/people";
 
 export function AccountEditForm({
   formId,

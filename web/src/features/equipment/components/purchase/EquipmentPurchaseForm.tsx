@@ -12,12 +12,8 @@ import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatMoney, formatNumber } from "@/lib/format";
 import { LIVE_VALIDATION_MODE, purchaseHeaderSchema } from "@/lib/validation";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
-import { equipmentPurchaseTotal, type EquipmentType } from "@/mocks/equipment";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
+import { equipmentPurchaseTotal, type EquipmentType } from "@/models/equipment";
 
 type DraftLine = { equipment: string; quantity: string; price: string };
 
@@ -56,7 +52,7 @@ export function EquipmentPurchaseForm({
   } = useForm({
     resolver: zodResolver(purchaseHeaderSchema),
     mode: LIVE_VALIDATION_MODE,
-    defaultValues: { date: "05/11/2026", supplier: "", phone: "" },
+    defaultValues: { date: "", supplier: "", phone: "" },
   });
   const [lines, setLines] = useState<DraftLine[]>(() => {
     const short = equipment.filter((item) => shortfall(item) > 0);

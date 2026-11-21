@@ -2,7 +2,6 @@
 
 import { useFormContext } from "react-hook-form";
 
-import { Alert } from "@/components/ui/Alert";
 import { TextField } from "@/components/ui/TextField";
 
 import type { OnBehalfFields } from "./onBehalfSchema";
@@ -32,10 +31,6 @@ export function CustomerLookupForm() {
           error={errors.customerName?.message}
         />
       </div>
-      <Alert tone="wait">
-        SĐT này đã thuộc hồ sơ &quot;Nguyễn Minh Đức&quot;. Kiểm tra đúng người
-        trước khi dùng, hệ thống không tạo hồ sơ thứ hai.
-      </Alert>
     </section>
   );
 }

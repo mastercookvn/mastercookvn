@@ -1,9 +1,10 @@
 import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { formatMoney } from "@/lib/format";
-import { INVENTORY_PERIOD as period } from "@/mocks/inventory";
 
-export function PeriodValuationTable() {
+import type { InventoryPeriod } from "../../lib/inventoryPeriod";
+
+export function PeriodValuationTable({ period }: { period: InventoryPeriod }) {
   return (
     <DataTable
       columns={[

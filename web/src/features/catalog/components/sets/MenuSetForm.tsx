@@ -10,12 +10,8 @@ import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
 import { formatMoney } from "@/lib/format";
 import { LIVE_VALIDATION_MODE, requiredTextSchema } from "@/lib/validation";
-import type { MenuSet } from "@/mocks/catalog";
-import {
-  readDemoState,
-  updateDemoState,
-  useDemoState,
-} from "@/mocks/demoStore";
+import type { MenuSet } from "@/models/catalog";
+import { readDemoState, updateDemoState, useDemoState } from "@/lib/demoStore";
 
 const MINIMUM_DISHES = 3;
 

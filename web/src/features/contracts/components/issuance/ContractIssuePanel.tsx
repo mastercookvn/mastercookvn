@@ -8,8 +8,8 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { PanelHeader } from "@/components/ui/PanelHeader";
 import type { Role } from "@/constants/roles";
 import { ROUTES } from "@/constants/routes";
-import type { Contract } from "@/mocks/contracts";
-import { useDemoState } from "@/mocks/demoStore";
+import type { Contract } from "@/models/contracts";
+import { useDemoState } from "@/lib/demoStore";
 
 import { isAwaitingContract } from "@/features/contracts/lib/contractState";
 
@@ -69,18 +69,22 @@ export function ContractIssuePanel({
       <div className="l-grid l-grid-main">
         <div className="l-stack gap-4">
           {issued ? (
-            <PaperSignatureForm />
+            <PaperSignatureForm signer={contract.customerName} />
           ) : (
             <>
-              <DepositTermsForm />
+              <DepositTermsForm contract={contract} />
               <SurchargeForm />
             </>
           )}
           <TransactionTable />
         </div>
-        <ActivationConditions roles={roles} />
+        <ActivationConditions roles={roles} contract={contract} />
       </div>
-      <PublishContractDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <PublishContractDialog
+        contract={contract}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </>
   );
 }

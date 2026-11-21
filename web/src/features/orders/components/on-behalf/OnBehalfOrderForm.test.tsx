@@ -10,8 +10,8 @@ describe("OnBehalfOrderForm", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Đặt mâm" }));
 
-    expect(screen.getByLabelText("Số mâm")).toHaveValue(8);
-    expect(screen.getByLabelText("Giờ giao mâm")).toHaveTextContent("18:00");
+    expect(screen.getByLabelText("Số mâm")).toHaveValue(10);
+    expect(screen.getByLabelText("Giờ giao mâm")).toHaveTextContent("17:30");
     expect(screen.queryByText("Lượt đãi")).not.toBeInTheDocument();
   });
 
@@ -47,6 +47,7 @@ describe("OnBehalfOrderForm", () => {
     ).toBeInTheDocument();
 
     const address = screen.getByLabelText("Địa chỉ tổ chức");
+    await user.type(address, "12 Lê Lợi");
     await user.clear(address);
     await waitFor(() =>
       expect(address).toHaveAccessibleDescription("Vui lòng nhập địa chỉ.")

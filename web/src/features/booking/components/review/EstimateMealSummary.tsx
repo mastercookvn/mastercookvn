@@ -6,7 +6,7 @@ import { MENU_MODE, SERVING_FORMAT } from "@/constants/booking";
 import { formatWeekdayDate, parseDayMonthYear } from "@/lib/format";
 import { formatLunarLong, solarToLunar } from "@/lib/lunar";
 import { describeWaves } from "@/lib/servingWaves";
-import { useDemoState, type EstimateMeal } from "@/mocks/demoStore";
+import { useDemoState, type EstimateMeal } from "@/lib/demoStore";
 
 import { mealTitle } from "@/features/booking/lib/mealTitle";
 

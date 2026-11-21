@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
 
-import { EQUIPMENT } from "@/mocks/equipment";
-import { STAFF } from "@/mocks/people";
+import { STAFF_POSITION } from "@/constants/staffing";
 
 import {
   addedTablesShortages,
   wavesWithAddedTables,
 } from "./addendumResources";
+
+const STAFF = ["An", "Bình", "Chi"].map((name) => ({
+  name,
+  position: STAFF_POSITION.Server,
+  active: true,
+}));
 
 const WAVES = [
   { from: "10:30", to: "12:00", tables: 6 },
@@ -28,7 +33,7 @@ describe("addendum resources", () => {
         added: 0,
         staff: [],
         busyStaff: [],
-        equipment: EQUIPMENT,
+        equipment: [],
       })
     ).toEqual([]);
   });
@@ -40,7 +45,7 @@ describe("addendum resources", () => {
       added: 5,
       staff: STAFF,
       busyStaff: STAFF.map((member) => member.name),
-      equipment: EQUIPMENT,
+      equipment: [],
     });
 
     expect(shortages.some((line) => line.includes("phục vụ"))).toBe(true);

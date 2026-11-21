@@ -9,9 +9,29 @@ import { PanelHeader } from "@/components/ui/PanelHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ToastButton } from "@/components/ui/ToastButton";
 import { INVENTORY_PERIOD_STATUS } from "@/constants/statuses";
-import { INVENTORY_PERIOD as period } from "@/mocks/inventory";
+import { EmptyState } from "@/components/ui/EmptyState";
+
+import {
+  currentInventoryPeriod,
+  type InventoryPeriod,
+} from "../../lib/inventoryPeriod";
 
 export function StocktakeTable() {
+  const period = currentInventoryPeriod();
+
+  if (!period) {
+    return (
+      <>
+        <PanelHeader title="Kiểm kê" />
+        <EmptyState>Chưa có kỳ nguyên liệu cần kiểm kê.</EmptyState>
+      </>
+    );
+  }
+
+  return <PeriodStocktake period={period} />;
+}
+
+function PeriodStocktake({ period }: { period: InventoryPeriod }) {
   const [counts, setCounts] = useState(
     period.lines.map((line) => line.closingQty)
   );

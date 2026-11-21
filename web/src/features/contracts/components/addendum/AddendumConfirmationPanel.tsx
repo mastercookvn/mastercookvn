@@ -7,14 +7,23 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { useToast } from "@/components/ui/Toast";
 import { ADDENDUM_STATUS } from "@/constants/statuses";
 import { formatMoney } from "@/lib/format";
-import { ADDENDUM_HOUSEWARMING as addendum } from "@/mocks/contracts";
-import { updateDemoState, useDemoState } from "@/mocks/demoStore";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { updateDemoState, useDemoState } from "@/lib/demoStore";
 
+import type { PendingAddendum } from "../../lib/contractRepository";
 import { BeforeAfterTable } from "./BeforeAfterTable";
 
-export function AddendumConfirmationPanel() {
+export function AddendumConfirmationPanel({
+  addendum,
+}: {
+  addendum: PendingAddendum | null;
+}) {
   const confirmed = useDemoState((state) => state.addendumConfirmed);
   const showToast = useToast();
+
+  if (!addendum) {
+    return <EmptyState>Không có phụ lục nào chờ bạn xác nhận.</EmptyState>;
+  }
 
   return (
     <div className="l-stack">
@@ -29,7 +38,7 @@ export function AddendumConfirmationPanel() {
           }
         />
       </div>
-      <BeforeAfterTable firstColumn="Nội dung" />
+      <BeforeAfterTable addendum={addendum} firstColumn="Nội dung" />
       <div className="card l-stack max-w-[520px]">
         <MoneyRow label="Chênh lệch" value={formatMoney(addendum.difference)} />
         <MoneyRow
@@ -50,7 +59,7 @@ export function AddendumConfirmationPanel() {
               variant="inverse"
               onClick={() =>
                 showToast(
-                  `Bản mẫu: mở mã QR với số tiền ${formatMoney(addendum.extraDeposit)}`
+                  `Mở mã QR với số tiền ${formatMoney(addendum.extraDeposit)}`
                 )
               }
             >

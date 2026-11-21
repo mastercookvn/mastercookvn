@@ -45,7 +45,7 @@ export function OrderList() {
             className="input"
             type="search"
             aria-label="Tra cứu đơn và hợp đồng"
-            placeholder="Mã đơn, số hợp đồng, tên bữa hoặc ngày, ví dụ DH-0142"
+            placeholder="Mã đơn, số hợp đồng, tên bữa hoặc ngày, ví dụ DH-..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />

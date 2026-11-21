@@ -6,8 +6,8 @@ import { DataTable } from "@/components/ui/DataTable";
 import { num } from "@/components/ui/tableColumns";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatMoney } from "@/lib/format";
-import { useDemoState } from "@/mocks/demoStore";
-import { equipmentPurchaseTotal } from "@/mocks/equipment";
+import { useDemoState } from "@/lib/demoStore";
+import { equipmentPurchaseTotal } from "@/models/equipment";
 
 export function SavedEquipmentPurchases() {
   const purchases = useDemoState((state) => state.equipmentPurchases);

@@ -1,5 +1,5 @@
 import { SERVING_FORMAT } from "@/constants/booking";
-import type { EstimateMeal } from "@/mocks/demoStore";
+import { type EstimateMeal } from "@/lib/demoStore";
 
 /** Tray orders have no name, so they are titled by what is delivered. */
 export function mealTitle(meal: EstimateMeal, fallback: string) {
