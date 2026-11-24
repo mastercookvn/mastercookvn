@@ -10,3 +10,46 @@ services:
       POSTGRES_DB: mastercookvn
       POSTGRES_USER: mastercookvn
       POSTGRES_PASSWORD: mastercookvn
+
+  rustfs:
+    container_name: mastercookvn-rustfs
+    image: rustfs/rustfs:1.0.6
+    environment:
+      RUSTFS_ACCESS_KEY: ${RUSTFS_ACCESS_KEY:-mastercookvn}
+      RUSTFS_SECRET_KEY: ${RUSTFS_SECRET_KEY:-mastercookvn}
+      RUSTFS_CONSOLE_ENABLE: "true"
+      RUSTFS_OBS_LOGGER_LEVEL: info
+      RUST_LOG: info
+      # RUSTFS_SERVER_DOMAINS: rustfs.mastercookvn.localhost
+    volumes:
+      - rustfs:/data
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:9000/health
+      start_period: 10s
+      start_interval: 1s
+    restart: unless-stopped
+
+  rustfs_bucket:
+    image: rustfs/rc:v0.1.38
+    container_name: mastercookvn-rustfs_bucket
+    entrypoint: > # language: sh
+      /bin/sh -c '
+        until (/usr/bin/rc alias set rustfs http://rustfs:9000 ${RUSTFS_ACCESS_KEY:-mastercookvn} ${RUSTFS_SECRET_KEY:-mastercookvn}) do
+          sleep 1;
+        done
+        /usr/bin/rc mb --ignore-existing rustfs/assets &&
+        /usr/bin/rc anonymous set download rustfs/assets;
+      '
+    restart: "no"
+    depends_on:
+      rustfs:
+        condition: service_healthy
+
+volumes:
+  rustfs:

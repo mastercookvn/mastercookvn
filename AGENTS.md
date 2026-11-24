@@ -12,6 +12,7 @@ pom.xml                   # Maven root pom.xml
 package.json
 tsconfig.json             # tsconfig monorepo
 tsconfig.base.json
+compose.yaml              # postgres, rustfs (S3 compatible)
 ```
 
 ## Docs
