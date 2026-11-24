@@ -42,6 +42,7 @@ src/
 - Reuse shared UI, custom icons and motion components. Forms use React Hook Form, Zod, `zodResolver` and shared validation from `lib/validation.ts`.
 - Use design tokens, `cn()` and `cva`. Keep feature CSS local and import it through `globals.css`; update `lib/utils.ts` when adding typography tokens.
 - Desktop support is sufficient. Verify changed UI in a desktop browser; mobile layouts and multi-viewport checks are not required.
+- Payment QR is VietQR (`lib/vietQr.ts`, `VietQrCode`) to the account in `NEXT_PUBLIC_PAYMENT_*`; each QR is one pending reference valid for TS07. Record a payment success once per reference and send orders with an idempotency key kept across retries.
 - Store image `MediaKey` values, not URLs. Use `MediaImage` and media helpers; keep content photos out of Git and S3 credentials server-only.
 
 ## Scripts and Tests

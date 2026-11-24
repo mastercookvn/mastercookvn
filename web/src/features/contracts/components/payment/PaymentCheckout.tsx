@@ -5,10 +5,13 @@ import { useState } from "react";
 import { QrIcon } from "@/components/icons";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
-import { QrPlaceholder } from "@/components/ui/QrPlaceholder";
 import { TextField } from "@/components/ui/TextField";
 import { useToast } from "@/components/ui/Toast";
+import { VietQrCode } from "@/components/ui/VietQrCode";
+import { BUSINESS_SETTINGS } from "@/constants/settings";
 import type { PaymentPurpose } from "@/constants/statuses";
+import { useNow } from "@/hooks/useNow";
+import { env } from "@/lib/env";
 import { formatMoney, formatNumber } from "@/lib/format";
 import {
   paymentIntentKey,
@@ -27,7 +30,19 @@ export type PaymentOption = {
   range?: { min: number; max: number };
 };
 
+const QR_VALIDITY_MS = BUSINESS_SETTINGS.qrValidityMinutes * 60 * 1000;
+
 const parseAmount = (text: string) => Number(text.replace(/\D/g, "")) || 0;
+
+const newReference = (prefix: string) =>
+  `${prefix}-${Date.now().toString(36).toUpperCase()}`;
+
+function formatRemaining(ms: number) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = String(totalSeconds % 60).padStart(2, "0");
+  return `${minutes}:${seconds}`;
+}
 
 function removeIntent(key: string) {
   const remaining = { ...readDemoState().paymentIntents };
@@ -35,9 +50,16 @@ function removeIntent(key: string) {
   updateDemoState({ paymentIntents: remaining });
 }
 
+function saveIntent(key: string, intent: PaymentIntent) {
+  updateDemoState({
+    paymentIntents: { ...readDemoState().paymentIntents, [key]: intent },
+  });
+}
+
 /**
  * The customer first saves the amount to pay, then asks for the QR code of that
- * exact amount. The QR never changes while the customer is still choosing.
+ * exact amount. Each QR is one pending transaction, valid for TS07; repeated
+ * clicks reuse it and a success is recorded once per reference.
  */
 export function PaymentCheckout({
   contractNumber,
@@ -54,8 +76,9 @@ export function PaymentCheckout({
 }) {
   const key = paymentIntentKey(contractNumber, purpose);
   const intent = useDemoState((state) => state.paymentIntents[key]);
+  const now = useNow();
   const [selected, setSelected] = useState(options[0].value);
-  const [qrVisible, setQrVisible] = useState(false);
+  const [qrHidden, setQrHidden] = useState(false);
   const [customText, setCustomText] = useState("");
   const showToast = useToast();
   const chosen =
@@ -68,6 +91,10 @@ export function PaymentCheckout({
       : amountToPay > chosen.range.max
         ? `Tối đa ${formatMoney(chosen.range.max)}`
         : null;
+
+  const bankBin = env.NEXT_PUBLIC_PAYMENT_BANK_BIN;
+  const accountNumber = env.NEXT_PUBLIC_PAYMENT_ACCOUNT_NUMBER;
+  const accountName = env.NEXT_PUBLIC_PAYMENT_ACCOUNT_NAME;
 
   if (!intent) {
     return (
@@ -122,17 +149,12 @@ export function PaymentCheckout({
             variant="primary"
             disabled={rangeError !== null}
             onClick={() => {
-              const createdAt = new Date().toLocaleString("vi-VN");
-              updateDemoState({
-                paymentIntents: {
-                  ...readDemoState().paymentIntents,
-                  [key]: {
-                    purpose,
-                    amount: amountToPay,
-                    reference: `${referencePrefix}-${Date.now().toString(36).toUpperCase()}`,
-                    createdAt,
-                  },
-                },
+              if (readDemoState().paymentIntents[key]) return;
+              saveIntent(key, {
+                purpose,
+                amount: amountToPay,
+                reference: newReference(referencePrefix),
+                createdAt: new Date().toLocaleString("vi-VN"),
               });
               showToast(`Đã lưu: bạn cần trả ${formatMoney(amountToPay)}`);
             }}
@@ -143,6 +165,30 @@ export function PaymentCheckout({
       </section>
     );
   }
+
+  const qrExpiresAt = intent.qrExpiresAt;
+  const qrLive = qrExpiresAt !== undefined && now !== null && now < qrExpiresAt;
+  const qrExpired =
+    qrExpiresAt !== undefined && now !== null && now >= qrExpiresAt;
+
+  const openQr = () => {
+    setQrHidden(false);
+    const current = readDemoState().paymentIntents[key];
+    if (!current) return;
+    if (current.qrExpiresAt !== undefined && Date.now() < current.qrExpiresAt) {
+      return;
+    }
+    saveIntent(key, {
+      ...current,
+      // The first QR uses the reference shown since saving; an expired one
+      // is a void transaction, so its replacement gets a new reference.
+      reference:
+        current.qrExpiresAt === undefined
+          ? current.reference
+          : newReference(referencePrefix),
+      qrExpiresAt: Date.now() + QR_VALIDITY_MS,
+    });
+  };
 
   return (
     <section className="card l-stack">
@@ -155,26 +201,47 @@ export function PaymentCheckout({
         </span>
       </div>
 
-      {qrVisible ? (
+      {qrLive && !qrHidden ? (
         <div className="l-stack items-center text-center">
-          <QrPlaceholder seed={`${intent.reference}${intent.amount}`} />
+          {bankBin && accountNumber ? (
+            <>
+              <VietQrCode
+                bankBin={bankBin}
+                accountNumber={accountNumber}
+                amount={intent.amount}
+                purpose={intent.reference}
+              />
+              <span className="text-small">
+                {accountName ? <b>{accountName}</b> : null}
+                {accountName ? " · " : null}
+                Số tài khoản <span className="text-code">{accountNumber}</span>
+              </span>
+            </>
+          ) : (
+            <Alert tone="error" className="w-full text-left">
+              Cơ sở chưa cấu hình tài khoản nhận tiền nên chưa tạo được mã QR.
+              Vui lòng liên hệ tư vấn hoặc kế toán.
+            </Alert>
+          )}
           <span className="text-small text-soft">
-            Quét bằng ứng dụng ngân hàng. Số tiền và nội dung đã điền sẵn theo
-            số đã lưu. Mã QR này chỉ minh họa, chưa chốt nhà cung cấp.
+            Quét bằng ứng dụng ngân hàng. Số tiền và nội dung đã điền sẵn, vui
+            lòng không sửa. Mã hết hạn sau{" "}
+            <b className="countdown">{formatRemaining(qrExpiresAt - now)}</b>.
           </span>
           <Alert tone="info" className="w-full text-left">
             Trang tự cập nhật khi nhận kết quả từ dịch vụ thanh toán, không cần
             bấm báo đã trả.
           </Alert>
           <div className="l-row justify-center">
-            <Button onClick={() => setQrVisible(false)}>Ẩn mã QR</Button>
-            {/* Simulated until GET /me/payments/{id} exists (V7). */}
+            <Button onClick={() => setQrHidden(true)}>Ẩn mã QR</Button>
+            {/* Simulated until GET /me/payments/{id} exists. */}
             <Button
               variant="inverse"
               onClick={() => {
+                const current = readDemoState().paymentIntents[key];
+                if (current?.reference !== intent.reference) return;
                 removeIntent(key);
-                setQrVisible(false);
-                onPaid(intent);
+                onPaid(current);
                 showToast("Đã nhận thanh toán thành công");
               }}
             >
@@ -183,25 +250,41 @@ export function PaymentCheckout({
           </div>
         </div>
       ) : (
-        <div className="l-between">
-          {options.length > 1 ? (
-            <Button
-              variant="text"
-              onClick={() => {
-                removeIntent(key);
-                showToast("Đã hủy số tiền đã lưu, bạn có thể chọn lại", "info");
-              }}
-            >
-              Đổi số tiền
+        <>
+          {qrExpired ? (
+            <Alert tone="wait">
+              Mã QR đã hết hạn sau {BUSINESS_SETTINGS.qrValidityMinutes} phút.
+              Nếu chưa chuyển khoản, bấm Tạo mã QR mới. Nếu đã chuyển theo mã
+              cũ, đừng chuyển lại, kế toán sẽ đối soát.
+            </Alert>
+          ) : null}
+          <div className="l-between">
+            {options.length > 1 && !qrLive ? (
+              <Button
+                variant="text"
+                onClick={() => {
+                  removeIntent(key);
+                  showToast(
+                    "Đã hủy số tiền đã lưu, bạn có thể chọn lại",
+                    "info"
+                  );
+                }}
+              >
+                Đổi số tiền
+              </Button>
+            ) : (
+              <span />
+            )}
+            <Button variant="primary" disabled={now === null} onClick={openQr}>
+              <QrIcon size={18} />
+              {qrExpired
+                ? "Tạo mã QR mới"
+                : qrLive
+                  ? "Hiện mã QR"
+                  : "Thanh toán"}
             </Button>
-          ) : (
-            <span />
-          )}
-          <Button variant="primary" onClick={() => setQrVisible(true)}>
-            <QrIcon size={18} />
-            Thanh toán
-          </Button>
-        </div>
+          </div>
+        </>
       )}
     </section>
   );

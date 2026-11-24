@@ -4,6 +4,7 @@ export const BUSINESS_SETTINGS = {
   taxRate: 0.08,
   serviceRadiusKm: 20,
   holdHours: 24,
+  qrValidityMinutes: 15,
   minimumDepositRate: 0.5,
   dishChangeCutoffDays: 5,
   tableChangeCutoffDays: 3,

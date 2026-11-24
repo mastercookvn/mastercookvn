@@ -57,13 +57,18 @@ export type BookingContact = {
 export type PaymentIntent = {
   purpose: PaymentPurpose;
   amount: number;
+  /** Transfer content of the pending transaction the current QR pays (BR08). */
   reference: string;
   createdAt: string;
+  /** Epoch ms after which the QR is void and a new one is needed (TS07). */
+  qrExpiresAt?: number;
 };
 
 /** An order the customer sent from the booking page, before any contract. */
 export type SubmittedOrder = {
   code: string;
+  /** Idempotency key of the submission that created it; a resend returns this order. */
+  submissionKey: string;
   submittedAt: string;
   eventType: string;
   contact?: BookingContact;
@@ -133,6 +138,8 @@ const INITIAL_STATE = {
   bookingEventType: "",
   bookingContact: { name: "", phone: "", note: "" } as BookingContact,
   submittedOrders: [] as SubmittedOrder[],
+  /** Kept across retries of one booking until it is accepted, so a resend cannot create a second order. */
+  bookingSubmissionKey: null as string | null,
 };
 
 export type DemoState = typeof INITIAL_STATE;

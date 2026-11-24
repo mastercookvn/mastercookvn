@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
@@ -50,6 +50,14 @@ function BookingSteps({ customer }: { customer: SignedInCustomer }) {
   const router = useRouter();
   const showToast = useToast();
   const [showErrors, setShowErrors] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const submitLock = useRef(false);
+
+  // The lock stays on after a successful send so a second click queued before the
+  // Sent screen renders is ignored; coming back to the form releases it.
+  useEffect(() => {
+    if (param !== BOOKING_STEP.Sent) submitLock.current = false;
+  }, [param]);
 
   const meals = useDemoState((state) => state.estimate);
   const dishes = useDemoState((state) => state.dishes);
@@ -100,26 +108,49 @@ function BookingSteps({ customer }: { customer: SignedInCustomer }) {
       );
       return;
     }
-    const { submittedOrders, bookingEventType } = readDemoState();
-    // Placeholder for POST /orders, which assigns the real code.
-    const code = `DH-${String(FIRST_ONLINE_ORDER + submittedOrders.length).padStart(4, "0")}`;
-    updateDemoState({
-      submittedOrders: [
-        {
-          code,
-          submittedAt: formatDayMonthYear(new Date()),
-          eventType: bookingEventType,
-          contact,
-          meals,
-          total: estimates.reduce(
-            (sum, estimate) => sum + (estimate.price?.total ?? 0),
-            0
-          ),
-        },
-        ...submittedOrders,
-      ],
-    });
-    goTo(BOOKING_STEP.Sent);
+    if (submitLock.current) return;
+    submitLock.current = true;
+    setSubmitting(true);
+
+    const submissionKey =
+      readDemoState().bookingSubmissionKey ?? crypto.randomUUID();
+    updateDemoState({ bookingSubmissionKey: submissionKey });
+
+    try {
+      // Placeholder for POST /orders with an Idempotency-Key header: the server
+      // returns the existing order for a key it has already accepted.
+      const { submittedOrders, bookingEventType } = readDemoState();
+      if (
+        !submittedOrders.some((order) => order.submissionKey === submissionKey)
+      ) {
+        const code = `DH-${String(FIRST_ONLINE_ORDER + submittedOrders.length).padStart(4, "0")}`;
+        updateDemoState({
+          submittedOrders: [
+            {
+              code,
+              submissionKey,
+              submittedAt: formatDayMonthYear(new Date()),
+              eventType: bookingEventType,
+              contact,
+              meals,
+              total: estimates.reduce(
+                (sum, estimate) => sum + (estimate.price?.total ?? 0),
+                0
+              ),
+            },
+            ...submittedOrders,
+          ],
+        });
+      }
+      updateDemoState({ bookingSubmissionKey: null });
+      goTo(BOOKING_STEP.Sent);
+    } catch (error) {
+      submitLock.current = false;
+      console.error("Could not send booking", error);
+      showToast("Chưa gửi được đơn, vui lòng thử lại", "error");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const proceed = () => {
@@ -171,8 +202,8 @@ function BookingSteps({ customer }: { customer: SignedInCustomer }) {
           estimates={estimates}
           problems={showErrors ? problems : []}
         >
-          <Button variant="primary" onClick={proceed}>
-            {next}
+          <Button variant="primary" disabled={submitting} onClick={proceed}>
+            {submitting ? "Đang gửi đơn..." : next}
           </Button>
           {current > 0 ? (
             <Button onClick={() => goTo(STEPS[current - 1].step)}>
