@@ -45,6 +45,13 @@ src/
 - Payment QR is VietQR (`lib/vietQr.ts`, `VietQrCode`) to the account in `NEXT_PUBLIC_PAYMENT_*`; each QR is one pending reference valid for TS07. Record a payment success once per reference and send orders with an idempotency key kept across retries.
 - Store image `MediaKey` values, not URLs. Use `MediaImage` and media helpers; keep content photos out of Git and S3 credentials server-only.
 
+## Backend API
+
+- Read the deployment-provided API base URL from server-only environment variables at request time, not at module initialization. Do not hardcode it or set it through `NEXT_PUBLIC_*`, `next.config.*` `env`, rewrites, or redirects. `next build` must succeed without the URL or a running backend.
+- Keep backend-dependent server work out of prerendering and `use cache` scopes. If it is not already gated by a request-time API, call `await connection()` before reading the URL or fetching. With Cache Components, put that work behind `<Suspense>` so the static shell can still prerender; do not use `dynamic = "force-dynamic"`.
+- Browser requests go directly to Spring, not through a Next.js proxy. Provide the browser-reachable base URL through a request-time Next.js config endpoint with `Cache-Control: no-store`; expose only the public URL, never private URLs or secrets. Cross-origin requests require Spring to allow the frontend origin via CORS.
+- Verify that the same build works with different runtime API URLs and that browser requests reach Spring directly.
+
 ## Scripts and Tests
 
 Package scripts: `dev`, `build`, `start`, `lint`, `lint:fix`, `format`, `format:check`, `typecheck`, `test`, `test:run`, `test:coverage`.
